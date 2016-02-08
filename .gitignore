@@ -1,0 +1,47 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
+EditorBuildSettings.asset
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+*.csproj
+*.sln
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ====== #
+# Custom #
+# ====== #
+Builds/
+*.sublime-*
+README.html
+*.csproj
+*.sln
+*.psd
+
+AtStake/Assembly-CSharp-vs.csproj
+AtStake/Assembly-CSharp.csproj
