@@ -6,4 +6,4 @@
 This is a mobile (iOS & Android) version of the [tabletop game](http://engagementgamelab.org/games/@stake/) designed by the [Engagement Lab](http://elab.emerson.edu/) at Emerson College.
 
 ## Developers
-This is a Unity3D 4.6 project. Clone the repository and open the project in Unity to make edits.
+This is a Unity3D 5.3 project. Clone the repository and open the project in Unity to make edits.
