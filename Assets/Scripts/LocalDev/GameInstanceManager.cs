@@ -21,12 +21,21 @@ public class GameInstanceManager : MonoBehaviour {
 
 	List<GameInstance> instances = new List<GameInstance> ();
 	int focused = -1;
+	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
 
 	void Update () {
+		// Quick setup
 		if (Input.GetKeyDown (KeyCode.Q)) {
-			GameInstance i = ObjectPool.Instantiate<GameInstance> ();
-			i.transform.SetParent (transform);
-			instances.Add (i);
+			AddPlayer ();
+			instances[0].HostGame ();
+			for (int i = 0; i < 3; i ++) {
+				AddPlayer ();
+				instances[i+1].JoinGame ();
+			}
+			FocusInstance (0);
+		}
+		if (Input.GetKeyDown (KeyCode.W)) {
+			AddPlayer ();
 		}
 		if (Input.GetKeyDown (KeyCode.Alpha1)) {
 			FocusInstance (0);
@@ -46,6 +55,13 @@ public class GameInstanceManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Alpha6)) {
 			FocusInstance (5);
 		}
+	}
+
+	void AddPlayer () {
+		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
+		i.transform.SetParent (transform);
+		instances.Add (i);
+		i.player.SetName (names[instances.Count-1]);
 	}
 
 	void FocusInstance (int index) {

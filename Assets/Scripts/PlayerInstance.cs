@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerInstance : MonoBehaviour {
+public class PlayerInstance : GameInstanceComponent {
 
 	Models.Player data;
 	public Models.Player Data {

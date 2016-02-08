@@ -20,6 +20,12 @@ public class GameInstanceUI : UIElement {
 		this.gi = gi;
 	}
 
+	public void AddTextLine (string line) {
+		TextLine l = ObjectPool.Instantiate<TextLine> ();
+		l.Text.text = line;
+		l.Parent = Transform;
+	}
+
 	void Update () {
 		if (gi.player != null) 
 			Name.text = gi.player.Data.Name;

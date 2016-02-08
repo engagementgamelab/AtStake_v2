@@ -7,7 +7,7 @@ using Models;
 // Send all messages through PlayerManager
 // Caches game state
 
-public class PlayerManager : MonoBehaviour, IInventoryHolder {
+public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 
 	Dictionary<string, Player> players = new Dictionary<string, Player> ();
 

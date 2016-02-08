@@ -49,7 +49,7 @@ public class UIElement : MB {
 	}
 
 	Text text = null;
-	protected Text Text {
+	public Text Text {
 		get {
 			if (text == null) {
 				text = GetComponent<Text> ();
