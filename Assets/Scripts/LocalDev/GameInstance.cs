@@ -3,11 +3,12 @@ using System.Collections;
 
 public class GameInstance : MonoBehaviour {
 
-	GameInstanceUI ui;
-	public PlayerManager manager;
-	public PlayerInstance player;
-	public NetworkManager network;
-	public MessageDispatcher dispatcher;
+	[System.NonSerialized] public GameInstanceUI ui;
+	[System.NonSerialized] public PlayerManager manager;
+	[System.NonSerialized] public PlayerInstance player;
+	[System.NonSerialized] public NetworkManager network;
+	[System.NonSerialized] public MessageDispatcher dispatcher;
+	[System.NonSerialized] public GameScreenManager screens;
 	bool focused = false;
 
 	public string Name {
@@ -34,6 +35,10 @@ public class GameInstance : MonoBehaviour {
 		ui = ObjectPool.Instantiate<GameInstanceUI> ();
 		ui.transform.SetParent (grid);
 		ui.Init (this);
+		
+		screens = ObjectPool.Instantiate<GameScreenManager> ();
+		screens.transform.SetParent (transform);
+		screens.Init (ui.Transform);
 	}
 
 	public void Focus () {
