@@ -27,8 +27,8 @@ public class GameInstanceUI : UIElement {
 	}
 
 	void Update () {
-		if (gi.Player != null) 
-			Name.text = gi.Player.Data.Name;
+		if (gi.Manager != null) 
+			Name.text = gi.Name;
 	}
 
 	public void Focus () {

@@ -61,7 +61,7 @@ public class GameInstanceManager : MonoBehaviour {
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
 		i.transform.SetParent (transform);
 		instances.Add (i);
-		i.Player.SetName (names[instances.Count-1]);
+		i.Manager.Player.Name = names[instances.Count-1];
 		FocusInstance (instances.Count-1);
 	}
 

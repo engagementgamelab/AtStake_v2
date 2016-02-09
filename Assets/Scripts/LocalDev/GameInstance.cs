@@ -1,27 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameInstance : MonoBehaviour {
 
 	public GameInstanceUI Ui { get; private set; }
 	public PlayerManager Manager { get; private set; }
-	public PlayerInstance Player { get; private set; }
 	public NetworkManager Network { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public GameScreenManager Screens { get; private set; }
 	bool focused = false;
 
 	public string Name {
-		get { return Player.Data.Name; }
+		get { return Manager.Player.Name; }
 	}
 
 	void Awake () {
 
 		Manager = ObjectPool.Instantiate<PlayerManager> ();
 		Manager.transform.SetParent (transform);
-
-		Player = ObjectPool.Instantiate<PlayerInstance> ();
-		Player.transform.SetParent (transform);
 
 		Network = ObjectPool.Instantiate<NetworkManager> ();
 		Network.transform.SetParent (transform);
@@ -54,36 +51,23 @@ public class GameInstance : MonoBehaviour {
 		Ui.AddTextLine (line);
 	}
 
-	/*void Update () {
-		if (focused) {
-			if (Input.GetKeyDown (KeyCode.H)) {
-				HostGame ();
-			}
-			if (Input.GetKeyDown (KeyCode.F)) {
-				Network.UpdateHosts ();
-			}
-			if (Input.GetKeyDown (KeyCode.J)) {
-				JoinGame ();
-			}
-			if (Input.GetKeyDown (KeyCode.A)) {
-				Dispatcher.ScheduleMessage ("balooga");
-			}
-			if (Input.GetKeyDown (KeyCode.S)) {
-				Dispatcher.ScheduleMessage ("frep");
-			}
-		}
-	}*/
-
 	public void HostGame () {
+		Manager.Init ();
 		Network.HostGame ();
-		Manager.AddPlayer (Player.Data);
-		// AddLine ("Hosting");
+		Network.onUpdateClients += OnUpdateClients;
 	}
 
-	public void JoinGame () {
-		Network.UpdateHosts ();
-		Network.JoinGame (Network.Hosts[0]);
-		// AddLine ("Joined " + network.Host.Name);
+	public void JoinGame (string hostId="") {
+		Manager.Init ();
+		if (hostId == "") {
+			Network.JoinGame (Network.Hosts[0]);
+		} else {
+			Network.JoinGame (hostId);
+		}
+	}
+
+	void OnUpdateClients (List<string> clients) {
+		Manager.UpdatePeers (clients);
 	}
 
 	void OnReceiveMessage (NetworkMessage msg) {

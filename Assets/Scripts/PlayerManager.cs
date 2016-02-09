@@ -4,33 +4,72 @@ using System.Collections.Generic;
 using InventorySystem;
 using Models;
 
-// Send all messages through PlayerManager
-// Caches game state
-
+// TODO: rename to GameData
 public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 
-	Dictionary<string, Player> players = new Dictionary<string, Player> ();
+	public delegate void OnAddPeer (string peer);
+	public delegate void OnRemovePeer (string peer);
+
+	Dictionary<string, Player> peers = new Dictionary<string, Player> ();
+	public Dictionary<string, Player> Peers {
+		get { return peers; }
+	}
+
+	Player player;
+	public Player Player {
+		get {
+			if (player == null) {
+				player = new Models.Player ();
+			}
+			return player;
+		}
+	}
 
 	Inventory inventory;
 	public Inventory Inventory {
 		get {
 			if (inventory == null) {
 				inventory = new Inventory (this);
-				inventory.Add (new CoinGroup ()); // The pot
+				inventory.Add (new CoinGroup ());
+				inventory.Add (new PotGroup ());
 			}
 			return inventory;
 		}
 	}
 
-	public void AddPlayer (Player player) {
-		players.Add (player.Name, player);
+	public OnAddPeer onAddPeer;
+	public OnRemovePeer onRemovePeer;
+
+	public void Init () {
+		Inventory["coins"].Clear ();
+		Inventory["pot"].Clear ();
+		peers.Clear ();
 	}
 
-	public void RemovePlayer (string name) {
-		try {
-			players.Remove (name);
-		} catch {
-			throw new System.Exception ("No player named '" + name + "' has been added to the game");
+	public void UpdatePeers (List<string> newPeers) {
+
+		foreach (string newPeer in newPeers) {
+			if (!peers.ContainsKey (newPeer)) {
+				AddPeer (newPeer);
+				if (onAddPeer != null)
+					onAddPeer (newPeer);
+			}
 		}
+
+		foreach (var peer in peers) {
+			if (!newPeers.Contains (peer.Key)) {
+				RemovePeer (peer.Key);
+				if (onRemovePeer != null)
+					onRemovePeer (peer.Key);
+			}
+		}
+	}
+
+	public void AddPeer (string name) {
+		peers.Add (name, new Player { Name = name });
+	}
+
+	public void RemovePeer (string name) {
+		peers.Remove (name);
 	}
 }

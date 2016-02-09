@@ -12,7 +12,9 @@ public class GameScreenManager : GameInstanceComponent {
 				screens = new Dictionary<string, GameScreen> () {
 					{ "start", new StartScreen () },
 					{ "name", new NameScreen () },
-					{ "hostjoin", new HostJoinScreen () }
+					{ "hostjoin", new HostJoinScreen () },
+					{ "lobby", new LobbyScreen () },
+					{ "games", new GamesScreen () }
 				};
 			}
 

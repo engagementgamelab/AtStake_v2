@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Player enters their name on this screen
+
 public class NameScreen : GameScreen {
 
 	Dictionary<string, ScreenElement> elements;
@@ -18,6 +20,9 @@ public class NameScreen : GameScreen {
 	}
 
 	protected override void OnHide () {
-		game.Player.SetName (GetScreenElement<InputElement> ("text").Text);
+		// TODO: don't actually allow players to continue w/o entering a name
+		string name = GetScreenElement<InputElement> ("text").Text;
+		if (name != "")
+			game.Manager.Player.Name = name;
 	}
 }

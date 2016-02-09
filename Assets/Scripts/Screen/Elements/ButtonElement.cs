@@ -12,6 +12,7 @@ public class ButtonElement : ScreenElement<ButtonElementUI> {
 
 	protected override void OnRender (ButtonElementUI b) {
 		b.Text.text = text;
+		b.RemoveButtonListeners ();
 		b.AddButtonListener (onPress);
 	}
 

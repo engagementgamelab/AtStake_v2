@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class NetworkManager : GameInstanceComponent {
 
+	public delegate void OnDisconnect ();
+	public delegate void OnUpdateClients (List<string> clients);
+
 	bool hosting = false;
 	public bool Hosting { 
 		get { return hosting; }
@@ -22,13 +25,15 @@ public class NetworkManager : GameInstanceComponent {
 		get { return clients; }
 	}
 
-	[DebuggableMethod]
+	public OnDisconnect onDisconnect;
+	public OnUpdateClients onUpdateClients;
+
+	// Host
 	public void HostGame () {
-		Clients.Clear ();
 		Hosting = true;
 	}
 
-	[DebuggableMethod]
+	// Client
 	public void JoinGame (string gameName) {
 
 		// For testing locally
@@ -36,27 +41,49 @@ public class NetworkManager : GameInstanceComponent {
 		foreach (GameInstance g in gi) {
 			if (g.Name == gameName) {
 				Host = g;
-				Host.Network.Clients.Add (Game.Name, Game);
+				Host.Network.ConnectClient (Game);
 				return;
 			}
 		}
 	}
 
-	[DebuggableMethod]
-	public void UpdateHosts () {
+	// Client
+	public List<string> UpdateHosts () {
 		hosts.Clear ();
 		List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
 		foreach (GameInstance g in gi) {
 			if (g.Network.Hosting && g != Game)
 				hosts.Add (g.Name, g);
 		}
+		return new List<string> (hosts.Keys);
 	}
 
-	[DebuggableMethod]
+	// Host
+	public void ConnectClient (GameInstance game) {
+		Clients.Add (game.Name, game);
+		if (onUpdateClients != null)
+			onUpdateClients (new List<string> (Clients.Keys));
+	}
+
+	// Host
+	public void DisconnectClient (string name) {
+		Clients.Remove (name);
+		if (onUpdateClients != null)
+			onUpdateClients (new List<string> (Clients.Keys));
+	}
+
+	// Host & Client
 	public void Disconnect () {
 		if (Hosting) {
 			// TODO: disconnect all players currently in game
+			foreach (var client in Clients) {
+				client.Value.Network.Disconnect ();
+			}
 			Hosting = false;
+		} else {
+			Host.Network.DisconnectClient (Game.Name);
 		}
+		if (onDisconnect != null)
+			onDisconnect ();
 	}
 }
