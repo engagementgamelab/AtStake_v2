@@ -7,8 +7,10 @@ using System.Collections;
 
 public class UIElement : MB {
 
+	public delegate void OnButtonPress ();
+
 	RectTransform rectTransform = null;
-	protected RectTransform RectTransform {
+	public RectTransform RectTransform {
 		get {
 			if (rectTransform == null) {
 				rectTransform = GetComponent<RectTransform> ();
@@ -18,7 +20,7 @@ public class UIElement : MB {
 	}
 
 	Image image = null;
-	protected Image Image {
+	public Image Image {
 		get {
 			if (image == null) {
 				image = GetComponent<Image> ();
@@ -28,23 +30,22 @@ public class UIElement : MB {
 	}
 
 	Button button = null;
-	protected Button Button {
+	public Button Button {
 		get {
 			if (button == null) {
 				button = GetComponent<Button> ();
-				button.onClick.AddListener (OnButtonPress);
 			}
 			return button;
 		}
 	}
 
-	Text buttonText = null;
-	protected Text ButtonText {
+	InputField inputField = null;
+	InputField InputField {
 		get {
-			if (buttonText == null) {
-				buttonText = Button.transform.GetChild(0).GetComponent<Text> ();
+			if (inputField == null) {
+				inputField = GetComponent<InputField> ();
 			}
-			return buttonText;
+			return inputField;
 		}
 	}
 
@@ -52,9 +53,29 @@ public class UIElement : MB {
 	public Text Text {
 		get {
 			if (text == null) {
-				text = GetComponent<Text> ();
+				if (Button != null) {
+					text = GetChildComponent<Text> (0);
+				} else if (InputField != null) {
+					text = InputField.textComponent;
+				} else {
+					text = GetComponent<Text> ();
+				}
 			}
 			return text;
+		}
+	}
+
+	Text placeholder = null;
+	public Text Placeholder {
+		get {
+			if (placeholder == null) {
+				if (InputField != null) {
+					placeholder = InputField.placeholder as Text;
+				} else {
+					throw new System.Exception ("No placeholder could be found because " + this + " is not an InputField");
+				}
+			}
+			return placeholder;
 		}
 	}
 
@@ -62,5 +83,23 @@ public class UIElement : MB {
 		return RectTransform.GetChild (childIndex).GetComponent<T> () as T;
 	}
 
-	protected virtual void OnButtonPress () {}
+	protected T GetChildComponent<T> (string name) where T : MonoBehaviour {
+		foreach (RectTransform t in RectTransform) {
+			if (t.name == name)
+				return t.GetComponent<T> () as T;	
+		}
+		throw new System.Exception ("No child named '" + name + "' exists on " + this);
+	}
+
+	public void AddButtonListener (System.Action action) {
+		Button.onClick.AddListener (() => { action (); });
+	}
+
+	public void RemoveButtonListener (System.Action action) {
+		Button.onClick.RemoveListener (() => { action (); });
+	}
+
+	public void RemoveButtonListeners () {
+		Button.onClick.RemoveAllListeners ();
+	}
 }

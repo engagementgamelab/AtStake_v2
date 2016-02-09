@@ -10,7 +10,9 @@ public class GameScreenManager : GameInstanceComponent {
 			if (screens == null) {
 
 				screens = new Dictionary<string, GameScreen> () {
-					{ "start", new StartScreen () }
+					{ "start", new StartScreen () },
+					{ "name", new NameScreen () },
+					{ "hostjoin", new HostJoinScreen () }
 				};
 			}
 
@@ -18,14 +20,30 @@ public class GameScreenManager : GameInstanceComponent {
 		}
 	}
 
+	string currScreen = "";
+	string prevScreen = "";
+
 	public void Init (Transform canvas) {
-		foreach (var screen in Screens) {
-			screen.Value.Init (canvas);
-		}
+		foreach (var screen in Screens)
+			screen.Value.Init (Game, canvas);
 		SetScreen ("start");
 	}
 
-	void SetScreen (string id) {
-		Screens[id].Show ();
+	public void SetScreen (string id) {
+		try {
+			if (currScreen != "") {
+				Screens[currScreen].Hide ();
+				prevScreen = currScreen;
+			}
+			currScreen = id;
+			Screens[currScreen].Show ();
+		} catch {
+			throw new System.Exception ("No screen with the id '" + id + "' exists");
+		}
+	}
+
+	// not being used rn - could it be removed?
+	public void SetScreenPrevious () {
+		SetScreen (prevScreen);
 	}
 }

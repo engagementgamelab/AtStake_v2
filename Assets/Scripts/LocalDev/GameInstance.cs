@@ -3,88 +3,87 @@ using System.Collections;
 
 public class GameInstance : MonoBehaviour {
 
-	[System.NonSerialized] public GameInstanceUI ui;
-	[System.NonSerialized] public PlayerManager manager;
-	[System.NonSerialized] public PlayerInstance player;
-	[System.NonSerialized] public NetworkManager network;
-	[System.NonSerialized] public MessageDispatcher dispatcher;
-	[System.NonSerialized] public GameScreenManager screens;
+	public GameInstanceUI Ui { get; private set; }
+	public PlayerManager Manager { get; private set; }
+	public PlayerInstance Player { get; private set; }
+	public NetworkManager Network { get; private set; }
+	public MessageDispatcher Dispatcher { get; private set; }
+	public GameScreenManager Screens { get; private set; }
 	bool focused = false;
 
 	public string Name {
-		get { return player.Data.Name; }
+		get { return Player.Data.Name; }
 	}
 
 	void Awake () {
 
-		manager = ObjectPool.Instantiate<PlayerManager> ();
-		manager.transform.SetParent (transform);
+		Manager = ObjectPool.Instantiate<PlayerManager> ();
+		Manager.transform.SetParent (transform);
 
-		player = ObjectPool.Instantiate<PlayerInstance> ();
-		player.transform.SetParent (transform);
+		Player = ObjectPool.Instantiate<PlayerInstance> ();
+		Player.transform.SetParent (transform);
 
-		network = ObjectPool.Instantiate<NetworkManager> ();
-		network.transform.SetParent (transform);
+		Network = ObjectPool.Instantiate<NetworkManager> ();
+		Network.transform.SetParent (transform);
 
-		dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
-		dispatcher.transform.SetParent (transform);
-		dispatcher.Init (network);
-		dispatcher.onReceiveMessage += OnReceiveMessage;
+		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
+		Dispatcher.transform.SetParent (transform);
+		Dispatcher.onReceiveMessage += OnReceiveMessage;
 
 		Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
-		ui = ObjectPool.Instantiate<GameInstanceUI> ();
-		ui.transform.SetParent (grid);
-		ui.Init (this);
+		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
+		Ui.transform.SetParent (grid);
+		Ui.Init (this);
 		
-		screens = ObjectPool.Instantiate<GameScreenManager> ();
-		screens.transform.SetParent (transform);
-		screens.Init (ui.Transform);
+		Screens = ObjectPool.Instantiate<GameScreenManager> ();
+		Screens.transform.SetParent (transform);
+		Screens.Init (Ui.Transform);
 	}
 
 	public void Focus () {
-		ui.Focus ();
+		Ui.Focus ();
 		focused = true;
 	}
 
 	public void Unfocus () {
-		ui.Unfocus ();
+		Ui.Unfocus ();
 		focused = false;
 	}
 
 	public void AddLine (string line) {
-		ui.AddTextLine (line);
+		Ui.AddTextLine (line);
 	}
 
-	void Update () {
+	/*void Update () {
 		if (focused) {
 			if (Input.GetKeyDown (KeyCode.H)) {
 				HostGame ();
 			}
 			if (Input.GetKeyDown (KeyCode.F)) {
-				network.UpdateHosts ();
+				Network.UpdateHosts ();
 			}
 			if (Input.GetKeyDown (KeyCode.J)) {
 				JoinGame ();
 			}
 			if (Input.GetKeyDown (KeyCode.A)) {
-				dispatcher.ScheduleMessage ("balooga");
+				Dispatcher.ScheduleMessage ("balooga");
 			}
 			if (Input.GetKeyDown (KeyCode.S)) {
-				dispatcher.ScheduleMessage ("frep");
+				Dispatcher.ScheduleMessage ("frep");
 			}
 		}
-	}
+	}*/
 
 	public void HostGame () {
-		network.HostGame ();
-		manager.AddPlayer (player.Data);
-		AddLine ("Hosting");
+		Network.HostGame ();
+		Manager.AddPlayer (Player.Data);
+		// AddLine ("Hosting");
 	}
 
 	public void JoinGame () {
-		network.UpdateHosts ();
-		network.JoinGame (network.Hosts[0]);
-		AddLine ("Joined " + network.Host.Name);
+		Network.UpdateHosts ();
+		Network.JoinGame (Network.Hosts[0]);
+		// AddLine ("Joined " + network.Host.Name);
 	}
 
 	void OnReceiveMessage (NetworkMessage msg) {

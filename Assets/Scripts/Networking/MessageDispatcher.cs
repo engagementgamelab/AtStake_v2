@@ -20,21 +20,16 @@ public class MessageDispatcher : GameInstanceComponent {
 
 	public OnReceiveMessage onReceiveMessage;
 
-	NetworkManager network;
 	Queue<NetworkMessage> messages = new Queue<NetworkMessage> ();
 	Confirmation confirmation = null;
 
 	bool Hosting {
-		get { return network.Hosting; }
+		get { return Game.Network.Hosting; }
 	}
 
 	/**
 	 *	Public methods
 	 */
-
-	public void Init (NetworkManager network) {
-		this.network = network;
-	}
 
 	public void ScheduleMessage (string id) {
 		ScheduleMessage (new NetworkMessage (id));
@@ -55,7 +50,7 @@ public class MessageDispatcher : GameInstanceComponent {
 	// Client methods
 
 	void SendMessageToHost (NetworkMessage msg) {
-		network.Host.dispatcher.ReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
+		Game.Network.Host.Dispatcher.ReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
 	}
 
 	// Host methods
@@ -78,11 +73,11 @@ public class MessageDispatcher : GameInstanceComponent {
 	void SendMessageToClients (NetworkMessage msg) {
 
 		// Create a new confirmation to fulfill
-		confirmation = new Confirmation (msg.id, new List<string> (network.Clients.Keys));
+		confirmation = new Confirmation (msg.id, new List<string> (Game.Network.Clients.Keys));
 
 		// Send message to all clients
-		foreach (var client in network.Clients) {
-			client.Value.dispatcher.ReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
+		foreach (var client in Game.Network.Clients) {
+			client.Value.Dispatcher.ReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
 		}
 
 		// Fire off the message
@@ -102,7 +97,7 @@ public class MessageDispatcher : GameInstanceComponent {
 
 	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
 		// StartCoroutine (SimulateSendConfirmation (id, str1, str2, val));
-		network.Host.dispatcher.ReceiveConfirmation (id, Game.Name);
+		Game.Network.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
 		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 	}
 
@@ -135,7 +130,6 @@ public class MessageDispatcher : GameInstanceComponent {
 			}
 		}
 
-		// returns true if all clients have confirmed
 		public bool Add (string id, string client) {
 			if (id == messageId) {
 				confirms[client] = true;
@@ -143,6 +137,8 @@ public class MessageDispatcher : GameInstanceComponent {
 					if (!c.Value)
 						return false;	
 				}
+				
+				// returns true if all clients have confirmed
 				return true;
 			}
 			Debug.LogWarning ("Host received confirmation for the message '" + id + "' but the host is looking for confirmations for the message '" + messageId + "'");

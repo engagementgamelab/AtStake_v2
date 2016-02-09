@@ -36,7 +36,7 @@ public class NetworkManager : GameInstanceComponent {
 		foreach (GameInstance g in gi) {
 			if (g.Name == gameName) {
 				Host = g;
-				Host.network.Clients.Add (Game.Name, Game);
+				Host.Network.Clients.Add (Game.Name, Game);
 				return;
 			}
 		}
@@ -47,7 +47,7 @@ public class NetworkManager : GameInstanceComponent {
 		hosts.Clear ();
 		List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
 		foreach (GameInstance g in gi) {
-			if (g.network.Hosting && g != Game)
+			if (g.Network.Hosting && g != Game)
 				hosts.Add (g.Name, g);
 		}
 	}

@@ -2,7 +2,6 @@
 
 public class TextElement : ScreenElement<TextElementUI> {
 
-	TextElementUI ui;
 	string text;
 
 	public string Text {

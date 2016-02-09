@@ -25,7 +25,7 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void Update () {
 		// Quick setup
-		if (Input.GetKeyDown (KeyCode.Q)) {
+		if (Input.GetKeyDown (KeyCode.Equals)) {
 			AddPlayer ();
 			instances[0].HostGame ();
 			for (int i = 0; i < 3; i ++) {
@@ -34,7 +34,7 @@ public class GameInstanceManager : MonoBehaviour {
 			}
 			FocusInstance (0);
 		}
-		if (Input.GetKeyDown (KeyCode.W)) {
+		if (Input.GetKeyDown (KeyCode.Minus)) {
 			AddPlayer ();
 		}
 		if (Input.GetKeyDown (KeyCode.Alpha1)) {
@@ -61,7 +61,8 @@ public class GameInstanceManager : MonoBehaviour {
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
 		i.transform.SetParent (transform);
 		instances.Add (i);
-		i.player.SetName (names[instances.Count-1]);
+		i.Player.SetName (names[instances.Count-1]);
+		FocusInstance (instances.Count-1);
 	}
 
 	void FocusInstance (int index) {
