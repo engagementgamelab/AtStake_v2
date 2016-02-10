@@ -20,7 +20,7 @@ public class GamesScreen : GameScreen {
 
 	protected override void OnShow () {
 		// TODO: also listen to new games as they get added
-		List<string> hosts = Game.Network.UpdateHosts ();
+		List<string> hosts = Game.Multiplayer.UpdateHosts ();
 		for (int i = 0; i < hosts.Count; i ++) {
 			string hostId = hosts[i];
 			AddElement (i.ToString (), new ButtonElement (hostId, () => {

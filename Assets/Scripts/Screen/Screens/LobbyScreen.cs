@@ -12,7 +12,7 @@ public class LobbyScreen : GameScreen {
 			if (elements == null) {
 				elements = new Dictionary<string, ScreenElement> ();
 				elements.Add ("text", new TextElement ("Lobby"));
-				elements.Add ("back", new BackButtonElement ("", () => { Game.Network.Disconnect (); }));
+				elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 			}
 			return elements;
 		}

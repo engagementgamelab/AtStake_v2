@@ -3,6 +3,35 @@ using System.Collections;
 
 namespace Models {
 
+	/// <summary>
+    /// Stores game config schema.
+    /// </summary>
+    public class GameConfig {
+
+        public GameEnvironment Local { get; set; }
+        public GameEnvironment Development { get; set; }
+        public GameEnvironment Staging { get; set; }
+        public GameEnvironment Production { get; set; }
+
+    }
+
+    /// <summary>
+    /// Stores game config environment schema.
+    /// </summary>
+    public class GameEnvironment {
+
+        public string Root { get; set; }
+        public string AuthKey { get; set; }
+
+    }
+
+    public class GameData {
+
+    	public Settings Settings { get; set; }
+    	public Deck[] Decks { get; set; }
+
+    }
+
 	public class Settings {
 		public int[] PlayerCountRange { get; set; }
 	}
@@ -13,6 +42,12 @@ namespace Models {
 		public Role Role { get; set; }
 	}
 
+	public class Deck {
+		public string Id { get; set; }
+		public string[] Questions { get; set; }
+		public Role[] Roles { get; set; }
+	}
+	
 	public class Role {
 		public string Title { get; set; }
 		public string Bio { get; set; }
@@ -22,11 +57,5 @@ namespace Models {
 	public class AgendaItem {
 		public string Description { get; set; }
 		public int Reward { get; set; }
-	}
-
-	public class Deck {
-		public string Id { get; set; }
-		public string[] Questions { get; set; }
-		public Role[] Roles { get; set; }
 	}
 }

@@ -6,7 +6,7 @@ public class GameInstance : MonoBehaviour {
 
 	public GameInstanceUI Ui { get; private set; }
 	public PlayerManager Manager { get; private set; }
-	public NetworkManager Network { get; private set; }
+	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public GameScreenManager Screens { get; private set; }
 	bool focused = false;
@@ -20,8 +20,8 @@ public class GameInstance : MonoBehaviour {
 		Manager = ObjectPool.Instantiate<PlayerManager> ();
 		Manager.transform.SetParent (transform);
 
-		Network = ObjectPool.Instantiate<NetworkManager> ();
-		Network.transform.SetParent (transform);
+		Multiplayer = ObjectPool.Instantiate<MultiplayerManager> ();
+		Multiplayer.transform.SetParent (transform);
 
 		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
 		Dispatcher.transform.SetParent (transform);
@@ -53,15 +53,15 @@ public class GameInstance : MonoBehaviour {
 	// Could move everything below here to a multiplayer manager
 	public void HostGame () {
 		Manager.Init ();
-		Network.HostGame ();
-		Network.onUpdateClients += OnUpdateClients;
-		Network.onDisconnect += OnDisconnect;
+		Multiplayer.HostGame ();
+		Multiplayer.onUpdateClients += OnUpdateClients;
+		Multiplayer.onDisconnect += OnDisconnect;
 	}
 
 	public void JoinGame (string hostId="") {
 		Manager.Init ();
-		Network.JoinGame (hostId == "" ? Network.Hosts[0] : hostId);
-		Network.onDisconnect += OnDisconnect;
+		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
+		Multiplayer.onDisconnect += OnDisconnect;
 	}
 
 	void OnUpdateClients (List<string> clients) {
@@ -75,7 +75,7 @@ public class GameInstance : MonoBehaviour {
 
 	void OnDisconnect () {
 		Screens.OnDisconnect ();
-		Network.onDisconnect -= OnDisconnect;
+		Multiplayer.onDisconnect -= OnDisconnect;
 		Dispatcher.RemoveAllListeners ();
 	}
 }

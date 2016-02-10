@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public abstract class GameScreen : GameInstanceRef {
 
 	protected bool IsHost {
-		get { return Game.Network.Hosting; }
+		get { return Game.Multiplayer.Hosting; }
 	}
 
 	protected bool IsDecider {

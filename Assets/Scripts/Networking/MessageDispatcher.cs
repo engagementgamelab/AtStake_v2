@@ -23,7 +23,7 @@ public class MessageDispatcher : GameInstanceComponent {
 	Confirmation confirmation = new Confirmation ("", new List<string> ());
 
 	bool Hosting {
-		get { return Game.Network.Hosting; }
+		get { return Game.Multiplayer.Hosting; }
 	}
 
 	/**
@@ -53,13 +53,13 @@ public class MessageDispatcher : GameInstanceComponent {
 	// Client methods
 
 	void SendMessageToHost (NetworkMessage msg) {
-		Game.Network.Host.Dispatcher.ReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
+		Game.Multiplayer.Host.Dispatcher.ReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
 	}
 
 	// Host methods
 
 	void QueueMessage (NetworkMessage msg) {
-		if (messages.Count > 0 || !confirmation.IsConfirmed (new List<string> (Game.Network.Clients.Keys))) {
+		if (messages.Count > 0 || !confirmation.IsConfirmed (new List<string> (Game.Multiplayer.Clients.Keys))) {
 			messages.Enqueue (msg);
 		} else {
 			SendMessageToClients (msg);
@@ -76,10 +76,10 @@ public class MessageDispatcher : GameInstanceComponent {
 	void SendMessageToClients (NetworkMessage msg) {
 
 		// Create a new confirmation to fulfill
-		confirmation = new Confirmation (msg.id, new List<string> (Game.Network.Clients.Keys));
+		confirmation = new Confirmation (msg.id, new List<string> (Game.Multiplayer.Clients.Keys));
 
 		// Send message to all clients
-		foreach (var client in Game.Network.Clients) {
+		foreach (var client in Game.Multiplayer.Clients) {
 			client.Value.Dispatcher.ReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
 		}
 
@@ -122,7 +122,7 @@ public class MessageDispatcher : GameInstanceComponent {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (id, str1, str2, val));
 		#else
-			Game.Network.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
+			Game.Multiplayer.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
 			ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 		#endif
 	}
@@ -130,17 +130,17 @@ public class MessageDispatcher : GameInstanceComponent {
 	#if SIMULATE_LATENCY
 	IEnumerator LatentSendConfirmation (string id, string str1, string str2, int val) {
 		yield return new WaitForSeconds (Random.value);
-		Game.Network.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
+		Game.Multiplayer.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
 		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 	}
 	#endif
 
 	public void ReceiveConfirmation (string id, string client) {
 		confirmation.Add (id, client);
-		if (confirmation.IsConfirmed (new List<string> (Game.Network.Clients.Keys))) {
+		if (confirmation.IsConfirmed (new List<string> (Game.Multiplayer.Clients.Keys))) {
 			SendQueuedMessage ();
 		}
-		/*if (confirmation.Add (id, client, new List<string> (Game.Network.Clients.Keys))) {
+		/*if (confirmation.Add (id, client, new List<string> (Game.Multiplayer.Clients.Keys))) {
 			confirmation = null;
 			SendQueuedMessage ();
 		}*/

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class NetworkManager : GameInstanceComponent {
+public class MultiplayerManager : GameInstanceComponent {
 
 	public delegate void OnDisconnect ();
 	public delegate void OnUpdateClients (List<string> clients);
@@ -41,7 +41,7 @@ public class NetworkManager : GameInstanceComponent {
 		foreach (GameInstance g in gi) {
 			if (g.Name == gameName) {
 				Host = g;
-				Host.Network.ConnectClient (Game);
+				Host.Multiplayer.ConnectClient (Game);
 				return;
 			}
 		}
@@ -52,7 +52,7 @@ public class NetworkManager : GameInstanceComponent {
 		hosts.Clear ();
 		List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
 		foreach (GameInstance g in gi) {
-			if (g.Network.Hosting && g != Game)
+			if (g.Multiplayer.Hosting && g != Game)
 				hosts.Add (g.Name, g);
 		}
 		return new List<string> (hosts.Keys);
@@ -80,13 +80,13 @@ public class NetworkManager : GameInstanceComponent {
 				onDisconnect ();
 			// TODO: disconnect all players currently in game
 			foreach (var client in new Dictionary<string, GameInstance> (Clients)) {
-				NetworkManager nm = Clients[client.Key].Network;
+				MultiplayerManager nm = Clients[client.Key].Multiplayer;
 				nm.Host = null;
 				nm.Disconnect ();
 			}
 		} else {
 			if (Host != null)
-				Host.Network.DisconnectClient (Game.Name);
+				Host.Multiplayer.DisconnectClient (Game.Name);
 			if (onDisconnect != null)
 				onDisconnect ();
 		}
