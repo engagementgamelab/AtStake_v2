@@ -17,4 +17,8 @@ public class GameInstanceRef {
 	public void Init (GameInstanceComponent component) {
 		Component = component;
 	}
+
+	protected void Log (object msg) {
+		Debug.Log (Game.Manager.Player.Name + ": " + msg);
+	}
 }

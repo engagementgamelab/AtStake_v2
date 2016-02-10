@@ -76,14 +76,19 @@ public class NetworkManager : GameInstanceComponent {
 	public void Disconnect () {
 		if (Hosting) {
 			Hosting = false;
+			if (onDisconnect != null)
+				onDisconnect ();
 			// TODO: disconnect all players currently in game
 			foreach (var client in new Dictionary<string, GameInstance> (Clients)) {
-				Clients[client.Key].Network.Disconnect ();
+				NetworkManager nm = Clients[client.Key].Network;
+				nm.Host = null;
+				nm.Disconnect ();
 			}
 		} else {
-			Host.Network.DisconnectClient (Game.Name);
+			if (Host != null)
+				Host.Network.DisconnectClient (Game.Name);
+			if (onDisconnect != null)
+				onDisconnect ();
 		}
-		if (onDisconnect != null)
-			onDisconnect ();
 	}
 }

@@ -14,7 +14,8 @@ public class GameScreenManager : GameInstanceComponent {
 					{ "name", new NameScreen () },
 					{ "hostjoin", new HostJoinScreen () },
 					{ "lobby", new LobbyScreen () },
-					{ "games", new GamesScreen () }
+					{ "games", new GamesScreen () },
+					{ "deck", new DeckScreen () }
 				};
 			}
 
@@ -29,14 +30,15 @@ public class GameScreenManager : GameInstanceComponent {
 		foreach (var screen in Screens)
 			screen.Value.Init (this, canvas);
 		SetScreen ("start");
+		Game.Dispatcher.AddListener ("GotoScreen", OnGotoScreen);
 	}
 
 	public void SetScreen (string id) {
+		if (!string.IsNullOrEmpty (CurrScreen)) {
+			Screens[CurrScreen].Hide ();
+			PrevScreen = CurrScreen;
+		}
 		try {
-			if (!string.IsNullOrEmpty (CurrScreen)) {
-				Screens[CurrScreen].Hide ();
-				PrevScreen = CurrScreen;
-			}
 			CurrScreen = id;
 			Screens[CurrScreen].Show ();
 		} catch {
@@ -46,6 +48,10 @@ public class GameScreenManager : GameInstanceComponent {
 
 	public void SetScreenPrevious () {
 		SetScreen (PrevScreen);
+	}
+
+	void OnGotoScreen (NetworkMessage msg) {
+		SetScreen (msg.str1);
 	}
 
 	public void OnDisconnect () {

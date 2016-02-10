@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#undef SIMULATE_LATENCY
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,10 +19,8 @@ public class MessageDispatcher : GameInstanceComponent {
 
 	public delegate void OnReceiveMessage (NetworkMessage msg);
 
-	public OnReceiveMessage onReceiveMessage;
-
 	Queue<NetworkMessage> messages = new Queue<NetworkMessage> ();
-	Confirmation confirmation = null;
+	Confirmation confirmation = new Confirmation ("", new List<string> ());
 
 	bool Hosting {
 		get { return Game.Network.Hosting; }
@@ -33,6 +32,10 @@ public class MessageDispatcher : GameInstanceComponent {
 
 	public void ScheduleMessage (string id) {
 		ScheduleMessage (new NetworkMessage (id));
+	}
+
+	public void ScheduleMessage (string id, string str1) {
+		ScheduleMessage (new NetworkMessage (id, str1));
 	}
 
 	public void ScheduleMessage (NetworkMessage msg) {
@@ -56,7 +59,7 @@ public class MessageDispatcher : GameInstanceComponent {
 	// Host methods
 
 	void QueueMessage (NetworkMessage msg) {
-		if (messages.Count > 0 || confirmation != null) {
+		if (messages.Count > 0 || !confirmation.IsConfirmed (new List<string> (Game.Network.Clients.Keys))) {
 			messages.Enqueue (msg);
 		} else {
 			SendMessageToClients (msg);
@@ -85,8 +88,28 @@ public class MessageDispatcher : GameInstanceComponent {
 	}
 
 	void ReceiveMessageEvent (NetworkMessage msg) {
-		if (onReceiveMessage != null)
-			onReceiveMessage (msg);
+		foreach (var listener in listeners) {
+			if (listener.Value == msg.id) {
+				listener.Key (msg);
+			}
+		}
+	}
+
+	// Listeners
+
+	Dictionary<OnReceiveMessage, string> listeners = new Dictionary<OnReceiveMessage, string> ();
+
+	public void AddListener (string id, OnReceiveMessage action) {
+		if (!listeners.ContainsKey (action))
+			listeners.Add (action, id);
+	}
+
+	public void RemoveListener (OnReceiveMessage action) {
+		listeners.Remove (action);
+	}
+
+	public void RemoveAllListeners () {
+		listeners.Clear ();
 	}
 
 	// RPCs
@@ -96,22 +119,31 @@ public class MessageDispatcher : GameInstanceComponent {
 	}
 
 	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
-		// StartCoroutine (SimulateSendConfirmation (id, str1, str2, val));
+		#if SIMULATE_LATENCY
+			StartCoroutine (LatentSendConfirmation (id, str1, str2, val));
+		#else
+			Game.Network.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
+			ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
+		#endif
+	}
+
+	#if SIMULATE_LATENCY
+	IEnumerator LatentSendConfirmation (string id, string str1, string str2, int val) {
+		yield return new WaitForSeconds (Random.value);
 		Game.Network.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
 		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 	}
-
-	/*IEnumerator SimulateSendConfirmation (string id, string str1, string str2, int val) {
-		yield return new WaitForSeconds (Random.value);
-		network.Host.dispatcher.ReceiveConfirmation (id, Game.Name);
-		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
-	}*/
+	#endif
 
 	public void ReceiveConfirmation (string id, string client) {
-		if (confirmation.Add (id, client)) {
-			confirmation = null;
+		confirmation.Add (id, client);
+		if (confirmation.IsConfirmed (new List<string> (Game.Network.Clients.Keys))) {
 			SendQueuedMessage ();
 		}
+		/*if (confirmation.Add (id, client, new List<string> (Game.Network.Clients.Keys))) {
+			confirmation = null;
+			SendQueuedMessage ();
+		}*/
 	}
 
 	// Class that handles message confirmations
@@ -130,19 +162,31 @@ public class MessageDispatcher : GameInstanceComponent {
 			}
 		}
 
-		public bool Add (string id, string client) {
+		public bool IsConfirmed (List<string> clients) {
+			foreach (string client in clients) {
+				if (confirms.ContainsKey (client)) {
+					if (!confirms[client])
+						return false;
+				}
+			}
+			return true;
+		}
+
+		public void Add (string id, string client) {
 			if (id == messageId) {
 				confirms[client] = true;
-				foreach (var c in confirms) {
+				/*foreach (var c in confirms) {
 					if (!c.Value)
 						return false;	
-				}
+				}*/
+
 				
+
 				// returns true if all clients have confirmed
-				return true;
+				// return true;
 			}
-			Debug.LogWarning ("Host received confirmation for the message '" + id + "' but the host is looking for confirmations for the message '" + messageId + "'");
-			return false;
+			// Debug.LogWarning ("Host received confirmation for the message '" + id + "' but the host is looking for confirmations for the message '" + messageId + "'");
+			// return false;
 		}
 	}
 }

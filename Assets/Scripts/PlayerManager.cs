@@ -4,17 +4,27 @@ using System.Collections.Generic;
 using InventorySystem;
 using Models;
 
-// TODO: rename to GameData
 public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 
 	public delegate void OnAddPeer (string peer);
 	public delegate void OnRemovePeer (string peer);
 
+	// All players (including this player)
+	public Dictionary<string, Player> Players {
+		get {
+			Dictionary<string, Player> players = new Dictionary<string, Player> (peers);
+			players.Add (Player.Name, Player);
+			return players;
+		}
+	}
+
+	// Every player except this one
 	Dictionary<string, Player> peers = new Dictionary<string, Player> ();
 	public Dictionary<string, Player> Peers {
 		get { return peers; }
 	}
 
+	// This player
 	Player player;
 	public Player Player {
 		get {
@@ -41,37 +51,42 @@ public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 	public OnRemovePeer onRemovePeer;
 
 	public void Init () {
+		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
 		Inventory["coins"].Clear ();
 		Inventory["pot"].Clear ();
 		peers.Clear ();
 	}
 
-	public void UpdatePeers (List<string> newPeers) {
+	public void OnUpdatePlayers (NetworkMessage msg) {
 
-		foreach (string newPeer in newPeers) {
+		List<string> players = new List<string> (msg.str1.Split ('|'));
+		players.Remove (Player.Name);
+
+		foreach (string newPeer in players) {
 			if (!peers.ContainsKey (newPeer)) {
-				AddPeer (newPeer);
+				peers.Add (newPeer, new Player { Name = newPeer });
+				if (onAddPeer != null)
+					onAddPeer (newPeer);
 			}
 		}
 
 		Dictionary<string, Player> tempPeers = new Dictionary<string, Player> (peers);
 
 		foreach (var peer in tempPeers) {
-			if (!newPeers.Contains (peer.Key)) {
-				RemovePeer (peer.Key);
+			string peerName = peer.Key;
+			if (!players.Contains (peerName)) {
+				peers.Remove (peerName);
+				if (onRemovePeer != null)
+					onRemovePeer (peerName);
 			}
 		}
 	}
 
 	public void AddPeer (string name) {
 		peers.Add (name, new Player { Name = name });
-		if (onAddPeer != null)
-			onAddPeer (name);
 	}
 
 	public void RemovePeer (string name) {
 		peers.Remove (name);
-		if (onRemovePeer != null)
-			onRemovePeer (name);
 	}
 }

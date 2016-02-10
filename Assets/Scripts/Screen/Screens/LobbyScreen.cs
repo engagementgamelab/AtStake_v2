@@ -19,6 +19,11 @@ public class LobbyScreen : GameScreen {
 	}
 
 	protected override void OnShow () {
+
+		OnAddPeer (Game.Manager.Player.Name);
+		foreach (var peer in Game.Manager.Peers)
+			OnAddPeer (peer.Key);
+
 		Game.Manager.onAddPeer += OnAddPeer;
 		Game.Manager.onRemovePeer += OnRemovePeer;
 	}
@@ -29,14 +34,30 @@ public class LobbyScreen : GameScreen {
 	}
 
 	void OnAddPeer (string peer) {
-		AddElement (peer, new TextElement (peer));
+		AddElement ("peer_" + peer, new TextElement (peer));
+		SetPlayButton ();
 	}
 
 	void OnRemovePeer (string peer) {
-		RemoveElement (peer);
+		RemoveElement ("peer_" + peer);
+		SetPlayButton ();
+	}
+
+	void SetPlayButton () {
+
+		if (!IsHost) return;
+
+		bool hasButton = HasElement ("play");
+		bool hasMinPlayers = Game.Manager.Players.Count >= 3; // TODO: get minimum player count from settings (Models.Settings)
+
+		if (hasMinPlayers && !hasButton) {
+			AddElement ("play", new ButtonElement ("Play", () => { AllGotoScreen ("deck"); }));
+		} else if (hasButton && !hasMinPlayers) {
+			RemoveElement ("play");
+		}
 	}
 
 	public override void OnDisconnect () {
-		GoBack ();
+		GotoScreen ("hostjoin");
 	}
 }

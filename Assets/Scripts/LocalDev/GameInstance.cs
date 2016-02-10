@@ -25,7 +25,6 @@ public class GameInstance : MonoBehaviour {
 
 		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
 		Dispatcher.transform.SetParent (transform);
-		Dispatcher.onReceiveMessage += OnReceiveMessage;
 
 		Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
 		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
@@ -51,6 +50,7 @@ public class GameInstance : MonoBehaviour {
 		Ui.AddTextLine (line);
 	}
 
+	// Could move everything below here to a multiplayer manager
 	public void HostGame () {
 		Manager.Init ();
 		Network.HostGame ();
@@ -65,15 +65,17 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	void OnUpdateClients (List<string> clients) {
-		Manager.UpdatePeers (clients);
+		string players = "";
+		foreach (string player in clients) {
+			players += player + "|";
+		}
+		players += Manager.Player.Name;
+		Dispatcher.ScheduleMessage ("UpdatePlayers", players);
 	}
 
 	void OnDisconnect () {
 		Screens.OnDisconnect ();
 		Network.onDisconnect -= OnDisconnect;
-	}
-
-	void OnReceiveMessage (NetworkMessage msg) {
-		Debug.Log (Name + " ::: " + msg.id);
+		Dispatcher.RemoveAllListeners ();
 	}
 }

@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 public abstract class GameScreen : GameInstanceRef {
 
+	protected bool IsHost {
+		get { return Game.Network.Hosting; }
+	}
+
+	protected bool IsDecider {
+		get { return false; }
+	}
+
 	public abstract Dictionary<string, ScreenElement> Elements { get; }
 	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
 
@@ -61,6 +69,10 @@ public abstract class GameScreen : GameInstanceRef {
 		RenderDynamic ();
 	}
 
+	protected bool HasElement (string id) {
+		return dynamicElements.ContainsKey (id);
+	}
+
 	// Routing
 	public void GotoScreen (string id) {
 		screens.SetScreen (id);
@@ -68,6 +80,10 @@ public abstract class GameScreen : GameInstanceRef {
 
 	public void GoBack () {
 		screens.SetScreenPrevious ();
+	}
+
+	public void AllGotoScreen (string id) {
+		Game.Dispatcher.ScheduleMessage ("GotoScreen", id);
 	}
 
 	// Events
