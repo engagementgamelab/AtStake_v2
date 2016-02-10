@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Only used for local dev
+
 public class GameInstanceManager : MonoBehaviour {
 
 	static GameInstanceManager instance = null;

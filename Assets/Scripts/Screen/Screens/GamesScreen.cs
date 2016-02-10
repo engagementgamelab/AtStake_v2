@@ -20,11 +20,11 @@ public class GamesScreen : GameScreen {
 
 	protected override void OnShow () {
 		// TODO: also listen to new games as they get added
-		List<string> hosts = game.Network.UpdateHosts ();
+		List<string> hosts = Game.Network.UpdateHosts ();
 		for (int i = 0; i < hosts.Count; i ++) {
 			string hostId = hosts[i];
 			AddElement (i.ToString (), new ButtonElement (hostId, () => {
-				game.JoinGame (hostId);
+				Game.JoinGame (hostId);
 				GotoScreen ("lobby");
 			}));
 		}

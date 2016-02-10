@@ -55,19 +55,22 @@ public class GameInstance : MonoBehaviour {
 		Manager.Init ();
 		Network.HostGame ();
 		Network.onUpdateClients += OnUpdateClients;
+		Network.onDisconnect += OnDisconnect;
 	}
 
 	public void JoinGame (string hostId="") {
 		Manager.Init ();
-		if (hostId == "") {
-			Network.JoinGame (Network.Hosts[0]);
-		} else {
-			Network.JoinGame (hostId);
-		}
+		Network.JoinGame (hostId == "" ? Network.Hosts[0] : hostId);
+		Network.onDisconnect += OnDisconnect;
 	}
 
 	void OnUpdateClients (List<string> clients) {
 		Manager.UpdatePeers (clients);
+	}
+
+	void OnDisconnect () {
+		Screens.OnDisconnect ();
+		Network.onDisconnect -= OnDisconnect;
 	}
 
 	void OnReceiveMessage (NetworkMessage msg) {

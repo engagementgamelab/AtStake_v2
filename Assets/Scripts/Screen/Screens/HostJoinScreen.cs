@@ -22,7 +22,7 @@ public class HostJoinScreen : GameScreen {
 	}
 
 	void Host () {
-		game.Network.HostGame ();
+		Game.HostGame ();
 		GotoScreen ("lobby");
 	}
 

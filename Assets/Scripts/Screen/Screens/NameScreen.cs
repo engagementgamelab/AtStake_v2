@@ -23,6 +23,6 @@ public class NameScreen : GameScreen {
 		// TODO: don't actually allow players to continue w/o entering a name
 		string name = GetScreenElement<InputElement> ("text").Text;
 		if (name != "")
-			game.Manager.Player.Name = name;
+			Game.Manager.Player.Name = name;
 	}
 }

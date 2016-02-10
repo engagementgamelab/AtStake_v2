@@ -51,25 +51,27 @@ public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 		foreach (string newPeer in newPeers) {
 			if (!peers.ContainsKey (newPeer)) {
 				AddPeer (newPeer);
-				if (onAddPeer != null)
-					onAddPeer (newPeer);
 			}
 		}
 
-		foreach (var peer in peers) {
+		Dictionary<string, Player> tempPeers = new Dictionary<string, Player> (peers);
+
+		foreach (var peer in tempPeers) {
 			if (!newPeers.Contains (peer.Key)) {
 				RemovePeer (peer.Key);
-				if (onRemovePeer != null)
-					onRemovePeer (peer.Key);
 			}
 		}
 	}
 
 	public void AddPeer (string name) {
 		peers.Add (name, new Player { Name = name });
+		if (onAddPeer != null)
+			onAddPeer (name);
 	}
 
 	public void RemovePeer (string name) {
 		peers.Remove (name);
+		if (onRemovePeer != null)
+			onRemovePeer (name);
 	}
 }

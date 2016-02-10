@@ -22,30 +22,33 @@ public class GameScreenManager : GameInstanceComponent {
 		}
 	}
 
-	string currScreen = "";
-	string prevScreen = "";
+	public string CurrScreen { get; private set; }
+	public string PrevScreen { get; private set; }
 
 	public void Init (Transform canvas) {
 		foreach (var screen in Screens)
-			screen.Value.Init (Game, canvas);
+			screen.Value.Init (this, canvas);
 		SetScreen ("start");
 	}
 
 	public void SetScreen (string id) {
 		try {
-			if (currScreen != "") {
-				Screens[currScreen].Hide ();
-				prevScreen = currScreen;
+			if (!string.IsNullOrEmpty (CurrScreen)) {
+				Screens[CurrScreen].Hide ();
+				PrevScreen = CurrScreen;
 			}
-			currScreen = id;
-			Screens[currScreen].Show ();
+			CurrScreen = id;
+			Screens[CurrScreen].Show ();
 		} catch {
 			throw new System.Exception ("No screen with the id '" + id + "' exists");
 		}
 	}
 
-	// not being used rn - could it be removed?
 	public void SetScreenPrevious () {
-		SetScreen (prevScreen);
+		SetScreen (PrevScreen);
+	}
+
+	public void OnDisconnect () {
+		Screens[CurrScreen].OnDisconnect ();
 	}
 }

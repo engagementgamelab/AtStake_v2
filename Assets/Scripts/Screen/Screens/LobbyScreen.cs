@@ -12,20 +12,20 @@ public class LobbyScreen : GameScreen {
 			if (elements == null) {
 				elements = new Dictionary<string, ScreenElement> ();
 				elements.Add ("text", new TextElement ("Lobby"));
-				elements.Add ("back", new BackButtonElement ("hostjoin", () => { game.Network.Disconnect (); }));
+				elements.Add ("back", new BackButtonElement ("", () => { Game.Network.Disconnect (); }));
 			}
 			return elements;
 		}
 	}
 
 	protected override void OnShow () {
-		game.Manager.onAddPeer += OnAddPeer;
-		game.Manager.onRemovePeer += OnRemovePeer;
+		Game.Manager.onAddPeer += OnAddPeer;
+		Game.Manager.onRemovePeer += OnRemovePeer;
 	}
 
 	protected override void OnHide () {
-		game.Manager.onAddPeer -= OnAddPeer;
-		game.Manager.onRemovePeer -= OnRemovePeer;
+		Game.Manager.onAddPeer -= OnAddPeer;
+		Game.Manager.onRemovePeer -= OnRemovePeer;
 	}
 
 	void OnAddPeer (string peer) {
@@ -34,5 +34,9 @@ public class LobbyScreen : GameScreen {
 
 	void OnRemovePeer (string peer) {
 		RemoveElement (peer);
+	}
+
+	public override void OnDisconnect () {
+		GoBack ();
 	}
 }

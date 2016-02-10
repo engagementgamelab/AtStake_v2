@@ -2,17 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class GameScreen {
+public abstract class GameScreen : GameInstanceRef {
 
 	public abstract Dictionary<string, ScreenElement> Elements { get; }
 	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
 
 	Transform canvas;
-	protected GameInstance game;
+	protected GameScreenManager screens;
 
-	public void Init (GameInstance game, Transform canvas) {
-		this.game = game;
+	public void Init (GameScreenManager screens, Transform canvas) {
+		this.screens = screens;
 		this.canvas = canvas;
+		Init (screens);
 	}
 	
 	public void Show () {
@@ -45,9 +46,6 @@ public abstract class GameScreen {
 		}
 	}
 
-	protected virtual void OnShow () {}
-	protected virtual void OnHide () {}
-
 	protected T GetScreenElement<T> (string id) where T : ScreenElement {
 		return Elements[id] as T;
 	}
@@ -58,17 +56,22 @@ public abstract class GameScreen {
 	}
 
 	protected void RemoveElement (string id) {
+		dynamicElements[id].Remove ();
 		dynamicElements.Remove (id);
 		RenderDynamic ();
 	}
 
 	// Routing
 	public void GotoScreen (string id) {
-		game.Screens.SetScreen (id);
+		screens.SetScreen (id);
 	}
 
-	// not being used rn - could it be removed?
 	public void GoBack () {
-		game.Screens.SetScreenPrevious ();
+		screens.SetScreenPrevious ();
 	}
+
+	// Events
+	public virtual void OnDisconnect () {}
+	protected virtual void OnShow () {}
+	protected virtual void OnHide () {}
 }
