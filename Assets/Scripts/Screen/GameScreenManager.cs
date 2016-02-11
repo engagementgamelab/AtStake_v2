@@ -16,7 +16,11 @@ public class GameScreenManager : GameInstanceBehaviour {
 					{ "lobby", new LobbyScreen () },
 					{ "games", new GamesScreen () },
 					{ "deck", new DeckScreen () },
-					{ "roles", new RolesScreen () }
+					{ "roles", new RolesScreen () },
+					{ "pot", new PotScreen () },
+					{ "bio", new BioScreen () },
+					{ "agenda", new AgendaScreen () },
+					{ "question", new QuestionScreen () }
 				};
 			}
 
@@ -39,12 +43,12 @@ public class GameScreenManager : GameInstanceBehaviour {
 			Screens[CurrScreen].Hide ();
 			PrevScreen = CurrScreen;
 		}
-		// try {
+		try {
 			CurrScreen = id;
 			Screens[CurrScreen].Show ();
-		/*} catch {
+		} catch {
 			throw new System.Exception ("No screen with the id '" + id + "' exists");
-		}*/
+		}
 	}
 
 	public void SetScreenPrevious () {

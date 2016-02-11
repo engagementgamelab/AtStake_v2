@@ -38,6 +38,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		ScheduleMessage (new NetworkMessage (id, str1));
 	}
 
+	public void ScheduleMessage (string id, string str1, string str2) {
+		ScheduleMessage (new NetworkMessage (id, str1, str2));
+	}
+
 	public void ScheduleMessage (NetworkMessage msg) {
 		if (Hosting) {
 			QueueMessage (msg);
@@ -88,7 +92,8 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	}
 
 	void ReceiveMessageEvent (NetworkMessage msg) {
-		foreach (var listener in listeners) {
+		Dictionary<OnReceiveMessage, string> tempListeners = new Dictionary<OnReceiveMessage, string> (listeners);
+		foreach (var listener in tempListeners) {
 			if (listener.Value == msg.id) {
 				listener.Key (msg);
 			}

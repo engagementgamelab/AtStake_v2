@@ -122,6 +122,11 @@
     "PlayerCountRange": [
       3,
       4
-    ]
+    ],
+    "PotCoinCount": 50,
+    "PlayerStartCoinCount": 50,
+    "DeciderStartCoinCount": 100,
+    "RewardOne": 50,
+    "RewardTwo": 100
   }
 }

@@ -8,10 +8,10 @@ using System.Collections.Generic;
 
 public class HostJoinScreen : GameScreen {
 
-	protected override void OnInitElements (Dictionary<string, ScreenElement> e) {
-		e.Add ("host", new ButtonElement ("Host", Host));
-		e.Add ("join", new ButtonElement ("Join", Join));
-		e.Add ("back", new BackButtonElement ("name"));
+	protected override void OnInitElements () {
+		Elements.Add ("host", new ButtonElement ("Host", Host));
+		Elements.Add ("join", new ButtonElement ("Join", Join));
+		Elements.Add ("back", new BackButtonElement ("name"));
 	}
 
 	void Host () {

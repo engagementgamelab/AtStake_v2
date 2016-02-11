@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Models;
 
 public abstract class GameScreen : GameInstanceComponent {
 
@@ -9,7 +10,19 @@ public abstract class GameScreen : GameInstanceComponent {
 	}
 
 	protected bool IsDecider {
-		get { return false; }
+		get { return Role != null && Role.Title == "Decider"; }
+	}
+
+	protected string Name {
+		get { return Game.Manager.Player.Name; }
+	}
+
+	protected string Title {
+		get { return Role.Title; }
+	}
+
+	protected Role Role {
+		get { return Game.Manager.Player.Role; }
 	}
 
 	Dictionary<string, ScreenElement> elements;
@@ -17,7 +30,12 @@ public abstract class GameScreen : GameInstanceComponent {
 		get {
 			if (elements == null) {
 				elements = new Dictionary<string, ScreenElement> ();
-				OnInitElements (elements);
+				OnInitElements ();
+				if (IsDecider) {
+					OnInitDeciderElements ();
+				} else {
+					OnInitPlayerElements ();
+				}
 			}
 			return elements;
 		}
@@ -97,7 +115,9 @@ public abstract class GameScreen : GameInstanceComponent {
 	}
 
 	// Events
-	protected virtual void OnInitElements (Dictionary<string, ScreenElement> e) {}
+	protected virtual void OnInitElements () {}			// Static elements that all players see
+	protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
+	protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see
 	public virtual void OnDisconnect () {}
 	protected virtual void OnShow () {}
 	protected virtual void OnHide () {}

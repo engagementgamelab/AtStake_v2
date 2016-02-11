@@ -4,22 +4,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 // Randomly assigns roles, with the last role being the Decider
+// Everyone sees everyone else's role
 
 public class RolesScreen : GameScreen {
 
 	protected override void OnShow () {
 
-		// Game.Dispatcher.AddListener ("AssignRole", AssignRole);
+		Game.Dispatcher.AddListener ("AssignRole", AssignRole);
 		
 		if (IsHost) {
 
 			string decider = GetDecider ();
 			List<string[]> roles = GetRoles (decider);
 
-			/*foreach (string title in Game.Decks.RoleTitles) {
-				AddElement ("title_" + title, new TextElement (title));
-			}*/
-
+			foreach (string[] role in roles) {
+				Game.Dispatcher.ScheduleMessage ("AssignRole", role[0], role[1]);
+			}
+			Game.Dispatcher.ScheduleMessage ("AssignRole", decider, "Decider");
 		}
 	}
 
@@ -59,6 +60,9 @@ public class RolesScreen : GameScreen {
 	}
 
 	void AssignRole (NetworkMessage msg) {
-
+		AddElement ("role_" + msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
+		if (IsDecider && !HasElement ("next")) {
+			AddElement ("next", new ButtonElement ("Next", () => { AllGotoScreen ("pot"); }));
+		}
 	}
 }

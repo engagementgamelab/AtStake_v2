@@ -34,6 +34,11 @@ namespace Models {
 
 	public class Settings {
 		public int[] PlayerCountRange { get; set; }
+		public int PotCoinCount { get; set; }
+		public int PlayerStartCoinCount { get; set; }
+		public int DeciderStartCoinCount { get; set; }
+		public int RewardOne { get; set; }
+		public int RewardTwo { get; set; }
 	}
 
 	public class Player {

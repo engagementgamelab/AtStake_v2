@@ -10,6 +10,7 @@ public class GameInstance : MonoBehaviour {
 	public MessageDispatcher Dispatcher { get; private set; }
 	public GameScreenManager Screens { get; private set; }
 	public DeckManager Decks { get; private set; }
+	public RoundManager Rounds { get; private set; }
 	bool focused = false;
 
 	public string Name {
@@ -30,15 +31,30 @@ public class GameInstance : MonoBehaviour {
 		Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
 		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
 		Ui.transform.SetParent (grid);
-		Ui.Init (this);
 		
 		Screens = ObjectPool.Instantiate<GameScreenManager> ();
 		Screens.transform.SetParent (transform);
-		Screens.Init (Ui.Transform);
 
 		Decks = ObjectPool.Instantiate<DeckManager> ();
 		Decks.transform.SetParent (transform);
+
+		Rounds = ObjectPool.Instantiate<RoundManager> ();
+		Rounds.transform.SetParent (transform);
+
+		InitApp ();
+	}
+
+	// Called when the app is started
+	void InitApp () {
+		Ui.Init (this);
+		Screens.Init (Ui.Transform);
 		Decks.Init ();
+	}
+
+	// Called when the game begins (considered to be when a player hosts or joins a game)
+	void InitGame () {
+		Manager.Init ();
+		Rounds.Init ();
 	}
 
 	public void Focus () {
@@ -55,16 +71,15 @@ public class GameInstance : MonoBehaviour {
 		Ui.AddTextLine (line);
 	}
 
-	// Could move everything below here to a multiplayer manager
 	public void HostGame () {
-		Manager.Init ();
+		InitGame ();
 		Multiplayer.HostGame ();
 		Multiplayer.onUpdateClients += OnUpdateClients;
 		Multiplayer.onDisconnect += OnDisconnect;
 	}
 
 	public void JoinGame (string hostId="") {
-		Manager.Init ();
+		InitGame ();
 		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
 		Multiplayer.onDisconnect += OnDisconnect;
 	}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using InventorySystem;
 using Models;
@@ -29,6 +30,8 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 		get { return peers; }
 	}
 
+	public string Decider { get; private set; }
+
 	// This player
 	Player player;
 	public Player Player {
@@ -57,6 +60,7 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
+		Game.Dispatcher.AddListener ("AssignRole", AssignRole);
 		Inventory["coins"].Clear ();
 		Inventory["pot"].Clear ();
 		peers.Clear ();
@@ -84,6 +88,15 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 				if (onRemovePeer != null)
 					onRemovePeer (peerName);
 			}
+		}
+	}
+
+	public void AssignRole (NetworkMessage msg) {
+		string player = msg.str1;
+		string role = msg.str2;
+		Players[player].Role = Game.Decks.GetRole (role);
+		if (role == "Decider") {
+			Decider = player;
 		}
 	}
 

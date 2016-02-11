@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 public class NameScreen : GameScreen {
 
-	protected override void OnInitElements (Dictionary<string, ScreenElement> e) {
-		e.Add ("text", new InputElement ("Your name"));
-		e.Add ("button", new ButtonElement ("Enter", () => { GotoScreen ("hostjoin"); }));
-		e.Add ("back", new BackButtonElement ("start"));		
+	protected override void OnInitElements () {
+		Elements.Add ("text", new InputElement ("Your name"));
+		Elements.Add ("button", new ButtonElement ("Enter", () => { GotoScreen ("hostjoin"); }));
+		Elements.Add ("back", new BackButtonElement ("start"));		
 	}
 
 	protected override void OnHide () {

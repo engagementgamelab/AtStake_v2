@@ -56,9 +56,6 @@ public class GameInstanceManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Alpha5)) {
 			FocusInstance (4);
 		}
-		if (Input.GetKeyDown (KeyCode.Alpha6)) {
-			FocusInstance (5);
-		}
 	}
 
 	void AddPlayer () {

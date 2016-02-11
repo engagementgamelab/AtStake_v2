@@ -10,10 +10,13 @@ public class DeckManager : GameInstanceBehaviour {
 	}
 
 	public Deck Deck { get; private set; }
-	public Role Role { get; private set; }
 
 	public List<Role> Roles {
-		get { return new List<Role> (Deck.Roles); }
+		get { 
+			List<Role> roles = new List<Role> (Deck.Roles); 
+			roles.Add (new Role () { Title = "Decider" });
+			return roles;
+		}
 	}
 
 	public List<string> RoleTitles {
@@ -32,14 +35,13 @@ public class DeckManager : GameInstanceBehaviour {
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("SetDeck", SetDeck);
-		Game.Dispatcher.AddListener ("SetRole", SetRole);
 	}
 
 	public void SetDeck (NetworkMessage msg) {
 		Deck = Decks.Find (x => x.Name == msg.str1);
 	}
 
-	public void SetRole (NetworkMessage msg) {
-		Role = Roles.Find (x => x.Title == msg.str1);
+	public Role GetRole (string title) {
+		return Roles.Find (x => x.Title == title);
 	}
 }
