@@ -8,10 +8,10 @@ namespace Models {
     /// </summary>
     public class GameConfig {
 
-        public GameEnvironment Local { get; set; }
-        public GameEnvironment Development { get; set; }
-        public GameEnvironment Staging { get; set; }
-        public GameEnvironment Production { get; set; }
+        public GameEnvironment local { get; set; }
+        public GameEnvironment development { get; set; }
+        public GameEnvironment staging { get; set; }
+        public GameEnvironment production { get; set; }
 
     }
 
@@ -20,15 +20,15 @@ namespace Models {
     /// </summary>
     public class GameEnvironment {
 
-        public string Root { get; set; }
-        public string AuthKey { get; set; }
+        public string root { get; set; }
+        public string authKey { get; set; }
 
     }
 
     public class GameData {
 
     	public Settings Settings { get; set; }
-    	public Deck[] Decks { get; set; }
+    	// public Deck[] Decks { get; set; }
 
     }
 
@@ -44,6 +44,7 @@ namespace Models {
 
 	public class Deck {
 		public string Id { get; set; }
+		public string Description { get; set; }
 		public string[] Questions { get; set; }
 		public Role[] Roles { get; set; }
 	}

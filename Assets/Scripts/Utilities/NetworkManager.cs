@@ -267,7 +267,7 @@ public class NetworkManager : MonoBehaviour {
                 if(_wwwRequest == null)
                     yield return null;
 
-                Debug.Log(_wwwRequest.text);
+                // Debug.Log(_wwwRequest.text);
 
                 // Deserialize the response and handle it below
                 Dictionary<string, object> response = JsonReader.Deserialize<Dictionary<string, object>>(_wwwRequest.text);
@@ -343,14 +343,14 @@ public class NetworkManager : MonoBehaviour {
         
         if(_hasRequest) {
             _elapsedRequestTime += Time.deltaTime;
-            Debug.Log(_elapsedRequestTime);
+            // Debug.Log (_elapsedRequestTime);
         }
 
         // Cease any request if takes too long and murder networking
         if(_elapsedRequestTime >= _timeoutCap && _hasRequest){
-            StopCoroutine(_currentRoutine);
+            StopCoroutine (_currentRoutine);
         
-            KillNetwork(false);
+            KillNetwork (false);
         }
     
     }

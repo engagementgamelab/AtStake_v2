@@ -25,7 +25,7 @@ public class DataManager {
     /// </summary>
     public static string APIKey {
         get {
-            return currentConfig.AuthKey;
+            return currentConfig.authKey;
         }
     }
     
@@ -34,7 +34,7 @@ public class DataManager {
     /// </summary>
     public static string RemoteURL {
         get {
-            return currentConfig.Root;
+            return currentConfig.root;
         }
     }
     
@@ -76,16 +76,16 @@ public class DataManager {
         
         // Set the current game config based on the environment
         #if UNITY_EDITOR
-           currentConfig = config.Local;
+            currentConfig = config.local;
 
             // If override set, use that
             if(configTypeOverride != null) {
                 if(configTypeOverride == "development")
-                    currentConfig = config.Development;
+                    currentConfig = config.development;
                 else if(configTypeOverride == "staging")
-                    currentConfig = config.Staging;
+                    currentConfig = config.staging;
                 else if(configTypeOverride == "production")
-                    currentConfig = config.Production;
+                    currentConfig = config.production;
             }
 
 
@@ -94,12 +94,7 @@ public class DataManager {
         #elif IS_PRODUCTION
            currentConfig = config.Production;
         #else
-           #if !UNITY_WEBGL
-               currentConfig = config.Staging;
-           #else
-               // Hack
-               currentConfig = config.Development;
-           #endif
+           currentConfig = config.Staging;
         #endif
 
     }
@@ -146,6 +141,10 @@ public class DataManager {
             outfile.Write(data);
         }
 
+    }
+
+    public static Settings GetSettings () {
+        return gameData.Settings;
     }
 
     // TODO: use this to get copy for screens
