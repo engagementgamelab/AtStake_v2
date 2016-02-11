@@ -20,7 +20,9 @@ public class GameScreenManager : GameInstanceBehaviour {
 					{ "pot", new PotScreen () },
 					{ "bio", new BioScreen () },
 					{ "agenda", new AgendaScreen () },
-					{ "question", new QuestionScreen () }
+					{ "question", new QuestionScreen () },
+					{ "think_instructions", new ThinkInstructionsScreen () },
+					{ "think", new ThinkScreen () }
 				};
 			}
 

@@ -141,6 +141,10 @@ public class DataManager {
         return gameData.Decks;
     }
 
+    public static string[] GetQuestions (string deckKey) {
+        return System.Array.Find (GetDecks (), x => x.Name == deckKey).Questions;
+    }
+
     // TODO: use this to get copy for screens
     /// <summary>
     /// Get the UI Text associated with the given key.

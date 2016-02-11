@@ -9,7 +9,7 @@ public class AgendaScreen : GameScreen {
 	protected override void OnInitDeciderElements () {
 		Elements.Add ("instructions1", new TextElement ("Read this out loud: 'everyone secretly review yr agenda'"));
 		Elements.Add ("instructions2", new TextElement ("Press next when everyone is ready"));
-		Elements.Add ("next", new ButtonElement ("Next", () => {}));
+		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("question"); }));
 	}
 
 	protected override void OnInitPlayerElements () {

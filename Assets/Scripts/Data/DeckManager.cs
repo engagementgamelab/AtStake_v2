@@ -10,6 +10,10 @@ public class DeckManager : GameInstanceBehaviour {
 	}
 
 	public Deck Deck { get; private set; }
+	
+	public string Name {
+		get { return Deck.Name; }
+	}
 
 	public List<Role> Roles {
 		get { 
@@ -43,5 +47,9 @@ public class DeckManager : GameInstanceBehaviour {
 
 	public Role GetRole (string title) {
 		return Roles.Find (x => x.Title == title);
+	}
+
+	public string GetQuestion () {
+		return DataManager.GetQuestions (Game.Decks.Name)[Game.Rounds.Current];
 	}
 }
