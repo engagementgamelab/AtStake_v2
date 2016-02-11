@@ -9,6 +9,7 @@ public class GameInstance : MonoBehaviour {
 	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public GameScreenManager Screens { get; private set; }
+	public DeckManager Decks { get; private set; }
 	bool focused = false;
 
 	public string Name {
@@ -34,6 +35,10 @@ public class GameInstance : MonoBehaviour {
 		Screens = ObjectPool.Instantiate<GameScreenManager> ();
 		Screens.transform.SetParent (transform);
 		Screens.Init (Ui.Transform);
+
+		Decks = ObjectPool.Instantiate<DeckManager> ();
+		Decks.transform.SetParent (transform);
+		Decks.Init ();
 	}
 
 	public void Focus () {

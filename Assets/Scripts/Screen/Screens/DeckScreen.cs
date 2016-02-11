@@ -6,18 +6,19 @@ using System.Collections.Generic;
 
 public class DeckScreen : GameScreen {
 
-	Dictionary<string, ScreenElement> elements;
-	public override Dictionary<string, ScreenElement> Elements {
-		get {
-			if (elements == null) {
-				elements = new Dictionary<string, ScreenElement> ();
-			}
-			return elements;
-		}
-	}
-
 	protected override void OnShow () {
-		AddElement ("instructions",
-			new TextElement (IsHost ? "Please choose a deck genius" : "Please wait while the host chooses a deck"));
+		if (IsHost) {
+			AddElement ("instructions", new TextElement ("Please choose a deck genius"));
+			List<string> names = Game.Decks.Names;
+			for (int i = 0; i < names.Count; i ++) {
+				string name = names[i];
+				AddElement ("deck_" + name, new ButtonElement (name, () => {
+					Game.Dispatcher.ScheduleMessage ("SetDeck", name);
+					AllGotoScreen ("roles");
+				}));
+			}
+		} else {
+			AddElement ("instructions", new TextElement("Please wait while the host chooses a deck"));
+		}
 	}
 }

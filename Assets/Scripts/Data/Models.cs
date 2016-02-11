@@ -28,7 +28,7 @@ namespace Models {
     public class GameData {
 
     	public Settings Settings { get; set; }
-    	// public Deck[] Decks { get; set; }
+    	public Deck[] Decks { get; set; }
 
     }
 
@@ -40,10 +40,11 @@ namespace Models {
 		public string Name { get; set; }
 		public int CoinCount { get; set; }
 		public Role Role { get; set; }
+		public bool HasBeenDecider { get; set; }
 	}
 
 	public class Deck {
-		public string Id { get; set; }
+		public string Name { get; set; }
 		public string Description { get; set; }
 		public string[] Questions { get; set; }
 		public Role[] Roles { get; set; }

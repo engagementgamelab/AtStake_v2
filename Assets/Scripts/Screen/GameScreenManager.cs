@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameScreenManager : GameInstanceComponent {
+public class GameScreenManager : GameInstanceBehaviour {
 
 	Dictionary<string, GameScreen> screens;
 	Dictionary<string, GameScreen> Screens {
@@ -15,7 +15,8 @@ public class GameScreenManager : GameInstanceComponent {
 					{ "hostjoin", new HostJoinScreen () },
 					{ "lobby", new LobbyScreen () },
 					{ "games", new GamesScreen () },
-					{ "deck", new DeckScreen () }
+					{ "deck", new DeckScreen () },
+					{ "roles", new RolesScreen () }
 				};
 			}
 
@@ -38,12 +39,12 @@ public class GameScreenManager : GameInstanceComponent {
 			Screens[CurrScreen].Hide ();
 			PrevScreen = CurrScreen;
 		}
-		try {
+		// try {
 			CurrScreen = id;
 			Screens[CurrScreen].Show ();
-		} catch {
+		/*} catch {
 			throw new System.Exception ("No screen with the id '" + id + "' exists");
-		}
+		}*/
 	}
 
 	public void SetScreenPrevious () {

@@ -6,16 +6,9 @@ using System.Collections.Generic;
 
 public class GamesScreen : GameScreen {
 
-	Dictionary<string, ScreenElement> elements;
-	public override Dictionary<string, ScreenElement> Elements {
-		get {
-			if (elements == null) {
-				elements = new Dictionary<string, ScreenElement> ();
-				elements.Add ("text", new TextElement ("Select a game to join"));
-				elements.Add ("back", new BackButtonElement ("hostjoin"));
-			}
-			return elements;
-		}
+	protected override void OnInitElements (Dictionary<string, ScreenElement> e) {
+		e.Add ("text", new TextElement ("Select a game to join"));
+		e.Add ("back", new BackButtonElement ("hostjoin"));
 	}
 
 	protected override void OnShow () {

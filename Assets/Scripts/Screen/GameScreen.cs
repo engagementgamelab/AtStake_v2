@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class GameScreen : GameInstanceRef {
+public abstract class GameScreen : GameInstanceComponent {
 
 	protected bool IsHost {
 		get { return Game.Multiplayer.Hosting; }
@@ -12,7 +12,17 @@ public abstract class GameScreen : GameInstanceRef {
 		get { return false; }
 	}
 
-	public abstract Dictionary<string, ScreenElement> Elements { get; }
+	Dictionary<string, ScreenElement> elements;
+	public Dictionary<string, ScreenElement> Elements {
+		get {
+			if (elements == null) {
+				elements = new Dictionary<string, ScreenElement> ();
+				OnInitElements (elements);
+			}
+			return elements;
+		}
+	}
+
 	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
 
 	Transform canvas;
@@ -87,6 +97,7 @@ public abstract class GameScreen : GameInstanceRef {
 	}
 
 	// Events
+	protected virtual void OnInitElements (Dictionary<string, ScreenElement> e) {}
 	public virtual void OnDisconnect () {}
 	protected virtual void OnShow () {}
 	protected virtual void OnHide () {}

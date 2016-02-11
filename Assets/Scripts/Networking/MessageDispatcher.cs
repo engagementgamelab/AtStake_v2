@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MessageDispatcher : GameInstanceComponent {
+public class MessageDispatcher : GameInstanceBehaviour {
 
 	/**
 	 *	The MessageDispatcher sends and receives messages between players.

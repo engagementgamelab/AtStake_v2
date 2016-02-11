@@ -30,11 +30,13 @@ public class GameInstanceManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Equals)) {
 			AddPlayer ();
 			instances[0].HostGame ();
-			for (int i = 0; i < 3; i ++) {
+			instances[0].Screens.SetScreen ("deck");
+			for (int i = 1; i < 3; i ++) {
 				AddPlayer ();
-				instances[i+1].JoinGame ();
+				instances[i].Multiplayer.UpdateHosts ();
+				instances[i].JoinGame ();
+				instances[i].Screens.SetScreen ("deck");
 			}
-			FocusInstance (0);
 		}
 		if (Input.GetKeyDown (KeyCode.Minus)) {
 			AddPlayer ();

@@ -6,15 +6,8 @@ using System.Collections.Generic;
 
 public class StartScreen : GameScreen {
 
-	Dictionary<string, ScreenElement> elements;
-	public override Dictionary<string, ScreenElement> Elements {
-		get {
-			if (elements == null) {
-				elements = new Dictionary<string, ScreenElement> ();
-				elements.Add ("text", new TextElement ("@Stake"));
-				elements.Add ("button", new ButtonElement ("Play", () => { GotoScreen ("name"); }));
-			}
-			return elements;
-		}
+	protected override void OnInitElements (Dictionary<string, ScreenElement> e) {
+		e.Add ("text", new TextElement ("@Stake"));
+		e.Add ("button", new ButtonElement ("Play", () => { GotoScreen ("name"); }));		
 	}
 }

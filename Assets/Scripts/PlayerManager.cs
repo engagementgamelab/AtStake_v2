@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using InventorySystem;
 using Models;
 
-public class PlayerManager : GameInstanceComponent, IInventoryHolder {
+public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 
 	public delegate void OnAddPeer (string peer);
 	public delegate void OnRemovePeer (string peer);
@@ -16,6 +16,11 @@ public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 			players.Add (Player.Name, Player);
 			return players;
 		}
+	}
+
+	// The players' names (including this one)
+	public List<string> PlayerNames {
+		get { return new List<string> (Players.Keys); }
 	}
 
 	// Every player except this one
@@ -46,7 +51,7 @@ public class PlayerManager : GameInstanceComponent, IInventoryHolder {
 			return inventory;
 		}
 	}
-
+	
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
 

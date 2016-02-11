@@ -6,16 +6,9 @@ using System.Collections.Generic;
 
 public class LobbyScreen : GameScreen {
 
-	Dictionary<string, ScreenElement> elements;
-	public override Dictionary<string, ScreenElement> Elements {
-		get {
-			if (elements == null) {
-				elements = new Dictionary<string, ScreenElement> ();
-				elements.Add ("text", new TextElement ("Lobby"));
-				elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
-			}
-			return elements;
-		}
+	protected override void OnInitElements (Dictionary<string, ScreenElement> e) {
+		e.Add ("text", new TextElement ("Lobby"));
+		e.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 	}
 
 	protected override void OnShow () {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MultiplayerManager : GameInstanceComponent {
+public class MultiplayerManager : GameInstanceBehaviour {
 
 	public delegate void OnDisconnect ();
 	public delegate void OnUpdateClients (List<string> clients);

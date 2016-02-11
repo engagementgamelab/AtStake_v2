@@ -1,14 +1,3 @@
-/* 
-World Bank RBF
-Created by Engagement Lab, 2015
-==============
- DialogueManager.cs
- Unity networking manager.
-
- Created by Johnny Richardson on 4/3/15.
-==============
-*/
-
 using UnityEngine;
 using System;
 using System.Collections;

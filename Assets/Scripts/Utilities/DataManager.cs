@@ -1,13 +1,3 @@
-/* 
-World Bank RBF
-Created by Engagement Lab, 2015
-==============
- DataManager.cs
- Unity data storage handler.
-
- Created by Johnny Richardson on 4/7/15.
-==============
-*/
 using UnityEngine;
 using System;
 using System.Collections;
@@ -75,7 +65,7 @@ public class DataManager {
         config = JsonReader.Deserialize<GameConfig>(data);
         
         // Set the current game config based on the environment
-        #if UNITY_EDITOR
+        // #if UNITY_EDITOR
             currentConfig = config.local;
 
             // If override set, use that
@@ -89,13 +79,13 @@ public class DataManager {
             }
 
 
-        #elif DEVELOPMENT_BUILD
-           currentConfig = config.Development;
+        /*#elif DEVELOPMENT_BUILD
+           currentConfig = config.development;
         #elif IS_PRODUCTION
-           currentConfig = config.Production;
+           currentConfig = config.production;
         #else
-           currentConfig = config.Staging;
-        #endif
+           currentConfig = config.staging;
+        #endif*/
 
     }
 
@@ -145,6 +135,10 @@ public class DataManager {
 
     public static Settings GetSettings () {
         return gameData.Settings;
+    }
+
+    public static Deck[] GetDecks () {
+        return gameData.Decks;
     }
 
     // TODO: use this to get copy for screens
