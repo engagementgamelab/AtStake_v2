@@ -22,7 +22,14 @@ public class GameScreenManager : GameInstanceBehaviour {
 					{ "agenda", new AgendaScreen () },
 					{ "question", new QuestionScreen () },
 					{ "think_instructions", new ThinkInstructionsScreen () },
-					{ "think", new ThinkScreen () }
+					{ "think", new ThinkScreen () },
+					{ "pitch_instructions", new PitchInstructionsScreen () },
+					{ "pitch", new PitchScreen () },
+					{ "extra_time", new ExtraTimeScreen () },
+					{ "deliberate_instructions", new DeliberateInstructionsScreen () },
+					{ "deliberate", new DeliberateScreen () },
+					{ "decide", new DecideScreen () },
+					{ "winner", new WinnerScreen () }
 				};
 			}
 
@@ -45,10 +52,10 @@ public class GameScreenManager : GameInstanceBehaviour {
 			Screens[CurrScreen].Hide ();
 			PrevScreen = CurrScreen;
 		}
+		CurrScreen = id;
 		try {
-			CurrScreen = id;
 			Screens[CurrScreen].Show ();
-		} catch {
+		} catch (KeyNotFoundException e) {
 			throw new System.Exception ("No screen with the id '" + id + "' exists");
 		}
 	}

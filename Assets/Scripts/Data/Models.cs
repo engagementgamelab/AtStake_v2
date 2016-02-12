@@ -40,6 +40,11 @@ namespace Models {
 		public int DeciderStartCoinCount { get; set; }
 		public int RewardOne { get; set; }
 		public int RewardTwo { get; set; }
+		public int ExtraTimeCost { get; set; }
+		public float ThinkSeconds { get; set; }
+		public float PitchSeconds { get; set; }
+		public float ExtraSeconds { get; set; }
+		public float DeliberateSeconds { get; set; }
 	}
 
 	public class Player {

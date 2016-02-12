@@ -3,6 +3,7 @@ using System.Collections;
 
 public abstract class ScreenElement {
 	public abstract bool Active { get; }
+	public abstract UIElement Element { get; }
 	public abstract Transform Render (GameScreen screen);
 	public abstract void Remove ();
 }
@@ -11,6 +12,10 @@ public class ScreenElement<T> : ScreenElement where T : UIElement {
 
 	protected T uiElement;
 	protected GameScreen screen;
+
+	public override UIElement Element {
+		get { return uiElement as UIElement; }
+	}
 
 	bool active = false;
 	public override bool Active {

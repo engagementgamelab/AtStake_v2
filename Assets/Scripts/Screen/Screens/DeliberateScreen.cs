@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Players silently brainstorm plans
-// Decider just kinda waits, awkwardly
+// Players and Decider deliberate over who has the best plan
+// Players try to get the winning plan to include their agenda items
 
-public class ThinkScreen : GameScreen {
+public class DeliberateScreen : GameScreen {
 
 	float Duration {
-		get { return DataManager.GetSettings ().ThinkSeconds; }
+		get { return DataManager.GetSettings ().DeliberateSeconds; }
 	}
 
 	protected override void OnInitDeciderElements () {
@@ -15,7 +15,7 @@ public class ThinkScreen : GameScreen {
 		Elements.Add ("timer", new TimerButtonElement (Duration, () => {
 			Game.Dispatcher.ScheduleMessage ("StartTimer");
 		}, () => {
-			AllGotoScreen ("pitch_instructions");	
+			AllGotoScreen ("decide");
 		}));
 	}
 

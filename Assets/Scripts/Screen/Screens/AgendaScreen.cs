@@ -13,10 +13,11 @@ public class AgendaScreen : GameScreen {
 	}
 
 	protected override void OnInitPlayerElements () {
-		Elements.Add ("title", new TextElement (Name + " the " + Title));
+		CreateRoleCard (true, false, true);
+		/*Elements.Add ("title", new TextElement (Name + " the " + Title));
 		for (int i = 0; i < Role.AgendaItems.Length; i ++) {
 			Elements.Add ("agenda" + i.ToString (), new TextElement (Role.AgendaItems[i].Description));
 			Elements.Add ("reward" + i.ToString (), new TextElement ("Reward: " + Role.AgendaItems[i].Reward));
-		}
+		}*/
 	}
 }

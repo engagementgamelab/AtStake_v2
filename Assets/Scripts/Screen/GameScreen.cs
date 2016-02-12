@@ -86,6 +86,28 @@ public abstract class GameScreen : GameInstanceComponent {
 		return Elements[id] as T;
 	}
 
+	protected void CreateRoleCard (bool showTitle, bool showBio, bool showAgenda) {
+		if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
+		if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
+		if (showAgenda) {
+			for (int i = 0; i < Role.AgendaItems.Length; i ++) {
+				Elements.Add ("rc_agenda" + i.ToString (), new TextElement (Role.AgendaItems[i].Description));
+				Elements.Add ("rc_reward" + i.ToString (), new TextElement ("Reward: " + Role.AgendaItems[i].Reward));
+			}
+		}
+	}
+
+	// Dynamic elements
+	protected T AddElement<T> (string id, T t) where T : ScreenElement {
+		try {
+			dynamicElements.Add (id, t);
+		} catch {
+			throw new System.Exception ("An element with the id '" + id + "' already exists on the screen.");
+		}
+		RenderDynamic ();
+		return t;
+	}
+
 	protected void AddElement (string id, ScreenElement element) {
 		dynamicElements.Add (id, element);
 		RenderDynamic ();

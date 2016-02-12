@@ -127,6 +127,11 @@
     "PlayerStartCoinCount": 50,
     "DeciderStartCoinCount": 100,
     "RewardOne": 50,
-    "RewardTwo": 100
+    "RewardTwo": 100,
+    "ExtraTimeCost": 10,
+    "ThinkSeconds": 30,
+    "PitchSeconds": 60,
+    "ExtraSeconds": 30,
+    "DeliberateSeconds": 60
   }
 }

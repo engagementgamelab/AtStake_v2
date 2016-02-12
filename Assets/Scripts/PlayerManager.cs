@@ -30,7 +30,14 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 		get { return peers; }
 	}
 
+	// The peers' names
+	public List<string> PeerNames {
+		get { return new List<string> (Peers.Keys); }
+	}
+
 	public string Decider { get; private set; }
+
+	public string Winner { get; set; }
 
 	// This player
 	Player player;

@@ -42,6 +42,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		ScheduleMessage (new NetworkMessage (id, str1, str2));
 	}
 
+	public void ScheduleMessage (string id, string str1, int val) {
+		ScheduleMessage (new NetworkMessage (id, str1, "", val));
+	}
+
 	public void ScheduleMessage (NetworkMessage msg) {
 		if (Hosting) {
 			QueueMessage (msg);

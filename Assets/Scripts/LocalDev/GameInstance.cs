@@ -43,7 +43,7 @@ public class GameInstance : MonoBehaviour {
 
 		InitApp ();
 	}
-
+	
 	// Called when the app is started
 	void InitApp () {
 		Ui.Init (this);
