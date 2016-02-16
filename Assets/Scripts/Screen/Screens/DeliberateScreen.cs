@@ -19,6 +19,11 @@ public class DeliberateScreen : GameScreen {
 		}));
 	}
 
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
+
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, true, true);
 		Elements.Add ("timer", new TimerElement (Duration));

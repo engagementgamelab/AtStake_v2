@@ -44,6 +44,11 @@ public class PitchScreen : GameScreen {
 		CreateRoleCard (true, true, true);
 	}
 
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
+
 	protected override void OnShow () {
 		Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 	}

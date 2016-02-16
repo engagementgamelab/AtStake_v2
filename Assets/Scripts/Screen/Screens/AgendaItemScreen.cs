@@ -20,5 +20,7 @@ public class AgendaItemScreen : GameScreen {
 	protected override void OnInitElements () {
 		Elements.Add ("instructions", new TextElement ("Did the winning plan include this agenda item?"));
 		Elements.Add ("item", new TextElement (Item.Description));
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
 	}
 }

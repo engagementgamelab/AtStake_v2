@@ -3,19 +3,19 @@ using System.Collections;
 
 public class GameInstanceComponent {
 
-	public GameInstanceBehaviour Component { get; private set; }
+	public GameInstanceBehaviour Behaviour { get; private set; }
 
 	GameInstance game;
 	public GameInstance Game {
 		get {
 			if (game == null)
-				game = Component.Game;
+				game = Behaviour.Game;
 			return game;
 		}
 	}
 
-	public void Init (GameInstanceBehaviour component) {
-		Component = component;
+	public void Init (GameInstanceBehaviour behaviour) {
+		Behaviour = behaviour;
 	}
 
 	protected void Log (object msg) {

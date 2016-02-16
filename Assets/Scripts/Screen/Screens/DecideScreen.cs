@@ -13,6 +13,11 @@ public class DecideScreen : GameScreen {
 		}
 	}
 
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
+
 	protected override void OnShow () {
 		Game.Dispatcher.AddListener ("ChooseWinner", ChooseWinner);
 	}

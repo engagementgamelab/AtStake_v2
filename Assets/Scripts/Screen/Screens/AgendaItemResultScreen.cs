@@ -14,6 +14,10 @@ public class AgendaItemResultScreen : GameScreen {
 
 	protected bool MyItem { get { return Item.Player == Name; } }
 
+	protected int[] RewardValues {
+		get { return DataManager.GetSettings ().Rewards; }
+	}
+
 	bool hasNextItem;
 
 	protected override void OnInitDeciderElements () {
@@ -21,6 +25,15 @@ public class AgendaItemResultScreen : GameScreen {
 		Co.WaitForFixedUpdate (() => {
 			hasNextItem = Game.Decks.NextAgendaItem ();
 		});
+	}
+
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
+
+	protected override void OnHide () {
+		item = null;
 	}
 
 	void Advance () {

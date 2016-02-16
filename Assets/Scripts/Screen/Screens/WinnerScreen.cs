@@ -9,7 +9,13 @@ public class WinnerScreen : GameScreen {
 		Game.Decks.NextAgendaItem ();
 	}
 
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
+
 	protected override void OnShow () {
 		AddElement ("text", new TextElement ("And the winner is " + Game.Manager.Winner));
+		Game.Score.AddWinnings ();
 	}
 }

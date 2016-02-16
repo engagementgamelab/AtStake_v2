@@ -9,4 +9,9 @@ public class ThinkInstructionsScreen : GameScreen {
 		Elements.Add ("instructions", new TextElement ("read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'"));
 		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("think"); }));
 	}
+
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
 }

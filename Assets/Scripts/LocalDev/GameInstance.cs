@@ -11,6 +11,7 @@ public class GameInstance : MonoBehaviour {
 	public GameScreenManager Screens { get; private set; }
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
+	public ScoreManager Score { get; private set; }
 	bool focused = false;
 
 	public string Name {
@@ -41,6 +42,9 @@ public class GameInstance : MonoBehaviour {
 		Rounds = ObjectPool.Instantiate<RoundManager> ();
 		Rounds.transform.SetParent (transform);
 
+		Score = ObjectPool.Instantiate<ScoreManager> ();
+		Score.transform.SetParent (transform);
+
 		InitApp ();
 	}
 	
@@ -55,6 +59,7 @@ public class GameInstance : MonoBehaviour {
 	void StartGame () {
 		Manager.Init ();
 		Rounds.Init ();
+		Score.Init ();
 	}
 
 	public void EndGame () {

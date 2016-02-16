@@ -10,6 +10,7 @@ public class RolesScreen : GameScreen {
 
 	protected override void OnShow () {
 
+		Game.Manager.Player.Role = null;
 		Game.Dispatcher.AddListener ("AssignRole", AssignRole);
 		
 		if (IsHost) {

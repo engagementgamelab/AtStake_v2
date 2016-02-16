@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//// <summary>
+/// Handles rounds. The number of rounds is determined by the number of questions in the deck.
+/// </summary>
 public class RoundManager : GameInstanceBehaviour {
 
 	int Count {

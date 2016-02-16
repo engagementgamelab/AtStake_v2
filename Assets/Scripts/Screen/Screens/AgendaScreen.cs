@@ -15,4 +15,9 @@ public class AgendaScreen : GameScreen {
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, false, true);
 	}
+
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
 }

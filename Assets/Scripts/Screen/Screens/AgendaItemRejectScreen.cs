@@ -10,6 +10,7 @@ public class AgendaItemRejectScreen : AgendaItemResultScreen {
 	}
 
 	protected override void OnInitElements () {
+		base.OnInitElements ();
 		if (!MyItem) {
 			Elements.Add ("reject", new TextElement ("The agenda item was not approved"));
 		}		

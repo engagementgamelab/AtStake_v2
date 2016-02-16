@@ -38,8 +38,7 @@ namespace Models {
 		public int PotCoinCount { get; set; }
 		public int PlayerStartCoinCount { get; set; }
 		public int DeciderStartCoinCount { get; set; }
-		public int RewardOne { get; set; }
-		public int RewardTwo { get; set; }
+		public int[] Rewards { get; set; }
 		public int ExtraTimeCost { get; set; }
 		public float ThinkSeconds { get; set; }
 		public float PitchSeconds { get; set; }

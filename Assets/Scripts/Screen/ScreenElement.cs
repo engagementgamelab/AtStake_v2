@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class ScreenElement {
+public abstract class ScreenElement : GameInstanceComponent {
 	public abstract bool Active { get; }
 	public abstract UIElement Element { get; }
 	public abstract Transform Render (GameScreen screen);

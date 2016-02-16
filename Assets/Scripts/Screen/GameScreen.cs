@@ -71,6 +71,7 @@ public abstract class GameScreen : GameInstanceComponent {
 
 	void Render () {
 		foreach (var element in Elements) {
+			element.Value.Init (Behaviour);
 			element.Value.Render (this).SetParent (canvas);
 		}
 	}
@@ -78,6 +79,7 @@ public abstract class GameScreen : GameInstanceComponent {
 	void RenderDynamic () {
 		foreach (var element in dynamicElements) {
 			ScreenElement s = element.Value;
+			s.Init (Behaviour);
 			if (!s.Active)
 				s.Render (this).SetParent (canvas);
 		}
@@ -91,9 +93,10 @@ public abstract class GameScreen : GameInstanceComponent {
 		if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
 		if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
 		if (showAgenda) {
+			int[] rewardValues = DataManager.GetSettings ().Rewards;
 			for (int i = 0; i < Role.AgendaItems.Length; i ++) {
 				Elements.Add ("rc_agenda" + i.ToString (), new TextElement (Role.AgendaItems[i].Description));
-				Elements.Add ("rc_reward" + i.ToString (), new TextElement ("Reward: " + Role.AgendaItems[i].Reward));
+				Elements.Add ("rc_reward" + i.ToString (), new TextElement ("Reward: " + rewardValues[Role.AgendaItems[i].Reward]));
 			}
 		}
 	}

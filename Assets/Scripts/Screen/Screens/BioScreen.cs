@@ -15,4 +15,9 @@ public class BioScreen : GameScreen {
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, true, false);
 	}
+
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
 }

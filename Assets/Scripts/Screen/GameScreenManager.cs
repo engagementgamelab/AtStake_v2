@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+//// <summary>
+/// Manages all the screens in the game
+/// Sets which screen is currently active
+/// </summary>
 public class GameScreenManager : GameInstanceBehaviour {
 
 	Dictionary<string, GameScreen> screens;

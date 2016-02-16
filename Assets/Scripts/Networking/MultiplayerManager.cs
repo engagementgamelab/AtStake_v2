@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+//// <summary>
+/// Handles local multiplayer
+/// Games consist of a host and multiple clients
+/// </summary>
 public class MultiplayerManager : GameInstanceBehaviour {
 
 	public delegate void OnDisconnect ();

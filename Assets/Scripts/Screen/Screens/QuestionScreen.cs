@@ -16,4 +16,9 @@ public class QuestionScreen : GameScreen {
 	protected override void OnInitPlayerElements () {
 		Elements.Add ("question", new TextElement (Game.Decks.GetQuestion ()));
 	}
+
+	protected override void OnInitElements () {
+		Elements.Add ("pot", new PotElement ());
+		Elements.Add ("coins", new CoinsElement ());
+	}
 }

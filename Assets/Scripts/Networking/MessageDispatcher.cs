@@ -8,7 +8,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	/**
 	 *	The MessageDispatcher sends and receives messages between players.
 	 *	In order to ensure synchronicity, messages go through the following steps:
-	 *		1. A device sends a message to the host (or host sends the message to itself)
+	 *		1. A device sends a message to the host (or, if hosting, skip to step 3)
 	 *		2. The host receives the message
 	 *		3. The host sends the message to all clients
 	 *		4. Clients, upon receiving the message, send a confirmation message back to the host

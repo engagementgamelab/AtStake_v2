@@ -7,5 +7,7 @@ namespace InventorySystem {
 		public override string ID {
 			get { return "pot"; }
 		}
+
+		public PotGroup  (int startCount) : base (startCount) {}
 	}
 }

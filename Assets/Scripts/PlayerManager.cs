@@ -5,7 +5,11 @@ using System.Collections.Generic;
 using InventorySystem;
 using Models;
 
-public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
+//// <summary>
+/// Keeps track of all the players in the game
+/// Updates player models to reflect who's the Decider and who's the winner of the round
+/// </summary>
+public class PlayerManager : GameInstanceBehaviour {
 
 	public delegate void OnAddPeer (string peer);
 	public delegate void OnRemovePeer (string peer);
@@ -37,6 +41,10 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 
 	public string Decider { get; private set; }
 
+	public Player DeciderPlayer {
+		get { return Players[Decider]; }
+	}
+
 	public string Winner { get; set; }
 
 	// This player
@@ -50,26 +58,12 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 		}
 	}
 
-	Inventory inventory;
-	public Inventory Inventory {
-		get {
-			if (inventory == null) {
-				inventory = new Inventory (this);
-				inventory.Add (new CoinGroup ());
-				inventory.Add (new PotGroup ());
-			}
-			return inventory;
-		}
-	}
-	
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
 		Game.Dispatcher.AddListener ("AssignRole", AssignRole);
-		Inventory["coins"].Clear ();
-		Inventory["pot"].Clear ();
 		peers.Clear ();
 		Player.HasBeenDecider = false;
 	}

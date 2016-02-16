@@ -14,8 +14,8 @@ public class ScoreboardScreen : GameScreen {
 	}
 
 	protected void DisplayScores () {
-		foreach (var player in Game.Manager.Players) {
-			Elements.Add ("player_" + player.Key, new TextElement (player.Key + ": " + player.Value.CoinCount + " coins")); 
+		foreach (var score in Game.Score.PlayerScores) {
+			Elements.Add ("player_" + score.Key, new TextElement (score.Key + ": " + score.Value + " coins")); 
 		}
 	}
 }
