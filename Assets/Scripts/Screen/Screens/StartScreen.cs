@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class StartScreen : GameScreen {
 
 	protected override void OnInitElements () {
-		Elements.Add ("text", new TextElement ("@Stake"));
-		Elements.Add ("button", new ButtonElement ("Play", () => { GotoScreen ("name"); }));		
+		Elements.Add ("play", new ButtonElement (Model.Buttons["play"], () => { GotoScreen ("name"); }));	
 	}
 }

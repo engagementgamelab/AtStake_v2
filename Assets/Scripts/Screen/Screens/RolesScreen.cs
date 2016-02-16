@@ -67,7 +67,7 @@ public class RolesScreen : GameScreen {
 	void AssignRole (NetworkMessage msg) {
 		AddElement ("role_" + msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
 		if (IsDecider && !HasElement ("next")) {
-			AddElement ("next", new ButtonElement ("Next", () => { AllGotoScreen ("pot"); }));
+			AddElement ("next", new NextButtonElement ("pot"));
 		}
 	}
 }

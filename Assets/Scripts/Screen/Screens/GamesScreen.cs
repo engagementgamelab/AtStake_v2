@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class GamesScreen : GameScreen {
 
 	protected override void OnInitElements () {
-		Elements.Add ("text", new TextElement ("Select a game to join"));
 		Elements.Add ("back", new BackButtonElement ("hostjoin"));
 	}
 

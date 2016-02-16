@@ -30,6 +30,7 @@ namespace Models {
 
     	public Settings Settings { get; set; }
     	public Deck[] Decks { get; set; }
+    	public Screen[] Screens { get; set; }
 
     }
 
@@ -69,5 +70,16 @@ namespace Models {
 	public class AgendaItem {
 		public string Description { get; set; }
 		public int Reward { get; set; }
+	}
+
+	public class Screen {
+		public string Symbol { get; set; }
+		public string DisplayName { get; set; } // Leave blank to not display a name
+		public Dictionary<string, string> Buttons { get; set; }		
+		public Dictionary<string, string> Text { get; set; }
+		public string Instructions { get; set; } // Instructions that all players see (including Decider)
+		public string DeciderInstructions { get; set; } // Instructions that only the Decider sees (overrides the above property)
+		public string HostInstructions { get; set; } // Instructions that only the Host sees (overrides the above property)
+		public bool DisplayScore { get; set; } // Whethor or not to display the pot and player's coin count
 	}
 }

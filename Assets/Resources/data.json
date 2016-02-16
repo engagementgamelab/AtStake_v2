@@ -118,17 +118,55 @@
       ]
     }
   ],
+  "Screens": [
+    {
+      "Symbol": "deck",
+      "Instructions": "Please wait while the host chooses a deck",
+      "HostInstructions": "Please choose a deck genius"
+    },
+    {
+      "Symbol": "games",
+      "Instructions": "Choose a game to join"
+    },
+    {
+      "Symbol": "hostjoin",
+      "Buttons": {
+        "host": "Host",
+        "join": "Join"
+      }
+    },
+    {
+      "Symbol": "lobby",
+      "DisplayName": "Lobby",
+      "Buttons": {
+        "play": "Play"
+      }
+    },
+    {
+      "Symbol": "name",
+      "Buttons": {
+        "submit": "Submit"
+      }
+    },
+    {
+      "Symbol": "start",
+      "DisplayName": "@Stake",
+      "Buttons": {
+        "play": "Play"
+      }
+    }
+  ],
   "Settings": {
     "PlayerCountRange": [
       3,
       4
     ],
     "PotCoinCount": 50,
-    "PlayerStartCoinCount": 50,
+    "PlayerStartCoinCount": 30,
     "DeciderStartCoinCount": 100,
     "Rewards": [
-      50,
-      100
+      10,
+      20
     ],
     "ExtraTimeCost": 10,
     "ThinkSeconds": 30,

@@ -5,7 +5,7 @@ public class ScoreboardScreen : GameScreen {
 
 	protected override void OnInitDeciderElements () {
 		Elements.Add ("instructions", new TextElement ("When everyone is ready, press 'next' to start the next round"));
-		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("roles"); }));
+		Elements.Add ("next", new NextButtonElement ("roles"));
 	}
 
 	protected override void OnInitElements () {

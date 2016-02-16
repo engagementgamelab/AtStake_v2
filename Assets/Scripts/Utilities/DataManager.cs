@@ -145,6 +145,10 @@ public class DataManager {
         return System.Array.Find (GetDecks (), x => x.Name == deckKey).Questions;
     }
 
+    public static Models.Screen GetScreen (string symbol) {
+        return System.Array.Find (gameData.Screens, x => x.Symbol == symbol);
+    }
+
     // TODO: use this to get copy for screens
     /// <summary>
     /// Get the UI Text associated with the given key.

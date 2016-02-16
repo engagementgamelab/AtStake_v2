@@ -4,7 +4,7 @@ using System.Collections;
 public class WinnerScreen : GameScreen {
 
 	protected override void OnInitDeciderElements () {
-		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("agenda_item"); }));
+		Elements.Add ("next", new NextButtonElement ("agenda_item"));
 		Game.Decks.ShuffleAgendaItems (Game.Manager.Peers);
 		Game.Decks.NextAgendaItem ();
 	}

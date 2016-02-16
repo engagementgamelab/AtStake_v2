@@ -25,11 +25,14 @@ public abstract class GameScreen : GameInstanceComponent {
 		get { return Game.Manager.Player.Role; }
 	}
 
+	protected Models.Screen Model { get; private set; }
+
 	Dictionary<string, ScreenElement> elements;
 	public Dictionary<string, ScreenElement> Elements {
 		get {
 			if (elements == null) {
 				elements = new Dictionary<string, ScreenElement> ();
+				LoadModelElements ();
 				OnInitElements ();
 				if (IsDecider) {
 					OnInitDeciderElements ();
@@ -46,9 +49,10 @@ public abstract class GameScreen : GameInstanceComponent {
 	Transform canvas;
 	protected GameScreenManager screens;
 
-	public void Init (GameScreenManager screens, Transform canvas) {
+	public void Init (GameScreenManager screens, Transform canvas, string id) {
 		this.screens = screens;
 		this.canvas = canvas;
+		Model = DataManager.GetScreen (id);
 		Init (screens);
 	}
 	
@@ -67,6 +71,33 @@ public abstract class GameScreen : GameInstanceComponent {
 		dynamicElements.Clear ();
 		OnHide ();
 		elements = null;
+	}
+
+	void LoadModelElements () {
+		if (Model != null) { // TODO: remove this check once all models are in
+			if (!string.IsNullOrEmpty (Model.DisplayName)) {
+				Elements.Add ("title", new TextElement (Model.DisplayName));
+			}
+			if (IsDecider) {
+				if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
+					Elements.Add ("decider_instructions", new TextElement (Model.DeciderInstructions));
+				}
+			}
+			if (IsHost) {
+				if (!string.IsNullOrEmpty (Model.HostInstructions)) {
+					Elements.Add ("host_instructions", new TextElement (Model.HostInstructions));
+				}
+			} 
+			if (!IsDecider && !IsHost) {
+				if (!string.IsNullOrEmpty (Model.Instructions)) {
+					Elements.Add ("instructions", new TextElement (Model.Instructions));
+				}
+			}
+			if (Model.DisplayScore) {
+				Elements.Add ("pot", new PotElement ());
+				Elements.Add ("coins", new CoinsElement ());
+			}
+		}
 	}
 
 	void Render () {

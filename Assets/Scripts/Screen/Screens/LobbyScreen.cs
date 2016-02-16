@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class LobbyScreen : GameScreen {
 
 	protected override void OnInitElements () {
-		Elements.Add ("text", new TextElement ("Lobby"));
 		Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 	}
 
@@ -44,7 +43,7 @@ public class LobbyScreen : GameScreen {
 		bool hasMinPlayers = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
 
 		if (hasMinPlayers && !hasButton) {
-			AddElement ("play", new ButtonElement ("Play", () => { AllGotoScreen ("deck"); }));
+			AddElement ("play", new ButtonElement (Model.Buttons["play"], () => { AllGotoScreen ("deck"); }));
 		} else if (hasButton && !hasMinPlayers) {
 			RemoveElement ("play");
 		}

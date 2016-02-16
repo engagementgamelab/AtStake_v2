@@ -7,7 +7,7 @@ public class DeliberateInstructionsScreen : GameScreen {
 
 	protected override void OnInitDeciderElements () {
 		Elements.Add ("instructions", new TextElement ("read this out load: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'"));
-		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("deliberate"); }));
+		Elements.Add ("next", new NextButtonElement ("deliberate"));
 	}
 
 	protected override void OnInitElements () {

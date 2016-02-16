@@ -9,7 +9,7 @@ public class BioScreen : GameScreen {
 	protected override void OnInitDeciderElements () {
 		Elements.Add ("instructions1", new TextElement ("Read this out loud: 'Come on yall say what you are!!'"));
 		Elements.Add ("instructions2", new TextElement ("When everyone has introduced themselves, press next"));
-		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("agenda"); }));
+		Elements.Add ("next", new NextButtonElement ("agenda"));
 	}
 
 	protected override void OnInitPlayerElements () {

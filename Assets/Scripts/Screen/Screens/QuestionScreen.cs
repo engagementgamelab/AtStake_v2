@@ -10,7 +10,7 @@ public class QuestionScreen : GameScreen {
 		Elements.Add ("instructions1", new TextElement ("read this out loud: 'yo everyone listen to this question'"));
 		Elements.Add ("question", new TextElement (Game.Decks.GetQuestion ()));
 		Elements.Add ("instructions2", new TextElement ("when everyne is done press next"));
-		Elements.Add ("next", new ButtonElement ("Next", () => { AllGotoScreen ("think_instructions"); }));
+		Elements.Add ("next", new NextButtonElement ("think_instructions"));
 	}
 
 	protected override void OnInitPlayerElements () {

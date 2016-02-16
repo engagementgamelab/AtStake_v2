@@ -9,8 +9,8 @@ using System.Collections.Generic;
 public class HostJoinScreen : GameScreen {
 
 	protected override void OnInitElements () {
-		Elements.Add ("host", new ButtonElement ("Host", Host));
-		Elements.Add ("join", new ButtonElement ("Join", Join));
+		Elements.Add ("host", new ButtonElement (Model.Buttons["host"], Host));
+		Elements.Add ("join", new ButtonElement (Model.Buttons["join"], Join));
 		Elements.Add ("back", new BackButtonElement ("name"));
 	}
 

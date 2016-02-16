@@ -21,7 +21,7 @@ public class AgendaItemResultScreen : GameScreen {
 	bool hasNextItem;
 
 	protected override void OnInitDeciderElements () {
-		Elements.Add ("next", new ButtonElement ("Next", Advance));
+		Elements.Add ("next", new NextButtonElement ("", Advance));
 		Co.WaitForFixedUpdate (() => {
 			hasNextItem = Game.Decks.NextAgendaItem ();
 		});

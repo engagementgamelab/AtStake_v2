@@ -51,7 +51,7 @@ public class GameScreenManager : GameInstanceBehaviour {
 
 	public void Init (Transform canvas) {
 		foreach (var screen in Screens)
-			screen.Value.Init (this, canvas);
+			screen.Value.Init (this, canvas, screen.Key);
 		SetScreen ("start");
 		Game.Dispatcher.AddListener ("GotoScreen", OnGotoScreen);
 	}

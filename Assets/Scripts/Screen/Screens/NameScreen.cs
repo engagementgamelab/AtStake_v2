@@ -8,7 +8,7 @@ public class NameScreen : GameScreen {
 
 	protected override void OnInitElements () {
 		Elements.Add ("input", new InputElement ("Your name"));
-		Elements.Add ("button", new ButtonElement ("Enter", () => { GotoScreen ("hostjoin"); }));
+		Elements.Add ("submit", new ButtonElement (Model.Buttons["submit"], () => { GotoScreen ("hostjoin"); }));
 		Elements.Add ("back", new BackButtonElement ("start"));		
 	}
 
