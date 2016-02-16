@@ -14,7 +14,5 @@ public class BioScreen : GameScreen {
 
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, true, false);
-		// Elements.Add ("title", new TextElement (Name + " the " + Title));
-		// Elements.Add ("bio", new TextElement (Role.Bio));
 	}
 }

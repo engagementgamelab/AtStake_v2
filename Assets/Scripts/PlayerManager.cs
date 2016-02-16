@@ -71,6 +71,7 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 		Inventory["coins"].Clear ();
 		Inventory["pot"].Clear ();
 		peers.Clear ();
+		Player.HasBeenDecider = false;
 	}
 
 	public void OnUpdatePlayers (NetworkMessage msg) {
@@ -104,6 +105,7 @@ public class PlayerManager : GameInstanceBehaviour, IInventoryHolder {
 		Players[player].Role = Game.Decks.GetRole (role);
 		if (role == "Decider") {
 			Decider = player;
+			Players[Decider].HasBeenDecider = true;
 		}
 	}
 

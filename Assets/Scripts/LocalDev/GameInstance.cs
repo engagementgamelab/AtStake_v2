@@ -52,9 +52,13 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
-	void InitGame () {
+	void StartGame () {
 		Manager.Init ();
 		Rounds.Init ();
+	}
+
+	public void EndGame () {
+		Multiplayer.Disconnect ();
 	}
 
 	public void Focus () {
@@ -72,14 +76,14 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public void HostGame () {
-		InitGame ();
+		StartGame ();
 		Multiplayer.HostGame ();
 		Multiplayer.onUpdateClients += OnUpdateClients;
 		Multiplayer.onDisconnect += OnDisconnect;
 	}
 
 	public void JoinGame (string hostId="") {
-		InitGame ();
+		StartGame ();
 		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
 		Multiplayer.onDisconnect += OnDisconnect;
 	}

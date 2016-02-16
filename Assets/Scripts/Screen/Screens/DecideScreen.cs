@@ -23,6 +23,6 @@ public class DecideScreen : GameScreen {
 
 	void ChooseWinner (NetworkMessage msg) {
 		Game.Manager.Winner = msg.str1;
-		AllGotoScreen ("winner");
+		GotoScreen ("winner");
 	}
 }

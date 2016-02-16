@@ -28,7 +28,11 @@ public class RolesScreen : GameScreen {
 		List<string> potentialDeciders = Game.Manager.Players
 			.Where (kv => !kv.Value.HasBeenDecider)
 			.Select (kv => kv.Key).ToList ();
-		return potentialDeciders[Random.Range (0, potentialDeciders.Count)];
+		try {
+			return potentialDeciders[Random.Range (0, potentialDeciders.Count)];
+		} catch {
+			throw new System.Exception ("A decider could not be selected because all players have been deciders");
+		}
 	}
 
 	List<string[]> GetRoles (string decider) {

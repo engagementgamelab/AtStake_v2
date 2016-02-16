@@ -66,6 +66,7 @@ public abstract class GameScreen : GameInstanceComponent {
 		}
 		dynamicElements.Clear ();
 		OnHide ();
+		elements = null;
 	}
 
 	void Render () {

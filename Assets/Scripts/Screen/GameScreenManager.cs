@@ -29,7 +29,12 @@ public class GameScreenManager : GameInstanceBehaviour {
 					{ "deliberate_instructions", new DeliberateInstructionsScreen () },
 					{ "deliberate", new DeliberateScreen () },
 					{ "decide", new DecideScreen () },
-					{ "winner", new WinnerScreen () }
+					{ "winner", new WinnerScreen () },
+					{ "agenda_item", new AgendaItemScreen () },
+					{ "agenda_item_accept", new AgendaItemAcceptScreen () },
+					{ "agenda_item_reject", new AgendaItemRejectScreen () },
+					{ "scoreboard", new ScoreboardScreen () },
+					{ "final_scoreboard", new FinalScoreboardScreen () }
 				};
 			}
 

@@ -38,6 +38,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		ScheduleMessage (new NetworkMessage (id, str1));
 	}
 
+	public void ScheduleMessage (string id, int val) {
+		ScheduleMessage (new NetworkMessage (id, "", "", val));
+	}
+
 	public void ScheduleMessage (string id, string str1, string str2) {
 		ScheduleMessage (new NetworkMessage (id, str1, str2));
 	}

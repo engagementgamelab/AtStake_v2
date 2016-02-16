@@ -11,5 +11,19 @@ public class RoundManager : GameInstanceBehaviour {
 
 	public void Init () {
 		Current = 0;
+		Game.Dispatcher.AddListener ("SetRound", SetRound);
+	}
+
+	public bool NextRound () {
+		if (Current < Count-1) {
+			Current ++;
+			Game.Dispatcher.ScheduleMessage ("SetRound", Current);
+			return true;
+		}
+		return false;
+	}
+
+	void SetRound (NetworkMessage msg) {
+		Current = msg.val;
 	}
 }

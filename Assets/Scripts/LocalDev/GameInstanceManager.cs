@@ -26,35 +26,55 @@ public class GameInstanceManager : MonoBehaviour {
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
 
 	void Update () {
-		// Quick setup
+		
+		if (Input.GetKeyDown (KeyCode.LeftBracket)) {
+			// Skip to roles screen
+			SetupRoles ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.RightBracket)) {
+			// Skip to decide screen (end of round 1)
+			SetupRoles ();
+			instances[0].Dispatcher.ScheduleMessage ("GotoScreen", "decide");
+		}
+
+		if (Input.GetKeyDown (KeyCode.Backslash)) {
+			// Skip to last round
+			SetupRoles ();
+			GameInstance i = instances[0];
+			i.Rounds.NextRound ();
+			i.Dispatcher.ScheduleMessage ("ChooseWinner", i.Manager.Player.Name);
+			i.Rounds.NextRound ();
+			i.Dispatcher.ScheduleMessage ("ChooseWinner", instances[1].Manager.Player.Name);
+			i.Dispatcher.ScheduleMessage ("GotoScreen", "roles");
+		}
+
 		if (Input.GetKeyDown (KeyCode.Equals)) {
-			AddPlayer ();
-			instances[0].HostGame ();
-			instances[0].Screens.SetScreen ("deck");
-			for (int i = 1; i < 3; i ++) {
-				AddPlayer ();
-				instances[i].Multiplayer.UpdateHosts ();
-				instances[i].JoinGame ();
-				instances[i].Screens.SetScreen ("deck");
-			}
+			// Skip to decks screen
+			SetupGame ();
 		}
+
 		if (Input.GetKeyDown (KeyCode.Minus)) {
+			// add game instance
 			AddPlayer ();
 		}
-		if (Input.GetKeyDown (KeyCode.Alpha1)) {
-			FocusInstance (0);
-		}
-		if (Input.GetKeyDown (KeyCode.Alpha2)) {
-			FocusInstance (1);
-		}
-		if (Input.GetKeyDown (KeyCode.Alpha3)) {
-			FocusInstance (2);
-		}
-		if (Input.GetKeyDown (KeyCode.Alpha4)) {
-			FocusInstance (3);
-		}
-		if (Input.GetKeyDown (KeyCode.Alpha5)) {
-			FocusInstance (4);
+	}
+
+	void SetupRoles () {
+		SetupGame ();
+		instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
+		instances[0].Dispatcher.ScheduleMessage ("GotoScreen", "roles");
+	}
+
+	void SetupGame () {
+		AddPlayer ();
+		instances[0].HostGame ();
+		instances[0].Screens.SetScreen ("deck");
+		for (int i = 1; i < 3; i ++) {
+			AddPlayer ();
+			instances[i].Multiplayer.UpdateHosts ();
+			instances[i].JoinGame ();
+			instances[i].Screens.SetScreen ("deck");
 		}
 	}
 
@@ -63,16 +83,5 @@ public class GameInstanceManager : MonoBehaviour {
 		i.transform.SetParent (transform);
 		instances.Add (i);
 		i.Manager.Player.Name = names[instances.Count-1];
-		FocusInstance (instances.Count-1);
-	}
-
-	void FocusInstance (int index) {
-		if (focused != -1) {
-			instances[focused].Unfocus ();
-		}
-		if (index >= 0 && index < instances.Count) {
-			instances[index].Focus ();
-			focused = index;
-		}
 	}
 }
