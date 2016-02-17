@@ -46,6 +46,30 @@ public abstract class GameScreen : GameInstanceComponent {
 
 	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
 
+	Settings settings;
+	Settings Settings {
+		get {
+			if (settings == null)
+				settings = DataManager.GetSettings ();
+			return settings;
+		}
+	}
+
+	protected Dictionary<string, string> TextVariables {
+		get {
+			return new Dictionary<string, string> () {
+				{ "decider", Game.Manager.Decider },
+				{ "decider_start_coin_count", Settings.DeciderStartCoinCount.ToString () },
+				{ "player_start_coin_count", Settings.PlayerStartCoinCount.ToString () },
+				{ "pot_coin_count", Settings.PotCoinCount.ToString () },
+				{ "extra_time_cost", Settings.ExtraTimeCost.ToString () },
+				{ "extra_seconds", Settings.ExtraSeconds.ToString () },
+				{ "round_number", (Game.Rounds.Current+1).ToString () },
+				{ "winner", Game.Manager.Winner }
+			};
+		}
+	}
+
 	Transform canvas;
 	protected GameScreenManager screens;
 
@@ -74,29 +98,30 @@ public abstract class GameScreen : GameInstanceComponent {
 	}
 
 	void LoadModelElements () {
-		if (Model != null) { // TODO: remove this check once all models are in
-			if (!string.IsNullOrEmpty (Model.DisplayName)) {
-				Elements.Add ("title", new TextElement (Model.DisplayName));
+		if (!string.IsNullOrEmpty (Model.DisplayName)) {
+			Elements.Add ("title", new TextElement (Model.DisplayName));
+		}
+		if (IsDecider) {
+			if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
+				Elements.Add ("decider_instructions", new TextElement (
+					DataManager.GetTextFromScreen (Model, "DeciderInstructions", TextVariables)));
 			}
-			if (IsDecider) {
-				if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
-					Elements.Add ("decider_instructions", new TextElement (Model.DeciderInstructions));
-				}
+		}
+		if (IsHost) {
+			if (!string.IsNullOrEmpty (Model.HostInstructions)) {
+				Elements.Add ("host_instructions", new TextElement (
+					DataManager.GetTextFromScreen (Model, "HostInstructions", TextVariables)));
 			}
-			if (IsHost) {
-				if (!string.IsNullOrEmpty (Model.HostInstructions)) {
-					Elements.Add ("host_instructions", new TextElement (Model.HostInstructions));
-				}
-			} 
-			if (!IsDecider && !IsHost) {
-				if (!string.IsNullOrEmpty (Model.Instructions)) {
-					Elements.Add ("instructions", new TextElement (Model.Instructions));
-				}
+		} 
+		if (!IsDecider) {
+			if (!string.IsNullOrEmpty (Model.Instructions)) {
+				Elements.Add ("instructions", new TextElement (
+					DataManager.GetTextFromScreen (Model, "Instructions", TextVariables)));
 			}
-			if (Model.DisplayScore) {
-				Elements.Add ("pot", new PotElement ());
-				Elements.Add ("coins", new CoinsElement ());
-			}
+		}
+		if (Model.DisplayScore) {
+			Elements.Add ("pot", new PotElement ());
+			Elements.Add ("coins", new CoinsElement ());
 		}
 	}
 

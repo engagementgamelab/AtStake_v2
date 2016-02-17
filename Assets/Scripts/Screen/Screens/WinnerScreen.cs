@@ -10,7 +10,7 @@ public class WinnerScreen : GameScreen {
 	}
 
 	protected override void OnInitElements () {
-		Elements.Add ("winner", new TextElement (Model.Text["winner"]));
+		Elements.Add ("winner", new TextElement (DataManager.GetTextFromScreen (Model, "winner", TextVariables)));
 	}
 
 	protected override void OnShow () {

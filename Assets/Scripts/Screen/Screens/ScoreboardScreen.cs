@@ -4,13 +4,12 @@ using System.Collections;
 public class ScoreboardScreen : GameScreen {
 
 	protected override void OnInitDeciderElements () {
-		// Elements.Add ("instructions", new TextElement ("When everyone is ready, press 'next' to start the next round"));
 		Elements.Add ("next", new NextButtonElement ("roles"));
 	}
 
 	protected override void OnInitElements () {
-		// Elements.Add ("text", new TextElement ("At the end of round " + (Game.Rounds.Current+1) + " the scores are:"));
-		Elements.Add ("round_end", new TextElement (Model.Text["round_end"]));
+		Elements.Add ("round_end", new TextElement (
+			DataManager.GetTextFromScreen (Model, "round_end", TextVariables)));
 		DisplayScores ();
 	}
 

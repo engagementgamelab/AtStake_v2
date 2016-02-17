@@ -22,6 +22,10 @@ public class PitchScreen : GameScreen {
 	List<string> peers;
 	int currentPeer;
 
+	Dictionary<string, string> CurrentPeerTextVariable {
+		get { return new Dictionary<string, string> () { { "current_peer", peers[currentPeer] } }; }
+	}
+
 	protected override void OnInitDeciderElements () {
 
 		Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
@@ -30,7 +34,6 @@ public class PitchScreen : GameScreen {
 		currentPeer = 0;
 		state = State.Pitch;
 
-		// Elements.Add ("instructions", new TextElement (peers[currentPeer] + " is first up. Start the timer when they're ready!"));
 		Elements.Add ("timer", new TimerButtonElement (Duration, () => {
 			Game.Dispatcher.ScheduleMessage (
 				"StartTimer", 
@@ -46,6 +49,10 @@ public class PitchScreen : GameScreen {
 
 	protected override void OnShow () {
 		Game.Dispatcher.AddListener ("StartTimer", StartTimer);
+		if (IsDecider) {
+			GetScreenElement<TextElement> ("decider_instructions")
+				.SetText (DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable));
+		}
 	}
 
 	protected override void OnHide () {
@@ -87,7 +94,7 @@ public class PitchScreen : GameScreen {
 			currentPeer ++;
 			if (currentPeer < peers.Count) {
 				GetScreenElement<TextElement> ("decider_instructions")
-					.SetText ("next up is " + peers[currentPeer] + ". Start the timer when they're ready!");
+					.SetText (DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable));
 				GetScreenElement<TimerButtonElement> ("timer").Reset (Duration);
 			} else {
 				AllGotoScreen ("deliberate_instructions");

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AgendaItemResultScreen : GameScreen {
 	
@@ -16,6 +17,15 @@ public class AgendaItemResultScreen : GameScreen {
 
 	protected int[] RewardValues {
 		get { return DataManager.GetSettings ().Rewards; }
+	}
+
+	protected Dictionary<string, string> RewardTextVariables {
+		get { 
+			Dictionary<string, string> v = new Dictionary<string, string> (TextVariables);
+			v.Add ("reward", RewardValues[Item.Reward].ToString ());
+			v.Add ("rewarded_player", Item.Player);
+			return v;
+		}
 	}
 
 	bool hasNextItem;

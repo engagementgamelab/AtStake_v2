@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AgendaItemAcceptScreen : AgendaItemResultScreen {
 
 	protected override void OnInitPlayerElements () {
 		if (MyItem) {
-			// Elements.Add ("your_item", new TextElement ("Decider chose your agenda item!! :D You get " + RewardValues[Item.Reward] + " coins"));
-			Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
+			Elements.Add ("your_item", new TextElement (
+				DataManager.GetTextFromScreen (Model, "your_item", RewardTextVariables)));
 		}
 	}
 
 	protected override void OnInitElements () {
 		if (!MyItem) {
-			// Elements.Add ("their_item", new TextElement (Item.Player + "'s agenda item was accepted. They win " + RewardValues[Item.Reward] + " coins"));
-			Elements.Add ("their_item", new TextElement (Model.Text["their_item"]));
+			Elements.Add ("your_item", new TextElement (
+				DataManager.GetTextFromScreen (Model, "their_item", RewardTextVariables)));
 		}
 	}
 

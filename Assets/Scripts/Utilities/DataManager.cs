@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -149,26 +150,28 @@ public class DataManager {
         return System.Array.Find (gameData.Screens, x => x.Symbol == symbol);
     }
 
-    // TODO: use this to get copy for screens
-    /// <summary>
-    /// Get the UI Text associated with the given key.
-    /// </summary>
-    /// <returns>Copy associated with the key.</returns>
-    /*public static string GetUIText (string key) {
-        
-        if (gameData == null) {
-            try {
-                return localUIText[key];
-            } catch {
-                return DataNotLoaded;
+    public static string GetTextFromScreen (Models.Screen screen, string key, Dictionary<string, string> vars=null) {
+        string text;
+        try {
+            switch (key) {
+                case "Instructions": text = screen.Instructions; break;
+                case "DeciderInstructions": text = screen.DeciderInstructions; break;
+                case "HostInstructions": text = screen.HostInstructions; break;
+                default: text = screen.Text[key]; break;
+            }
+        } catch {
+            throw new System.Exception ("The model " + screen + " does not contain text with the key " + key);
+        }
+        if (vars != null) {
+            foreach (Match match in Regex.Matches (text, @"\{\{(.*?)\}\}")) {
+                string m = match.Value;
+                string v = m.Replace ("{{", "").Replace ("}}", "");
+                string replace;
+                if (vars.TryGetValue (v, out replace)) {
+                    text = text.Replace (m, replace);
+                }
             }
         }
-
-        string val;
-        if (gameData.ui_text.TryGetValue (key, out val)) {
-            return val;
-        }
-     
-        return "";
-    }*/
+        return text;
+    }
 }

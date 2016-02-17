@@ -4,18 +4,12 @@ using System.Collections;
 public class DecideScreen : GameScreen {
 
 	protected override void OnInitDeciderElements () {
-		Elements.Add ("instructions", new TextElement ("Read aloud: 'i'm gonna choose a winner now :)'"));
 		foreach (var peer in Game.Manager.Peers) {
 			string name = peer.Key;
 			Elements.Add ("peer_" + name, new ButtonElement (name, () => {
 				Game.Dispatcher.ScheduleMessage ("ChooseWinner", name);
 			}));
 		}
-	}
-
-	protected override void OnInitElements () {
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
 	}
 
 	protected override void OnShow () {

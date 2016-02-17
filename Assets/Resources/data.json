@@ -141,7 +141,7 @@
       "Symbol": "agenda_item_accept",
       "Text": {
         "your_item": "Decider chose your agenda item!! :D You get {{reward}} coins",
-        "their_item": "The agenda item was not approved"
+        "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} coins :D"
       },
       "DisplayScore": true
     },
@@ -149,13 +149,18 @@
       "Symbol": "agenda_item_reject",
       "Text": {
         "your_item": "Decider did not choose your agenda item",
-        "their_item": "{{winning_player}}'s agenda item was accepted. They win {{reward}} coins"
+        "their_item": "{{rewarded_player}}'s agenda item was not accepted."
       },
       "DisplayScore": true
     },
     {
       "Symbol": "bio",
       "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "decide",
+      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!",
       "DisplayScore": true
     },
     {
@@ -176,7 +181,7 @@
     {
       "Symbol": "extra_time",
       "Text": {
-        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_time_seconds}} seconds additional time.",
+        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time.",
         "cant_afford": "You can't afford extra time :("
       },
       "Buttons": {
@@ -220,7 +225,11 @@
     },
     {
       "Symbol": "pitch",
-      "DeciderInstructions": "{{current_peer}} is first up. Start the timer when they're ready!",
+      "DeciderInstructions": ".",
+      "Text": {
+        "first_up": "{{current_peer}} is first up. Start the timer when they're ready!",
+        "next_up": "next up is {{current_peer}} Start the timer when they're ready!"
+      },
       "DisplayScore": true
     },
     {
@@ -230,7 +239,7 @@
     },
     {
       "Symbol": "pot",
-      "Instructions": "As the Decider, {{decider}} begins with {{decider_coin_count}} coins. Everyone else begins with {{player_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start.",
+      "Instructions": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins. Everyone else begins with {{player_start_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start.",
       "DisplayScore": true
     },
     {
