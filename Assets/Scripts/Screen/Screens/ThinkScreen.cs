@@ -11,7 +11,6 @@ public class ThinkScreen : GameScreen {
 	}
 
 	protected override void OnInitDeciderElements () {
-		Elements.Add ("instructions", new TextElement ("When everyone is ready, start the timer"));
 		Elements.Add ("timer", new TimerButtonElement (Duration, () => {
 			Game.Dispatcher.ScheduleMessage ("StartTimer");
 		}, () => {
@@ -22,11 +21,6 @@ public class ThinkScreen : GameScreen {
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, true, true);
 		Elements.Add ("timer", new TimerElement (Duration));
-	}
-
-	protected override void OnInitElements () {
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
 	}
 
 	protected override void OnShow () {

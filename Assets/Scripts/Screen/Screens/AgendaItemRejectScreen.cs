@@ -5,14 +5,15 @@ public class AgendaItemRejectScreen : AgendaItemResultScreen {
 	
 	protected override void OnInitPlayerElements () {
 		if (MyItem) {
-			Elements.Add ("loser", new TextElement ("Decider did not choose your agenda item"));
+			// Elements.Add ("your_item", new TextElement ("Decider did not choose your agenda item"));
+			Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
 		}
 	}
 
 	protected override void OnInitElements () {
-		base.OnInitElements ();
 		if (!MyItem) {
-			Elements.Add ("reject", new TextElement ("The agenda item was not approved"));
+			// Elements.Add ("their_item", new TextElement ("The agenda item was not approved"));
+			Elements.Add ("their_item", new TextElement (Model.Text["their_item"]));
 		}		
 	}
 }

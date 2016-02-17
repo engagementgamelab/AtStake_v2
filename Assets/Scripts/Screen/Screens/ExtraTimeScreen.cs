@@ -9,21 +9,20 @@ public class ExtraTimeScreen : GameScreen {
 		Models.Settings settings = DataManager.GetSettings ();
 
 		if (Game.Score.CanAffordExtraTime) {
-			Elements.Add ("instructions", new TextElement ("Times up but you can pay " + settings.ExtraTimeCost + " for " + settings.ExtraSeconds + " seconds additional time."));
-			Elements.Add ("accept", new ButtonElement ("More time", () => {
+			// Elements.Add ("can_afford", new TextElement ("Times up but you can pay " + settings.ExtraTimeCost + " for " + settings.ExtraSeconds + " seconds additional time."));
+			Elements.Add ("can_afford", new TextElement (Model.Text["can_afford"]));
+			Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => {
 				GotoScreen ("pitch");
 				Game.Dispatcher.ScheduleMessage ("AcceptExtraTime", Name);
 			}));
 		} else {
-			Elements.Add ("instructions", new TextElement ("You can't afford extra time :("));
+			Elements.Add ("cant_afford", new TextElement (Model.Text["cant_afford"]));
+			// Elements.Add ("cant_afford", new TextElement ("You can't afford extra time :("));
 		}
 
-		Elements.Add ("decline", new ButtonElement ("Nah", () => {
+		Elements.Add ("decline", new ButtonElement (Model.Buttons["decline"], () => {
 			GotoScreen ("pitch");
 			Game.Dispatcher.ScheduleMessage ("DeclineExtraTime");	
 		}));
-
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
 	}
 }

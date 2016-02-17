@@ -27,11 +27,6 @@ public class AgendaItemResultScreen : GameScreen {
 		});
 	}
 
-	protected override void OnInitElements () {
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
-	}
-
 	protected override void OnHide () {
 		item = null;
 	}

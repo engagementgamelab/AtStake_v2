@@ -78,8 +78,8 @@ namespace Models {
 		public Dictionary<string, string> Buttons { get; set; }		
 		public Dictionary<string, string> Text { get; set; }
 		public string Instructions { get; set; } // Instructions that all players see (including Decider)
-		public string DeciderInstructions { get; set; } // Instructions that only the Decider sees (overrides the above property)
-		public string HostInstructions { get; set; } // Instructions that only the Host sees (overrides the above property)
-		public bool DisplayScore { get; set; } // Whethor or not to display the pot and player's coin count
+		public string DeciderInstructions { get; set; } // Instructions that only the Decider sees
+		public string HostInstructions { get; set; } // Instructions that only the Host sees
+		public bool DisplayScore { get; set; } // Whether or not to display the pot and player's coin count
 	}
 }

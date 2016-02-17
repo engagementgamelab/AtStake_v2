@@ -8,19 +8,16 @@ public class AgendaItemScreen : GameScreen {
 	}
 
 	protected override void OnInitDeciderElements () {
-		Elements.Add ("accept", new ButtonElement ("Yes", () => { AllGotoScreen ("agenda_item_accept"); }));
-		Elements.Add ("reject", new ButtonElement ("No", () => { AllGotoScreen ("agenda_item_reject"); }));
+		Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => { AllGotoScreen ("agenda_item_accept"); }));
+		Elements.Add ("reject", new ButtonElement (Model.Buttons["reject"], () => { AllGotoScreen ("agenda_item_reject"); }));
 	}
 
 	protected override void OnInitPlayerElements () {
 		if (Item.Player == Name)
-			Elements.Add ("yours", new TextElement ("This is your agenda item! Convince the decider you're awesome!!"));
+			Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
 	}
 
 	protected override void OnInitElements () {
-		Elements.Add ("instructions", new TextElement ("Did the winning plan include this agenda item?"));
 		Elements.Add ("item", new TextElement (Item.Description));
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
 	}
 }

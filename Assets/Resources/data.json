@@ -120,9 +120,79 @@
   ],
   "Screens": [
     {
+      "Symbol": "agenda",
+      "DeciderInstructions": "Read this out loud: 'everyone secretly review yr agenda' Press next when everyone is ready",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "agenda_item",
+      "Instructions": "Did the winning plan include this agenda item?",
+      "DeciderInstructions": "Did the winning plan include this agenda item?",
+      "Text": {
+        "your_item": "This is your agenda item! Convince the decider you're awesome!!"
+      },
+      "Buttons": {
+        "accept": "Yes",
+        "reject": "No"
+      },
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "agenda_item_accept",
+      "Text": {
+        "your_item": "Decider chose your agenda item!! :D You get {{reward}} coins",
+        "their_item": "The agenda item was not approved"
+      },
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "agenda_item_reject",
+      "Text": {
+        "your_item": "Decider did not choose your agenda item",
+        "their_item": "{{winning_player}}'s agenda item was accepted. They win {{reward}} coins"
+      },
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "bio",
+      "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next",
+      "DisplayScore": true
+    },
+    {
       "Symbol": "deck",
       "Instructions": "Please wait while the host chooses a deck",
       "HostInstructions": "Please choose a deck genius"
+    },
+    {
+      "Symbol": "deliberate",
+      "DeciderInstructions": "When everyone is ready, start the timer",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "deliberate_instructions",
+      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "extra_time",
+      "Text": {
+        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_time_seconds}} seconds additional time.",
+        "cant_afford": "You can't afford extra time :("
+      },
+      "Buttons": {
+        "accept": "More time",
+        "decline": "Nah"
+      },
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "final_scoreboard",
+      "Text": {
+        "scores": "And the final scores are:"
+      },
+      "Buttons": {
+        "menu": "Main menu"
+      }
     },
     {
       "Symbol": "games",
@@ -149,11 +219,58 @@
       }
     },
     {
+      "Symbol": "pitch",
+      "DeciderInstructions": "{{current_peer}} is first up. Start the timer when they're ready!",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "pitch_instructions",
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "pot",
+      "Instructions": "As the Decider, {{decider}} begins with {{decider_coin_count}} coins. Everyone else begins with {{player_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start.",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "question",
+      "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "roles"
+    },
+    {
+      "Symbol": "scoreboard",
+      "DeciderInstructions": "When everyone is ready, press 'next' to start the next round",
+      "Text": {
+        "round_end": "At the end of round {{round_number}} the scores are:"
+      }
+    },
+    {
       "Symbol": "start",
       "DisplayName": "@Stake",
       "Buttons": {
         "play": "Play"
       }
+    },
+    {
+      "Symbol": "think",
+      "DeciderInstructions": "When everyone is ready, start the timer",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "think_instructions",
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'",
+      "DisplayScore": true
+    },
+    {
+      "Symbol": "winner",
+      "Text": {
+        "winner": "And the winner is {{winner}}"
+      },
+      "DisplayScore": true
     }
   ],
   "Settings": {

@@ -30,7 +30,7 @@ public class PitchScreen : GameScreen {
 		currentPeer = 0;
 		state = State.Pitch;
 
-		Elements.Add ("instructions", new TextElement (peers[currentPeer] + " is first up. Start the timer when they're ready!"));
+		// Elements.Add ("instructions", new TextElement (peers[currentPeer] + " is first up. Start the timer when they're ready!"));
 		Elements.Add ("timer", new TimerButtonElement (Duration, () => {
 			Game.Dispatcher.ScheduleMessage (
 				"StartTimer", 
@@ -42,11 +42,6 @@ public class PitchScreen : GameScreen {
 
 	protected override void OnInitPlayerElements () {
 		CreateRoleCard (true, true, true);
-	}
-
-	protected override void OnInitElements () {
-		Elements.Add ("pot", new PotElement ());
-		Elements.Add ("coins", new CoinsElement ());
 	}
 
 	protected override void OnShow () {
@@ -91,7 +86,7 @@ public class PitchScreen : GameScreen {
 			state = State.Pitch;
 			currentPeer ++;
 			if (currentPeer < peers.Count) {
-				GetScreenElement<TextElement> ("instructions")
+				GetScreenElement<TextElement> ("decider_instructions")
 					.SetText ("next up is " + peers[currentPeer] + ". Start the timer when they're ready!");
 				GetScreenElement<TimerButtonElement> ("timer").Reset (Duration);
 			} else {

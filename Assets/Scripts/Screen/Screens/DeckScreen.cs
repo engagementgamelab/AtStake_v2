@@ -8,7 +8,6 @@ public class DeckScreen : GameScreen {
 
 	protected override void OnShow () {
 		if (IsHost) {
-			// AddElement ("instructions", new TextElement ("Please choose a deck genius"));
 			List<string> names = Game.Decks.Names;
 			for (int i = 0; i < names.Count; i ++) {
 				string name = names[i];
@@ -17,8 +16,6 @@ public class DeckScreen : GameScreen {
 					AllGotoScreen ("roles");
 				}));
 			}
-		} else {
-			// AddElement ("instructions", new TextElement("Please wait while the host chooses a deck"));
 		}
 	}
 }

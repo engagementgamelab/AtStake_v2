@@ -5,14 +5,15 @@ public class AgendaItemAcceptScreen : AgendaItemResultScreen {
 
 	protected override void OnInitPlayerElements () {
 		if (MyItem) {
-			Elements.Add ("winner", new TextElement ("Decider chose your agenda item!! :D You get " + RewardValues[Item.Reward] + " coins"));
+			// Elements.Add ("your_item", new TextElement ("Decider chose your agenda item!! :D You get " + RewardValues[Item.Reward] + " coins"));
+			Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
 		}
 	}
 
 	protected override void OnInitElements () {
-		base.OnInitElements ();
 		if (!MyItem) {
-			Elements.Add ("reject", new TextElement (Item.Player + "'s agenda item was accepted. They win " + RewardValues[Item.Reward] + " coins"));
+			// Elements.Add ("their_item", new TextElement (Item.Player + "'s agenda item was accepted. They win " + RewardValues[Item.Reward] + " coins"));
+			Elements.Add ("their_item", new TextElement (Model.Text["their_item"]));
 		}
 	}
 
