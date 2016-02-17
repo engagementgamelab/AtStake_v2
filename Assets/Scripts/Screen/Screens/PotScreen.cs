@@ -6,10 +6,6 @@ using System.Collections.Generic;
 
 public class PotScreen : GameScreen {
 
-	protected override void OnInitElements () {
-		Models.Settings settings = DataManager.GetSettings ();
-	}
-
 	protected override void OnInitDeciderElements () {
 		Elements.Add ("next", new NextButtonElement ("bio"));
 	}

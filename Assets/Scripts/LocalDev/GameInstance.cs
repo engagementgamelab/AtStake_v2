@@ -12,7 +12,6 @@ public class GameInstance : MonoBehaviour {
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
-	bool focused = false;
 
 	public string Name {
 		get { return Manager.Player.Name; }
@@ -64,16 +63,6 @@ public class GameInstance : MonoBehaviour {
 
 	public void EndGame () {
 		Multiplayer.Disconnect ();
-	}
-
-	public void Focus () {
-		Ui.Focus ();
-		focused = true;
-	}
-
-	public void Unfocus () {
-		Ui.Unfocus ();
-		focused = false;
 	}
 
 	public void AddLine (string line) {

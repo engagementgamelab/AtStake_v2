@@ -124,7 +124,7 @@ public class SceneManager : MonoBehaviour {
 			}
 
 			// Fallback: load game data from local config
-			catch(System.Exception e) {
+			catch {
 				gameData = GameDataLoadFallback ();
 			}
 		}

@@ -32,11 +32,11 @@ public class DataManager {
     /// <summary>
     /// Set to production mode.
     /// </summary>
-    public static bool Production {
+    /*public static bool Production {
         set {
             isProduction = value;
         }
-    }
+    }*/
 
     public static readonly string DataNotLoaded = "<data not loaded>";
     public static GameEnvironment currentConfig;
@@ -44,12 +44,12 @@ public class DataManager {
     static JsonReaderSettings _readerSettings = new JsonReaderSettings();
     static GameConfig config;
     static GameData gameData;
-    static bool isProduction;
+    // static bool isProduction;
 
-    static Dictionary<string, string> localUIText = new Dictionary<string, string>() {
+    /*static Dictionary<string, string> localUIText = new Dictionary<string, string>() {
         {"copy_server_down_header", "Sorry!"},
         {"copy_server_down_body", "The game's server is currently unreachable. Your internet connection may be having some issues, or the server is offline for regular maintenance.\n\nPlease close the application and try again in a few minutes. Apologies for the inconvenience!"}
-    };
+    };*/
 
     /// <summary>
     /// Set global game config data, such as API endpoints, given a valid input string

@@ -3,30 +3,68 @@ using System.Collections;
 using System.Collections.Generic;
 using Models;
 
+/// <summary>
+/// Handles content that gets displayed on the screen
+///
+/// A "GameScreen" can be thought of as a "view" - it pulls in content from the API (or loads it locally)
+/// 	and then determines which content should be rendered on the screen.
+///		Better practice is to keep logic to a minimum.
+///
+/// This is the rendering order:
+/// 	1. Elements set by the API (check Models.Screen), with the exception of Buttons and Text
+///		2. Elements that all players see (override OnInitElements)
+///		3. Elements that only the Decider sees (override OnInitDeciderElements)
+///		4. Elements that all players except the Decider see (override OnInitPlayerElements)
+///
+/// After the screen has loaded you can add additional elements by calling AddElement()
+/// </summary>
 public abstract class GameScreen : GameInstanceComponent {
 
+	/// <summary>
+	/// Returns true if this player is hosting
+	/// </summary>
 	protected bool IsHost {
 		get { return Game.Multiplayer.Hosting; }
 	}
 
+	/// <summary>
+	/// Returns true if this player is the Decider
+	/// </summary>
 	protected bool IsDecider {
 		get { return Role != null && Role.Title == "Decider"; }
 	}
 
+	/// <summary>
+	/// Returns this player's name
+	/// </summary>
 	protected string Name {
 		get { return Game.Manager.Player.Name; }
 	}
 
+	/// <summary>
+	/// Returns this player's role title
+	/// </summary>
 	protected string Title {
 		get { return Role.Title; }
 	}
 
+	/// <summary>
+	/// Returns this player's role
+	/// </summary>
 	protected Role Role {
 		get { return Game.Manager.Player.Role; }
 	}
 
+	/// <summary>
+	/// Returns the model associated with this player
+	/// </summary>
 	protected Models.Screen Model { get; private set; }
 
+	/// <summary>
+	/// The static elements that get rendered on the screen
+	/// These are initialized when they're first referenced
+	/// Generally you do not need to work directly with this dictionary
+	/// </summary>
 	Dictionary<string, ScreenElement> elements;
 	public Dictionary<string, ScreenElement> Elements {
 		get {
@@ -44,17 +82,10 @@ public abstract class GameScreen : GameInstanceComponent {
 		}
 	}
 
-	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
-
-	Settings settings;
-	Settings Settings {
-		get {
-			if (settings == null)
-				settings = DataManager.GetSettings ();
-			return settings;
-		}
-	}
-
+	/// <summary>
+	/// Some text pulled in from the API contains variables surrounded by {{double_brackets}}
+	/// This lookup is used to replace those variables with the associated value
+	/// </summary>
 	protected Dictionary<string, string> TextVariables {
 		get {
 			return new Dictionary<string, string> () {
@@ -70,9 +101,23 @@ public abstract class GameScreen : GameInstanceComponent {
 		}
 	}
 
+	Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
+
+	Settings settings;
+	Settings Settings {
+		get {
+			if (settings == null)
+				settings = DataManager.GetSettings ();
+			return settings;
+		}
+	}
+
 	Transform canvas;
 	protected GameScreenManager screens;
 
+	/// <summary>
+	/// Initializes the screen. This should only ever be called by GameScreenManager
+	/// </summary>
 	public void Init (GameScreenManager screens, Transform canvas, string id) {
 		this.screens = screens;
 		this.canvas = canvas;
@@ -80,11 +125,17 @@ public abstract class GameScreen : GameInstanceComponent {
 		Init (screens);
 	}
 	
+	/// <summary>
+	/// Shows the screen. This should only ever be called by GameScreenManager
+	/// </summary>
 	public void Show () {
 		Render ();
 		OnShow ();
 	}
 
+	/// <summary>
+	/// Hides the screen. This should only ever be called by GameScreenManager
+	/// </summary>
 	public void Hide () {
 		foreach (var element in Elements) {
 			element.Value.Remove ();

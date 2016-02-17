@@ -65,7 +65,7 @@ public class GameScreenManager : GameInstanceBehaviour {
 		try {
 			Screens[CurrScreen].Show ();
 		} catch (KeyNotFoundException e) {
-			throw new System.Exception ("No screen with the id '" + id + "' exists");
+			throw new System.Exception ("No screen with the id '" + id + "' exists.\n" + e);
 		}
 	}
 

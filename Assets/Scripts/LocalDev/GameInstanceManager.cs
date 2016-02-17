@@ -22,7 +22,6 @@ public class GameInstanceManager : MonoBehaviour {
 	}
 
 	List<GameInstance> instances = new List<GameInstance> ();
-	int focused = -1;
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
 
 	void Update () {
