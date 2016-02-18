@@ -137,9 +137,10 @@ public abstract class GameScreen : GameInstanceComponent {
 	/// Hides the screen. This should only ever be called by GameScreenManager
 	/// </summary>
 	public void Hide () {
-		foreach (var element in Elements) {
+		/*foreach (var element in Elements) {
 			element.Value.Remove ();
-		}
+		}*/
+		Game.Ui.RemoveElements (elements);
 		foreach (var element in dynamicElements) {
 			element.Value.Remove ();
 		}
@@ -150,7 +151,7 @@ public abstract class GameScreen : GameInstanceComponent {
 
 	void LoadModelElements () {
 		if (!string.IsNullOrEmpty (Model.DisplayName)) {
-			Elements.Add ("title", new TextElement (Model.DisplayName));
+			Elements.Add ("title", new TextElement (Model.DisplayName, TextStyle.Header));
 		}
 		if (IsDecider) {
 			if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
@@ -178,17 +179,18 @@ public abstract class GameScreen : GameInstanceComponent {
 
 	void Render () {
 		foreach (var element in Elements) {
-			element.Value.Init (Behaviour);
-			element.Value.Render (this).SetParent (canvas);
+			element.Value.Init (Behaviour, this);
+			// element.Value.Render (this).SetParent (canvas);
 		}
+		Game.Ui.RenderElements (elements);
 	}
 
 	void RenderDynamic () {
 		foreach (var element in dynamicElements) {
 			ScreenElement s = element.Value;
-			s.Init (Behaviour);
-			if (!s.Active)
-				s.Render (this).SetParent (canvas);
+			s.Init (Behaviour, this);
+			/*if (!s.Active)
+				s.Render (this).SetParent (canvas);*/
 		}
 	}
 

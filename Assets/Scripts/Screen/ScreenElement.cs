@@ -2,10 +2,17 @@
 using System.Collections;
 
 public abstract class ScreenElement : GameInstanceComponent {
+
 	public abstract bool Active { get; }
 	public abstract UIElement Element { get; }
-	public abstract Transform Render (GameScreen screen);
+	public abstract Transform Render ();
 	public abstract void Remove ();
+	protected GameScreen screen;
+
+	public void Init (GameInstanceBehaviour behaviour, GameScreen screen) {
+		base.Init (behaviour);
+		this.screen = screen;
+	}
 }
 
 public class ScreenElement<T> : ScreenElement where T : UIElement {
@@ -22,8 +29,7 @@ public class ScreenElement<T> : ScreenElement where T : UIElement {
 		get { return active; }
 	}
 
-	public override Transform Render (GameScreen screen) {
-		this.screen = screen;
+	public override Transform Render () {
 		uiElement = ObjectPool.Instantiate<T> ();
 		OnRender (uiElement);
 		active = true;

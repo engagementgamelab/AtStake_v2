@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameInstanceUI : UIElement {
 
@@ -15,27 +16,37 @@ public class GameInstanceUI : UIElement {
 	}
 
 	GameInstance gi;
+	ScreenTemplate template;
 
 	public void Init (GameInstance gi) {
 		this.gi = gi;
+		template = ObjectPool.Instantiate<ScreenTemplate> ();
+		template.transform.SetParent (Transform);
+		template.transform.localScale = new Vector3 (0.5f, 0.5f, 1f);
 	}
 
-	public void AddTextLine (string line) {
-		TextLine l = ObjectPool.Instantiate<TextLine> ();
-		l.Text.text = line;
-		l.Parent = Transform;
+	public void RenderElements (Dictionary<string, ScreenElement> elements) {
+		foreach (var element in elements) {
+			element.Value.Render ().SetParent (template.contentArea);
+		}
+	}
+
+	public void AddElement (string key, ScreenElement element) {
+
+	}
+
+	public void RemoveElement (string key) {
+
+	}
+
+	public void RemoveElements (Dictionary<string, ScreenElement> elements) {
+		foreach (var element in elements) {
+			element.Value.Remove ();
+		}
 	}
 
 	void Update () {
 		if (gi.Manager != null) 
 			Name.text = gi.Name;
-	}
-
-	public void Focus () {
-		Name.fontStyle = FontStyle.Bold;
-	}
-
-	public void Unfocus () {
-		Name.fontStyle = FontStyle.Normal;
 	}
 }

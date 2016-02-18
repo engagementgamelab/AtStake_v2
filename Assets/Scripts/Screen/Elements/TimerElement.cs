@@ -8,7 +8,7 @@ public class TimerElement : ScreenElement<TimerElementUI> {
 
 	public TimerElement (float duration, System.Action onEnd=null) {
 		this.duration = duration
-		#if UNITY_EDITOR && FAST_TIME
+		#if FAST_TIME
 		* 0.1f
 		#endif
 		;
@@ -30,7 +30,7 @@ public class TimerElement : ScreenElement<TimerElementUI> {
 	public void Reset (float newDuration=-1) {
 		if (newDuration > -1) {
 			duration = newDuration
-			#if UNITY_EDITOR && FAST_TIME
+			#if FAST_TIME
 			* 0.1f
 			#endif
 			;

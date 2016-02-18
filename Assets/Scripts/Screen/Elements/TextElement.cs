@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class TextElement : ScreenElement<TextElementUI> {
 
 	string text;
+	TextStyle style;
 
-	public TextElement (string text) {
+	public TextElement (string text, TextStyle style=null) {
 		this.text = text;
+		this.style = (style == null) ? TextStyle.Paragraph : style;
 	}
 
 	protected override void OnRender (TextElementUI t) {
-		t.Text.text = text;
+		Text el = t.Text;
+		el.text = text;
+		el.fontStyle = style.FontStyle;
+		el.color = style.FontColor;
+		el.alignment = style.TextAnchor;
+		el.fontSize = style.FontSize;
 	}
 
 	public void SetText (string text) {

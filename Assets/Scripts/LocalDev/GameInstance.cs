@@ -28,10 +28,11 @@ public class GameInstance : MonoBehaviour {
 		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
 		Dispatcher.transform.SetParent (transform);
 
-		Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
+		/*Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
 		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
-		Ui.transform.SetParent (grid);
-		
+		Ui.transform.SetParent (grid);*/
+		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
+
 		Screens = ObjectPool.Instantiate<GameScreenManager> ();
 		Screens.transform.SetParent (transform);
 
@@ -45,6 +46,10 @@ public class GameInstance : MonoBehaviour {
 		Score.transform.SetParent (transform);
 
 		InitApp ();
+	}
+
+	public void SetUiPosition (Vector3 pos) {
+		Ui.transform.position = pos;
 	}
 	
 	// Called when the app is started
@@ -63,10 +68,6 @@ public class GameInstance : MonoBehaviour {
 
 	public void EndGame () {
 		Multiplayer.Disconnect ();
-	}
-
-	public void AddLine (string line) {
-		Ui.AddTextLine (line);
 	}
 
 	public void HostGame () {

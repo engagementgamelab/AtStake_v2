@@ -24,6 +24,13 @@ public class GameInstanceManager : MonoBehaviour {
 	List<GameInstance> instances = new List<GameInstance> ();
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
 
+	Vector3[] instancePositions = new Vector3[] {
+		new Vector3 (0, 333, 0),
+		new Vector3 (250, 333, 0),
+		Vector3.zero,
+		new Vector3 (250, 0, 0)
+	};
+
 	void Update () {
 		
 		if (Input.GetKeyDown (KeyCode.LeftBracket)) {
@@ -82,5 +89,6 @@ public class GameInstanceManager : MonoBehaviour {
 		i.transform.SetParent (transform);
 		instances.Add (i);
 		i.Manager.Player.Name = names[instances.Count-1];
+		i.SetUiPosition (instancePositions[instances.Count-1]);
 	}
 }
