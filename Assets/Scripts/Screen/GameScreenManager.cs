@@ -58,14 +58,20 @@ public class GameScreenManager : GameInstanceBehaviour {
 
 	public void SetScreen (string id) {
 		if (!string.IsNullOrEmpty (CurrScreen)) {
+			Game.Ui.Unload ();
 			Screens[CurrScreen].Hide ();
 			PrevScreen = CurrScreen;
 		}
 		CurrScreen = id;
 		try {
-			Screens[CurrScreen].Show ();
+			Screens[CurrScreen].Load ();
 		} catch (KeyNotFoundException e) {
-			throw new System.Exception ("No screen with the id '" + id + "' exists.\n" + e);
+			throw new System.Exception ("No view with the id '" + id + "' exists.\n" + e);
+		}
+		try {
+			Game.Ui.Load (CurrScreen, Screens[CurrScreen]);
+		} catch (KeyNotFoundException e) {
+			throw new System.Exception ("No template with the id '" + id + "' exists.\n" + e);
 		}
 	}
 

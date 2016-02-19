@@ -14,6 +14,10 @@ public static class Palette {
 		get { return Color255 (255, 119, 0); }
 	}
 
+	public static Color Blue {
+		get { return Color255 (0, 0, 255); }
+	}
+
 	public static class Transparent {
 
 		public static Color White {

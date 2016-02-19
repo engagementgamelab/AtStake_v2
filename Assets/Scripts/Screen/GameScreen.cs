@@ -77,6 +77,7 @@ public abstract class GameScreen : GameInstanceComponent {
 				} else {
 					OnInitPlayerElements ();
 				}
+				InitElements ();
 			}
 			return elements;
 		}
@@ -128,8 +129,8 @@ public abstract class GameScreen : GameInstanceComponent {
 	/// <summary>
 	/// Shows the screen. This should only ever be called by GameScreenManager
 	/// </summary>
-	public void Show () {
-		Render ();
+	public void Load () {
+		// Render ();
 		OnShow ();
 	}
 
@@ -141,9 +142,10 @@ public abstract class GameScreen : GameInstanceComponent {
 			element.Value.Remove ();
 		}*/
 		Game.Ui.RemoveElements (elements);
-		foreach (var element in dynamicElements) {
+		/*foreach (var element in dynamicElements) {
 			element.Value.Remove ();
-		}
+		}*/
+		Game.Ui.RemoveElements (dynamicElements);
 		dynamicElements.Clear ();
 		OnHide ();
 		elements = null;
@@ -177,12 +179,19 @@ public abstract class GameScreen : GameInstanceComponent {
 		}
 	}
 
+	void InitElements () {
+		foreach (var element in Elements) {
+			element.Value.Init (Behaviour, this);
+		}
+	}
+
+	// deprecate
 	void Render () {
 		foreach (var element in Elements) {
 			element.Value.Init (Behaviour, this);
 			// element.Value.Render (this).SetParent (canvas);
 		}
-		Game.Ui.RenderElements (elements);
+		// Game.Ui.RenderElements (elements);
 	}
 
 	void RenderDynamic () {
@@ -217,19 +226,24 @@ public abstract class GameScreen : GameInstanceComponent {
 		} catch {
 			throw new System.Exception ("An element with the id '" + id + "' already exists on the screen.");
 		}
-		RenderDynamic ();
+		// RenderDynamic ();
+		dynamicElements[id].Init (Behaviour, this);
+		Game.Ui.AddElement (id, dynamicElements[id]);
 		return t;
 	}
 
 	protected void AddElement (string id, ScreenElement element) {
 		dynamicElements.Add (id, element);
-		RenderDynamic ();
+		// RenderDynamic ();
+		element.Init (Behaviour, this);
+		Game.Ui.AddElement (id, element);
 	}
 
 	protected void RemoveElement (string id) {
 		dynamicElements[id].Remove ();
+		Game.Ui.RemoveElement (dynamicElements[id]);
 		dynamicElements.Remove (id);
-		RenderDynamic ();
+		// RenderDynamic ();
 	}
 
 	protected bool HasElement (string id) {

@@ -5,7 +5,7 @@ public abstract class ScreenElement : GameInstanceComponent {
 
 	public abstract bool Active { get; }
 	public abstract UIElement Element { get; }
-	public abstract Transform Render ();
+	public abstract Transform Render (Transform parent);
 	public abstract void Remove ();
 	protected GameScreen screen;
 
@@ -29,9 +29,11 @@ public class ScreenElement<T> : ScreenElement where T : UIElement {
 		get { return active; }
 	}
 
-	public override Transform Render () {
+	public override Transform Render (Transform parent) {
 		uiElement = ObjectPool.Instantiate<T> ();
 		OnRender (uiElement);
+		uiElement.Parent = parent;
+		uiElement.Transform.localScale = Vector3.one;
 		active = true;
 		return uiElement.Transform;	
 	}
