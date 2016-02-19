@@ -22,5 +22,5 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	}
 
 	public abstract void ApplyElement (T element);
-	public abstract void RemoveElement (T element);
+	public virtual void RemoveElement (T element) {}
 }

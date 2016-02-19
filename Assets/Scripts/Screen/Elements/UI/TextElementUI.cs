@@ -11,9 +11,5 @@ public class TextElementUI : ScreenElementUI<TextElement> {
 		Text.fontSize = e.style.FontSize;
 	}
 
-	public override void RemoveElement (TextElement e) {
-		Text.text = "";
-	}
-
 	// TODO: UpdateText/SetText
 }

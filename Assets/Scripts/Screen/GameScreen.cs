@@ -141,11 +141,11 @@ public abstract class GameScreen : GameInstanceComponent {
 		/*foreach (var element in Elements) {
 			element.Value.Remove ();
 		}*/
-		Game.Ui.RemoveElements (elements);
+		// Game.Ui.RemoveElements (elements);
 		/*foreach (var element in dynamicElements) {
 			element.Value.Remove ();
 		}*/
-		Game.Ui.RemoveElements (dynamicElements);
+		// Game.Ui.RemoveElements (dynamicElements);
 		dynamicElements.Clear ();
 		OnHide ();
 		elements = null;
