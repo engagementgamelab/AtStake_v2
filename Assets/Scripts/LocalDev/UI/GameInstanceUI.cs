@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Views;
 
 // TODO: rename to TemplateManager
 
@@ -33,7 +34,7 @@ public class GameInstanceUI : UIElement {
 		container.transform.localScale = new Vector3 (0.5f, 0.5f, 1f);
 	}
 
-	public void Load (string id, GameScreen view) {
+	public void Load (string id, View view) {
 		content = ObjectPool.Instantiate (templates[id]).GetComponent<TemplateContent> ();
 		content.Parent = container.contentContainer;
 		content.Transform.localScale = Vector3.one;

@@ -107,4 +107,12 @@ public class UIElement : MB {
 	public void RemoveButtonListeners () {
 		Button.onClick.RemoveAllListeners ();
 	}
+
+	public void AddEndEditListener (System.Action<string> action) {
+		InputField.onEndEdit.AddListener ((string s) => { action (s); });
+	}
+
+	public void RemoveInputFieldListeners () {
+		InputField.onEndEdit.RemoveAllListeners ();
+	}
 }

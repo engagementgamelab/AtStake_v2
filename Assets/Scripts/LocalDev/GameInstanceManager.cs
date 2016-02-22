@@ -41,7 +41,7 @@ public class GameInstanceManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.RightBracket)) {
 			// Skip to decide screen (end of round 1)
 			SetupRoles ();
-			instances[0].Dispatcher.ScheduleMessage ("GotoScreen", "decide");
+			instances[0].Dispatcher.ScheduleMessage ("GotoView", "decide");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Backslash)) {
@@ -52,7 +52,7 @@ public class GameInstanceManager : MonoBehaviour {
 			i.Dispatcher.ScheduleMessage ("ChooseWinner", i.Manager.Player.Name);
 			i.Rounds.NextRound ();
 			i.Dispatcher.ScheduleMessage ("ChooseWinner", instances[1].Manager.Player.Name);
-			i.Dispatcher.ScheduleMessage ("GotoScreen", "roles");
+			i.Dispatcher.ScheduleMessage ("GotoView", "roles");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
@@ -69,18 +69,18 @@ public class GameInstanceManager : MonoBehaviour {
 	void SetupRoles () {
 		SetupGame ();
 		instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
-		instances[0].Dispatcher.ScheduleMessage ("GotoScreen", "roles");
+		instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
 	}
 
 	void SetupGame () {
 		AddPlayer ();
 		instances[0].HostGame ();
-		instances[0].Screens.SetScreen ("deck");
+		instances[0].Views.Goto ("deck");
 		for (int i = 1; i < 3; i ++) {
 			AddPlayer ();
 			instances[i].Multiplayer.UpdateHosts ();
 			instances[i].JoinGame ();
-			instances[i].Screens.SetScreen ("deck");
+			instances[i].Views.Goto ("deck");
 		}
 	}
 

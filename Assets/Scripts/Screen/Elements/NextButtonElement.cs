@@ -6,7 +6,7 @@ public class NextButtonElement : ButtonElement {
 	public NextButtonElement (string nextScreen, System.Action onPress=null) :
 		base ("Next", () => {
 			if (nextScreen != "")
-				screen.AllGotoScreen (nextScreen);
+				Game.Views.AllGoto (nextScreen);
 			if (onPress != null)
 				onPress ();
 		}) {}

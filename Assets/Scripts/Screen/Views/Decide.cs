@@ -1,0 +1,30 @@
+﻿using UnityEngine;
+using System.Collections;
+
+namespace Views {
+
+	public class Decide : View {
+
+		protected override void OnInitDeciderElements () {
+			foreach (var peer in Game.Manager.Peers) {
+				string name = peer.Key;
+				Elements.Add ("peer_" + name, new ButtonElement (name, () => {
+					Game.Dispatcher.ScheduleMessage ("ChooseWinner", name);
+				}));
+			}
+		}
+
+		protected override void OnShow () {
+			Game.Dispatcher.AddListener ("ChooseWinner", ChooseWinner);
+		}
+
+		protected override void OnHide () {
+			Game.Dispatcher.RemoveListener (ChooseWinner);
+		}
+
+		void ChooseWinner (NetworkMessage msg) {
+			Game.Manager.Winner = msg.str1;
+			GotoView ("winner");
+		}
+	}
+}

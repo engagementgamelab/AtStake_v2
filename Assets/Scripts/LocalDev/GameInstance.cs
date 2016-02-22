@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Views;
 
 public class GameInstance : MonoBehaviour {
 
@@ -8,7 +9,7 @@ public class GameInstance : MonoBehaviour {
 	public PlayerManager Manager { get; private set; }
 	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
-	public GameScreenManager Screens { get; private set; }
+	public ViewManager Views { get; private set; }
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
@@ -33,8 +34,8 @@ public class GameInstance : MonoBehaviour {
 		Ui.transform.SetParent (grid);*/
 		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
 
-		Screens = ObjectPool.Instantiate<GameScreenManager> ();
-		Screens.transform.SetParent (transform);
+		Views = ObjectPool.Instantiate<ViewManager> ();
+		Views.transform.SetParent (transform);
 
 		Decks = ObjectPool.Instantiate<DeckManager> ();
 		Decks.transform.SetParent (transform);
@@ -55,7 +56,7 @@ public class GameInstance : MonoBehaviour {
 	// Called when the app is started
 	void InitApp () {
 		Ui.Init (this);
-		Screens.Init (Ui.Transform);
+		Views.Init (Ui.Transform);
 		Decks.Init ();
 	}
 
@@ -93,7 +94,7 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	void OnDisconnect () {
-		Screens.OnDisconnect ();
+		Views.OnDisconnect ();
 		Multiplayer.onDisconnect -= OnDisconnect;
 		Dispatcher.RemoveAllListeners ();
 	}

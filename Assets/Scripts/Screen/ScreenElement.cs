@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Views;
 
 public abstract class ScreenElement : GameInstanceComponent {
 
@@ -7,18 +8,18 @@ public abstract class ScreenElement : GameInstanceComponent {
 	public abstract UIElement Element { get; }
 	public abstract Transform Render (Transform parent);
 	public abstract void Remove ();
-	protected GameScreen screen;
+	protected View view; // TODO: this reference might be unused
 
-	public void Init (GameInstanceBehaviour behaviour, GameScreen screen) {
+	public void Init (GameInstanceBehaviour behaviour, View view) {
 		base.Init (behaviour);
-		this.screen = screen;
+		this.view = view;
 	}
 }
 
 public class ScreenElement<T> : ScreenElement where T : UIElement {
 
 	protected T uiElement;
-	protected GameScreen screen;
+	protected View view;
 
 	public override UIElement Element {
 		get { return uiElement as UIElement; }
