@@ -20,11 +20,12 @@ namespace Templates {
 
 		GameInstance gi;
 		TemplateContainer container;
-		TemplateContent content;
+		Template content;
 
 		Dictionary<string, string> templates = new Dictionary<string, string> () {
-			{ "start", "StartTemplate" },
-			{ "name", "NameTemplate" }
+			{ "start", "Start" },
+			{ "name", "Name" },
+			{ "hostjoin", "HostJoin" }
 		};
 
 		public void Init (GameInstance gi) {
@@ -35,7 +36,7 @@ namespace Templates {
 		}
 
 		public void Load (string id, View view) {
-			content = ObjectPool.Instantiate (templates[id]).GetComponent<TemplateContent> ();
+			content = ObjectPool.Instantiate (templates[id]).GetComponent<Template> ();
 			content.Parent = container.contentContainer;
 			content.Transform.localScale = Vector3.one;
 			content.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;

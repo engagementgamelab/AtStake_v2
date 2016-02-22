@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Templates {
 
-	public abstract class TemplateContent : MB {
+	public abstract class Template : MB {
 
 		public abstract TemplateSettings Settings { get; }
 

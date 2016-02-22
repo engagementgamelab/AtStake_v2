@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Templates {
 
-	public class Name : Template {
+	public class _template : Template {
 
 		public override TemplateSettings Settings {
 			get {

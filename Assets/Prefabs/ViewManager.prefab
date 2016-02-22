@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 469236}
   - 114: {fileID: 11463176}
   m_Layer: 0
-  m_Name: GameScreenManager
+  m_Name: ViewManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
