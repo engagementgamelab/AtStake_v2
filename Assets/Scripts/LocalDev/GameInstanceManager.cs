@@ -89,6 +89,6 @@ public class GameInstanceManager : MonoBehaviour {
 		i.transform.SetParent (transform);
 		instances.Add (i);
 		i.Manager.Player.Name = names[instances.Count-1];
-		i.SetUiPosition (instancePositions[instances.Count-1]);
+		i.SetTemplatePosition (instancePositions[instances.Count-1]);
 	}
 }

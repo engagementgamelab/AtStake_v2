@@ -2,14 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using Views;
+using Templates;
 
 public class GameInstance : MonoBehaviour {
 
-	public GameInstanceUI Ui { get; private set; }
 	public PlayerManager Manager { get; private set; }
 	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
+
 	public ViewManager Views { get; private set; }
+	public TemplateManager Templates { get; private set; }
+
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
@@ -32,7 +35,7 @@ public class GameInstance : MonoBehaviour {
 		/*Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
 		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
 		Ui.transform.SetParent (grid);*/
-		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
+		Templates = ObjectPool.Instantiate<TemplateManager> ();
 
 		Views = ObjectPool.Instantiate<ViewManager> ();
 		Views.transform.SetParent (transform);
@@ -49,14 +52,14 @@ public class GameInstance : MonoBehaviour {
 		InitApp ();
 	}
 
-	public void SetUiPosition (Vector3 pos) {
-		Ui.transform.position = pos;
+	public void SetTemplatePosition (Vector3 pos) {
+		Templates.transform.position = pos;
 	}
 	
 	// Called when the app is started
 	void InitApp () {
-		Ui.Init (this);
-		Views.Init (Ui.Transform);
+		Templates.Init (this);
+		Views.Init (Templates.Transform);
 		Decks.Init ();
 	}
 

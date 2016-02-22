@@ -230,7 +230,7 @@ namespace Views {
 			}
 			// RenderDynamic ();
 			dynamicElements[id].Init (Behaviour, this);
-			Game.Ui.AddElement (id, dynamicElements[id]);
+			Game.Templates.AddElement (id, dynamicElements[id]);
 			return t;
 		}
 
@@ -238,12 +238,12 @@ namespace Views {
 			dynamicElements.Add (id, element);
 			// RenderDynamic ();
 			element.Init (Behaviour, this);
-			Game.Ui.AddElement (id, element);
+			Game.Templates.AddElement (id, element);
 		}
 
 		protected void RemoveElement (string id) {
 			dynamicElements[id].Remove ();
-			Game.Ui.RemoveElement (dynamicElements[id]);
+			Game.Templates.RemoveElement (dynamicElements[id]);
 			dynamicElements.Remove (id);
 			// RenderDynamic ();
 		}

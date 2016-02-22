@@ -62,7 +62,7 @@ namespace Views {
 			
 			// Unload the current view and update the PrevView reference
 			if (!string.IsNullOrEmpty (CurrView)) {
-				Game.Ui.Unload ();
+				Game.Templates.Unload ();
 				Views[CurrView].Hide ();
 				PrevView = CurrView;
 			}
@@ -77,7 +77,7 @@ namespace Views {
 
 			// Render the new view
 			try {
-				Game.Ui.Load (CurrView, Views[CurrView]);
+				Game.Templates.Load (CurrView, Views[CurrView]);
 			} catch (KeyNotFoundException e) {
 				throw new System.Exception ("No template with the id '" + id + "' exists.\n" + e);
 			}
