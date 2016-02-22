@@ -30,7 +30,13 @@ namespace Templates {
 				if (k == "back" || k == "pot" || k == "coin")
 					continue;
 				ScreenElementUI e = FindScreenElementById (k);
-				if (e != null) e.Init (element.Value);	
+				if (e != null) e.Load (element.Value);	
+			}
+		}
+
+		public void UnloadElements () {
+			foreach (var element in Elements) {
+				element.Unload ();
 			}
 		}
 	}

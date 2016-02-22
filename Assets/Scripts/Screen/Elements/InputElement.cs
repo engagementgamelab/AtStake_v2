@@ -13,8 +13,4 @@ public class InputElement : ScreenElement<InputElementUI> {
 		this.placeholder = placeholder;
 		this.onEndEdit = onEndEdit;
 	}
-
-	protected override void OnRender (InputElementUI i) {
-		// i.Placeholder.text = placeholder;
-	}
 }

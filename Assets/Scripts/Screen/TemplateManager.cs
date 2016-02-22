@@ -22,11 +22,7 @@ namespace Templates {
 		TemplateContainer container;
 		Template content;
 
-		Dictionary<string, string> templates = new Dictionary<string, string> () {
-			{ "start", "Start" },
-			{ "name", "Name" },
-			{ "hostjoin", "HostJoin" }
-		};
+		Dictionary<string, Template> templateLookup = new Dictionary<string, Template> ();
 
 		public void Init (GameInstance gi) {
 			this.gi = gi;
@@ -36,18 +32,16 @@ namespace Templates {
 		}
 
 		public void Load (string id, View view) {
-			content = ObjectPool.Instantiate (templates[id]).GetComponent<Template> ();
-			content.Parent = container.contentContainer;
-			content.Transform.localScale = Vector3.one;
-			content.GetComponent<RectTransform> ().anchoredPosition = Vector2.zero;
-			content.GetComponent<RectTransform> ().sizeDelta = Vector2.one;
+			content = GetTemplateById (id);
+			content.gameObject.SetActive (true);
 			container.LoadElements (view.Elements);
 			container.LoadSettings (content.Settings);
 			content.LoadElements (view.Elements);
 		}
 
 		public void Unload () {
-			ObjectPool.Destroy (content.name.Replace("(Clone)", ""));
+			content.UnloadElements ();
+			content.gameObject.SetActive (false);
 		}
 
 		public void AddElement (string key, ScreenElement element) {
@@ -58,7 +52,28 @@ namespace Templates {
 
 		}
 
+		Template GetTemplateById (string id) {
+			Template template;
+			if (templateLookup.TryGetValue (id, out template)) {
+				return template;
+			} else {
+				template = System.Array.Find (container.templates, x => x.name.ToLower () == id);
+				if (template != null) {
+					templateLookup.Add (id, template);
+					return template;
+				} else {
+					throw new System.Exception ("No template for the id '" + id + "' exists.");
+				}
+			}
+		}
+
 		void Update () {
+			/*if (Input.GetKeyDown (KeyCode.Q)) {
+				Load ("start", new Views.Start ());
+			}
+			if (Input.GetKeyDown (KeyCode.W)) {
+				Load ("name", new Views.Name ());
+			}*/
 			if (gi.Manager != null) 
 				Name.text = gi.Name;
 		}

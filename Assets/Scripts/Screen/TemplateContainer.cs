@@ -19,6 +19,8 @@ namespace Templates {
 		public RectTransform contentContainer;
 		public RectTransform contentArea;
 
+		public Template[] templates;
+
 		Color BackgroundColor {
 			set { backgroundColor.color = value; }
 		}
@@ -55,7 +57,7 @@ namespace Templates {
 			ScreenElement back;
 			if (elements.TryGetValue ("back", out back)) {
 				backButton.gameObject.SetActive (true);
-				backButton.Init ((BackButtonElement)back);
+				backButton.Load ((BackButtonElement)back);
 			} else {
 				backButton.gameObject.SetActive (false);
 			}

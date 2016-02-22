@@ -9,16 +9,4 @@ public class ButtonElement : ScreenElement<ButtonElementUI> {
 		this.text = text;
 		this.onPress = onPress;
 	}
-
-	// TODO: have ScreenElementUI handle this
-	protected override void OnRender (ButtonElementUI b) {
-		/*b.Text.text = text;
-		b.RemoveButtonListeners ();
-		b.AddButtonListener (onPress);*/
-	}
-
-	// TODO: have ScreenElementUI handle this	
-	protected override void OnRemove (ButtonElementUI b) {
-		// b.RemoveButtonListeners ();
-	}
 }
