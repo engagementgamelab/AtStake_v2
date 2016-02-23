@@ -52,8 +52,9 @@ namespace Views {
 		protected override void OnShow () {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (IsDecider) {
-				GetScreenElement<TextElement> ("decider_instructions")
-					.SetText (DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable));
+				// TODO: Update text
+				/*GetScreenElement<TextElement> ("decider_instructions")
+					.SetText (DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable));*/
 			}
 		}
 
@@ -95,8 +96,9 @@ namespace Views {
 				state = State.Pitch;
 				currentPeer ++;
 				if (currentPeer < peers.Count) {
-					GetScreenElement<TextElement> ("decider_instructions")
-						.SetText (DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable));
+					// TODO: update text
+					/*GetScreenElement<TextElement> ("decider_instructions")
+						.SetText (DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable));*/
 					GetScreenElement<TimerButtonElement> ("timer").Reset (Duration);
 				} else {
 					AllGotoView ("deliberate_instructions");

@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 
-public class InputElement : ScreenElement<InputElementUI> {
+public class InputElement : ScreenElement {
 
-	public readonly string placeholder;
-	public readonly System.Action<string> onEndEdit;
-
-	public string Text {
-		get { return ((InputElementUI)uiElement).Text.text; }
-	}
+	public readonly string Placeholder;
+	public readonly System.Action<string> OnEndEdit;
 
 	public InputElement (string placeholder, System.Action<string> onEndEdit) {
-		this.placeholder = placeholder;
-		this.onEndEdit = onEndEdit;
+		Placeholder = placeholder;
+		OnEndEdit = onEndEdit;
 	}
 }

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class ButtonElement : ScreenElement<ButtonElementUI> {
+public class ButtonElement : ScreenElement {
 
-	public readonly string text;
-	public readonly System.Action onPress;
+	public readonly string Text;
+	public readonly System.Action OnPress;
 
 	public ButtonElement (string text, System.Action onPress) {
-		this.text = text;
-		this.onPress = onPress;
+		Text = text;
+		OnPress = onPress;
 	}
 }

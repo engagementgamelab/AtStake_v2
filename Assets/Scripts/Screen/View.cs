@@ -183,14 +183,16 @@ namespace Views {
 
 		void InitElements () {
 			foreach (var element in Elements) {
-				element.Value.Init (Behaviour, this);
+				// element.Value.Init (Behaviour, this);
+				element.Value.Init (Behaviour);
 			}
 		}
 
 		// deprecate
 		void Render () {
 			foreach (var element in Elements) {
-				element.Value.Init (Behaviour, this);
+				// element.Value.Init (Behaviour, this);
+				element.Value.Init (Behaviour);
 				// element.Value.Render (this).SetParent (canvas);
 			}
 			// Game.Ui.RenderElements (elements);
@@ -199,14 +201,19 @@ namespace Views {
 		void RenderDynamic () {
 			foreach (var element in dynamicElements) {
 				ScreenElement s = element.Value;
-				s.Init (Behaviour, this);
+				// s.Init (Behaviour, this);
+				s.Init (Behaviour);
 				/*if (!s.Active)
 					s.Render (this).SetParent (canvas);*/
 			}
 		}
 
 		protected T GetScreenElement<T> (string id) where T : ScreenElement {
-			return Elements[id] as T;
+			try {
+				return Elements[id] as T;
+			} catch (KeyNotFoundException) {
+				throw new System.Exception ("No screen element with the id '" + id + "'");
+			}
 		}
 
 		protected void CreateRoleCard (bool showTitle, bool showBio, bool showAgenda) {
@@ -229,21 +236,20 @@ namespace Views {
 				throw new System.Exception ("An element with the id '" + id + "' already exists on the screen.");
 			}
 			// RenderDynamic ();
-			dynamicElements[id].Init (Behaviour, this);
-			Game.Templates.AddElement (id, dynamicElements[id]);
+			dynamicElements[id].Init (Behaviour);
+			// dynamicElements[id].Init (Behaviour, this);
 			return t;
 		}
 
 		protected void AddElement (string id, ScreenElement element) {
 			dynamicElements.Add (id, element);
 			// RenderDynamic ();
-			element.Init (Behaviour, this);
-			Game.Templates.AddElement (id, element);
+			element.Init (Behaviour);
+			// element.Init (Behaviour, this);
 		}
 
 		protected void RemoveElement (string id) {
-			dynamicElements[id].Remove ();
-			Game.Templates.RemoveElement (dynamicElements[id]);
+			// dynamicElements[id].Remove ();
 			dynamicElements.Remove (id);
 			// RenderDynamic ();
 		}

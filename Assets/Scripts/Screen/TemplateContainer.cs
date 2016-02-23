@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Views;
 
 namespace Templates {
 
@@ -41,17 +42,22 @@ namespace Templates {
 			set { coins.GetChild (0).GetComponent<Text> ().text = value.ToString (); }
 		}
 
-		public void SetBackground (Color bgColor, string bgImage) {
+		public void LoadView (View view, Template template) {
+			LoadElements (view.Elements);
+			LoadSettings (template.Settings);
+		}
+
+		void SetBackground (Color bgColor, string bgImage) {
 			BackgroundColor = bgColor;
 			BackgroundImage = AssetLoader.LoadBackground (bgImage);
 		}
 
-		public void SetTopBar (bool enabled, Color topBarColor=new Color()) {
+		void SetTopBar (bool enabled, Color topBarColor=new Color()) {
 			topBar.gameObject.SetActive (enabled);
 			TopBarColor = topBarColor;
 		}
 
-		public void LoadElements (Dictionary<string, ScreenElement> elements) {
+		void LoadElements (Dictionary<string, ScreenElement> elements) {
 
 			// Back button
 			ScreenElement back;
@@ -79,7 +85,7 @@ namespace Templates {
 			}
 		}
 
-		public void LoadSettings (TemplateSettings settings) {
+		void LoadSettings (TemplateSettings settings) {
 			SetBackground (settings.BackgroundColor, settings.BackgroundImage);
 			SetTopBar (settings.TopBarEnabled, settings.TopBarColor);
 		}

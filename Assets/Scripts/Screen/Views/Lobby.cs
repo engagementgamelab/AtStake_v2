@@ -8,8 +8,12 @@ namespace Views {
 
 	public class Lobby : View {
 
+		ListElement<TextElement> peerList;
+
 		protected override void OnInitElements () {
 			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
+			peerList = new ListElement<TextElement> ();
+			Elements.Add ("peer_list", peerList);
 		}
 
 		protected override void OnShow () {
@@ -28,12 +32,16 @@ namespace Views {
 		}
 
 		void OnAddPeer (string peer) {
-			AddElement ("peer_" + peer, new TextElement (peer));
-			SetPlayButton ();
+			// AddElement ("peer_" + peer, new TextElement (peer));
+			Co.WaitForFixedUpdate (() => {
+				peerList.Add (peer, new TextElement (peer));
+				SetPlayButton ();
+			});
 		}
 
 		void OnRemovePeer (string peer) {
-			RemoveElement ("peer_" + peer);
+			// RemoveElement ("peer_" + peer);
+			peerList.Remove (peer);
 			SetPlayButton ();
 		}
 

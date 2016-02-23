@@ -1,13 +1,21 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TextElement : ScreenElement<TextElementUI> {
+public class TextElement : ScreenElement {
 
-	public readonly string text;
-	public readonly TextStyle style;
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
+	}
+
+	public readonly TextStyle Style;
 
 	public TextElement (string text, TextStyle style=null) {
 		this.text = text;
-		this.style = (style == null) ? TextStyle.Paragraph : style;
+		Style = (style == null) ? TextStyle.Paragraph : style;
 	}
 }

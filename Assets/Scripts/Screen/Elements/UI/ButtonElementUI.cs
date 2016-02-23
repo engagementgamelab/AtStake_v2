@@ -4,8 +4,8 @@ using System.Collections;
 public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 
 	public override void ApplyElement (ButtonElement e) {
-		Text.text = e.text;
-		AddButtonListener (e.onPress);
+		Text.text = e.Text;
+		AddButtonListener (e.OnPress);
 	}
 
 	public override void RemoveElement (ButtonElement e) {

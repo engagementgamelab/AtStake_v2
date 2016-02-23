@@ -4,8 +4,8 @@ using System.Collections;
 public class InputElementUI : ScreenElementUI<InputElement> {
 
 	public override void ApplyElement (InputElement e) {
-		Placeholder.text = e.placeholder;
-		AddEndEditListener (e.onEndEdit);
+		Placeholder.text = e.Placeholder;
+		AddEndEditListener (e.OnEndEdit);
 	}
 
 	public override void RemoveElement (InputElement e) {

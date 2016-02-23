@@ -22,6 +22,7 @@ namespace Templates {
 		TemplateContainer container;
 		Template content;
 
+		// Template cache
 		Dictionary<string, Template> templateLookup = new Dictionary<string, Template> ();
 
 		public void Init (GameInstance gi) {
@@ -34,22 +35,13 @@ namespace Templates {
 		public void Load (string id, View view) {
 			content = GetTemplateById (id);
 			content.gameObject.SetActive (true);
-			container.LoadElements (view.Elements);
-			container.LoadSettings (content.Settings);
-			content.LoadElements (view.Elements);
+			container.LoadView (view, content);
+			content.LoadView (view);
 		}
 
 		public void Unload () {
-			content.UnloadElements ();
+			content.UnloadView ();
 			content.gameObject.SetActive (false);
-		}
-
-		public void AddElement (string key, ScreenElement element) {
-			// RenderElements (new Dictionary<string, ScreenElement> () { { key, element } });
-		}
-
-		public void RemoveElement (ScreenElement element) {
-
 		}
 
 		Template GetTemplateById (string id) {
@@ -62,18 +54,12 @@ namespace Templates {
 					templateLookup.Add (id, template);
 					return template;
 				} else {
-					throw new System.Exception ("No template for the id '" + id + "' exists.");
+					throw new System.Exception ("No template for the view '" + id + "' exists.");
 				}
 			}
 		}
 
 		void Update () {
-			/*if (Input.GetKeyDown (KeyCode.Q)) {
-				Load ("start", new Views.Start ());
-			}
-			if (Input.GetKeyDown (KeyCode.W)) {
-				Load ("name", new Views.Name ());
-			}*/
 			if (gi.Manager != null) 
 				Name.text = gi.Name;
 		}

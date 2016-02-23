@@ -1,7 +1,7 @@
 ﻿#define FAST_TIME
 using UnityEngine;
 
-public class TimerElement : ScreenElement<TimerElementUI> {
+public class TimerElement : ScreenElement {
 
 	float duration;
 	System.Action onEnd;
@@ -15,13 +15,13 @@ public class TimerElement : ScreenElement<TimerElementUI> {
 		this.onEnd = onEnd;
 	}
 
-	protected override void OnRender (TimerElementUI t) {
+/*	protected override void OnRender (TimerElementUI t) {
 		t.Interactable = false;
 		Reset ();
 	}
-
+*/
 	public void StartTimer () {
-		Co.StartCoroutine (duration, OnUpdate, () => {
+		Co.StartCoroutine (duration, OnUpdateTime, () => {
 			if (onEnd != null)
 				onEnd ();
 		});
@@ -35,11 +35,11 @@ public class TimerElement : ScreenElement<TimerElementUI> {
 			#endif
 			;
 		}
-		OnUpdate (0);
+		OnUpdateTime (0);
 	}
 
-	void OnUpdate (float p) {
+	void OnUpdateTime (float p) {
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
-		uiElement.Text.text = time.ToString () + " seconds";
+		// uiElement.Text.text = time.ToString () + " seconds";
 	}
 }

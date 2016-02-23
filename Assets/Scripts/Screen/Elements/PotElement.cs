@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PotElement : ScreenElement<PotElementUI> {
+public class PotElement : ScreenElement {
 
-	protected override void OnRender (PotElementUI p) {
+	/*protected override void OnRender (PotElementUI p) {
 		SetText ();
 		Game.Score.Inventory["pot"].onUpdate += SetText;
 	}
@@ -11,8 +11,8 @@ public class PotElement : ScreenElement<PotElementUI> {
 	protected override void OnRemove (PotElementUI p) {
 		Game.Score.Inventory["pot"].onUpdate -= SetText;
 	}
-
+*/
 	void SetText () {
-		uiElement.Text.text = "Pot: " + Game.Score.Pot;
+		// uiElement.Text.text = "Pot: " + Game.Score.Pot;
 	}
 }
