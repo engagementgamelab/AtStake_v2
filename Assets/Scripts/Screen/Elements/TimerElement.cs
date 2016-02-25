@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class TimerElement : ScreenElement {
 
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
+	}
+
 	float duration;
 	System.Action onEnd;
 
@@ -13,13 +22,9 @@ public class TimerElement : ScreenElement {
 		#endif
 		;
 		this.onEnd = onEnd;
-	}
-
-/*	protected override void OnRender (TimerElementUI t) {
-		t.Interactable = false;
 		Reset ();
 	}
-*/
+
 	public void StartTimer () {
 		Co.StartCoroutine (duration, OnUpdateTime, () => {
 			if (onEnd != null)
@@ -40,6 +45,6 @@ public class TimerElement : ScreenElement {
 
 	void OnUpdateTime (float p) {
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
-		// uiElement.Text.text = time.ToString () + " seconds";
+		Text = time.ToString () + " seconds";
 	}
 }

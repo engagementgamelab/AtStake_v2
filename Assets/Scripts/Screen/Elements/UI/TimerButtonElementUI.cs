@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TimerButtonElementUI : UIElement {}
+public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
+
+	public override void ApplyElement (TimerButtonElement e) {
+		
+	}
+}
