@@ -9,17 +9,15 @@ namespace Views {
 	public class Lobby : View {
 
 		ListElement<TextElement> peerList;
-		ButtonElement playButton;
 
 		protected override void OnInitElements () {
-
-			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 
 			peerList = new ListElement<TextElement> ();
 			Elements.Add ("peer_list", peerList);
 
-			playButton = new ButtonElement (Model.Buttons["play"], () => { AllGotoView ("deck"); });
-			Elements.Add ("play", playButton);
+			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
+			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], 
+				() => { AllGotoView ("deck"); }) { Active = false });
 		}
 
 		protected override void OnShow () {
@@ -50,7 +48,8 @@ namespace Views {
 		}
 
 		void SetPlayButton () {
-			playButton.Active = IsHost && Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
+			if (IsHost)
+				Elements["play"].Active = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
 		}
 
 		public override void OnDisconnect () {

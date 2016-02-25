@@ -41,21 +41,31 @@ namespace Templates {
 			}
 		}
 		
-		void LoadElements (Dictionary<string, ScreenElement> elements) {
-			foreach (var element in elements) {
+		void LoadElements (Dictionary<string, ScreenElement> data) {
+
+			// Loads the template elements based on the provided data
+			// If the template has an element without any associated data, it is not rendered
+			foreach (var element in Elements) {
+				string k = element.Key;
+				ScreenElement elementData;
+				if (data.TryGetValue (k, out elementData)) {
+					element.Value.Load (elementData);
+				} else {
+					element.Value.gameObject.SetActive (false);
+				}
+			}
+
+			// Throw a warning if there's data without an associated template element (only in editor)
+			#if UNITY_EDITOR
+			foreach (var element in data) {
 				string k = element.Key;
 				if (k == "back" || k == "pot" || k == "coin")
 					continue;
-				#if UNITY_EDITOR
-				try {
-				#endif
-					Elements[k].Load (element.Value);
-				#if UNITY_EDITOR
-				} catch (KeyNotFoundException) {
+				if (!Elements.ContainsKey (k)) {
 					Debug.LogWarning ("The template '" + this + "' does not contain a screen element with the id '" + k + "' so it will not be rendererd");
 				}
-				#endif
 			}
+			#endif
 		}
 	}
 

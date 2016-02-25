@@ -15,6 +15,7 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		this.element = (T)element;
 		ApplyElement (this.element);
 		element.onUpdate += OnUpdate;
+		OnSetActive (element.Active);
 	}
 
 	public override void Unload () {

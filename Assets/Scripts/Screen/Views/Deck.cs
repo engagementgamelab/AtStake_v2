@@ -8,16 +8,23 @@ namespace Views {
 
 	public class Deck : View {
 
+		protected override void OnInitHostElements () {
+			Elements.Add ("deck_list", new ListElement<ButtonElement> ());
+		}
+
 		protected override void OnShow () {
-			if (IsHost) {
-				List<string> names = Game.Decks.Names;
-				for (int i = 0; i < names.Count; i ++) {
-					string name = names[i];
-					AddElement ("deck_" + name, new ButtonElement (name, () => {
-						Game.Dispatcher.ScheduleMessage ("SetDeck", name);
-						AllGotoView ("roles");
-					}));
-				}
+
+			if (!IsHost) return;
+
+			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("deck_list");
+			List<string> names = Game.Decks.Names;
+
+			for (int i = 0; i < names.Count; i ++) {
+				string name = names[i];
+				list.Add (name, new ButtonElement (name, () => {
+					Game.Dispatcher.ScheduleMessage ("SetDeck", name);
+					AllGotoView ("roles");
+				}));
 			}
 		}
 	}

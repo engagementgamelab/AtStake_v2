@@ -10,6 +10,14 @@ namespace Views {
 
 	public class Roles : View {
 
+		ListElement<TextElement> roleList;
+
+		protected override void OnInitElements () {
+			roleList = new ListElement<TextElement> ();
+			Elements.Add ("role_list", roleList);
+			Elements.Add ("next", new NextButtonElement ("pot") { Active = false });
+		}
+
 		protected override void OnShow () {
 
 			Game.Manager.Player.Role = null;
@@ -67,10 +75,14 @@ namespace Views {
 		}
 
 		void AssignRole (NetworkMessage msg) {
-			AddElement ("role_" + msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
+			roleList.Add (msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
+			if (IsDecider) {
+				Elements["next"].Active = true;
+			}
+			/*AddElement ("role_" + msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
 			if (IsDecider && !HasElement ("next")) {
 				AddElement ("next", new NextButtonElement ("pot"));
-			}
+			}*/
 		}
 	}
 }

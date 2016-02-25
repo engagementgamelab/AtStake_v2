@@ -145,14 +145,6 @@ namespace Views {
 		/// Hides the screen. This should only ever be called by ViewManager
 		/// </summary>
 		public void Hide () {
-			/*foreach (var element in Elements) {
-				element.Value.Remove ();
-			}*/
-			// Game.Ui.RemoveElements (elements);
-			/*foreach (var element in dynamicElements) {
-				element.Value.Remove ();
-			}*/
-			// Game.Ui.RemoveElements (dynamicElements);
 			dynamicElements.Clear ();
 			OnHide ();
 			elements = null;
@@ -173,8 +165,8 @@ namespace Views {
 					Elements.Add ("host_instructions", new TextElement (
 						DataManager.GetTextFromScreen (Model, "HostInstructions", TextVariables)));
 				}
-			} 
-			if (!IsDecider) {
+			}
+			if (!IsDecider && !IsHost) {
 				if (!string.IsNullOrEmpty (Model.Instructions)) {
 					Elements.Add ("instructions", new TextElement (
 						DataManager.GetTextFromScreen (Model, "Instructions", TextVariables)));
@@ -188,7 +180,6 @@ namespace Views {
 
 		void InitElements () {
 			foreach (var element in Elements) {
-				// element.Value.Init (Behaviour, this);
 				element.Value.Init (Behaviour);
 			}
 		}
