@@ -8,7 +8,7 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 	public delegate void OnRemove (string id);
 
 	Dictionary<string, T> elements;
-	protected Dictionary<string, T> Elements {
+	public Dictionary<string, T> Elements {
 		get {
 			if (elements == null)
 				elements = new Dictionary<string, T> ();
@@ -18,6 +18,10 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 
 	public OnAdd onAdd;
 	public OnRemove onRemove;
+
+	public ListElement (Dictionary<string, T> elements=null) {
+		this.elements = elements;
+	}
 
 	public void Add (string id, T t) {
 		Elements.Add (id, t);

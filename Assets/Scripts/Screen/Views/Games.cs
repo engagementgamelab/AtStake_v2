@@ -21,10 +21,6 @@ namespace Views {
 			List<string> hosts = Game.Multiplayer.UpdateHosts ();
 			for (int i = 0; i < hosts.Count; i ++) {
 				string hostId = hosts[i];
-				/*AddElement (i.ToString (), new ButtonElement (hostId, () => {
-					Game.JoinGame (hostId);
-					GotoView ("lobby");
-				}));*/
 				list.Add (hostId, new ButtonElement (hostId, () => {
 					Game.JoinGame (hostId);
 					GotoView ("lobby");

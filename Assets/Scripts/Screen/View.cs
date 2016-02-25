@@ -79,6 +79,11 @@ namespace Views {
 					} else {
 						OnInitPlayerElements ();
 					}
+					if (IsHost) {
+						OnInitHostElements ();
+					} else {
+						OnInitClientElements ();
+					}
 					InitElements ();
 				}
 				return elements;
@@ -275,6 +280,8 @@ namespace Views {
 		protected virtual void OnInitElements () {}			// Static elements that all players see
 		protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
 		protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see
+		protected virtual void OnInitHostElements () {}		// Static elements that only the host sees
+		protected virtual void OnInitClientElements () {}	// Static elements that only clients seee
 		public virtual void OnDisconnect () {}
 		protected virtual void OnShow () {}
 		protected virtual void OnHide () {}

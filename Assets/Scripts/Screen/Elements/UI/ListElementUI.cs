@@ -16,6 +16,12 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 	}
 
 	public override void ApplyElement (ListElement<U> e) {
+
+		// Load initial elements (if any)
+		foreach (var element in e.Elements)
+			AddElement (element.Key, element.Value);
+
+		// Listen for elements being added/removed
 		e.onAdd += AddElement;
 		e.onRemove += RemoveElement;
 	}
@@ -30,6 +36,7 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		t.id = id;
 		t.Load (element);
 		t.Parent = RectTransform;
+		t.RectTransform.localScale = Vector3.one;
 	}
 
 	void RemoveElement (string id) {
