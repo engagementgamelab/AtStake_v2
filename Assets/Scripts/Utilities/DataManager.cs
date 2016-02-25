@@ -156,7 +156,9 @@ public class DataManager {
             switch (key) {
                 case "Instructions": text = screen.Instructions; break;
                 case "DeciderInstructions": text = screen.DeciderInstructions; break;
+                case "PlayerInstructions": text = screen.PlayerInstructions; break;
                 case "HostInstructions": text = screen.HostInstructions; break;
+                case "ClientInstructions": text = screen.ClientInstructions; break;
                 default: text = screen.Text[key]; break;
             }
         } catch {

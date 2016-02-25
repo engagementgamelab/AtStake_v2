@@ -153,17 +153,27 @@ namespace Views {
 						DataManager.GetTextFromScreen (Model, "DeciderInstructions", TextVariables)));
 				}
 			}
+			if (!IsDecider) {
+				if (!string.IsNullOrEmpty (Model.PlayerInstructions)) {
+					Elements.Add ("player_instructions", new TextElement (
+						DataManager.GetTextFromScreen (Model, "PlayerInstructions", TextVariables)));
+				}
+			}
 			if (IsHost) {
 				if (!string.IsNullOrEmpty (Model.HostInstructions)) {
 					Elements.Add ("host_instructions", new TextElement (
 						DataManager.GetTextFromScreen (Model, "HostInstructions", TextVariables)));
 				}
 			}
-			if (!IsDecider && !IsHost) {
-				if (!string.IsNullOrEmpty (Model.Instructions)) {
-					Elements.Add ("instructions", new TextElement (
-						DataManager.GetTextFromScreen (Model, "Instructions", TextVariables)));
+			if (!IsHost) {
+				if (!string.IsNullOrEmpty (Model.ClientInstructions)) {
+					Elements.Add ("client_instructions", new TextElement (
+						DataManager.GetTextFromScreen (Model, "ClientInstructions", TextVariables)));
 				}
+			}
+			if (!string.IsNullOrEmpty (Model.Instructions)) {
+				Elements.Add ("instructions", new TextElement (
+					DataManager.GetTextFromScreen (Model, "Instructions", TextVariables)));
 			}
 			if (Model.DisplayScore) {
 				Elements.Add ("pot", new PotElement ());

@@ -127,7 +127,6 @@
     {
       "Symbol": "agenda_item",
       "Instructions": "Did the winning plan include this agenda item?",
-      "DeciderInstructions": "Did the winning plan include this agenda item?",
       "Text": {
         "your_item": "This is your agenda item! Convince the decider you're awesome!!"
       },
@@ -165,7 +164,7 @@
     },
     {
       "Symbol": "deck",
-      "Instructions": "Please wait while the host chooses a deck",
+      "ClientInstructions": "Please wait while the host chooses a deck",
       "HostInstructions": "Please choose a deck genius"
     },
     {
@@ -201,7 +200,7 @@
     },
     {
       "Symbol": "games",
-      "Instructions": "Choose a game to join"
+      "ClientInstructions": "Choose a game to join"
     },
     {
       "Symbol": "hostjoin",
