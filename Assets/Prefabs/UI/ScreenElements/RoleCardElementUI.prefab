@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e965f22df05054afd8856af017a331d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: agenda_list
+  id: rc_agenda
 --- !u!114 &11466038
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -335,7 +335,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: id
+      value: rc_agenda
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 192626}

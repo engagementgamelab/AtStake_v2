@@ -96,8 +96,5 @@ namespace Models {
 
 		// Instructions that only clients see (not the host)
 		public string ClientInstructions { get; set; }
-
-		// Whether or not to display the pot and player's coin count
-		public bool DisplayScore { get; set; }
 	}
 }

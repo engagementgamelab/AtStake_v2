@@ -5,6 +5,10 @@ namespace Views {
 
 	public class _template : View {
 
+		protected override void OnInitElements () {
+			// Everyone
+		}
+		
 		protected override void OnInitDeciderElements () {
 			// Only the Decider
 		}
@@ -19,10 +23,6 @@ namespace Views {
 
 		protected override void OnInitClientElements () {
 			// Only the clients (not the host)
-		}
-
-		protected override void OnInitElements () {
-			// Everyone
 		}
 
 		protected override void OnShow () {

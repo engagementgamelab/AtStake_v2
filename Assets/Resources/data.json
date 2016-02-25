@@ -121,8 +121,7 @@
   "Screens": [
     {
       "Symbol": "agenda",
-      "DeciderInstructions": "Read this out loud: 'everyone secretly review yr agenda' Press next when everyone is ready",
-      "DisplayScore": true
+      "DeciderInstructions": "Read this out loud: 'everyone secretly review yr agenda' Press next when everyone is ready"
     },
     {
       "Symbol": "agenda_item",
@@ -133,34 +132,29 @@
       "Buttons": {
         "accept": "Yes",
         "reject": "No"
-      },
-      "DisplayScore": true
+      }
     },
     {
       "Symbol": "agenda_item_accept",
       "Text": {
         "your_item": "Decider chose your agenda item!! :D You get {{reward}} coins",
         "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} coins :D"
-      },
-      "DisplayScore": true
+      }
     },
     {
       "Symbol": "agenda_item_reject",
       "Text": {
         "your_item": "Decider did not choose your agenda item",
         "their_item": "{{rewarded_player}}'s agenda item was not accepted."
-      },
-      "DisplayScore": true
+      }
     },
     {
       "Symbol": "bio",
-      "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next",
-      "DisplayScore": true
+      "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next"
     },
     {
       "Symbol": "decide",
-      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!",
-      "DisplayScore": true
+      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!"
     },
     {
       "Symbol": "deck",
@@ -169,13 +163,11 @@
     },
     {
       "Symbol": "deliberate",
-      "DeciderInstructions": "When everyone is ready, start the timer",
-      "DisplayScore": true
+      "DeciderInstructions": "When everyone is ready, start the timer"
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'",
-      "DisplayScore": true
+      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'"
     },
     {
       "Symbol": "extra_time",
@@ -186,8 +178,7 @@
       "Buttons": {
         "accept": "More time",
         "decline": "Nah"
-      },
-      "DisplayScore": true
+      }
     },
     {
       "Symbol": "final_scoreboard",
@@ -228,23 +219,19 @@
       "Text": {
         "first_up": "{{current_peer}} is first up. Start the timer when they're ready!",
         "next_up": "next up is {{current_peer}} Start the timer when they're ready!"
-      },
-      "DisplayScore": true
+      }
     },
     {
       "Symbol": "pitch_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'",
-      "DisplayScore": true
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'"
     },
     {
       "Symbol": "pot",
-      "Instructions": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins. Everyone else begins with {{player_start_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start.",
-      "DisplayScore": true
+      "Instructions": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins. Everyone else begins with {{player_start_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start."
     },
     {
       "Symbol": "question",
-      "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool",
-      "DisplayScore": true
+      "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool"
     },
     {
       "Symbol": "roles"
@@ -265,20 +252,17 @@
     },
     {
       "Symbol": "think",
-      "DeciderInstructions": "When everyone is ready, start the timer",
-      "DisplayScore": true
+      "DeciderInstructions": "When everyone is ready, start the timer"
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'",
-      "DisplayScore": true
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'"
     },
     {
       "Symbol": "winner",
       "Text": {
         "winner": "And the winner is {{winner}}"
-      },
-      "DisplayScore": true
+      }
     }
   ],
   "Settings": {

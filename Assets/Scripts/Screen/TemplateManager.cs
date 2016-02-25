@@ -45,6 +45,7 @@ namespace Templates {
 		}
 
 		Template GetTemplateById (string id) {
+			id = id.Replace ("_", "");
 			Template template;
 			if (templateLookup.TryGetValue (id, out template)) {
 				return template;

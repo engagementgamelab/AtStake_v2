@@ -4806,7 +4806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e965f22df05054afd8856af017a331d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: agenda_list
+  id: rc_agenda
 --- !u!114 &11432174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7985,7 +7985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e965f22df05054afd8856af017a331d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: agenda_list
+  id: rc_agenda
 --- !u!114 &11473822
 MonoBehaviour:
   m_ObjectHideFlags: 1
