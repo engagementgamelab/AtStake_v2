@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Views;
@@ -36,7 +37,7 @@ namespace Templates {
 		}
 
 		public void UnloadView () {
-			foreach (var element in Elements) {
+			foreach (var element in Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value)) {
 				element.Value.Unload ();
 			}
 		}
@@ -59,7 +60,7 @@ namespace Templates {
 			#if UNITY_EDITOR
 			foreach (var element in data) {
 				string k = element.Key;
-				if (k == "back" || k == "pot" || k == "coin")
+				if (k == "back" || k == "pot" || k == "coins")
 					continue;
 				if (!Elements.ContainsKey (k)) {
 					Debug.LogWarning ("The template '" + this + "' does not contain a screen element with the id '" + k + "' so it will not be rendererd");

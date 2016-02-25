@@ -3,6 +3,7 @@ using System.Collections;
 
 public abstract class ScreenElementUI : UIElement {
 	public string id;
+	public abstract bool Loaded { get; }
 	public abstract void Load (ScreenElement e);
 	public abstract void Unload ();
 }
@@ -10,6 +11,8 @@ public abstract class ScreenElementUI : UIElement {
 public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenElement {
 	
 	T element;
+
+	public override bool Loaded { get { return element != null; } }
 
 	public override void Load (ScreenElement element) {
 		this.element = (T)element;
@@ -21,8 +24,8 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	public override void Unload () {
 		try {
 			element.onUpdate -= OnUpdate;
-		} catch {
-			throw new System.Exception ("A ScreenElement has not been set for " + this);
+		} catch (System.NullReferenceException e) {
+			throw new System.Exception ("A ScreenElement has not been set for " + this + "\n" + e);
 		}
 		RemoveElement (element);
 		element = null;

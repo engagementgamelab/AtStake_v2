@@ -36,10 +36,8 @@ namespace Views {
 		}
 
 		void OnAddPeer (string peer) {
-			Co.WaitForFixedUpdate (() => {
-				peerList.Add (peer, new TextElement (peer));
-				SetPlayButton ();
-			});
+			peerList.Add (peer, new TextElement (peer));
+			SetPlayButton ();
 		}
 
 		void OnRemovePeer (string peer) {

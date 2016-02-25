@@ -85,6 +85,7 @@ namespace Views {
 						OnInitClientElements ();
 					}
 					InitElements ();
+					OnShow ();
 				}
 				return elements;
 			}
@@ -131,14 +132,6 @@ namespace Views {
 			this.canvas = canvas;
 			Model = DataManager.GetScreen (id);
 			Init (views);
-		}
-		
-		/// <summary>
-		/// Shows the screen. This should only ever be called by ViewManager
-		/// </summary>
-		public void Load () {
-			// Render ();
-			OnShow ();
 		}
 
 		/// <summary>

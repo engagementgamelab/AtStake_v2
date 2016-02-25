@@ -68,13 +68,6 @@ namespace Views {
 			}
 			CurrView = id;
 
-			// Load the new view
-			try {
-				Views[CurrView].Load ();
-			} catch (KeyNotFoundException e) {
-				throw new System.Exception ("No view with the id '" + id + "' exists.\n" + e);
-			}
-
 			// Render the new view
 			try {
 				Game.Templates.Load (CurrView, Views[CurrView]);
