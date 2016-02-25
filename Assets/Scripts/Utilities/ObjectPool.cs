@@ -7,8 +7,6 @@ using System.IO;
 using UnityEditor;
 #endif
 
-// TODO: automatically generate Resources/Prefabs directory if it does not exist
-
 public class ObjectPool {
 
 	static readonly Dictionary<string, ObjectPool> pools = new Dictionary<string, ObjectPool> ();
@@ -16,15 +14,6 @@ public class ObjectPool {
 	List<MonoBehaviour> active = new List<MonoBehaviour> ();
 
 	MonoBehaviour prefab;
-
-	#if UNITY_EDITOR
-	[MenuItem ("Object Pool/Refresh Resources")]
-	static void RefreshResources () {
-		// TODO: for each asset in resources/prefabs, delete the asset and re-copy the asset in the project directory ONLY IF the asset exists in the project directory
-		// (right now this is just deleting all the prefabs so that they can be re-created at runtime)
-		PoolIOHandler.DeletePrefabsInResources ();
-	}
-	#endif
 
 	public void Init<T> (string id) where T : MonoBehaviour {
 		prefab = PoolIOHandler.LoadPrefab<T> (id);
@@ -184,10 +173,36 @@ public static class PoolIOHandler {
 	}
 
 	#if UNITY_EDITOR
+	
+	[MenuItem ("Object Pool/Refresh Prefabs")]
+	static void RefreshResources () {
+
+		// Removes and replaces all the prefabs in the Resources directory
+		// This will be very slow for a project with many prefabs...
+
+		string[] files = GetPrefabsInResources ();
+		foreach (string f in files) {
+
+			string fileName = f.Replace (ResourcesPath, "").Replace (".prefab", "");
+			string projectPath = FindPrefabDirectory (fileName, ApplicationPath);
+
+			AssetDatabase.DeleteAsset ("Assets" + f.Replace (Application.dataPath, ""));
+
+			string p = "Assets" + projectPath.Replace (Application.dataPath, "");
+
+			AssetDatabase.CopyAsset (p, "Assets/Resources/Prefabs/" + fileName + ".prefab");
+			AssetDatabase.Refresh ();
+		}
+	}
+	
 	public static void DeletePrefabsInResources () {
-		string[] files = Directory.GetFiles (ResourcesPath, "*.prefab");
+		string[] files = GetPrefabsInResources ();
 		foreach (string f in files)
 			AssetDatabase.DeleteAsset ("Assets" + f.Replace (Application.dataPath, ""));
+	}
+
+	public static string[] GetPrefabsInResources () {
+		return Directory.GetFiles (ResourcesPath, "*.prefab");
 	}
 
 	static string FindPrefabDirectory (string id, string path) {

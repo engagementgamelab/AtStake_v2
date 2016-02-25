@@ -29,6 +29,11 @@ public class UIElement : MB {
 		}
 	}
 
+	public Sprite Sprite {
+		get { return Image.sprite; }
+		set { Image.sprite = value; }
+	}
+
 	Button button = null;
 	public Button Button {
 		get {
