@@ -246,6 +246,7 @@ namespace Views {
 			return t;
 		}
 
+		// TODO: deprecate
 		protected void AddElement (string id, ScreenElement element) {
 			dynamicElements.Add (id, element);
 			// RenderDynamic ();
@@ -253,6 +254,7 @@ namespace Views {
 			// element.Init (Behaviour, this);
 		}
 
+		// TODO: deprecate
 		protected void RemoveElement (string id) {
 			// dynamicElements[id].Remove ();
 			dynamicElements.Remove (id);
