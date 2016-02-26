@@ -59,7 +59,7 @@ public class GameInstance : MonoBehaviour {
 	// Called when the app is started
 	void InitApp () {
 		Templates.Init (this);
-		Views.Init (Templates.Transform);
+		Views.Init ();
 		Decks.Init ();
 	}
 

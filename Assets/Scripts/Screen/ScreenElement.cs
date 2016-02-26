@@ -17,10 +17,6 @@ public abstract class ScreenElement : GameInstanceComponent {
 
 	public OnUpdate onUpdate;
 
-	public void Init (GameInstanceBehaviour behaviour) {
-		base.Init (behaviour);
-	}
-
 	protected void SendUpdateMessage () {
 		if (onUpdate != null)
 			onUpdate (this);

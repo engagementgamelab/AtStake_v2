@@ -110,8 +110,6 @@ namespace Views {
 			}
 		}
 
-		Dictionary<string, ScreenElement> dynamicElements = new Dictionary<string, ScreenElement> ();
-
 		Settings settings;
 		Settings Settings {
 			get {
@@ -121,15 +119,13 @@ namespace Views {
 			}
 		}
 
-		Transform canvas; // TODO: deprecate
 		protected ViewManager views;
 
 		/// <summary>
 		/// Initializes the screen. This should only ever be called by ViewManager
 		/// </summary>
-		public void Init (ViewManager views, Transform canvas, string id) {
+		public void Init (ViewManager views, string id) {
 			this.views = views;
-			this.canvas = canvas;
 			Model = DataManager.GetScreen (id);
 			Init (views);
 		}
@@ -138,7 +134,6 @@ namespace Views {
 		/// Hides the screen. This should only ever be called by ViewManager
 		/// </summary>
 		public void Hide () {
-			dynamicElements.Clear ();
 			OnHide ();
 			elements = null;
 		}
@@ -195,26 +190,6 @@ namespace Views {
 			}
 		}
 
-		// deprecate
-		void Render () {
-			foreach (var element in Elements) {
-				// element.Value.Init (Behaviour, this);
-				element.Value.Init (Behaviour);
-				// element.Value.Render (this).SetParent (canvas);
-			}
-			// Game.Ui.RenderElements (elements);
-		}
-
-		void RenderDynamic () {
-			foreach (var element in dynamicElements) {
-				ScreenElement s = element.Value;
-				// s.Init (Behaviour, this);
-				s.Init (Behaviour);
-				/*if (!s.Active)
-					s.Render (this).SetParent (canvas);*/
-			}
-		}
-
 		protected T GetScreenElement<T> (string id) where T : ScreenElement {
 			try {
 				return Elements[id] as T;
@@ -237,37 +212,8 @@ namespace Views {
 			}
 		}
 
-		// Dynamic elements
-		protected T AddElement<T> (string id, T t) where T : ScreenElement {
-			try {
-				dynamicElements.Add (id, t);
-			} catch {
-				throw new System.Exception ("An element with the id '" + id + "' already exists on the screen.");
-			}
-			// RenderDynamic ();
-			dynamicElements[id].Init (Behaviour);
-			// dynamicElements[id].Init (Behaviour, this);
-			return t;
-		}
-
-		// TODO: deprecate
-		protected void AddElement (string id, ScreenElement element) {
-			dynamicElements.Add (id, element);
-			// RenderDynamic ();
-			element.Init (Behaviour);
-			// element.Init (Behaviour, this);
-		}
-
-		// TODO: deprecate
-		protected void RemoveElement (string id) {
-			// dynamicElements[id].Remove ();
-			dynamicElements.Remove (id);
-			// RenderDynamic ();
-		}
-
 		protected bool HasElement (string id) {
 			return Elements.ContainsKey (id);
-			// return dynamicElements.ContainsKey (id);
 		}
 
 		// Routing

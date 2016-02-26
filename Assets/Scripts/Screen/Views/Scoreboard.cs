@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Views {
 
@@ -16,9 +18,11 @@ namespace Views {
 		}
 
 		protected void DisplayScores () {
-			foreach (var score in Game.Score.PlayerScores) {
+			Dictionary<string, TextElement> scores = Game.Score.PlayerScores.ToDictionary (x => x.Key, x => new TextElement (x.Key + ": " + x.Value + " coins"));
+			Elements.Add ("score_list", new ListElement<TextElement> (scores));
+			/*foreach (var score in Game.Score.PlayerScores) {
 				Elements.Add ("player_" + score.Key, new TextElement (score.Key + ": " + score.Value + " coins")); 
-			}
+			}*/
 		}
 	}
 }

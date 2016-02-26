@@ -51,9 +51,9 @@ namespace Views {
 		public string CurrView { get; private set; }
 		public string PrevView { get; private set; }
 
-		public void Init (Transform canvas) {
+		public void Init () {
 			foreach (var view in Views)
-				view.Value.Init (this, canvas, view.Key);
+				view.Value.Init (this, view.Key);
 			Goto ("start");
 			Game.Dispatcher.AddListener ("GotoView", OnGotoView);
 		}
