@@ -2,7 +2,24 @@
 
 public class ButtonElement : ScreenElement {
 
-	public readonly string Text;
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
+	}
+
+	bool interactable = true;
+	public bool Interactable {
+		get { return interactable; }
+		set {
+			interactable = value;
+			SendUpdateMessage ();
+		}
+	}
+
 	public readonly System.Action OnPress;
 
 	public ButtonElement (string text, System.Action onPress) {

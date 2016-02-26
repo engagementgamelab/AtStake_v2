@@ -1,17 +1,30 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Views {
 
 	public class Decide : View {
 
+		string selectedPeer;
+
 		protected override void OnInitDeciderElements () {
-			foreach (var peer in Game.Manager.Peers) {
-				string name = peer.Key;
-				Elements.Add ("peer_" + name, new ButtonElement (name, () => {
-					Game.Dispatcher.ScheduleMessage ("ChooseWinner", name);
-				}));
-			}
+
+			// Confirmation button. Can only be pressed after a player has been selected.
+			Elements.Add ("confirm", new ButtonElement ("Confirm", () => {
+				Game.Dispatcher.ScheduleMessage ("ChooseWinner", selectedPeer);
+			}) { Interactable = false });
+
+			// A button list of players
+			Dictionary<string, ButtonElement> peers = Game.Manager.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
+				selectedPeer = x;
+				ButtonElement confirmButton = GetScreenElement<ButtonElement> ("confirm");
+				confirmButton.Text = "Confirm " + selectedPeer;
+				confirmButton.Interactable = true;
+			}));
+
+			Elements.Add ("peer_list", new ListElement<ButtonElement> (peers));
 		}
 
 		protected override void OnShow () {

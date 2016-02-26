@@ -3,6 +3,24 @@ using UnityEngine;
 
 public class TimerButtonElement : ScreenElement {
 
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
+	}
+
+	bool interactable;
+	public bool Interactable {
+		get { return interactable; }
+		private set {
+			interactable = value;
+			SendUpdateMessage ();
+		}
+	}
+
 	public float Duration {
 		get { return duration; }
 	}
@@ -19,24 +37,15 @@ public class TimerButtonElement : ScreenElement {
 		;
 		this.onStart = onStart;
 		this.onEnd = onEnd;
-	}
-
-	/*protected override void OnRender (TimerButtonElementUI t) {
-		t.RemoveButtonListeners ();
-		t.AddButtonListener (StartTimer);
 		Reset ();
 	}
 
-	protected override void OnRemove (TimerButtonElementUI t) {
-		t.RemoveButtonListeners ();
-	}
-*/
 	public void StartTimer () {
 
 		if (onStart != null)
 			onStart ();
 
-		// uiElement.Interactable = false;
+		Interactable = false;
 		Co.StartCoroutine (duration, OnUpdateTime, () => {
 			if (onEnd != null)
 				onEnd ();
@@ -51,12 +60,12 @@ public class TimerButtonElement : ScreenElement {
 			#endif
 			;
 		}
-		// uiElement.Interactable = true;
+		Interactable = true;
 		OnUpdateTime (0);
 	}
 
 	void OnUpdateTime (float p) {
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
-		// uiElement.Text.text = time.ToString () + " seconds";
+		Text = time.ToString () + " seconds";
 	}
 }

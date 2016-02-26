@@ -34,7 +34,9 @@ namespace Views {
 		}
 
 		void StartTimer (NetworkMessage msg) {
-			GetScreenElement<TimerElement> ("timer").StartTimer ();
+			if (HasElement ("timer")) {
+				GetScreenElement<TimerElement> ("timer").StartTimer ();
+			}
 		}
 	}
 }

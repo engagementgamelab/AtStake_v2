@@ -31,8 +31,9 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		element = null;
 	}
 
-	protected virtual void OnUpdate (ScreenElement element) {
+	void OnUpdate (ScreenElement element) {
 		OnSetActive (element.Active);
+		OnUpdate ((T)element);
 	}
 
 	protected virtual void OnSetActive (bool active) {
@@ -41,4 +42,5 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 
 	public abstract void ApplyElement (T element);
 	public virtual void RemoveElement (T element) {}
+	protected virtual void OnUpdate (T element) {}
 }

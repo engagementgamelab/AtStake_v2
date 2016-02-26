@@ -9,14 +9,14 @@ namespace Views {
 
 		protected override void OnInitElements () {
 			if (Game.Score.CanAffordExtraTime) {
-				Elements.Add ("can_afford", new TextElement (
+				Elements.Add ("instruction", new TextElement (
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
 				Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => {
 					GotoView ("pitch");
 					Game.Dispatcher.ScheduleMessage ("AcceptExtraTime", Name);
 				}));
 			} else {
-				Elements.Add ("cant_afford", new TextElement (
+				Elements.Add ("instruction", new TextElement (
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
 			}
 

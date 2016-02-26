@@ -36,7 +36,7 @@ namespace Views {
 			currentPeer = 0;
 			state = State.Pitch;
 
-			Elements.Add ("timer", new TimerButtonElement (Duration, () => {
+			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
 					peers[currentPeer], 
@@ -47,14 +47,16 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			CreateRoleCard (true, true, true);
+			Elements.Add ("timer", new TimerElement (Duration, () => {
+				GotoView ("extra_time");
+			}) { Active = false });
 		}
 
 		protected override void OnShow () {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
-			if (IsDecider) {
-				// TODO: Update text
-				/*GetScreenElement<TextElement> ("decider_instructions")
-					.SetText (DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable));*/
+			if (HasElement ("decider_instructions")) {
+				GetScreenElement<TextElement> ("decider_instructions")
+					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable);
 			}
 		}
 
@@ -76,16 +78,17 @@ namespace Views {
 					duration = ExtraTimeDuration;
 				}
 
-				AddElement<TimerElement> ("timer", new TimerElement (duration, () => {
-					GotoView ("extra_time");
-				})).StartTimer ();
+				TimerElement timer = GetScreenElement<TimerElement> ("timer");
+				timer.Active = true;
+				timer.Reset (duration);
+				timer.StartTimer ();
 			}
 		}
 
 		void AcceptExtraTime (NetworkMessage msg) {
 			if (IsDecider) {
 				state = State.Extra;
-				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer");
+				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
 				t.Reset (ExtraTimeDuration);
 				t.StartTimer ();
 			}
@@ -96,10 +99,9 @@ namespace Views {
 				state = State.Pitch;
 				currentPeer ++;
 				if (currentPeer < peers.Count) {
-					// TODO: update text
-					/*GetScreenElement<TextElement> ("decider_instructions")
-						.SetText (DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable));*/
-					GetScreenElement<TimerButtonElement> ("timer").Reset (Duration);
+					GetScreenElement<TextElement> ("decider_instructions")
+						.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
+					GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
 				} else {
 					AllGotoView ("deliberate_instructions");
 				}

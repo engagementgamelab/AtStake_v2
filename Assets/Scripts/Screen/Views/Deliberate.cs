@@ -13,7 +13,7 @@ namespace Views {
 		}
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("timer", new TimerButtonElement (Duration, () => {
+			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
 				Game.Dispatcher.ScheduleMessage ("StartTimer");
 			}, () => {
 				AllGotoView ("decide");
@@ -34,7 +34,7 @@ namespace Views {
 		}
 
 		void StartTimer (NetworkMessage msg) {
-			if (!IsDecider) {
+			if (HasElement ("timer")) {
 				GetScreenElement<TimerElement> ("timer").StartTimer ();
 			}
 		}

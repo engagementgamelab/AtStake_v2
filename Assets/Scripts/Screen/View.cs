@@ -266,7 +266,8 @@ namespace Views {
 		}
 
 		protected bool HasElement (string id) {
-			return dynamicElements.ContainsKey (id);
+			return Elements.ContainsKey (id);
+			// return dynamicElements.ContainsKey (id);
 		}
 
 		// Routing

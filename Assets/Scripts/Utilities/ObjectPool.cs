@@ -113,6 +113,15 @@ public class ObjectPool {
 		GetPool<T> ().ReleaseInstance (go.GetComponent<MonoBehaviour> ());
 	}
 
+	public static void DestroyChildren (Transform t) {
+
+		List<Transform> children = new List<Transform> ();
+		foreach (Transform child in t) children.Add (child);
+
+		for (int i = 0; i < children.Count; i ++)
+			Destroy (children[i]);
+	}
+
 	public static List<T> GetActiveInstances<T> () where T : MonoBehaviour {
 		return GetPool<T> ().active.ConvertAll (x => (T)x);
 	}
