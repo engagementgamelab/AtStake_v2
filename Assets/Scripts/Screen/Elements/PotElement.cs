@@ -3,16 +3,21 @@ using System.Collections;
 
 public class PotElement : ScreenElement {
 
-	/*protected override void OnRender (PotElementUI p) {
-		SetText ();
-		Game.Score.Inventory["pot"].onUpdate += SetText;
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
 	}
 
-	protected override void OnRemove (PotElementUI p) {
-		Game.Score.Inventory["pot"].onUpdate -= SetText;
+	protected override void OnInit () {
+		Game.Score.Inventory["pot"].onUpdate += SetText;
+		SetText ();
 	}
-*/
+
 	void SetText () {
-		// uiElement.Text.text = "Pot: " + Game.Score.Pot;
+		Text = "Pot: " + Game.Score.Pot;
 	}
 }

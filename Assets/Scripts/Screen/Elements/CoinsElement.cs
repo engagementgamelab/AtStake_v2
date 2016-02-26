@@ -3,16 +3,21 @@ using System.Collections;
 
 public class CoinsElement : ScreenElement {
 
-	/*protected override void OnRender (CoinsElementUI c) {
-		SetText (Game.Score.PlayerScore);
-		Game.Score.onUpdateScore += SetText;
+	string text;
+	public string Text {
+		get { return text; }
+		set {
+			text = value;
+			SendUpdateMessage ();
+		}
 	}
 
-	protected override void OnRemove (CoinsElementUI c) {
-		Game.Score.onUpdateScore -= SetText;
+	protected override void OnInit () {
+		Game.Score.onUpdateScore += SetText;
+		SetText (Game.Score.PlayerScore);
 	}
-*/
+
 	void SetText (int score) {
-		// uiElement.Text.text = "Coins: " + score;
+		Text = "Coins: " + score;
 	}
 }

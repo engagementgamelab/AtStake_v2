@@ -75,5 +75,7 @@ namespace Templates {
 		public Color TopBarColor { get; set; }
 		public Color BackgroundColor { get; set; }
 		public string BackgroundImage { get; set; }
+		public bool PotEnabled { get; set; }
+		public bool CoinsEnabled { get; set; }
 	}
 }

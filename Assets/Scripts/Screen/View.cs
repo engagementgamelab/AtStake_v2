@@ -177,11 +177,8 @@ namespace Views {
 					DataManager.GetTextFromScreen (Model, "Instructions", TextVariables)));
 			}
 
-			// deprecate
-			// if (Model.DisplayScore) {
-				Elements.Add ("pot", new PotElement ());
-				Elements.Add ("coins", new CoinsElement ());
-			// }
+			Elements.Add ("pot", new PotElement ());
+			Elements.Add ("coins", new CoinsElement ());
 		}
 
 		void InitElements () {

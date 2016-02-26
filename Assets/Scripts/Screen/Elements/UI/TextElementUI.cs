@@ -11,5 +11,7 @@ public class TextElementUI : ScreenElementUI<TextElement> {
 		Text.fontSize = e.Style.FontSize;
 	}
 
-	// TODO: UpdateText/SetText
+	protected override void OnUpdate (TextElement e) {
+		Text.text = e.Text;
+	}
 }

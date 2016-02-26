@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +14,8 @@ namespace Templates {
 
 		public BackButtonElementUI backButton;
 
-		public RectTransform pot;
-		public RectTransform coins;
+		public PotElementUI pot;
+		public CoinsElementUI coins;
 
 		public RectTransform contentContainer;
 		public RectTransform contentArea;
@@ -32,14 +32,6 @@ namespace Templates {
 
 		Color TopBarColor {
 			set { topBar.color = value; }
-		}
-
-		int PotValue {
-			set { pot.GetChild (0).GetComponent<Text> ().text = value.ToString (); }
-		}
-
-		int CoinsValue {
-			set { coins.GetChild (0).GetComponent<Text> ().text = value.ToString (); }
 		}
 
 		public void LoadView (View view, Template template) {
@@ -60,6 +52,9 @@ namespace Templates {
 		void LoadElements (Dictionary<string, ScreenElement> elements) {
 
 			// Back button
+			if (backButton.Loaded)
+				backButton.Unload ();
+
 			ScreenElement back;
 			if (elements.TryGetValue ("back", out back)) {
 				backButton.gameObject.SetActive (true);
@@ -69,25 +64,29 @@ namespace Templates {
 			}
 
 			// Pot
+			if (pot.Loaded)
+				pot.Unload ();
+				
 			ScreenElement potEl;
 			if (elements.TryGetValue ("pot", out potEl)) {
-				pot.gameObject.SetActive (true);
-			} else {
-				pot.gameObject.SetActive (false);
+				pot.Load (potEl);
 			}
 
 			// Coins
+			if (coins.Loaded)
+				coins.Unload ();
+
 			ScreenElement coinsEl;
 			if (elements.TryGetValue ("coins", out coinsEl)) {
-				coins.gameObject.SetActive (true);
-			} else {
-				coins.gameObject.SetActive (false);
+				coins.Load (coinsEl);
 			}
 		}
 
 		void LoadSettings (TemplateSettings settings) {
 			SetBackground (settings.BackgroundColor, settings.BackgroundImage);
 			SetTopBar (settings.TopBarEnabled, settings.TopBarColor);
+			pot.gameObject.SetActive (settings.PotEnabled);
+			coins.gameObject.SetActive (settings.CoinsEnabled);
 		}
 	}
 }

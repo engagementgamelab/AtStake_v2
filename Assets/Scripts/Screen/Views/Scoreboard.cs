@@ -20,9 +20,6 @@ namespace Views {
 		protected void DisplayScores () {
 			Dictionary<string, TextElement> scores = Game.Score.PlayerScores.ToDictionary (x => x.Key, x => new TextElement (x.Key + ": " + x.Value + " coins"));
 			Elements.Add ("score_list", new ListElement<TextElement> (scores));
-			/*foreach (var score in Game.Score.PlayerScores) {
-				Elements.Add ("player_" + score.Key, new TextElement (score.Key + ": " + score.Value + " coins")); 
-			}*/
 		}
 	}
 }

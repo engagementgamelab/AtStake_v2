@@ -11,7 +11,9 @@ namespace Templates {
 					TopBarEnabled = true,
 					TopBarColor = Palette.Orange,
 					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
+					BackgroundImage = "applause-bg",
+					PotEnabled = true,
+					CoinsEnabled = true
 				};
 			}
 		}
