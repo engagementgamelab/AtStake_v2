@@ -19,6 +19,9 @@ namespace Templates {
 
 		public Template[] templates;
 
+		Template content;
+		Dictionary<string, Template> templateLookup = new Dictionary<string, Template> ();
+
 		Color BackgroundColor {
 			set { backgroundColor.color = value; }
 		}
@@ -31,9 +34,23 @@ namespace Templates {
 			set { topBar.color = value; }
 		}
 
-		public void LoadView (View view, Template template) {
+		public void LoadView (string id, View view) {
+			content = GetTemplateById (id);
+			content.gameObject.SetActive (true);
 			LoadElements (view.Elements);
-			LoadSettings (template.Settings);
+			LoadSettings (content.Settings);
+			content.LoadView (view);
+		}
+
+		public void UnloadView () {
+			content.UnloadView ();
+			content.gameObject.SetActive (false);
+		}
+
+		public bool TemplateIsBefore (string template1, string template2) {
+			return System.Array.IndexOf (templates, GetTemplateById (template1)) 
+				< System.Array.IndexOf (templates, GetTemplateById (template2));
+
 		}
 
 		void SetBackground (Color bgColor, string bgImage) {
@@ -84,6 +101,22 @@ namespace Templates {
 			SetTopBar (settings.TopBarEnabled, settings.TopBarColor);
 			pot.gameObject.SetActive (settings.PotEnabled);
 			coins.gameObject.SetActive (settings.CoinsEnabled);
+		}
+
+		Template GetTemplateById (string id) {
+			id = id.Replace ("_", "");
+			Template template;
+			if (templateLookup.TryGetValue (id, out template)) {
+				return template;
+			} else {
+				template = System.Array.Find (templates, x => x.name.ToLower () == id);
+				if (template != null) {
+					templateLookup.Add (id, template);
+					return template;
+				} else {
+					throw new System.Exception ("No template for the view '" + id + "' exists.");
+				}
+			}
 		}
 	}
 }

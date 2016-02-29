@@ -87,6 +87,7 @@ namespace Views {
 
 		void AcceptExtraTime (NetworkMessage msg) {
 			if (IsDecider) {
+				AllGotoView ("pitch");
 				state = State.Extra;
 				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
 				t.Reset (ExtraTimeDuration);
@@ -99,6 +100,7 @@ namespace Views {
 				state = State.Pitch;
 				currentPeer ++;
 				if (currentPeer < peers.Count) {
+					AllGotoView ("pitch");
 					GetScreenElement<TextElement> ("decider_instructions")
 						.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
 					GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);

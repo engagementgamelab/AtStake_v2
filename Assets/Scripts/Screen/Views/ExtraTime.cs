@@ -21,8 +21,7 @@ namespace Views {
 			}
 
 			Elements.Add ("decline", new ButtonElement (Model.Buttons["decline"], () => {
-				GotoView ("pitch");
-				Game.Dispatcher.ScheduleMessage ("DeclineExtraTime");	
+				Game.Dispatcher.ScheduleMessage ("DeclineExtraTime");
 			}));
 		}
 	}

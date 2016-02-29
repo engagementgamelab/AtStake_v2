@@ -59,7 +59,9 @@ namespace Views {
 		}
 
 		public void Goto (string id) {
-			
+
+			if (id == CurrView) return;
+
 			// Unload the current view and update the PrevView reference
 			if (!string.IsNullOrEmpty (CurrView)) {
 				Game.Templates.Unload ();
