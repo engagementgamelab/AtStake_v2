@@ -8,7 +8,7 @@ namespace Templates {
 
 	public class TemplateManager : UIElement {
 
-		Text nameText;
+		/*Text nameText;
 		Text Name {
 			get {
 				if (nameText == null) {
@@ -16,26 +16,29 @@ namespace Templates {
 				}
 				return nameText;
 			}
-		}
+		}*/
 
 		GameInstance gi;
-		TemplateContainer container;
+		// TemplateContainer container;
 		Template content;
+
+		public TemplateContainer container1;
+		public TemplateContainer container2;
 
 		// Template cache
 		Dictionary<string, Template> templateLookup = new Dictionary<string, Template> ();
 
 		public void Init (GameInstance gi) {
 			this.gi = gi;
-			container = ObjectPool.Instantiate<TemplateContainer> ();
+			/*container = ObjectPool.Instantiate<TemplateContainer> ();
 			container.transform.SetParent (Transform);
-			container.transform.localScale = new Vector3 (0.5f, 0.5f, 1f);
+			container.transform.localScale = new Vector3 (0.5f, 0.5f, 1f);*/
 		}
 
 		public void Load (string id, View view) {
 			content = GetTemplateById (id);
 			content.gameObject.SetActive (true);
-			container.LoadView (view, content);
+			container1.LoadView (view, content);
 			content.LoadView (view);
 		}
 
@@ -50,7 +53,7 @@ namespace Templates {
 			if (templateLookup.TryGetValue (id, out template)) {
 				return template;
 			} else {
-				template = System.Array.Find (container.templates, x => x.name.ToLower () == id);
+				template = System.Array.Find (container1.templates, x => x.name.ToLower () == id);
 				if (template != null) {
 					templateLookup.Add (id, template);
 					return template;
@@ -60,9 +63,9 @@ namespace Templates {
 			}
 		}
 
-		void Update () {
+		/*void Update () {
 			if (gi.Manager != null) 
 				Name.text = gi.Name;
-		}
+		}*/
 	}
 }

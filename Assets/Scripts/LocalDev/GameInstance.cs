@@ -54,6 +54,7 @@ public class GameInstance : MonoBehaviour {
 
 	public void SetTemplatePosition (Vector3 pos) {
 		Templates.transform.position = pos;
+		Templates.transform.SetParent (transform);
 	}
 	
 	// Called when the app is started

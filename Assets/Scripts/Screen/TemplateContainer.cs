@@ -17,9 +17,6 @@ namespace Templates {
 		public PotElementUI pot;
 		public CoinsElementUI coins;
 
-		public RectTransform contentContainer;
-		public RectTransform contentArea;
-
 		public Template[] templates;
 
 		Color BackgroundColor {
