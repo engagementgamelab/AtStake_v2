@@ -32,9 +32,6 @@ public class GameInstance : MonoBehaviour {
 		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
 		Dispatcher.transform.SetParent (transform);
 
-		/*Transform grid = GameObject.FindWithTag ("LocalDevGrid").transform;
-		Ui = ObjectPool.Instantiate<GameInstanceUI> ();
-		Ui.transform.SetParent (grid);*/
 		Templates = ObjectPool.Instantiate<TemplateManager> ();
 
 		Views = ObjectPool.Instantiate<ViewManager> ();
