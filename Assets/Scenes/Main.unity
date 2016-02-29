@@ -271,6 +271,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!223 &493657074 stripped
+Canvas:
+  m_PrefabParentObject: {fileID: 22331638, guid: 5f0408c1ba9ce469e9513598a3da6af8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1699463610}
 --- !u!1 &819063074
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,6 +376,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1476338075}
   m_RootOrder: 0
+--- !u!114 &1068982137 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11443000, guid: 5f0408c1ba9ce469e9513598a3da6af8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1699463610}
+  m_Script: {fileID: 11500000, guid: 8acee8fc4c2b44c93bf9c834d9d728b8, type: 3}
 --- !u!1 &1476338074
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,6 +502,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1675511526 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11408288, guid: 5f0408c1ba9ce469e9513598a3da6af8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1699463610}
+  m_Script: {fileID: 11500000, guid: 8acee8fc4c2b44c93bf9c834d9d728b8, type: 3}
 --- !u!1001 &1699463610
 Prefab:
   m_ObjectHideFlags: 0
@@ -528,7 +545,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 411274, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 22446602, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
       propertyPath: m_AnchorMin.y
@@ -921,6 +938,38 @@ Prefab:
     - target: {fileID: 146112, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22415164, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11455094, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 493657074}
+    - target: {fileID: 11455094, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: slidePosition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22415164, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11455094, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: container1
+      value: 
+      objectReference: {fileID: 1068982137}
+    - target: {fileID: 11455094, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: container2
+      value: 
+      objectReference: {fileID: 1675511526}
+    - target: {fileID: 9524180, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9524180, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}
+      propertyPath: m_UpdateMode
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f0408c1ba9ce469e9513598a3da6af8, type: 2}

@@ -6,7 +6,7 @@ using Views;
 
 namespace Templates {
 
-	public class TemplateContainer : MonoBehaviour {
+	public class TemplateContainer : UIElement {
 
 		public Image backgroundColor;
 		public Image backgroundImage;

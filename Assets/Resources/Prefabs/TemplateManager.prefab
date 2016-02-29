@@ -3478,6 +3478,8 @@ GameObject:
   m_Component:
   - 224: {fileID: 22496818}
   - 222: {fileID: 22294062}
+  - 95: {fileID: 9524180}
+  - 114: {fileID: 11455094}
   m_Layer: 0
   m_Name: TemplatesContainer
   m_TagString: Untagged
@@ -5513,6 +5515,23 @@ Transform:
   - {fileID: 22439590}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!95 &9524180
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165266}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1c87dbce51b0c4a21beaa274c1d6bcd1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11400100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9687,6 +9706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009e89f58d85743c895de64075ad0862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  templatesContainer: {fileID: 11455094}
   container1: {fileID: 11443000}
   container2: {fileID: 11408288}
 --- !u!114 &11428832
@@ -13620,6 +13640,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: A game about gaming in a world of games with game game games hooray games
+--- !u!114 &11455094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174f158e592e94c14b241180e7c3d316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11455212
 MonoBehaviour:
   m_ObjectHideFlags: 1

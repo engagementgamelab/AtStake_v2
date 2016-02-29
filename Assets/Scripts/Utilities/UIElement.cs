@@ -84,6 +84,15 @@ public class UIElement : MB {
 		}
 	}
 
+	Animator animator;
+	public Animator Animator {
+		get {
+			if (animator == null)
+				animator = GetComponent<Animator> ();
+			return animator;
+		}
+	}
+
 	public bool Interactable {
 		get { return Button.interactable; }
 		set { Button.interactable = value; }

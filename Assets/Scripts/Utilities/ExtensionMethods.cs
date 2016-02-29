@@ -296,6 +296,22 @@ public static class ExtensionMethods {
 	}
 
 	/**
+	 *	RectTransform
+	 */
+
+	public static void SetAnchoredPositionX (this RectTransform transform, float x) {
+		Vector2 p = transform.anchoredPosition;
+		p.x = x;
+		transform.anchoredPosition = p;
+	}
+
+	public static void SetAnchoredPositionY (this RectTransform transform, float y) {
+		Vector2 p = transform.anchoredPosition;
+		p.y = y;
+		transform.anchoredPosition = p;
+	}
+
+	/**
 	 *	Colliders
 	 */
 
