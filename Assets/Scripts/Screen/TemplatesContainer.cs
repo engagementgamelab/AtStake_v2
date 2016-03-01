@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Views;
 
 namespace Templates {
@@ -20,6 +21,15 @@ namespace Templates {
 		TemplateContainer activeContainer;
 		TemplateContainer inactiveContainer;
 
+		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
+		// true = SlideIn
+		Dictionary<string, bool> transitionOverrides = new Dictionary<string, bool> () {
+			{ "agenda_item_accept agenda_item", true },
+			{ "agenda_item_reject agenda_item", true },
+			{ "scoreboard roles", true },
+			{ "final_scoreboard roles", true }
+		};
+
 		public void Load (string id, View view) {
 
 			if (activeContainer == null) {
@@ -31,10 +41,23 @@ namespace Templates {
 				inactiveContainer.RectTransform.SetAnchoredPositionX (canvasWidth);
 			} else {
 				inactiveContainer.LoadView (id, view);
-				if (inactiveContainer.TemplateIsBefore (id, prevId)) {
-					SlideOut ();
+
+				// Trigger the slide animation
+				// If the new screen and previous screen have a transition override specified, use that
+				// Otherwise, use the default behaviour
+				bool slideIn;
+				if (transitionOverrides.TryGetValue (prevId + " " + id, out slideIn)) {
+					if (slideIn) {
+						SlideIn ();
+					} else {
+						SlideOut ();
+					}
 				} else {
-					SlideIn ();
+					if (inactiveContainer.TemplateIsBefore (id, prevId)) {
+						SlideOut ();
+					} else {
+						SlideIn ();
+					}
 				}
 			}
 

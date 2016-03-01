@@ -11,12 +11,7 @@ namespace Templates {
 		public TemplatesContainer templatesContainer;
 
 		public void Load (string id, View view) {
-			// activeContainer.LoadView (id, view);
 			templatesContainer.Load (id, view);
-		}
-
-		public void Unload () {
-			// activeContainer.UnloadView ();
 		}
 	}
 }

@@ -64,7 +64,6 @@ namespace Views {
 
 			// Unload the current view and update the PrevView reference
 			if (!string.IsNullOrEmpty (CurrView)) {
-				Game.Templates.Unload ();
 				Views[CurrView].Hide ();
 				PrevView = CurrView;
 			}
