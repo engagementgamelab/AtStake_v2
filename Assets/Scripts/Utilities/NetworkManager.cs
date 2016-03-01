@@ -357,7 +357,8 @@ public class NetworkManager : MonoBehaviour {
             _wwwRequest.Dispose();
 
         // Call delegate
-        onNoNetwork(noConnection);
+        if (onNoNetwork != null)
+            onNoNetwork(noConnection);
 
         _ignoreNetwork = true;
         _hasRequest = false;

@@ -27,7 +27,9 @@ namespace Templates {
 			{ "agenda_item_accept agenda_item", true },
 			{ "agenda_item_reject agenda_item", true },
 			{ "scoreboard roles", true },
-			{ "final_scoreboard roles", true }
+			{ "final_scoreboard roles", true },
+			{ "pitch extra_time", true },
+			{ "extra_time pitch", false }
 		};
 
 		public void Load (string id, View view) {

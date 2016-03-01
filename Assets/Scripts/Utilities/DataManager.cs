@@ -38,7 +38,6 @@ public class DataManager {
         }
     }*/
 
-    public static readonly string DataNotLoaded = "<data not loaded>";
     public static GameEnvironment currentConfig;
 
     static JsonReaderSettings _readerSettings = new JsonReaderSettings();

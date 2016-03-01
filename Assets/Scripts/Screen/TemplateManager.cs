@@ -13,5 +13,14 @@ namespace Templates {
 		public void Load (string id, View view) {
 			templatesContainer.Load (id, view);
 		}
+
+		void OnEnable () {
+			transform.localScale = 			
+			#if SINGLE_SCREEN
+				new Vector3 (0.5f, 0.5f, 0.5f);
+			#else
+				Vector3.one;
+			#endif
+		}
 	}
 }

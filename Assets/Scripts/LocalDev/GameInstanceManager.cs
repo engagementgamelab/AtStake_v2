@@ -24,6 +24,16 @@ public class GameInstanceManager : MonoBehaviour {
 	List<GameInstance> instances = new List<GameInstance> ();
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
 
+	void AddPlayer () {
+		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
+		i.transform.SetParent (transform);
+		instances.Add (i);
+		i.Manager.Player.Name = names[instances.Count-1];
+		i.SetTemplatePosition (instancePositions[instances.Count-1]);
+	}
+
+	#if SINGLE_SCREEN
+
 	Vector3[] instancePositions = new Vector3[] {
 		new Vector3 (0, 333, 0),
 		new Vector3 (250, 333, 0),
@@ -84,11 +94,12 @@ public class GameInstanceManager : MonoBehaviour {
 		}
 	}
 
-	void AddPlayer () {
-		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
-		i.transform.SetParent (transform);
-		instances.Add (i);
-		i.Manager.Player.Name = names[instances.Count-1];
-		i.SetTemplatePosition (instancePositions[instances.Count-1]);
+	#else
+
+	Vector3[] instancePositions = new Vector3[] { Vector3.zero };
+
+	void Start () {
+		AddPlayer ();
 	}
+	#endif
 }

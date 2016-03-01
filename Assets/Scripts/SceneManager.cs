@@ -18,7 +18,8 @@ public class SceneManager : MonoBehaviour {
 		LoadGameConfig ();
 			
 		// Set global game data local fallback in case of no connection
-		// SetGameData (true);
+		SetGameData (true);
+		
 	}
 
 	void Start() {
@@ -36,19 +37,6 @@ public class SceneManager : MonoBehaviour {
 			NetworkManager.Instance.Authenticate (ClientAuthenticated);
 	    }
 	}
-
-	#if UNITY_EDITOR
-	void OnGUI() {
-		/*GUIStyle style = new GUIStyle();
-		
-		style.fontSize = 13;
-		style.fontStyle = FontStyle.BoldAndItalic;
-
-	    GUI.contentColor = Color.white;
-
-        GUI.Label(new Rect(4, 4, 100, 20), "ENVIRONMENT: " + environment, style);*/
-	}
-	#endif
 
 	/// <summary>
 	/// Client was authenticated to API; we can now get game data and ask player to log in
