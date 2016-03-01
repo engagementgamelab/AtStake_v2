@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NetworkingManager : MonoBehaviour, IConnectionManager {
 
@@ -33,6 +34,8 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 
 		settings = new Settings (4, false, 3f, 3);
 
+		#if !SINGLE_SCREEN
+
 		// Configure connection to multiplayer server
 		MasterServer.ipAddress = DataManager.MultiplayerServerIp;
 		MasterServer.port = DataManager.MultiplayerServerPort;
@@ -43,6 +46,8 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		test = ObjectPool.Instantiate<NetworkConnectionTest> ();
 		test.Init (settings);
 		test.TestClientConnection (OnTestResult);
+
+		#endif
 	}
 
 	void OnTestResult (ConnectionStatus result) {
@@ -58,5 +63,25 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 			Network.InitializeSecurity ();
 		Network.InitializeServer (settings.MaxConnections, 25001, !Network.HavePublicAddress ());
 		MasterServer.RegisterHost (settings.GameName, gameInstanceName);
+	}
+
+	public void Join (string hostName, string gameInstanceName) {
+
+	}
+
+	public List<string> UpdateHosts () {
+		return null;
+	}
+
+	public void ConnectClient (string gameInstanceName) {
+		
+	}
+
+	public void DisconnectClient (string gameInstanceName) {
+
+	}
+
+	public void Disconnect () {
+
 	}
 }

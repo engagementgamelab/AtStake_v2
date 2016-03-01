@@ -2,3 +2,6 @@ Add these preprocessors to smcs.rsp for different configurations:
 
 Enables "single screen" version of the game. Multiple instances of the game are played on a single screen rather than using local multiplayer.
 -define:SINGLE_SCREEN
+
+Delays network messages by a random value (up to 1 second) to simulate poor connections
+-define:SIMULATE_LATENCY

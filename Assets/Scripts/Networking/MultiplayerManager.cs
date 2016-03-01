@@ -34,16 +34,21 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public NetworkingManager networking;
 	public BluetoothManager bluetooth;
+	public LocalManager local;
 
 	IConnectionManager connectionManager;
 	IConnectionManager ConnectionManager {
 		get {
 			if (connectionManager == null) {
+				#if SINGLE_SCREEN
+				connectionManager = local;
+				#else
 				if (networking.Status == ConnectionStatus.Succeeded) {
 					connectionManager = networking;
 				} else {
 					connectionManager = bluetooth;
 				}
+				#endif
 			}
 			return connectionManager;
 		}
@@ -56,21 +61,23 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// Host
 	public void HostGame () {
 		Hosting = true;
-		// ConnectionManager.Host (Game.Name);
+		ConnectionManager.Host (Game.Name);
 	}
 
 	// Client
-	public void JoinGame (string gameName) {
+	public void JoinGame (string hostName) {
 
 		// For testing locally
-		List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
+		/*List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
 		foreach (GameInstance g in gi) {
-			if (g.Name == gameName) {
+			if (g.Name == hostName) {
 				Host = g;
 				Host.Multiplayer.ConnectClient (Game);
 				return;
 			}
-		}
+		}*/
+
+		ConnectionManager.Join (hostName, Game.Name);
 	}
 
 	// Client
