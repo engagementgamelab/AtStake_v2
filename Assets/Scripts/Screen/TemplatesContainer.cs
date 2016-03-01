@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Views;
@@ -20,6 +21,15 @@ namespace Templates {
 
 		TemplateContainer activeContainer;
 		TemplateContainer inactiveContainer;
+
+		GraphicRaycaster raycaster;
+		GraphicRaycaster Raycaster {
+			get {
+				if (raycaster == null) 
+					raycaster = canvas.GetComponent<GraphicRaycaster> ();
+				return raycaster;
+			}
+		}
 
 		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
 		// true = SlideIn
@@ -78,6 +88,9 @@ namespace Templates {
 			if (animating) return;
 			animating = true;
 
+			// Disable the raycaster while animating so that the user can't "double press" buttons
+			Raycaster.enabled = false;
+
 			inactiveContainer.RectTransform.SetAnchoredPositionX (-to);
 
 			Co.StartCoroutine (slideTime, (float p) => {
@@ -94,6 +107,9 @@ namespace Templates {
 
 				// Swap the active and inactive containers
 				UpdateActiveContainer ();
+
+				// Enable the raycaster so that input is accepted again
+				Raycaster.enabled = true;
 				animating = false;
 			});
 		}
