@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Only used for local dev
-
 public class GameInstanceManager : MonoBehaviour {
 
 	static GameInstanceManager instance = null;
@@ -23,6 +21,10 @@ public class GameInstanceManager : MonoBehaviour {
 
 	List<GameInstance> instances = new List<GameInstance> ();
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
+
+	void Awake () {
+		Application.targetFrameRate = 60;
+	}
 
 	void AddPlayer () {
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
@@ -101,5 +103,6 @@ public class GameInstanceManager : MonoBehaviour {
 	void Start () {
 		AddPlayer ();
 	}
+	
 	#endif
 }
