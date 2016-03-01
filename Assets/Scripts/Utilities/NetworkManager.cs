@@ -350,7 +350,7 @@ public class NetworkManager : MonoBehaviour {
         if(_ignoreNetwork)
             return;
         
-        Debug.Log(">>>> Networking has been disabled. <<<<");
+        Debug.Log(">>>> Could not connect to EL API - Using local data <<<<");
 
         // Toss the request
         if(_wwwRequest != null)     

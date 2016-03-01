@@ -1,18 +1,30 @@
 {
 	"local": {
 		"root": "http://localhost:3000/api", 
-		"authKey": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+		"authKey": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"multiplayerServerIp": "unity",
+		"multiplayerServerPort": -1,
+		"facilitorPort": -1
 	},
 	"development": {
 		"root": "http://engage.dev.emerson.edu:3000/api",
-		"authKey": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+		"authKey": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"multiplayerServerIp": "unity",
+		"multiplayerServerPort": -1,
+		"facilitorPort": -1
 	},
 	"staging": {
 		"root": "http://api.elab.emerson.edu:3000/api",
-		"authKey": "27a3996e6c59d6f1c38331517732eebdd879d4574eae2c6d7a7290be7d1bd49e"
+		"authKey": "27a3996e6c59d6f1c38331517732eebdd879d4574eae2c6d7a7290be7d1bd49e",
+		"multiplayerServerIp": "unity",
+		"multiplayerServerPort": -1,
+		"facilitorPort": -1
 	},
 	"production": {
 		"root": "http://api.elab.emerson.edu:3000/api",
-		"authKey": "27a3996e6c59d6f1c38331517732eebdd879d4574eae2c6d7a7290be7d1bd49e"
+		"authKey": "27a3996e6c59d6f1c38331517732eebdd879d4574eae2c6d7a7290be7d1bd49e",
+		"multiplayerServerIp": "unity",
+		"multiplayerServerPort": -1,
+		"facilitorPort": -1
 	}
 }

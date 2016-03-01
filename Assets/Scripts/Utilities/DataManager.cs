@@ -30,6 +30,27 @@ public class DataManager {
     }
     
     /// <summary>
+    /// Get the IP address of the server that handles multiplayer connections
+    /// </summary>
+    public static string MultiplayerServerIp {
+        get { return currentConfig.multiplayerServerIp == "unity" ? MasterServer.ipAddress : currentConfig.multiplayerServerIp; }
+    }
+
+    /// <summary>
+    /// Get the port of the server that handles multiplayer connections
+    /// </summary>
+    public static int MultiplayerServerPort {
+        get { return currentConfig.multiplayerServerPort == -1 ? MasterServer.port : currentConfig.multiplayerServerPort; }
+    }
+
+    /// <summary>
+    /// Get the port of the facilitator port for nat punchthroughs 
+    /// </summary>
+    public static int FacilitatorPort {
+        get { return currentConfig.facilitatorPort == -1 ? Network.natFacilitatorPort : currentConfig.facilitatorPort; }
+    }
+
+    /// <summary>
     /// Set to production mode.
     /// </summary>
     /*public static bool Production {

@@ -32,9 +32,31 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public OnDisconnect onDisconnect;
 	public OnUpdateClients onUpdateClients;
 
+	public NetworkingManager networking;
+	public BluetoothManager bluetooth;
+
+	IConnectionManager connectionManager;
+	IConnectionManager ConnectionManager {
+		get {
+			if (connectionManager == null) {
+				if (networking.Status == ConnectionStatus.Succeeded) {
+					connectionManager = networking;
+				} else {
+					connectionManager = bluetooth;
+				}
+			}
+			return connectionManager;
+		}
+	}
+
+	void OnEnable () {
+		networking.gameObject.SetActive (true);
+	}
+
 	// Host
 	public void HostGame () {
 		Hosting = true;
+		// ConnectionManager.Host (Game.Name);
 	}
 
 	// Client
