@@ -11,22 +11,20 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public delegate void OnDisconnect ();
 	public delegate void OnUpdateClients (List<string> clients);
 
-	bool hosting = false;
-	public bool Hosting { 
-		get { return hosting; }
-		private set { hosting = value; }
-	}
+	public string Host { get; private set; }
+	List<string> hosts = new List<string> ();
+	List<string> clients = new List<string> ();
 
-	public GameInstance Host { get; private set; }
-
-	Dictionary<string, GameInstance> hosts = new Dictionary<string, GameInstance> ();
 	public List<string> Hosts {
-		get { return new List<string> (hosts.Keys); }
+		get { return hosts; }
 	}
 
-	Dictionary<string, GameInstance> clients = new Dictionary<string, GameInstance> ();
-	public Dictionary<string, GameInstance> Clients {
+	public List<string> Clients {
 		get { return clients; }
+	}
+
+	public bool Hosting {
+		get { return Host == Game.Name; }
 	}
 
 	public OnDisconnect onDisconnect;
@@ -50,6 +48,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				}
 				#endif
 			}
+			connectionManager.Init (Game.Name);
 			return connectionManager;
 		}
 	}
@@ -60,68 +59,58 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	// Host
 	public void HostGame () {
-		Hosting = true;
-		ConnectionManager.Host (Game.Name);
+		Clients.Clear ();
+		Host = Game.Name;
+		ConnectionManager.Host ();
 	}
 
 	// Client
 	public void JoinGame (string hostName) {
-
-		// For testing locally
-		/*List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
-		foreach (GameInstance g in gi) {
-			if (g.Name == hostName) {
-				Host = g;
-				Host.Multiplayer.ConnectClient (Game);
-				return;
-			}
-		}*/
-
-		ConnectionManager.Join (hostName, Game.Name);
+		Host = hostName;
+		ConnectionManager.Join (hostName);
 	}
 
 	// Client
 	public List<string> UpdateHosts () {
-		hosts.Clear ();
-		List<GameInstance> gi = ObjectPool.GetActiveInstances<GameInstance> ();
-		foreach (GameInstance g in gi) {
-			if (g.Multiplayer.Hosting && g != Game)
-				hosts.Add (g.Name, g);
-		}
-		return new List<string> (hosts.Keys);
+		hosts = ConnectionManager.UpdateHosts ();
+		return hosts;
 	}
 
 	// Host
-	public void ConnectClient (GameInstance game) {
-		Clients.Add (game.Name, game);
+	public void ConnectClient (string clientName) {
+		ConnectionManager.ConnectClient (clientName);
+		Clients.Add (clientName);
 		if (onUpdateClients != null)
-			onUpdateClients (new List<string> (Clients.Keys));
+			onUpdateClients (Clients);
 	}
 
 	// Host
 	public void DisconnectClient (string name) {
 		Clients.Remove (name);
 		if (onUpdateClients != null)
-			onUpdateClients (new List<string> (Clients.Keys));
+			onUpdateClients (Clients);
 	}
 
 	// Host & Client
 	public void Disconnect () {
-		if (Hosting) {
-			Hosting = false;
-			if (onDisconnect != null)
-				onDisconnect ();
-			// TODO: disconnect all players currently in game
-			foreach (var client in new Dictionary<string, GameInstance> (Clients)) {
-				MultiplayerManager nm = Clients[client.Key].Multiplayer;
-				nm.Host = null;
-				nm.Disconnect ();
-			}
-		} else {
-			if (Host != null)
-				Host.Multiplayer.DisconnectClient (Game.Name);
-			if (onDisconnect != null)
-				onDisconnect ();
-		}
+		ConnectionManager.Disconnect (Host);
+		if (onDisconnect != null)
+			onDisconnect ();
+	}
+
+	public void SendMessageToHost (string id, string str1, string str2, int val) {
+		ConnectionManager.SendMessageToHost (id, str1, str2, val);
+	}
+
+	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
+		ConnectionManager.ReceiveMessageFromClient (id, str1, str2, val);	
+	}
+
+	public void SendMessageToClients (string id, string str1, string str2, int val) {
+		ConnectionManager.SendMessageToClients (id, str1, str2, val);
+	}
+
+	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
+		ConnectionManager.ReceiveMessageFromHost (id, str1, str2, val);
 	}
 }

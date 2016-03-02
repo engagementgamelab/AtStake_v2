@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Handles local multiplayer over WIFI
+/// </summary>
 public class NetworkingManager : MonoBehaviour, IConnectionManager {
 
 	public struct Settings {
@@ -25,7 +28,7 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		get { return status; }
 	}
 
-	MultiplayerManager multiplayer;
+	string gameInstanceName;
 	Settings settings;
 	NetworkConnectionTest test;
 	ConnectionStatus status = ConnectionStatus.Undetermined;
@@ -54,18 +57,18 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		status = ConnectionStatus.Succeeded;
 	}
 
-	public void Init (MultiplayerManager multiplayer) {
-		this.multiplayer = multiplayer;
+	public void Init (string gameInstanceName) {
+		this.gameInstanceName = gameInstanceName;
 	}
 
-	public void Host (string gameInstanceName) {
+	public void Host () {
 		if (settings.SecureServer)
 			Network.InitializeSecurity ();
 		Network.InitializeServer (settings.MaxConnections, 25001, !Network.HavePublicAddress ());
 		MasterServer.RegisterHost (settings.GameName, gameInstanceName);
 	}
 
-	public void Join (string hostName, string gameInstanceName) {
+	public void Join (string hostName) {
 
 	}
 
@@ -73,15 +76,31 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		return null;
 	}
 
-	public void ConnectClient (string gameInstanceName) {
+	public void ConnectClient (string clientName) {
 		
 	}
 
-	public void DisconnectClient (string gameInstanceName) {
+	public void DisconnectClient () {
 
 	}
 
-	public void Disconnect () {
+	public void Disconnect (string hostName) {
 
+	}
+
+	public void SendMessageToHost (string id, string str1, string str2, int val) {
+		
+	}
+
+	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
+		
+	}
+
+	public void SendMessageToClients (string id, string str1, string str2, int val) {
+
+	}
+	
+	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
+		
 	}
 }

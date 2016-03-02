@@ -25,6 +25,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		get { return Game.Multiplayer.Hosting; }
 	}
 
+	List<string> Clients {
+		get { return Game.Multiplayer.Clients; }
+	}
+
 	/**
 	 *	Public methods
 	 */
@@ -64,13 +68,13 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	// Client methods
 
 	void SendMessageToHost (NetworkMessage msg) {
-		Game.Multiplayer.Host.Dispatcher.ReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
+		Game.Multiplayer.SendMessageToHost (msg.id, msg.str1, msg.str2, msg.val);
 	}
 
 	// Host methods
 
 	void QueueMessage (NetworkMessage msg) {
-		if (messages.Count > 0 || !confirmation.IsConfirmed (new List<string> (Game.Multiplayer.Clients.Keys))) {
+		if (messages.Count > 0 || !confirmation.IsConfirmed (Clients)) {
 			messages.Enqueue (msg);
 		} else {
 			SendMessageToClients (msg);
@@ -87,12 +91,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	void SendMessageToClients (NetworkMessage msg) {
 
 		// Create a new confirmation to fulfill
-		confirmation = new Confirmation (msg.id, new List<string> (Game.Multiplayer.Clients.Keys));
+		confirmation = new Confirmation (msg.id, Clients);
 
 		// Send message to all clients
-		foreach (var client in Game.Multiplayer.Clients) {
-			client.Value.Dispatcher.ReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
-		}
+		Game.Multiplayer.SendMessageToClients (msg.id, msg.str1, msg.str2, msg.val);
 
 		// Fire off the message
 		ReceiveMessageEvent (msg);
@@ -127,14 +129,18 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	// RPCs
 
 	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
-		QueueMessage (new NetworkMessage (id, str1, str2, val));
+		if (id.Contains ("__confirm")) {
+			ReceiveConfirmation (id.Replace("__confirm", ""), str1);
+		} else {
+			QueueMessage (new NetworkMessage (id, str1, str2, val));
+		}
 	}
 
 	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (id, str1, str2, val));
 		#else
-			Game.Multiplayer.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
+			SendMessageToHost (new NetworkMessage ("__confirm" + id, Game.Name, "", -1));
 			ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 		#endif
 	}
@@ -142,20 +148,16 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	#if SIMULATE_LATENCY
 	IEnumerator LatentSendConfirmation (string id, string str1, string str2, int val) {
 		yield return new WaitForSeconds (Random.value);
-		Game.Multiplayer.Host.Dispatcher.ReceiveConfirmation (id, Game.Name);
+		SendMessageToHost (new NetworkMessage ("__confirm" + id, Game.Name, "", -1));
 		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
 	}
 	#endif
 
-	public void ReceiveConfirmation (string id, string client) {
+	void ReceiveConfirmation (string id, string client) {
 		confirmation.Add (id, client);
-		if (confirmation.IsConfirmed (new List<string> (Game.Multiplayer.Clients.Keys))) {
+		if (confirmation.IsConfirmed (Clients)) {
 			SendQueuedMessage ();
 		}
-		/*if (confirmation.Add (id, client, new List<string> (Game.Multiplayer.Clients.Keys))) {
-			confirmation = null;
-			SendQueuedMessage ();
-		}*/
 	}
 
 	// Class that handles message confirmations
@@ -163,7 +165,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	// It's only after all clients have confirmed that the host will send out subsequent messages
 	public class Confirmation {
 
-		readonly string messageId;
+		public readonly string messageId;
 		readonly Dictionary<string, bool> confirms;
 
 		public Confirmation (string messageId, List<string> clients) {
@@ -185,20 +187,29 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		}
 
 		public void Add (string id, string client) {
-			if (id == messageId) {
+			if (id == messageId)
 				confirms[client] = true;
-				/*foreach (var c in confirms) {
-					if (!c.Value)
-						return false;	
-				}*/
-
-				
-
-				// returns true if all clients have confirmed
-				// return true;
-			}
-			// Debug.LogWarning ("Host received confirmation for the message '" + id + "' but the host is looking for confirmations for the message '" + messageId + "'");
-			// return false;
 		}
 	}
+
+	#if UNITY_EDITOR
+
+	bool showStatus = false;
+
+	void OnGUI () {
+
+		if (!Hosting) return;
+
+		GUI.color = Color.black;
+		showStatus = GUILayout.Toggle (showStatus, "Show message status");
+
+		if (!showStatus) return;
+
+		foreach (NetworkMessage msg in messages) {
+			GUILayout.Label (msg.id);
+		}
+
+		GUILayout.Label (confirmation.messageId + " confirmed: " + confirmation.IsConfirmed (Clients));
+	}
+	#endif
 }
