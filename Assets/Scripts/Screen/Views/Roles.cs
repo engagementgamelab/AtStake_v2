@@ -74,7 +74,7 @@ namespace Views {
 			return roles;
 		}
 
-		void AssignRole (NetworkMessage msg) {
+		void AssignRole (NetworkMessageContent msg) {
 			roleList.Add (msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
 			if (IsDecider) {
 				Elements["next"].Active = true;

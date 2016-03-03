@@ -12,7 +12,7 @@ public class SceneManager : MonoBehaviour {
 
 	void Awake () { 
 
-		NetworkManager.Instance.onServerDown += OnServerDown;
+		ApiManager.Instance.onServerDown += OnServerDown;
 
 		// We need our game config data before calling any remote endpoints
 		LoadGameConfig ();
@@ -32,9 +32,9 @@ public class SceneManager : MonoBehaviour {
 	    #endif
 
 		// Authenticate to API
-	    if (!NetworkManager.Instance.Authenticated) {
+	    if (!ApiManager.Instance.Authenticated) {
 	    	Debug.Log("Authenticate to API");
-			NetworkManager.Instance.Authenticate (ClientAuthenticated);
+			ApiManager.Instance.Authenticate (ClientAuthenticated);
 	    }
 	}
 
@@ -54,10 +54,10 @@ public class SceneManager : MonoBehaviour {
 			return;	
 		}
 
-		NetworkManager.Instance.Cookie = response["session_cookie"].ToString();
+		ApiManager.Instance.Cookie = response["session_cookie"].ToString();
 
 		// Set as authenticated
-		NetworkManager.Instance.Authenticated = true;
+		ApiManager.Instance.Authenticated = true;
 
 		// Set global game data if needed
 		SetGameData ();
@@ -108,7 +108,7 @@ public class SceneManager : MonoBehaviour {
 			// This should live in a static global dictionary somewhere
 			// Try to get data from API remote
 			try {
-				gameData = NetworkManager.Instance.DownloadDataFromURL("/gameData");
+				gameData = ApiManager.Instance.DownloadDataFromURL("/gameData");
 			}
 
 			// Fallback: load game data from local config

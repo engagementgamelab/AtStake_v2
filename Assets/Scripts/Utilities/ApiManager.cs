@@ -7,10 +7,10 @@ using System.IO;
 using System.Text;
 using JsonFx.Json;
  
-public class NetworkManager : MonoBehaviour {
+public class ApiManager : MonoBehaviour {
 
-    protected NetworkManager() {}
-    private static NetworkManager _instance = null;
+    protected ApiManager() {}
+    private static ApiManager _instance = null;
 
     private static Action<Dictionary<string, object>> _currentResponseHandler;
     public static string _sessionCookie;
@@ -39,15 +39,15 @@ public class NetworkManager : MonoBehaviour {
     }
     List<PostCache> _cachedRequests = new List<PostCache>();
         
-    public static NetworkManager Instance {
+    public static ApiManager Instance {
         get {
             if (_instance == null) {
-                _instance = FindObjectOfType (typeof (NetworkManager)) as NetworkManager;
+                _instance = FindObjectOfType (typeof (ApiManager)) as ApiManager;
 
                 if (_instance == null) {
                     GameObject obj = new GameObject ();
                     obj.hideFlags = HideFlags.HideAndDontSave;
-                    _instance = obj.AddComponent<NetworkManager> ();
+                    _instance = obj.AddComponent<ApiManager> ();
                 }
             }
             return _instance;

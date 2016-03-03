@@ -7,9 +7,9 @@ using System.Collections.Generic;
 /// </summary>
 public class LocalManager : MonoBehaviour, IConnectionManager {
 
-	public ConnectionStatus Status {
+	/*public ConnectionStatus Status {
 		get { return ConnectionStatus.Succeeded; }
-	}
+	}*/
 
 	string gameInstanceName;
 
@@ -23,10 +23,10 @@ public class LocalManager : MonoBehaviour, IConnectionManager {
 		FindGameWithName (hostName).Multiplayer.ConnectClient (gameInstanceName);
 	}
 
-	public List<string> UpdateHosts () {
-		return ObjectPool.GetActiveInstances<GameInstance> ()
+	public void RequestHostList (System.Action<List<string>> callback) {
+		callback (ObjectPool.GetActiveInstances<GameInstance> ()
 			.FindAll (x => x.Name != gameInstanceName && x.Multiplayer.Hosting)
-			.ConvertAll (x => x.Name);
+			.ConvertAll (x => x.Name));
 	}
 
 	public void ConnectClient (string clientName) {}

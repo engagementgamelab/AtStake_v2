@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#undef DEBUG
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,9 +17,9 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 *				the next message if one exists in the queue
 	 */
 
-	public delegate void OnReceiveMessage (NetworkMessage msg);
+	public delegate void OnReceiveMessage (NetworkMessageContent msg);
 
-	Queue<NetworkMessage> messages = new Queue<NetworkMessage> ();
+	Queue<NetworkMessageContent> messages = new Queue<NetworkMessageContent> ();
 	Confirmation confirmation = new Confirmation ("", new List<string> ());
 
 	bool Hosting {
@@ -34,26 +35,26 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 */
 
 	public void ScheduleMessage (string id) {
-		ScheduleMessage (new NetworkMessage (id));
+		ScheduleMessage (new NetworkMessageContent (id));
 	}
 
 	public void ScheduleMessage (string id, string str1) {
-		ScheduleMessage (new NetworkMessage (id, str1));
+		ScheduleMessage (new NetworkMessageContent (id, str1));
 	}
 
 	public void ScheduleMessage (string id, int val) {
-		ScheduleMessage (new NetworkMessage (id, "", "", val));
+		ScheduleMessage (new NetworkMessageContent (id, "", "", val));
 	}
 
 	public void ScheduleMessage (string id, string str1, string str2) {
-		ScheduleMessage (new NetworkMessage (id, str1, str2));
+		ScheduleMessage (new NetworkMessageContent (id, str1, str2));
 	}
 
 	public void ScheduleMessage (string id, string str1, int val) {
-		ScheduleMessage (new NetworkMessage (id, str1, "", val));
+		ScheduleMessage (new NetworkMessageContent (id, str1, "", val));
 	}
 
-	public void ScheduleMessage (NetworkMessage msg) {
+	public void ScheduleMessage (NetworkMessageContent msg) {
 		if (Hosting) {
 			QueueMessage (msg);
 		} else {
@@ -67,13 +68,13 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	// Client methods
 
-	void SendMessageToHost (NetworkMessage msg) {
+	void SendMessageToHost (NetworkMessageContent msg) {
 		Game.Multiplayer.SendMessageToHost (msg.id, msg.str1, msg.str2, msg.val);
 	}
 
 	// Host methods
 
-	void QueueMessage (NetworkMessage msg) {
+	void QueueMessage (NetworkMessageContent msg) {
 		if (messages.Count > 0 || !confirmation.IsConfirmed (Clients)) {
 			messages.Enqueue (msg);
 		} else {
@@ -83,12 +84,12 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	void SendQueuedMessage () {
 		if (messages.Count > 0) {
-			NetworkMessage msg = messages.Dequeue ();
+			NetworkMessageContent msg = messages.Dequeue ();
 			SendMessageToClients (msg);
 		}
 	}
 
-	void SendMessageToClients (NetworkMessage msg) {
+	void SendMessageToClients (NetworkMessageContent msg) {
 
 		// Create a new confirmation to fulfill
 		confirmation = new Confirmation (msg.id, Clients);
@@ -100,7 +101,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		ReceiveMessageEvent (msg);
 	}
 
-	void ReceiveMessageEvent (NetworkMessage msg) {
+	void ReceiveMessageEvent (NetworkMessageContent msg) {
 		Dictionary<OnReceiveMessage, string> tempListeners = new Dictionary<OnReceiveMessage, string> (listeners);
 		foreach (var listener in tempListeners) {
 			if (listener.Value == msg.id) {
@@ -132,7 +133,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		if (id.Contains ("__confirm")) {
 			ReceiveConfirmation (id.Replace("__confirm", ""), str1);
 		} else {
-			QueueMessage (new NetworkMessage (id, str1, str2, val));
+			QueueMessage (new NetworkMessageContent (id, str1, str2, val));
 		}
 	}
 
@@ -140,16 +141,16 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (id, str1, str2, val));
 		#else
-			SendMessageToHost (new NetworkMessage ("__confirm" + id, Game.Name, "", -1));
-			ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
+			SendMessageToHost (new NetworkMessageContent ("__confirm" + id, Game.Name, "", -1));
+			ReceiveMessageEvent (new NetworkMessageContent (id, str1, str2, val));
 		#endif
 	}
 
 	#if SIMULATE_LATENCY
 	IEnumerator LatentSendConfirmation (string id, string str1, string str2, int val) {
 		yield return new WaitForSeconds (Random.value);
-		SendMessageToHost (new NetworkMessage ("__confirm" + id, Game.Name, "", -1));
-		ReceiveMessageEvent (new NetworkMessage (id, str1, str2, val));
+		SendMessageToHost (new NetworkMessageContent ("__confirm" + id, Game.Name, "", -1));
+		ReceiveMessageEvent (new NetworkMessageContent (id, str1, str2, val));
 	}
 	#endif
 
@@ -192,7 +193,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		}
 	}
 
-	#if UNITY_EDITOR
+	#if UNITY_EDITOR && DEBUG
 
 	bool showStatus = false;
 
@@ -205,7 +206,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 		if (!showStatus) return;
 
-		foreach (NetworkMessage msg in messages) {
+		foreach (NetworkMessageContent msg in messages) {
 			GUILayout.Label (msg.id);
 		}
 

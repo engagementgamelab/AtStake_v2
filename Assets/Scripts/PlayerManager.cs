@@ -68,7 +68,7 @@ public class PlayerManager : GameInstanceBehaviour {
 		Player.HasBeenDecider = false;
 	}
 
-	public void OnUpdatePlayers (NetworkMessage msg) {
+	public void OnUpdatePlayers (NetworkMessageContent msg) {
 
 		List<string> players = new List<string> (msg.str1.Split ('|'));
 		players.Remove (Player.Name);
@@ -93,7 +93,7 @@ public class PlayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	public void AssignRole (NetworkMessage msg) {
+	public void AssignRole (NetworkMessageContent msg) {
 		string player = msg.str1;
 		string role = msg.str2;
 		Players[player].Role = Game.Decks.GetRole (role);

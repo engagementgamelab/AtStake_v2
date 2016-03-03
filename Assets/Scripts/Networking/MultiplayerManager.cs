@@ -41,11 +41,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				#if SINGLE_SCREEN
 				connectionManager = local;
 				#else
-				if (networking.Status == ConnectionStatus.Succeeded) {
+				/*if (networking.Status == ConnectionStatus.Succeeded) {
 					connectionManager = networking;
 				} else {
 					connectionManager = bluetooth;
-				}
+				}*/
+				connectionManager = networking;
 				#endif
 			}
 			connectionManager.Init (Game.Name);
@@ -71,9 +72,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Client
-	public List<string> UpdateHosts () {
-		hosts = ConnectionManager.UpdateHosts ();
-		return hosts;
+	public void RequestHostList (System.Action<List<string>> callback) {
+		// hosts = ConnectionManager.UpdateHosts ();
+		// return hosts;
+		ConnectionManager.RequestHostList ((List<string> result) => {
+			hosts = result;
+			callback (result);
+		});
 	}
 
 	// Host

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum ConnectionStatus { Undetermined, Failed, Succeeded }
+// public enum ConnectionStatus { Undetermined, Failed, Succeeded }
 
 public class NetworkConnectionTest : MonoBehaviour {
 
-	ConnectionTesterStatus connectionTestResult = ConnectionTesterStatus.Undetermined;
+	/*ConnectionTesterStatus connectionTestResult = ConnectionTesterStatus.Undetermined;
 
 	string prevTestMessage = "";
 	ConnectionStatus testResult = ConnectionStatus.Undetermined;
@@ -167,5 +167,5 @@ public class NetworkConnectionTest : MonoBehaviour {
 				Debug.Log (msg);
 			prevTestMessage = msg;
 		}
-	}
+	}*/
 }

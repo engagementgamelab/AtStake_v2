@@ -26,7 +26,7 @@ public class RoundManager : GameInstanceBehaviour {
 		return false;
 	}
 
-	void SetRound (NetworkMessage msg) {
+	void SetRound (NetworkMessageContent msg) {
 		Current = msg.val;
 	}
 }

@@ -32,7 +32,7 @@ public class DataManager {
     /// <summary>
     /// Get the IP address of the server that handles multiplayer connections
     /// </summary>
-    public static string MultiplayerServerIp {
+    /*public static string MultiplayerServerIp {
         get { return currentConfig.multiplayerServerIp == "unity" ? MasterServer.ipAddress : currentConfig.multiplayerServerIp; }
     }
 
@@ -48,7 +48,7 @@ public class DataManager {
     /// </summary>
     public static int FacilitatorPort {
         get { return currentConfig.facilitatorPort == -1 ? Network.natFacilitatorPort : currentConfig.facilitatorPort; }
-    }
+    }*/
 
     /// <summary>
     /// Set to production mode.

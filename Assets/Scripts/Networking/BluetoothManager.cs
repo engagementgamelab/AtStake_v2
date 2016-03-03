@@ -7,12 +7,12 @@ using System.Collections.Generic;
 /// </summary>
 public class BluetoothManager : MonoBehaviour, IConnectionManager {
 
-	public ConnectionStatus Status {
+	/*public ConnectionStatus Status {
 		get { return status; }
-	}
+	}*/
 
 	string gameInstanceName;
-	ConnectionStatus status;
+	// ConnectionStatus status;
 
 	public void Init (string gameInstanceName) {
 		this.gameInstanceName = gameInstanceName;
@@ -26,8 +26,8 @@ public class BluetoothManager : MonoBehaviour, IConnectionManager {
 
 	}
 
-	public List<string> UpdateHosts () {
-		return null;
+	public void RequestHostList (System.Action<List<string>> callback) {
+		
 	}
 
 	public void ConnectClient (string clientName) {
@@ -53,7 +53,7 @@ public class BluetoothManager : MonoBehaviour, IConnectionManager {
 	public void SendMessageToClients (string id, string str1, string str2, int val) {
 
 	}
-	
+
 	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
 		
 	}

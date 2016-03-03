@@ -90,9 +90,10 @@ public class GameInstanceManager : MonoBehaviour {
 		instances[0].Views.Goto ("deck");
 		for (int i = 1; i < 3; i ++) {
 			AddPlayer ();
-			instances[i].Multiplayer.UpdateHosts ();
-			instances[i].JoinGame ();
-			instances[i].Views.Goto ("deck");
+			instances[i].Multiplayer.RequestHostList ((List<string> hosts) => {
+				instances[i].JoinGame ();
+				instances[i].Views.Goto ("deck");
+			});
 		}
 	}
 

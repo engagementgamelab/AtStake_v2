@@ -18,14 +18,16 @@ namespace Views {
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
 
 			// TODO: also listen to new games as they get added
-			List<string> hosts = Game.Multiplayer.UpdateHosts ();
-			for (int i = 0; i < hosts.Count; i ++) {
-				string hostId = hosts[i];
-				list.Add (hostId, new ButtonElement (hostId, () => {
-					Game.JoinGame (hostId);
-					GotoView ("lobby");
-				}));
-			}
+
+			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
+				for (int i = 0; i < hosts.Count; i ++) {
+					string hostId = hosts[i];
+					list.Add (hostId, new ButtonElement (hostId, () => {
+						Game.JoinGame (hostId);
+						GotoView ("lobby");
+					}));
+				}
+			});
 		}
 	}
 }

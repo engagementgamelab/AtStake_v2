@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 public interface IConnectionManager {
-	ConnectionStatus Status { get; }
+	// ConnectionStatus Status { get; }
 	void Init (string gameInstanceName);
 	void Host ();
 	void Join (string hostName);
-	List<string> UpdateHosts ();
+	void RequestHostList (System.Action<List<string>> callback);
 	void ConnectClient (string clientName);
 	void DisconnectClient ();
 	void Disconnect (string hostName);
