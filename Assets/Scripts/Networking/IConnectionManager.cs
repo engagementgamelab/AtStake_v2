@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public interface IConnectionManager {
 	// ConnectionStatus Status { get; }
-	void Init (string gameInstanceName);
+	void Init (string gameInstanceName, MultiplayerManager multiplayer);
 	void Host ();
 	void Join (string hostName);
 	void RequestHostList (System.Action<List<string>> callback);

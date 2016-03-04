@@ -24,6 +24,11 @@ public class NetworkMasterClient : MonoBehaviour
 
 	static NetworkMasterClient singleton;
 
+	// Callbacks
+	System.Action onConnect;
+	System.Action onDisconnect;
+	System.Action onUnregisterHost;
+
 	void Awake()
 	{
 		if (singleton == null)
@@ -35,7 +40,7 @@ public class NetworkMasterClient : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
-	public void InitializeClient()
+	public void InitializeClient(string ipAddress="", System.Action onConnect=null)
 	{
 		if (client != null)
 		{
@@ -43,8 +48,12 @@ public class NetworkMasterClient : MonoBehaviour
 			return;
 		}
 
+		this.onConnect = onConnect;
+
 		client = new NetworkClient();
-		client.Connect(MasterServerIpAddress, MasterServerPort);
+		client.Connect(ipAddress == "" ? MasterServerIpAddress : ipAddress, MasterServerPort);
+		// client.Connect(Network.player.ipAddress, MasterServerPort);
+		// client.Connect(MasterServerIpAddress, MasterServerPort);
 
 		// system msgs
 		client.RegisterHandler(MsgType.Connect, OnClientConnect);
@@ -58,7 +67,7 @@ public class NetworkMasterClient : MonoBehaviour
 
 	}
 
-	public void ResetClient()
+	public void ResetClient(System.Action onDisconnect=null)
 	{
 		if (client == null)
 			return;
@@ -84,6 +93,9 @@ public class NetworkMasterClient : MonoBehaviour
 	void OnClientConnect(NetworkMessage netMsg)
 	{
 		Debug.Log("Client Connected to Master");
+		// Debug.Log (netMsg.conn.address);
+		if (onConnect != null)
+			onConnect ();
 	}
 
 	void OnClientDisconnect(NetworkMessage netMsg)
@@ -111,6 +123,8 @@ public class NetworkMasterClient : MonoBehaviour
 	{
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredHostMessage>();
 		OnServerEvent((MasterMsgTypes.NetworkMasterServerEvent)msg.resultCode);
+		if (onUnregisterHost != null)
+			onUnregisterHost ();
 	}
 
 	void OnListOfHosts(NetworkMessage netMsg)
@@ -175,13 +189,15 @@ public class NetworkMasterClient : MonoBehaviour
 		client.Send(MasterMsgTypes.RequestListOfHostsId, msg);
 	}
 
-	public void UnregisterHost()
+	public void UnregisterHost(System.Action onUnregisterHost=null)
 	{
 		if (!isConnected)
 		{
 			Debug.LogError("UnregisterHost not connected");
 			return;
 		}
+
+		this.onUnregisterHost = onUnregisterHost;
 
 		var msg = new MasterMsgTypes.UnregisterHostMessage();
 		msg.gameTypeName = HostGameType;

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// TODO: should instead use localhost with NetworkingManager (deprecate this class)
+
 /// <summary>
 /// Simulates local multiplayer in a single screen
 /// </summary>
@@ -12,9 +14,11 @@ public class LocalManager : MonoBehaviour, IConnectionManager {
 	}*/
 
 	string gameInstanceName;
+	// MultiplayerManager manager;
 
-	public void Init (string gameInstanceName) {
+	public void Init (string gameInstanceName, MultiplayerManager multiplayer) {
 		this.gameInstanceName = gameInstanceName;
+		// this.multiplayer = multiplayer;
 	}
 
 	public void Host () {}

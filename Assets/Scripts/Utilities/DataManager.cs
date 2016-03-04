@@ -125,9 +125,13 @@ public class DataManager {
         }
 
         // create/save to file in Assets/Resources/
-        #if !UNITY_WEBPLAYER
+        #if !UNITY_WEBPLAYER 
 
-            SaveDataToJson("data", data);
+            SaveDataToJson("data", data
+                #if UNITY_IOS || UNITY_ANDROID
+                ,true
+                #endif
+            );
 
         #endif
     }
@@ -138,7 +142,7 @@ public class DataManager {
     /// <param name="fileName">The file's name.</param>
     /// <param name="data">String to be used to save in JSON file.</param>
     /// <param name="persistentPath">Use the application persistent resource path?</param>
-    public static void SaveDataToJson(string fileName, string data, bool persistentPath=false) {
+    static void SaveDataToJson(string fileName, string data, bool persistentPath=false) {
 
         string dataPath = (persistentPath ? Application.persistentDataPath : Application.dataPath) + "/Resources/";
         DirectoryInfo dirData = new DirectoryInfo(dataPath);

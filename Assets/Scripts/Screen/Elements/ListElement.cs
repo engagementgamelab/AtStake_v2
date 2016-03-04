@@ -36,4 +36,18 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 			onRemove (id);
 		SendUpdateMessage ();
 	}
+
+	public void Set (Dictionary<string, T> newElements) {
+		Dictionary<string, T> tempElements = new Dictionary<string, T> (Elements);
+		foreach (var element in tempElements) {
+			if (!newElements.ContainsKey (element.Key)) {
+				Remove (element.Key);
+			}
+		}
+		foreach (var element in newElements) {
+			if (!elements.ContainsKey (element.Key)) {
+				Add (element.Key, element.Value);
+			}
+		}
+	}
 }

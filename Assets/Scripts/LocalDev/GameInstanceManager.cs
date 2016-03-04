@@ -24,6 +24,7 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void Awake () {
 		Application.targetFrameRate = 60;
+		Application.runInBackground = true;
 	}
 
 	void AddPlayer () {

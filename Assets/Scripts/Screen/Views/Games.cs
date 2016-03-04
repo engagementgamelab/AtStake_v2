@@ -9,7 +9,7 @@ namespace Views {
 	public class Games : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("back", new BackButtonElement ("hostjoin"));
+			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("game_list", new ListElement<ButtonElement> ());
 		}
 
@@ -17,16 +17,16 @@ namespace Views {
 
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
 
-			// TODO: also listen to new games as they get added
-
 			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
+				Dictionary<string, ButtonElement> hostButtons = new Dictionary<string, ButtonElement> ();
 				for (int i = 0; i < hosts.Count; i ++) {
 					string hostId = hosts[i];
-					list.Add (hostId, new ButtonElement (hostId, () => {
+					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
 						Game.JoinGame (hostId);
 						GotoView ("lobby");
 					}));
 				}
+				list.Set (hostButtons);
 			});
 		}
 	}

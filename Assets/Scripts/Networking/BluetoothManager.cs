@@ -11,11 +11,12 @@ public class BluetoothManager : MonoBehaviour, IConnectionManager {
 		get { return status; }
 	}*/
 
-	string gameInstanceName;
+	// string gameInstanceName;
 	// ConnectionStatus status;
 
-	public void Init (string gameInstanceName) {
-		this.gameInstanceName = gameInstanceName;
+	public void Init (string gameInstanceName, MultiplayerManager multiplayer) {
+		// this.gameInstanceName = gameInstanceName;
+		// this.multiplayer = multiplayer;
 	}
 
 	public void Host () {

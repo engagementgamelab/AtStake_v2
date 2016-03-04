@@ -49,7 +49,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				connectionManager = networking;
 				#endif
 			}
-			connectionManager.Init (Game.Name);
+			connectionManager.Init (Game.Name, this);
 			return connectionManager;
 		}
 	}
