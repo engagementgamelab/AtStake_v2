@@ -13,7 +13,6 @@ namespace Templates {
 		public Image topBar;
 
 		public BackButtonElementUI backButton;
-
 		public PotElementUI pot;
 		public CoinsElementUI coins;
 
@@ -32,6 +31,19 @@ namespace Templates {
 
 		Color TopBarColor {
 			set { topBar.color = value; }
+		}
+
+		public static TemplateContainer Init (TemplatesContainer myContainer, int siblingIndex) {
+			TemplateContainer c = ObjectPool.Instantiate<TemplateContainer> ();
+			c.transform.SetParent (myContainer.transform);
+			c.transform.SetSiblingIndex (siblingIndex);
+			c.RectTransform.localScale = Vector3.one;
+			c.RectTransform.anchoredPosition = Vector2.zero;
+			c.RectTransform.sizeDelta = Vector2.zero;
+			c.backButton = myContainer.backButton;
+			c.pot = myContainer.pot;
+			c.coins = myContainer.coins;
+			return c;
 		}
 
 		public void LoadView (string id, View view) {

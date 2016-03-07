@@ -27,13 +27,17 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 	public void StartBroadcasting () {
 
 		if (running) {
+			#if DEBUG
 			Debug.LogWarning ("Discovery already running");
+			#endif
 			return;
 		}
 
 		Initialize ();
 		if (StartAsServer ()) {
+			#if DEBUG
 			Debug.Log ("Started discovery server");
+			#endif
 		} else {
 			throw new System.Exception ("Failed to start discovery server");
 		}
@@ -42,13 +46,17 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 	public void StartListening (System.Action<Dictionary<string, string>> onUpdateHosts) {
 
 		if (running) {
+			#if DEBUG
 			Debug.LogWarning ("Discovery already running");
+			#endif
 			return;
 		}
 
 		Initialize ();
 		if (StartAsClient ()) {
+			#if DEBUG
 			Debug.Log ("Started discovery client");
+			#endif
 			this.onUpdateHosts += onUpdateHosts;
 		} else {
 			throw new System.Exception ("Failed to start discovery client");
@@ -72,7 +80,6 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 
 		#if DEBUG
 		Debug.Log ("============ HOSTS ==============");
-		Debug.Log (fromAddress + ": " + gameName);
 		#endif
 		foreach (var broadcast in broadcastsReceived) {
 
@@ -87,6 +94,9 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 			} else {
 				received[address].Timeout ++;
 			}
+			#if DEBUG
+			Debug.Log (name + ": " + address);
+			#endif
 			hosts.Add (name, address);
 		}
 

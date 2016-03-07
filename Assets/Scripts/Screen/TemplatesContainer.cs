@@ -11,8 +11,13 @@ namespace Templates {
 		public float slidePosition = 0f; // %
 
 		public Canvas canvas;
-		public TemplateContainer container1;
-		public TemplateContainer container2;
+		
+		public BackButtonElementUI backButton;
+		public PotElementUI pot;
+		public CoinsElementUI coins;
+
+		TemplateContainer container1;
+		TemplateContainer container2;
 
 		float canvasWidth;
 		float slideTime = 0.33f;
@@ -78,6 +83,8 @@ namespace Templates {
 
 		void OnEnable () {
 			canvasWidth = canvas.GetComponent<RectTransform> ().sizeDelta.x;
+			container1 = TemplateContainer.Init (this, 0);
+			container2 = TemplateContainer.Init (this, 1);
 		}
 
 		void SlideIn () { Slide (-canvasWidth); }
