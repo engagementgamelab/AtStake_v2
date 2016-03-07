@@ -31,24 +31,33 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public OnUpdateClients onUpdateClients;
 
 	public NetworkingManager networking;
-	public BluetoothManager bluetooth;
-	public LocalManager local;
+	// public BluetoothManager bluetooth;
+	// public LocalManager local;
 
-	IConnectionManager connectionManager;
+	/*IConnectionManager connectionManager;
 	IConnectionManager ConnectionManager {
 		get {
 			if (connectionManager == null) {
 				#if SINGLE_SCREEN
 				connectionManager = local;
 				#else
-				/*if (networking.Status == ConnectionStatus.Succeeded) {
+				if (networking.Status == ConnectionStatus.Succeeded) {
 					connectionManager = networking;
 				} else {
 					connectionManager = bluetooth;
-				}*/
+				}
 				connectionManager = networking;
-				#endif
+				// #endif
 			}
+			connectionManager.Init (Game.Name, this);
+			return connectionManager;
+		}
+	}*/
+
+	NetworkingManager connectionManager;
+	NetworkingManager ConnectionManager {
+		get {
+			connectionManager = networking;
 			connectionManager.Init (Game.Name, this);
 			return connectionManager;
 		}
@@ -66,9 +75,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Client
-	public void JoinGame (string hostName) {
+	public void JoinGame (string hostName, System.Action<int> callback) {
 		Host = hostName;
-		ConnectionManager.Join (hostName);
+		ConnectionManager.Join (hostName, callback);
 	}
 
 	// Client

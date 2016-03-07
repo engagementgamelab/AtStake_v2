@@ -7,11 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Simulates local multiplayer in a single screen
 /// </summary>
-public class LocalManager : MonoBehaviour, IConnectionManager {
+/*public class LocalManager : MonoBehaviour, IConnectionManager {
 
-	/*public ConnectionStatus Status {
-		get { return ConnectionStatus.Succeeded; }
-	}*/
 
 	string gameInstanceName;
 	// MultiplayerManager manager;
@@ -79,3 +76,4 @@ public class LocalManager : MonoBehaviour, IConnectionManager {
 		return FindHost ().Multiplayer;
 	}
 }
+*/

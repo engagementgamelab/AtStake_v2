@@ -20,7 +20,7 @@ public class GameInstanceManager : MonoBehaviour {
 	}
 
 	List<GameInstance> instances = new List<GameInstance> ();
-	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt. Dan" };
+	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt Dan" };
 
 	void Awake () {
 		Application.targetFrameRate = 60;

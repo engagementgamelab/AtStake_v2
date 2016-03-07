@@ -13,7 +13,7 @@ using System.IO;
 /// <summary>
 /// Handles local multiplayer over WIFI
 /// </summary>
-public class NetworkingManager : MonoBehaviour, IConnectionManager {
+public class NetworkingManager : MonoBehaviour {
 
 	// const bool enableNetworkClass = false;
 	// const bool enableNetworkHudClass = false;
@@ -89,34 +89,31 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		}
 	}
 
+	string IpAddress {
+		#if SINGLE_SCREEN
+		get { return "127.0.0.1"; }
+		#else
+		get { return Network.player.ipAddress; }
+		#endif
+	}
+
+	int Port {
+		get { return 3148; }
+	}
+
 	public NetworkMasterServer server;
 	public NetworkMasterClient client;
 
 	string gameInstanceName;
 	MultiplayerManager multiplayer;
 	Settings settings;
+	Dictionary<string, string> hosts;
 	// NetworkConnectionTest test;
 	// ConnectionStatus status = ConnectionStatus.Undetermined;
 	// ConnectionStatus status = ConnectionStatus.Succeeded;
 
 	void OnEnable () {
-
 		settings = new Settings (4, false, 3f, 3);
-
-		#if !SINGLE_SCREEN
-
-		// Configure connection to multiplayer server
-		/*MasterServer.ipAddress = DataManager.MultiplayerServerIp;
-		MasterServer.port = DataManager.MultiplayerServerPort;
-		Network.natFacilitatorIP = DataManager.MultiplayerServerIp;
-		Network.natFacilitatorPort = DataManager.FacilitatorPort;
-
-		// Test connection
-		test = ObjectPool.Instantiate<NetworkConnectionTest> ();
-		test.Init (settings);
-		test.TestClientConnection (OnTestResult);*/
-
-		#endif
 	}
 
 	public void Init (string gameInstanceName, MultiplayerManager multiplayer) {
@@ -127,18 +124,26 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 	public void Host () {
 
 		server.InitializeServer ();
-		client.InitializeClient (Network.player.ipAddress, () => {
-			client.RegisterHost (settings.GameName, gameInstanceName +":"+Network.player.ipAddress+":3148", "", false, 4, 3148);
+		client.InitializeClient (IpAddress, () => {
+			string gameName = gameInstanceName;
+			// string gameName = gameInstanceName + ":" + IpAddress + ":" + Port;
+			client.RegisterHost (settings.GameName, gameName, "", false, 4, Port);
 			Discovery.StartBroadcasting ();
 		});
 	}
 
-	public void Join (string hostName) {
-
+	public void Join (string hostName, System.Action<int> callback=null) {
+		client.InitializeClient (hosts[hostName], () => {
+			client.RegisterClient (settings.GameName, gameInstanceName, hostName, (int resultCode, string clientName) => {
+				Discovery.Stop ();
+				callback (resultCode);
+			});
+		});
 	}
 
 	public void RequestHostList (System.Action<List<string>> callback) {
 		Discovery.StartListening ((Dictionary<string, string> hosts) => {
+			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
 		});
 	}

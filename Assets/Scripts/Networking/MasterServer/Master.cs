@@ -11,6 +11,7 @@ public class MasterMsgTypes
 		RegistrationSucceeded, // Registration to master server succeeded, received confirmation.
 		UnregistrationSucceeded, // Unregistration to master server succeeded, received confirmation.
 		HostListReceived, // Received a host list from the master server.
+		RegisteredClientFailed, // Client could not be added to room.
 	}
 
 	// -------------- client to masterserver Ids --------------
@@ -18,12 +19,14 @@ public class MasterMsgTypes
 	public const short RegisterHostId = 150;
 	public const short UnregisterHostId = 151;
 	public const short RequestListOfHostsId = 152;
+	public const short RegisterClientId = 153;
 
 	// -------------- masterserver to client Ids --------------
 
 	public const short RegisteredHostId = 160;
 	public const short UnregisteredHostId = 161;
 	public const short ListOfHostsId = 162;
+	public const short RegisteredClientId = 163;
 	
 
 	// -------------- client to server messages --------------
@@ -49,9 +52,16 @@ public class MasterMsgTypes
 		public string gameTypeName;
 	}
 
+	public class RegisterClientMessage : MessageBase
+	{
+		public string gameTypeName;
+		public string gameName;
+		public string clientName;
+	}
+
 	// -------------- server to client messages --------------
 
-	public struct Room
+	public class Room
 	{
 		public string name;
 		public string comment;
@@ -60,6 +70,7 @@ public class MasterMsgTypes
 		public string hostIp;
 		public int hostPort;
 		public int connectionId;
+		public string[] players;
 	}
 
 	public class ListOfHostsMessage : MessageBase
@@ -71,5 +82,11 @@ public class MasterMsgTypes
 	public class RegisteredHostMessage : MessageBase
 	{
 		public int resultCode;
+	}
+
+	public class RegisteredClientMessage : MessageBase
+	{
+		public int resultCode;
+		public string clientName;
 	}
 }

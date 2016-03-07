@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 public class MyNetworkDiscovery : NetworkDiscovery {
 
+	#if SINGLE_SCREEN
+	static MyNetworkDiscovery broadcasting = null;
+	static MyNetworkDiscovery listening = null;
+	#endif
+
 	class BroadcastResult {
 
 		public NetworkBroadcastResult Result { get; set; }
@@ -24,9 +29,15 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 	System.Action<Dictionary<string, string>> onUpdateHosts;
 	int timeoutBuffer = 0; // Number of updates that can happen on a "missing" address before it is removed
 
+	void OnEnable () { showGUI = false; }
+
 	public void StartBroadcasting () {
 
-		if (running) {
+		if (running
+			#if SINGLE_SCREEN
+			|| broadcasting != null
+			#endif
+			) {
 			#if DEBUG
 			Debug.LogWarning ("Discovery already running");
 			#endif
@@ -38,6 +49,9 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 			#if DEBUG
 			Debug.Log ("Started discovery server");
 			#endif
+			#if SINGLE_SCREEN
+			broadcasting = this;
+			#endif
 		} else {
 			throw new System.Exception ("Failed to start discovery server");
 		}
@@ -45,9 +59,17 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 
 	public void StartListening (System.Action<Dictionary<string, string>> onUpdateHosts) {
 
-		if (running) {
+		if (running
+			#if SINGLE_SCREEN
+			|| listening != null
+			#endif
+			) {
 			#if DEBUG
 			Debug.LogWarning ("Discovery already running");
+			#endif
+			#if SINGLE_SCREEN
+			if (!running)
+				listening.onUpdateHosts += onUpdateHosts;
 			#endif
 			return;
 		}
@@ -57,6 +79,9 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 			#if DEBUG
 			Debug.Log ("Started discovery client");
 			#endif
+			#if SINGLE_SCREEN
+			listening = this;
+			#endif
 			this.onUpdateHosts += onUpdateHosts;
 		} else {
 			throw new System.Exception ("Failed to start discovery client");
@@ -65,6 +90,13 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 
 	public void Stop () {
 		onUpdateHosts = null;
+		#if SINGLE_SCREEN
+		if (broadcasting == this)
+			broadcasting = null;
+		else if (listening == this)
+			listening = null;
+		if (running)
+		#endif
 		StopBroadcast ();
 	}
 
@@ -97,7 +129,7 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 			#if DEBUG
 			Debug.Log (name + ": " + address);
 			#endif
-			hosts.Add (name, address);
+			hosts.Add (name.Replace (".", ""), address);
 		}
 
 		if (onUpdateHosts != null)

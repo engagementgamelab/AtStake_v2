@@ -5,11 +5,11 @@ using System.Collections.Generic;
 /// <summary>
 /// Handles local multiplayer over Bluetooth
 /// </summary>
-public class BluetoothManager : MonoBehaviour, IConnectionManager {
+/*public class BluetoothManager : MonoBehaviour, IConnectionManager {
 
-	/*public ConnectionStatus Status {
+	public ConnectionStatus Status {
 		get { return status; }
-	}*/
+	}
 
 	// string gameInstanceName;
 	// ConnectionStatus status;
@@ -59,3 +59,4 @@ public class BluetoothManager : MonoBehaviour, IConnectionManager {
 		
 	}
 }
+*/

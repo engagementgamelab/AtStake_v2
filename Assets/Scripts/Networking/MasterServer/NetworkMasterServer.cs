@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#undef DEBUG
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Networking;
@@ -21,9 +22,38 @@ public class Rooms
 		room.hostIp = hostIp;
 		room.hostPort = hostPort;
 		room.connectionId = connectionId;
+		// room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
+		room.playerLimit = 2;
+		room.players = new string[0];
 		rooms[gameName] = room;
 
 		return true;
+	}
+
+	public int AddPlayer (string gameName, string playerName) {
+
+		// The name comes in with a bunch of empty chars. As cool & expected as that is, they have to be removed.
+		gameName = new string (gameName
+			.ToCharArray ()
+			.ToList<char> ()
+			.FindAll (x => x != (char)0)
+			.ToArray<char> ());
+
+		MasterMsgTypes.Room room = rooms[gameName];
+
+		// Don't add the player if the room is full (adding 1 to include the host in the count)
+		if (room.players.Length+1 >= room.playerLimit)
+			return -2;
+
+		// Don't add the player if someone else in the room has the same name
+		List<string> playersList = new List<string> (room.players);
+		if (gameName == playerName || playersList.Contains (playerName))
+			return -1;
+
+		// Add the player
+		playersList.Add (playerName);
+		room.players = playersList.ToArray ();
+		return 0;
 	}
 
 	public MasterMsgTypes.Room[] GetRooms()
@@ -35,9 +65,22 @@ public class Rooms
 public class NetworkMasterServer : MonoBehaviour
 {
 	public int MasterServerPort;
+	static NetworkMasterServer singleton;
 
 	// map of gameTypeNames to rooms of that type
 	Dictionary<string, Rooms> gameTypeRooms = new Dictionary<string, Rooms>();
+
+	void Awake()
+	{
+		if (singleton == null)
+		{
+			singleton = this;
+		}
+		else
+		{
+			Destroy(gameObject);
+		}
+	}
 
 	public void InitializeServer()
 	{
@@ -58,6 +101,7 @@ public class NetworkMasterServer : MonoBehaviour
 		NetworkServer.RegisterHandler(MasterMsgTypes.RegisterHostId, OnServerRegisterHost);
 		NetworkServer.RegisterHandler(MasterMsgTypes.UnregisterHostId, OnServerUnregisterHost);
 		NetworkServer.RegisterHandler(MasterMsgTypes.RequestListOfHostsId, OnServerListHosts);
+		NetworkServer.RegisterHandler(MasterMsgTypes.RegisterClientId, OnServerRegisterClient);
 	}
 
 	public void ResetServer()
@@ -134,8 +178,6 @@ public class NetworkMasterServer : MonoBehaviour
 		netMsg.conn.Send(MasterMsgTypes.RegisteredHostId, response);
 	}
 
-
-
 	void OnServerUnregisterHost(NetworkMessage netMsg)
 	{
 		Debug.Log("OnServerUnregisterHost");
@@ -185,7 +227,34 @@ public class NetworkMasterServer : MonoBehaviour
 		netMsg.conn.Send(MasterMsgTypes.ListOfHostsId, response);
 	}
 
+	void OnServerRegisterClient(NetworkMessage netMsg)
+	{
+		Debug.Log ("Client registered");
+		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisterClientMessage>();
+		if (!gameTypeRooms.ContainsKey(msg.gameTypeName))
+		{
+			throw new System.Exception ("No game with the name '" + msg.gameTypeName + "' exists");
+		}
 
+		var rooms = gameTypeRooms[msg.gameTypeName];
+		int addPlayerResult = rooms.AddPlayer (msg.gameName, msg.clientName);
+
+		switch (addPlayerResult) {
+			case 0:
+				var response = new MasterMsgTypes.RegisteredClientMessage ();
+				response.resultCode = (int)MasterMsgTypes.NetworkMasterServerEvent.RegisteredClientFailed;
+				response.clientName = msg.clientName;
+				NetworkServer.SendToAll (MasterMsgTypes.RegisteredClientId, response);
+				break;
+			default:
+				var err = new MasterMsgTypes.RegisteredClientMessage ();
+				err.resultCode = addPlayerResult;
+				NetworkServer.SendToAll (MasterMsgTypes.RegisteredClientId, err);
+				break;
+		}
+	}
+
+	#if DEBUG
 	void OnGUI()
 	{
 		if (NetworkServer.active)
@@ -216,4 +285,5 @@ public class NetworkMasterServer : MonoBehaviour
 			}
 		}
 	}
+	#endif
 }
