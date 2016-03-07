@@ -20,7 +20,7 @@ namespace Views {
 			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
 				Dictionary<string, ButtonElement> hostButtons = new Dictionary<string, ButtonElement> ();
 				for (int i = 0; i < hosts.Count; i ++) {
-					string hostId = hosts[i];
+					string hostId = hosts[i].Replace (".", "");
 					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
 						Game.JoinGame (hostId);
 						GotoView ("lobby");

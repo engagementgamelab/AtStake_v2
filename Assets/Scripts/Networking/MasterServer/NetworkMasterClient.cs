@@ -73,6 +73,7 @@ public class NetworkMasterClient : MonoBehaviour
 			return;
 
 		client.Disconnect();
+		// client.Shutdown (); // does this need to happen?
 		client = null;
 		hosts = null;
 	}

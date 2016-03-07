@@ -80,18 +80,14 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 		get {
 			if (discovery == null) {
 				discovery = gameObject.AddComponent<MyNetworkDiscovery> ();
-				// discovery.useNetworkManager = true;
 				discovery.useNetworkManager = false;
-				/*if (!discovery.Initialize ()) {
-					Debug.LogError ("Failed to initialize discovery service");
-				}*/
 			}
-			discovery.broadcastData = gameInstanceName;
+			// Hack to fix an infuriating unity bug where gameData was getting combined in NetworkDiscovery's OnReceivedBroadcast
+			// The periods act as a buffer. They get removed when the data is actually rendered to the screen.
+			discovery.broadcastData = gameInstanceName + "....................";
 			return discovery;
 		}
 	}
-
-	// NetworkClient client;
 
 	public NetworkMasterServer server;
 	public NetworkMasterClient client;
@@ -132,7 +128,7 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 
 		server.InitializeServer ();
 		client.InitializeClient (Network.player.ipAddress, () => {
-			client.RegisterHost (settings.GameName, gameInstanceName, "", false, 4, 3148);//NetManager.networkPort);
+			client.RegisterHost (settings.GameName, gameInstanceName +":"+Network.player.ipAddress+":3148", "", false, 4, 3148);
 			Discovery.StartBroadcasting ();
 		});
 	}
@@ -156,7 +152,9 @@ public class NetworkingManager : MonoBehaviour, IConnectionManager {
 	}
 
 	public void Disconnect (string hostName) {
+
 		Discovery.Stop ();
+
 		if (hostName == gameInstanceName) {
 			client.UnregisterHost (() => {
 				client.ResetClient ();
