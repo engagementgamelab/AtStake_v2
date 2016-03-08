@@ -22,8 +22,8 @@ public class Rooms
 		room.hostIp = hostIp;
 		room.hostPort = hostPort;
 		room.connectionId = connectionId;
-		// room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
-		room.playerLimit = 2;
+		room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
+		// room.playerLimit = 2;
 		room.players = new string[0];
 		rooms[gameName] = room;
 
@@ -33,11 +33,7 @@ public class Rooms
 	public int AddPlayer (string gameName, string playerName) {
 
 		// The name comes in with a bunch of empty chars. As cool & expected as that is, they have to be removed.
-		gameName = new string (gameName
-			.ToCharArray ()
-			.ToList<char> ()
-			.FindAll (x => x != (char)0)
-			.ToArray<char> ());
+		gameName = gameName.RemoveEmptyChars ();
 
 		MasterMsgTypes.Room room = rooms[gameName];
 
@@ -69,6 +65,13 @@ public class NetworkMasterServer : MonoBehaviour
 
 	// map of gameTypeNames to rooms of that type
 	Dictionary<string, Rooms> gameTypeRooms = new Dictionary<string, Rooms>();
+
+	// The way I've set it up, there should only ever be one room per server
+	MasterMsgTypes.Room GetDefaultRoom () {
+		foreach (var rooms in gameTypeRooms)
+			return rooms.Value.GetRooms ()[0];
+		throw new System.Exception ("No rooms have been created");
+	}
 
 	void Awake()
 	{
@@ -102,6 +105,8 @@ public class NetworkMasterServer : MonoBehaviour
 		NetworkServer.RegisterHandler(MasterMsgTypes.UnregisterHostId, OnServerUnregisterHost);
 		NetworkServer.RegisterHandler(MasterMsgTypes.RequestListOfHostsId, OnServerListHosts);
 		NetworkServer.RegisterHandler(MasterMsgTypes.RegisterClientId, OnServerRegisterClient);
+		NetworkServer.RegisterHandler(MasterMsgTypes.GenericClientToHostId, OnServerClientToHost);
+		NetworkServer.RegisterHandler(MasterMsgTypes.GenericHostToClientsId, OnServerHostToClients);
 	}
 
 	public void ResetServer()
@@ -126,7 +131,6 @@ public class NetworkMasterServer : MonoBehaviour
 
 	void OnServerConnect(NetworkMessage netMsg)
 	{
-		Debug.Log ("connected");
 		Debug.Log("Master received client");
 	}
 
@@ -163,7 +167,7 @@ public class NetworkMasterServer : MonoBehaviour
 
 	void OnServerRegisterHost(NetworkMessage netMsg)
 	{
-		Debug.Log("OnServerRegisterHost");
+		// Debug.Log("OnServerRegisterHost");
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisterHostMessage>();
 		var rooms = EnsureRoomsForGameType(msg.gameTypeName);
 
@@ -249,9 +253,23 @@ public class NetworkMasterServer : MonoBehaviour
 			default:
 				var err = new MasterMsgTypes.RegisteredClientMessage ();
 				err.resultCode = addPlayerResult;
+				err.clientName = msg.clientName;
 				NetworkServer.SendToAll (MasterMsgTypes.RegisteredClientId, err);
 				break;
 		}
+	}
+
+	void OnServerClientToHost (NetworkMessage netMsg) {
+		NetworkServer.SendToClient (
+			GetDefaultRoom ().connectionId,
+			MasterMsgTypes.GenericHostFromClientId, 
+			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
+	}
+
+	void OnServerHostToClients (NetworkMessage netMsg) {
+		NetworkServer.SendToAll (
+			MasterMsgTypes.GenericClientsFromHostId, 
+			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	#if DEBUG

@@ -8,8 +8,11 @@ using System.Collections.Generic;
 /// </summary>
 public class MultiplayerManager : GameInstanceBehaviour {
 
+	public delegate void OnConnect ();
 	public delegate void OnDisconnect ();
 	public delegate void OnUpdateClients (List<string> clients);
+	public delegate void OnRoomFull ();
+	public delegate void OnNameTaken ();
 
 	public string Host { get; private set; }
 	List<string> hosts = new List<string> ();
@@ -27,8 +30,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		get { return Host == Game.Name; }
 	}
 
+	public OnConnect onConnect;
 	public OnDisconnect onDisconnect;
 	public OnUpdateClients onUpdateClients;
+	public OnRoomFull onRoomFull;
+	public OnNameTaken onNameTaken;
 
 	public NetworkingManager networking;
 	// public BluetoothManager bluetooth;
@@ -75,9 +81,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Client
-	public void JoinGame (string hostName, System.Action<int> callback) {
+	public void JoinGame (string hostName) {//, System.Action<int> callback) {
 		Host = hostName;
-		ConnectionManager.Join (hostName, callback);
+		ConnectionManager.Join (hostName);//, callback);
 	}
 
 	// Client
@@ -112,12 +118,42 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			onDisconnect ();
 	}
 
+	// Host & Client
+	public void OnRegisteredClient (int resultCode, string clientName) {
+
+		bool thisClient = clientName == Game.Name;
+
+		switch (resultCode) {
+			case -1:
+				if (!Hosting && thisClient) {
+					if (onNameTaken != null)
+						onNameTaken ();
+				}
+				break;
+			case -2:
+				if (!Hosting && thisClient) {
+					if (onRoomFull != null)
+						onRoomFull ();
+				}
+				break;
+			default:
+				if (Hosting) {
+					ConnectClient (clientName);
+				} else if (thisClient) {
+					if (onConnect != null)
+						onConnect ();
+				}
+				break;
+		}
+	}
+
 	public void SendMessageToHost (string id, string str1, string str2, int val) {
 		ConnectionManager.SendMessageToHost (id, str1, str2, val);
 	}
 
 	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
-		ConnectionManager.ReceiveMessageFromClient (id, str1, str2, val);	
+		// ConnectionManager.ReceiveMessageFromClient (id, str1, str2, val);	
+		Game.Dispatcher.ReceiveMessageFromClient (id, str1, str2, val);
 	}
 
 	public void SendMessageToClients (string id, string str1, string str2, int val) {
@@ -125,6 +161,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
-		ConnectionManager.ReceiveMessageFromHost (id, str1, str2, val);
+		// ConnectionManager.ReceiveMessageFromHost (id, str1, str2, val);
+		if (!Hosting) {
+			Debug.Log (Game.Name + " got " + id);
+			Game.Dispatcher.ReceiveMessageFromHost (id, str1, str2, val);
+		}
 	}
 }

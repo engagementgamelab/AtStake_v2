@@ -1,4 +1,6 @@
-﻿public class NetworkMessageContent {
+﻿// TODO: deprecate thsi
+// use MasterMsgTypes.GenericMessage instead
+public class NetworkMessageContent {
 
 	public readonly string id, str1, str2;
 	public readonly int val;

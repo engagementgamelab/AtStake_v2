@@ -1,9 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 public static class ExtensionMethods {
+
+	/**
+	 *	String
+	 */
+
+	public static string RemoveEmptyChars (this string str) {
+		return new string (str
+			.ToCharArray ()
+			.ToList<char> ()
+			.FindAll (x => x != (char)0)
+			.ToArray<char> ());
+	}
 
 	/**
 	 *	Float

@@ -20,6 +20,8 @@ public class MasterMsgTypes
 	public const short UnregisterHostId = 151;
 	public const short RequestListOfHostsId = 152;
 	public const short RegisterClientId = 153;
+	public const short GenericClientToHostId = 158;
+	public const short GenericHostToClientsId = 159;
 
 	// -------------- masterserver to client Ids --------------
 
@@ -27,7 +29,18 @@ public class MasterMsgTypes
 	public const short UnregisteredHostId = 161;
 	public const short ListOfHostsId = 162;
 	public const short RegisteredClientId = 163;
-	
+	public const short GenericHostFromClientId = 168;
+	public const short GenericClientsFromHostId = 169;	
+
+	// -------------- message for passing common values --------------
+
+	public class GenericMessage : MessageBase
+	{
+		public string id;
+		public string str1;
+		public string str2;
+		public int val;
+	}
 
 	// -------------- client to server messages --------------
 

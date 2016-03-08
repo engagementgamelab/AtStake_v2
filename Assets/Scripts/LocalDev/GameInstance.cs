@@ -78,9 +78,9 @@ public class GameInstance : MonoBehaviour {
 		Multiplayer.onDisconnect += OnDisconnect;
 	}
 
-	public void JoinGame (string hostId="", System.Action<int> callback=null) {
+	public void JoinGame (string hostId="") {//, System.Action<int> callback=null) {
 		StartGame ();
-		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId, callback);
+		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);//, callback);
 		Multiplayer.onDisconnect += OnDisconnect;
 	}
 

@@ -17,12 +17,16 @@ namespace Views {
 
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
 
+			Game.Multiplayer.onRoomFull += OnRoomFull;
+			Game.Multiplayer.onNameTaken += OnNameTaken;
+			Game.Multiplayer.onConnect += OnConnect;
+
 			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
 				Dictionary<string, ButtonElement> hostButtons = new Dictionary<string, ButtonElement> ();
 				for (int i = 0; i < hosts.Count; i ++) {
 					string hostId = hosts[i];
 					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
-						Game.JoinGame (hostId, (int resultCode) => {
+						Game.JoinGame (hostId);/*, (int resultCode) => {
 							if (resultCode == -1) {
 								Debug.Log ("name taken");
 							} else if (resultCode == -2) {
@@ -30,11 +34,27 @@ namespace Views {
 							} else {
 								GotoView ("lobby");
 							}
-						});
+						});*/
 					}));
 				}
 				list.Set (hostButtons);
 			});
 		}
+
+		protected override void OnHide () {
+			Game.Multiplayer.onRoomFull = null;
+			Game.Multiplayer.onNameTaken = null;
+			Game.Multiplayer.onConnect = null;
+		}
+
+		void OnRoomFull () {
+			Debug.Log ("ROOM FULL");
+		}
+
+		void OnNameTaken () {
+			Debug.Log ("NAME TAKEN");
+		}
+
+		void OnConnect () { GotoView ("lobby"); }
 	}
 }

@@ -49,7 +49,7 @@ namespace Templates {
 		public void LoadView (string id, View view) {
 			content = GetTemplateById (id);
 			content.gameObject.SetActive (true);
-			LoadElements (view.Elements);
+			LoadElements (view.Elements, content.Settings);
 			LoadSettings (content.Settings);
 			content.LoadView (view);
 		}
@@ -75,7 +75,7 @@ namespace Templates {
 			TopBarColor = topBarColor;
 		}
 
-		void LoadElements (Dictionary<string, ScreenElement> elements) {
+		void LoadElements (Dictionary<string, ScreenElement> elements, TemplateSettings settings) {
 
 			// Back button
 			if (backButton.Loaded)
@@ -94,7 +94,7 @@ namespace Templates {
 				pot.Unload ();
 				
 			ScreenElement potEl;
-			if (elements.TryGetValue ("pot", out potEl)) {
+			if (settings.PotEnabled && elements.TryGetValue ("pot", out potEl)) {
 				pot.Load (potEl);
 			}
 
@@ -103,7 +103,7 @@ namespace Templates {
 				coins.Unload ();
 
 			ScreenElement coinsEl;
-			if (elements.TryGetValue ("coins", out coinsEl)) {
+			if (settings.CoinsEnabled && elements.TryGetValue ("coins", out coinsEl)) {
 				coins.Load (coinsEl);
 			}
 		}

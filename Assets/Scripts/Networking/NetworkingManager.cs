@@ -114,6 +114,15 @@ public class NetworkingManager : MonoBehaviour {
 
 	void OnEnable () {
 		settings = new Settings (4, false, 3f, 3);
+		client.onRegisteredClient += (int resultCode, string clientName) => {
+			multiplayer.OnRegisteredClient (resultCode, clientName);
+		};
+		client.onReceiveMessageFromHost += (string id, string str1, string str2, int val) => {
+			multiplayer.ReceiveMessageFromHost (id, str1, str2, val);
+		};
+		client.onReceiveMessageFromClient += (string id, string str1, string str2, int val) => {
+			multiplayer.ReceiveMessageFromClient (id, str1, str2, val);
+		};
 	}
 
 	public void Init (string gameInstanceName, MultiplayerManager multiplayer) {
@@ -132,12 +141,13 @@ public class NetworkingManager : MonoBehaviour {
 		});
 	}
 
-	public void Join (string hostName, System.Action<int> callback=null) {
+	public void Join (string hostName) {//, System.Action<int> callback=null) {
 		client.InitializeClient (hosts[hostName], () => {
-			client.RegisterClient (settings.GameName, gameInstanceName, hostName, (int resultCode, string clientName) => {
+			client.RegisterClient (settings.GameName, gameInstanceName, hostName);/*, (int resultCode, string clientName) => {
 				Discovery.Stop ();
 				callback (resultCode);
-			});
+			});*/
+			Discovery.Stop ();
 		});
 	}
 
@@ -173,18 +183,10 @@ public class NetworkingManager : MonoBehaviour {
 	}
 
 	public void SendMessageToHost (string id, string str1, string str2, int val) {
-		
-	}
-
-	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
-		
+		client.SendMessageToHost (id, str1, str2, val);
 	}
 
 	public void SendMessageToClients (string id, string str1, string str2, int val) {
-
-	}
-
-	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
-		
+		client.SendMessageToClients (id, str1, str2, val);
 	}
 }

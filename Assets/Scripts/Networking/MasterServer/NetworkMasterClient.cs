@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 
 public class NetworkMasterClient : MonoBehaviour
 {
+
+	public delegate void OnReceiveMessageFromClient (string id, string str1, string str2, int val);
+	public delegate void OnReceiveMessageFromHost (string id, string str1, string str2, int val);
+
 	public bool dedicatedServer;
 	public string MasterServerIpAddress;
 	public int MasterServerPort;
@@ -29,7 +33,9 @@ public class NetworkMasterClient : MonoBehaviour
 	System.Action onConnect;
 	System.Action onDisconnect;
 	System.Action onUnregisterHost;
-	System.Action<int, string> onRegisteredClient;
+	public System.Action<int, string> onRegisteredClient;
+	public OnReceiveMessageFromClient onReceiveMessageFromClient;
+	public OnReceiveMessageFromHost onReceiveMessageFromHost;
 
 	void Awake()
 	{
@@ -65,6 +71,8 @@ public class NetworkMasterClient : MonoBehaviour
 		client.RegisterHandler(MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
 		client.RegisterHandler(MasterMsgTypes.ListOfHostsId, OnListOfHosts);
 		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
+		client.RegisterHandler(MasterMsgTypes.GenericHostFromClientId, OnHostFromClient);
+		client.RegisterHandler(MasterMsgTypes.GenericClientsFromHostId, OnClientsFromHost);
 
 	}
 
@@ -94,7 +102,7 @@ public class NetworkMasterClient : MonoBehaviour
 
 	void OnClientConnect(NetworkMessage netMsg)
 	{
-		Debug.Log("Client Connected to Master");
+		// Debug.Log("Client Connected to Master");
 		if (onConnect != null)
 			onConnect ();
 
@@ -138,16 +146,20 @@ public class NetworkMasterClient : MonoBehaviour
 
 	void OnRegisteredClient(NetworkMessage netMsg) {
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
-		Debug.Log ("GOT " + msg.clientName);
 		if (onRegisteredClient != null)
 			onRegisteredClient (msg.resultCode, msg.clientName);
-		/*if (msg.resultCode == -1) {
-			Debug.Log ("someone has that name");
-		} else if (msg.resultCode == -2) {
-			Debug.Log ("room is full");
-		} else {
-			Debug.Log (msg.clientName + " added");
-		}*/
+	}
+
+	void OnHostFromClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
+		if (onReceiveMessageFromClient != null)
+			onReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
+	}
+
+	void OnClientsFromHost (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
+		if (onReceiveMessageFromHost != null)
+			onReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
 	}
 
 	public void ClearHostList()
@@ -225,14 +237,31 @@ public class NetworkMasterClient : MonoBehaviour
 		Debug.Log("send UnregisterHost");
 	}
 
-	public void RegisterClient(string gameTypeName, string clientName, string gameName, System.Action<int, string> onRegisteredClient=null)
+	public void RegisterClient(string gameTypeName, string clientName, string gameName)//, System.Action<int, string> onRegisteredClient=null)
 	{
-		this.onRegisteredClient += onRegisteredClient;
 		var msg = new MasterMsgTypes.RegisterClientMessage();
 		msg.gameTypeName = gameTypeName;
 		msg.clientName = clientName;
 		msg.gameName = gameName;
 		client.Send(MasterMsgTypes.RegisterClientId, msg);
+	}
+
+	public void SendMessageToHost (string id, string str1, string str2, int val) {
+		var msg = new MasterMsgTypes.GenericMessage ();
+		msg.id = id;
+		msg.str1 = str1;
+		msg.str2 = str2;
+		msg.val = val;
+		client.Send (MasterMsgTypes.GenericClientToHostId, msg);
+	}
+
+	public void SendMessageToClients (string id, string str1, string str2, int val) {
+		var msg = new MasterMsgTypes.GenericMessage ();
+		msg.id = id;
+		msg.str1 = str1;
+		msg.str2 = str2;
+		msg.val = val;
+		client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
 	}
 
 	public virtual void OnFailedToConnectToMasterServer()
