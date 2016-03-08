@@ -9,7 +9,7 @@ namespace Views {
 	public class Start : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], () => { GotoView ("name"); }));	
+			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], () => { GotoView ("name"); }));
 		}
 	}
 }

@@ -70,6 +70,7 @@ public class ObjectPool {
 	}
 
 	public static MonoBehaviour Instantiate (string id, Vector3 position=new Vector3 (), Quaternion rotation=new Quaternion ()) {
+		Debug.LogWarning ("Unstable - use generic methods instead");
 		MonoBehaviour m = GetPool (id).CreateInstance ();
 		m.transform.position = position;
 		m.transform.localRotation = rotation;
@@ -83,19 +84,25 @@ public class ObjectPool {
 		return t;
 	}
 
+	// TODO: these appear to break if you've been using generic methods for e.g. instantiation (is it because (Clone) is being added to the name?)
 	public static void Destroy (string id) {
+		Debug.LogWarning ("Unstable - use generic methods instead");
 		ObjectPool op = GetPool (id);
 		if (op.active.Count > 0)
 			op.ReleaseInstance (op.active[0]);
 	}
 
+	// TODO: these appear to break if you've been using generic methods for e.g. instantiation (is it because (Clone) is being added to the name?)
 	public static void Destroy (GameObject go) {
+		Debug.LogWarning ("Unstable - use generic methods instead");
 		MonoBehaviour m = go.GetComponent<MonoBehaviour> ();
 		ObjectPool op = GetPool (m.GetType ().Name);
 		op.ReleaseInstance (m);
 	}
 
+	// TODO: these appear to break if you've been using generic methods for e.g. instantiation (is it because (Clone) is being added to the name?)
 	public static void Destroy (Transform t) {
+		Debug.LogWarning ("Unstable - use generic methods instead");
 		MonoBehaviour m = t.GetComponent<MonoBehaviour> ();
 		ObjectPool op = GetPool (m.GetType ().Name);
 		op.ReleaseInstance (m);
@@ -122,14 +129,14 @@ public class ObjectPool {
 			Destroy (children[i]);
 	}
 
-	public static void DestroyChildren<T> (Transform t, System.Action<T> onDestroy) {
+	public static void DestroyChildren<T> (Transform t, System.Action<T> onDestroy) where T : MonoBehaviour {
 
 		List<Transform> children = new List<Transform> ();
 		foreach (Transform child in t) children.Add (child);
 
 		for (int i = 0; i < children.Count; i ++) {
 			onDestroy (children[i].GetComponent<T> ());
-			Destroy (children[i]);
+			Destroy<T> (children[i]);
 		}
 	}
 

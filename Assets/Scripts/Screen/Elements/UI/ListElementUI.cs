@@ -29,7 +29,7 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 	public override void RemoveElement (ListElement<U> e) {
 		e.onAdd -= AddElement;
 		e.onRemove -= RemoveElement;
-		ObjectPool.DestroyChildren (RectTransform, (T t) => { t.Unload (); });
+		ObjectPool.DestroyChildren<T> (RectTransform, (T t) => { t.Unload (); });
 	}
 
 	void AddElement (string id, U element) {

@@ -23,7 +23,6 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 		}
 	}
 
-	Dictionary<string, string> gameNames = new Dictionary<string, string> ();
 	Dictionary<string, BroadcastResult> received = new Dictionary<string, BroadcastResult> ();
 
 	System.Action<Dictionary<string, string>> onUpdateHosts;
