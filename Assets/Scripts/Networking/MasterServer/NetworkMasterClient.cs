@@ -33,7 +33,11 @@ public class NetworkMasterClient : MonoBehaviour
 	System.Action onConnect;
 	System.Action onDisconnect;
 	System.Action onUnregisterHost;
+
+	// Delegates
 	public System.Action<int, string> onRegisteredClient;
+	public System.Action<string> onUnregisteredClient;
+	public System.Action onDisconnected;
 	public OnReceiveMessageFromClient onReceiveMessageFromClient;
 	public OnReceiveMessageFromHost onReceiveMessageFromHost;
 
@@ -71,6 +75,7 @@ public class NetworkMasterClient : MonoBehaviour
 		client.RegisterHandler(MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
 		client.RegisterHandler(MasterMsgTypes.ListOfHostsId, OnListOfHosts);
 		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
+		client.RegisterHandler(MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
 		client.RegisterHandler(MasterMsgTypes.GenericHostFromClientId, OnHostFromClient);
 		client.RegisterHandler(MasterMsgTypes.GenericClientsFromHostId, OnClientsFromHost);
 
@@ -82,7 +87,6 @@ public class NetworkMasterClient : MonoBehaviour
 			return;
 
 		client.Disconnect();
-		// client.Shutdown (); // does this need to happen?
 		client = null;
 		hosts = null;
 	}
@@ -148,6 +152,12 @@ public class NetworkMasterClient : MonoBehaviour
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
 		if (onRegisteredClient != null)
 			onRegisteredClient (msg.resultCode, msg.clientName);
+	}
+
+	void OnUnregisteredClient(NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.UnregisteredClientMessage> ();
+		if (onUnregisteredClient != null)
+			onUnregisteredClient (msg.clientName);
 	}
 
 	void OnHostFromClient (NetworkMessage netMsg) {
@@ -257,6 +267,8 @@ public class NetworkMasterClient : MonoBehaviour
 	public virtual void OnFailedToConnectToMasterServer()
 	{
 		Debug.Log("OnFailedToConnectToMasterServer");
+		if (onDisconnected != null)
+			onDisconnected ();
 	}
 
 	public virtual void OnServerEvent(MasterMsgTypes.NetworkMasterServerEvent evt)
@@ -265,7 +277,6 @@ public class NetworkMasterClient : MonoBehaviour
 
 		if (evt == MasterMsgTypes.NetworkMasterServerEvent.HostListReceived)
 		{
-			Debug.Log ("found " + hosts.Length + " hosts");
 			foreach (var h in hosts)
 			{
 				Debug.Log("Host:" + h.name + "addr:" + h.hostIp + ":" + h.hostPort);

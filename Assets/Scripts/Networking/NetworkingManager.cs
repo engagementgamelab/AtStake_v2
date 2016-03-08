@@ -110,15 +110,24 @@ public class NetworkingManager : MonoBehaviour {
 	// ConnectionStatus status = ConnectionStatus.Succeeded;
 
 	void OnEnable () {
+
 		settings = new Settings (4, false, 3f, 3);
+
+		// Callbacks
 		client.onRegisteredClient += (int resultCode, string clientName) => {
 			multiplayer.OnRegisteredClient (resultCode, clientName);
+		};
+		client.onUnregisteredClient += (string clientName) => {
+			multiplayer.OnUnregisteredClient (clientName);
 		};
 		client.onReceiveMessageFromHost += (MasterMsgTypes.GenericMessage msg) => {
 			multiplayer.ReceiveMessageFromHost (msg);
 		};
 		client.onReceiveMessageFromClient += (MasterMsgTypes.GenericMessage msg) => {
 			multiplayer.ReceiveMessageFromClient (msg);
+		};
+		client.onDisconnected += () => {
+			multiplayer.OnDisconnected ();
 		};
 	}
 
@@ -149,14 +158,6 @@ public class NetworkingManager : MonoBehaviour {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
 		});
-	}
-
-	public void ConnectClient (string clientName) {
-		
-	}
-
-	public void DisconnectClient () {
-
 	}
 
 	public void Disconnect (string hostName) {

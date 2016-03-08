@@ -23,13 +23,14 @@ public class Rooms
 		room.hostPort = hostPort;
 		room.connectionId = connectionId;
 		room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
-		room.players = new string[0];
+		// room.players = new string[0];
+		room.players = new MasterMsgTypes.Player[0];
 		rooms[gameName] = room;
 
 		return true;
 	}
 
-	public int AddPlayer (string gameName, string playerName) {
+	public int AddPlayer (string gameName, string playerName, int connectionId) {
 
 		// The name comes in with a bunch of empty chars. As cool & expected as that is, they have to be removed.
 		gameName = gameName.RemoveEmptyChars ();
@@ -41,14 +42,37 @@ public class Rooms
 			return -2;
 
 		// Don't add the player if someone else in the room has the same name
-		List<string> playersList = new List<string> (room.players);
-		if (gameName == playerName || playersList.Contains (playerName))
+		List<MasterMsgTypes.Player> playersList = new List<MasterMsgTypes.Player> (room.players);
+		if (gameName == playerName || playersList.Find (x => x.name == playerName) != null)
 			return -1;
 
 		// Add the player
-		playersList.Add (playerName);
+		MasterMsgTypes.Player player = new MasterMsgTypes.Player ();
+		player.name = playerName;
+		player.connectionId = connectionId;
+		playersList.Add (player);
 		room.players = playersList.ToArray ();
 		return 0;
+	}
+
+	public string RemovePlayer (MasterMsgTypes.Room room, int connectionId) {
+
+		string clientName = "";
+
+		if (connectionId == room.connectionId) {
+			throw new System.Exception ("Player could not be removed from the room because it is the host");
+		} else {
+
+			// client disconnected
+			List<MasterMsgTypes.Player> playersList = room.players.ToList<MasterMsgTypes.Player> ();
+			int index = playersList.FindIndex (x => x.connectionId == connectionId);
+			clientName = playersList[index].name;
+			if (index >= 0)
+				playersList.RemoveAt (index);
+			room.players = playersList.ToArray ();
+		}
+
+		return clientName;
 	}
 
 	public MasterMsgTypes.Room[] GetRooms()
@@ -65,11 +89,19 @@ public class NetworkMasterServer : MonoBehaviour
 	// map of gameTypeNames to rooms of that type
 	Dictionary<string, Rooms> gameTypeRooms = new Dictionary<string, Rooms>();
 
+	Rooms GetDefaultTypeRooms () {
+		foreach (var rooms in gameTypeRooms)
+			return rooms.Value;
+		throw new System.Exception ("No rooms have been created");
+	}
+
 	// The way I've set it up, there should only ever be one room per server
 	MasterMsgTypes.Room GetDefaultRoom () {
-		foreach (var rooms in gameTypeRooms)
-			return rooms.Value.GetRooms ()[0];
-		throw new System.Exception ("No rooms have been created");
+		try {
+			return GetDefaultTypeRooms ().GetRooms ()[0];
+		} catch {
+			throw new System.Exception ("No rooms have been created");
+		}
 	}
 
 	void Awake()
@@ -137,7 +169,7 @@ public class NetworkMasterServer : MonoBehaviour
 	{
 		Debug.Log("Master lost client");
 
-		// remove the associated host
+		// Host disconnected
 		foreach (var rooms in gameTypeRooms.Values)
 		{
 			foreach (var room in rooms.rooms.Values)
@@ -155,6 +187,13 @@ public class NetworkMasterServer : MonoBehaviour
 			}
 		}
 
+		if (gameTypeRooms.Count > 0) {
+
+			// Client disconnected
+			var msg = new MasterMsgTypes.UnregisteredClientMessage ();
+			msg.clientName = GetDefaultTypeRooms ().RemovePlayer (GetDefaultRoom (), netMsg.conn.connectionId);
+			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+		}
 	}
 
 	void OnServerError(NetworkMessage netMsg)
@@ -198,7 +237,7 @@ public class NetworkMasterServer : MonoBehaviour
 		var room = rooms.rooms[msg.gameName];
 		if (room.connectionId != netMsg.conn.connectionId)
 		{
-			//err
+			//error
 			Debug.Log("OnServerUnregisterHost connection mismatch:" + room.connectionId);
 			return;
 		}
@@ -240,7 +279,7 @@ public class NetworkMasterServer : MonoBehaviour
 		}
 
 		var rooms = gameTypeRooms[msg.gameTypeName];
-		int addPlayerResult = rooms.AddPlayer (msg.gameName, msg.clientName);
+		int addPlayerResult = rooms.AddPlayer (msg.gameName, msg.clientName, netMsg.conn.connectionId);
 
 		switch (addPlayerResult) {
 			case 0:

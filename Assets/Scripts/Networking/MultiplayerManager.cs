@@ -95,16 +95,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Host
-	public void ConnectClient (string clientName) {
-		ConnectionManager.ConnectClient (clientName);
+	void ConnectClient (string clientName) {
 		Clients.Add (clientName);
-		if (onUpdateClients != null)
-			onUpdateClients (Clients);
-	}
-
-	// Host
-	public void DisconnectClient (string name) {
-		Clients.Remove (name);
 		if (onUpdateClients != null)
 			onUpdateClients (Clients);
 	}
@@ -112,6 +104,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// Host & Client
 	public void Disconnect () {
 		ConnectionManager.Disconnect (Host);
+		OnDisconnected ();
+	}
+
+	// Host & Client
+	public void OnDisconnected () {
 		if (onDisconnect != null)
 			onDisconnect ();
 	}
@@ -145,15 +142,22 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
+	// Host
+	public void OnUnregisteredClient (string name) {
+		if (Hosting) {
+			Clients.Remove (name);
+			if (onUpdateClients != null)
+				onUpdateClients (Clients);
+		}
+	}
+
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
 		ConnectionManager.SendMessageToHost (msg);
 	}
 
-	// public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
 
 		// Only the host receives this message
-		// Game.Dispatcher.ReceiveMessageFromClient (id, str1, str2, val);
 		Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
@@ -161,12 +165,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		ConnectionManager.SendMessageToClients (msg);
 	}
 
-	// public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Pass this on to all clients except the host
 		if (!Hosting) {
-			// Game.Dispatcher.ReceiveMessageFromHost (id, str1, str2, val);
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
 		}
 	}

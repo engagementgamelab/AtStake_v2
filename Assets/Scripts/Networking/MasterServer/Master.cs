@@ -29,6 +29,7 @@ public class MasterMsgTypes
 	public const short UnregisteredHostId = 161;
 	public const short ListOfHostsId = 162;
 	public const short RegisteredClientId = 163;
+	public const short UnregisteredClientId = 164;
 	public const short GenericHostFromClientId = 168;
 	public const short GenericClientsFromHostId = 169;	
 
@@ -92,7 +93,13 @@ public class MasterMsgTypes
 		public string hostIp;
 		public int hostPort;
 		public int connectionId;
-		public string[] players;
+		public Player[] players;
+	}
+
+	public class Player
+	{
+		public string name;
+		public int connectionId;
 	}
 
 	public class ListOfHostsMessage : MessageBase
@@ -109,6 +116,11 @@ public class MasterMsgTypes
 	public class RegisteredClientMessage : MessageBase
 	{
 		public int resultCode;
+		public string clientName;
+	}
+
+	public class UnregisteredClientMessage : MessageBase
+	{
 		public string clientName;
 	}
 }

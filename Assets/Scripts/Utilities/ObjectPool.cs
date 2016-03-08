@@ -122,6 +122,17 @@ public class ObjectPool {
 			Destroy (children[i]);
 	}
 
+	public static void DestroyChildren<T> (Transform t, System.Action<T> onDestroy) {
+
+		List<Transform> children = new List<Transform> ();
+		foreach (Transform child in t) children.Add (child);
+
+		for (int i = 0; i < children.Count; i ++) {
+			onDestroy (children[i].GetComponent<T> ());
+			Destroy (children[i]);
+		}
+	}
+
 	public static List<T> GetActiveInstances<T> () where T : MonoBehaviour {
 		return GetPool<T> ().active.ConvertAll (x => (T)x);
 	}

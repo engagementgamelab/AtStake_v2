@@ -26,15 +26,7 @@ namespace Views {
 				for (int i = 0; i < hosts.Count; i ++) {
 					string hostId = hosts[i];
 					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
-						Game.JoinGame (hostId);/*, (int resultCode) => {
-							if (resultCode == -1) {
-								Debug.Log ("name taken");
-							} else if (resultCode == -2) {
-								Debug.Log ("room full");
-							} else {
-								GotoView ("lobby");
-							}
-						});*/
+						Game.JoinGame (hostId);
 					}));
 				}
 				list.Set (hostButtons);
@@ -46,7 +38,7 @@ namespace Views {
 			Game.Multiplayer.onNameTaken = null;
 			Game.Multiplayer.onConnect = null;
 		}
-
+		
 		void OnRoomFull () {
 			Debug.Log ("ROOM FULL");
 		}
