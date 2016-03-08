@@ -62,6 +62,23 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		}
 	}
 
+	// Listeners
+
+	Dictionary<OnReceiveMessage, string> listeners = new Dictionary<OnReceiveMessage, string> ();
+
+	public void AddListener (string id, OnReceiveMessage action) {
+		if (!listeners.ContainsKey (action))
+			listeners.Add (action, id);
+	}
+
+	public void RemoveListener (OnReceiveMessage action) {
+		listeners.Remove (action);
+	}
+
+	public void RemoveAllListeners () {
+		listeners.Clear ();
+	}
+
 	/**
 	 *	Private methods
 	 */
@@ -108,23 +125,6 @@ public class MessageDispatcher : GameInstanceBehaviour {
 				listener.Key (msg);
 			}
 		}
-	}
-
-	// Listeners
-
-	Dictionary<OnReceiveMessage, string> listeners = new Dictionary<OnReceiveMessage, string> ();
-
-	public void AddListener (string id, OnReceiveMessage action) {
-		if (!listeners.ContainsKey (action))
-			listeners.Add (action, id);
-	}
-
-	public void RemoveListener (OnReceiveMessage action) {
-		listeners.Remove (action);
-	}
-
-	public void RemoveAllListeners () {
-		listeners.Clear ();
 	}
 
 	// RPCs

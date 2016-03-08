@@ -109,6 +109,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	// Host & Client
 	public void OnDisconnected () {
+		Host = "";
 		if (onDisconnect != null)
 			onDisconnect ();
 	}

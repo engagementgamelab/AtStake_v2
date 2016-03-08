@@ -187,12 +187,16 @@ public class NetworkMasterServer : MonoBehaviour
 			}
 		}
 
+		// Client disconnected
 		if (gameTypeRooms.Count > 0) {
 
-			// Client disconnected
-			var msg = new MasterMsgTypes.UnregisteredClientMessage ();
-			msg.clientName = GetDefaultTypeRooms ().RemovePlayer (GetDefaultRoom (), netMsg.conn.connectionId);
-			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+			Rooms rooms = GetDefaultTypeRooms ();
+
+			if (rooms.rooms.Count > 0) {
+				var msg = new MasterMsgTypes.UnregisteredClientMessage ();
+				msg.clientName = rooms.RemovePlayer (GetDefaultRoom (), netMsg.conn.connectionId);
+				NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+			}
 		}
 	}
 
