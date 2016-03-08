@@ -81,7 +81,7 @@ namespace Views {
 			Goto (PrevView);
 		}
 
-		void OnGotoView (NetworkMessageContent msg) {
+		void OnGotoView (MasterMsgTypes.GenericMessage msg) {
 			Goto (msg.str1);
 		}
 

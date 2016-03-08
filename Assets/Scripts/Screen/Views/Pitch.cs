@@ -64,7 +64,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (StartTimer);
 		}
 
-		void StartTimer (NetworkMessageContent msg) {
+		void StartTimer (MasterMsgTypes.GenericMessage msg) {
 
 			if (msg.str1 == Name) {
 
@@ -85,7 +85,7 @@ namespace Views {
 			}
 		}
 
-		void AcceptExtraTime (NetworkMessageContent msg) {
+		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
 			if (IsDecider) {
 				AllGotoView ("pitch");
 				state = State.Extra;
@@ -95,7 +95,7 @@ namespace Views {
 			}
 		}
 
-		void DeclineExtraTime (NetworkMessageContent msg) {
+		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
 			if (IsDecider) {
 				state = State.Pitch;
 				currentPeer ++;

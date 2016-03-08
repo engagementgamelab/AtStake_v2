@@ -81,15 +81,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Client
-	public void JoinGame (string hostName) {//, System.Action<int> callback) {
+	public void JoinGame (string hostName) {
 		Host = hostName;
-		ConnectionManager.Join (hostName);//, callback);
+		ConnectionManager.Join (hostName);
 	}
 
 	// Client
 	public void RequestHostList (System.Action<List<string>> callback) {
-		// hosts = ConnectionManager.UpdateHosts ();
-		// return hosts;
 		ConnectionManager.RequestHostList ((List<string> result) => {
 			hosts = result;
 			callback (result);
@@ -147,24 +145,29 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	public void SendMessageToHost (string id, string str1, string str2, int val) {
-		ConnectionManager.SendMessageToHost (id, str1, str2, val);
+	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+		ConnectionManager.SendMessageToHost (msg);
 	}
 
-	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
-		// ConnectionManager.ReceiveMessageFromClient (id, str1, str2, val);	
-		Game.Dispatcher.ReceiveMessageFromClient (id, str1, str2, val);
+	// public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
+	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
+
+		// Only the host receives this message
+		// Game.Dispatcher.ReceiveMessageFromClient (id, str1, str2, val);
+		Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
-	public void SendMessageToClients (string id, string str1, string str2, int val) {
-		ConnectionManager.SendMessageToClients (id, str1, str2, val);
+	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+		ConnectionManager.SendMessageToClients (msg);
 	}
 
-	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
-		// ConnectionManager.ReceiveMessageFromHost (id, str1, str2, val);
+	// public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
+	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
+
+		// Pass this on to all clients except the host
 		if (!Hosting) {
-			Debug.Log (Game.Name + " got " + id);
-			Game.Dispatcher.ReceiveMessageFromHost (id, str1, str2, val);
+			// Game.Dispatcher.ReceiveMessageFromHost (id, str1, str2, val);
+			Game.Dispatcher.ReceiveMessageFromHost (msg);
 		}
 	}
 }

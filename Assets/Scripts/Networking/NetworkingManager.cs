@@ -15,9 +15,6 @@ using System.IO;
 /// </summary>
 public class NetworkingManager : MonoBehaviour {
 
-	// const bool enableNetworkClass = false;
-	// const bool enableNetworkHudClass = false;
-
 	public struct Settings {
 
 		public readonly string GameName;
@@ -117,11 +114,11 @@ public class NetworkingManager : MonoBehaviour {
 		client.onRegisteredClient += (int resultCode, string clientName) => {
 			multiplayer.OnRegisteredClient (resultCode, clientName);
 		};
-		client.onReceiveMessageFromHost += (string id, string str1, string str2, int val) => {
-			multiplayer.ReceiveMessageFromHost (id, str1, str2, val);
+		client.onReceiveMessageFromHost += (MasterMsgTypes.GenericMessage msg) => {
+			multiplayer.ReceiveMessageFromHost (msg);
 		};
-		client.onReceiveMessageFromClient += (string id, string str1, string str2, int val) => {
-			multiplayer.ReceiveMessageFromClient (id, str1, str2, val);
+		client.onReceiveMessageFromClient += (MasterMsgTypes.GenericMessage msg) => {
+			multiplayer.ReceiveMessageFromClient (msg);
 		};
 	}
 
@@ -135,18 +132,14 @@ public class NetworkingManager : MonoBehaviour {
 		server.InitializeServer ();
 		client.InitializeClient (IpAddress, () => {
 			string gameName = gameInstanceName;
-			// string gameName = gameInstanceName + ":" + IpAddress + ":" + Port;
 			client.RegisterHost (settings.GameName, gameName, "", false, 4, Port);
 			Discovery.StartBroadcasting ();
 		});
 	}
 
-	public void Join (string hostName) {//, System.Action<int> callback=null) {
+	public void Join (string hostName) {
 		client.InitializeClient (hosts[hostName], () => {
-			client.RegisterClient (settings.GameName, gameInstanceName, hostName);/*, (int resultCode, string clientName) => {
-				Discovery.Stop ();
-				callback (resultCode);
-			});*/
+			client.RegisterClient (settings.GameName, gameInstanceName, hostName);
 			Discovery.Stop ();
 		});
 	}
@@ -182,11 +175,11 @@ public class NetworkingManager : MonoBehaviour {
 		}
 	}
 
-	public void SendMessageToHost (string id, string str1, string str2, int val) {
-		client.SendMessageToHost (id, str1, str2, val);
+	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+		client.SendMessageToHost (msg);
 	}
 
-	public void SendMessageToClients (string id, string str1, string str2, int val) {
-		client.SendMessageToClients (id, str1, str2, val);
+	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+		client.SendMessageToClients (msg);
 	}
 }

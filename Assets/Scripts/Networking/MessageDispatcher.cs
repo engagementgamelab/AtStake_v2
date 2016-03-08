@@ -17,9 +17,9 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 *				the next message if one exists in the queue
 	 */
 
-	public delegate void OnReceiveMessage (NetworkMessageContent msg);
+	public delegate void OnReceiveMessage (MasterMsgTypes.GenericMessage msg);
 
-	Queue<NetworkMessageContent> messages = new Queue<NetworkMessageContent> ();
+	Queue<MasterMsgTypes.GenericMessage> messages = new Queue<MasterMsgTypes.GenericMessage> ();
 	Confirmation confirmation = new Confirmation ("", new List<string> ());
 
 	bool Hosting {
@@ -35,26 +35,26 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 */
 
 	public void ScheduleMessage (string id) {
-		ScheduleMessage (new NetworkMessageContent (id));
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id));
 	}
 
 	public void ScheduleMessage (string id, string str1) {
-		ScheduleMessage (new NetworkMessageContent (id, str1));
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1));
 	}
 
 	public void ScheduleMessage (string id, int val) {
-		ScheduleMessage (new NetworkMessageContent (id, "", "", val));
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, "", "", val));
 	}
 
 	public void ScheduleMessage (string id, string str1, string str2) {
-		ScheduleMessage (new NetworkMessageContent (id, str1, str2));
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1, str2));
 	}
 
 	public void ScheduleMessage (string id, string str1, int val) {
-		ScheduleMessage (new NetworkMessageContent (id, str1, "", val));
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1, "", val));
 	}
 
-	public void ScheduleMessage (NetworkMessageContent msg) {
+	public void ScheduleMessage (MasterMsgTypes.GenericMessage msg) {
 		if (Hosting) {
 			QueueMessage (msg);
 		} else {
@@ -68,13 +68,13 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	// Client methods
 
-	void SendMessageToHost (NetworkMessageContent msg) {
-		Game.Multiplayer.SendMessageToHost (msg.id, msg.str1, msg.str2, msg.val);
+	void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+		Game.Multiplayer.SendMessageToHost (msg);
 	}
 
 	// Host methods
 
-	void QueueMessage (NetworkMessageContent msg) {
+	void QueueMessage (MasterMsgTypes.GenericMessage msg) {
 		if (messages.Count > 0 || !confirmation.IsConfirmed (Clients)) {
 			messages.Enqueue (msg);
 		} else {
@@ -84,24 +84,24 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	void SendQueuedMessage () {
 		if (messages.Count > 0) {
-			NetworkMessageContent msg = messages.Dequeue ();
+			MasterMsgTypes.GenericMessage msg = messages.Dequeue ();
 			SendMessageToClients (msg);
 		}
 	}
 
-	void SendMessageToClients (NetworkMessageContent msg) {
+	void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
 		// Create a new confirmation to fulfill
 		confirmation = new Confirmation (msg.id, Clients);
 
 		// Send message to all clients
-		Game.Multiplayer.SendMessageToClients (msg.id, msg.str1, msg.str2, msg.val);
+		Game.Multiplayer.SendMessageToClients (msg);
 
 		// Fire off the message
 		ReceiveMessageEvent (msg);
 	}
 
-	void ReceiveMessageEvent (NetworkMessageContent msg) {
+	void ReceiveMessageEvent (MasterMsgTypes.GenericMessage msg) {
 		Dictionary<OnReceiveMessage, string> tempListeners = new Dictionary<OnReceiveMessage, string> (listeners);
 		foreach (var listener in tempListeners) {
 			if (listener.Value == msg.id) {
@@ -129,28 +129,28 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	// RPCs
 
-	public void ReceiveMessageFromClient (string id, string str1, string str2, int val) {
-		if (id.Contains ("__confirm")) {
-			ReceiveConfirmation (id.Replace("__confirm", ""), str1);
+	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
+		if (msg.id.Contains ("__confirm")) {
+			ReceiveConfirmation (msg.id.Replace("__confirm", ""), msg.str1);
 		} else {
-			QueueMessage (new NetworkMessageContent (id, str1, str2, val));
+			QueueMessage (msg);
 		}
 	}
 
-	public void ReceiveMessageFromHost (string id, string str1, string str2, int val) {
+	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 		#if SIMULATE_LATENCY
-			StartCoroutine (LatentSendConfirmation (id, str1, str2, val));
+			StartCoroutine (LatentSendConfirmation (msg));
 		#else
-			SendMessageToHost (new NetworkMessageContent ("__confirm" + id, Game.Name, "", -1));
-			ReceiveMessageEvent (new NetworkMessageContent (id, str1, str2, val));
+			SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
+			ReceiveMessageEvent (msg);
 		#endif
 	}
 
 	#if SIMULATE_LATENCY
-	IEnumerator LatentSendConfirmation (string id, string str1, string str2, int val) {
+	IEnumerator LatentSendConfirmation (MasterMsgTypes.GenericMessage msg) {
 		yield return new WaitForSeconds (Random.value);
-		SendMessageToHost (new NetworkMessageContent ("__confirm" + id, Game.Name, "", -1));
-		ReceiveMessageEvent (new NetworkMessageContent (id, str1, str2, val));
+		SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
+		ReceiveMessageEvent (msg);
 	}
 	#endif
 
@@ -206,7 +206,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 		if (!showStatus) return;
 
-		foreach (NetworkMessageContent msg in messages) {
+		foreach (MasterMsgTypes.GenericMessage msg in messages) {
 			GUILayout.Label (msg.id);
 		}
 

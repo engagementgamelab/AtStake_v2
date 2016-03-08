@@ -40,6 +40,15 @@ public class MasterMsgTypes
 		public string str1;
 		public string str2;
 		public int val;
+
+		public static GenericMessage Create (string id, string str1="", string str2="", int val=-1) {
+			GenericMessage msg = new GenericMessage ();
+			msg.id = id;
+			msg.str1 = str1;
+			msg.str2 = str2;
+			msg.val = val;
+			return msg;
+		}
 	}
 
 	// -------------- client to server messages --------------

@@ -23,7 +23,6 @@ public class Rooms
 		room.hostPort = hostPort;
 		room.connectionId = connectionId;
 		room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
-		// room.playerLimit = 2;
 		room.players = new string[0];
 		rooms[gameName] = room;
 

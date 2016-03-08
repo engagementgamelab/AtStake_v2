@@ -74,15 +74,11 @@ namespace Views {
 			return roles;
 		}
 
-		void AssignRole (NetworkMessageContent msg) {
+		void AssignRole (MasterMsgTypes.GenericMessage msg) {
 			roleList.Add (msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
 			if (IsDecider) {
 				Elements["next"].Active = true;
 			}
-			/*AddElement ("role_" + msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
-			if (IsDecider && !HasElement ("next")) {
-				AddElement ("next", new NextButtonElement ("pot"));
-			}*/
 		}
 	}
 }

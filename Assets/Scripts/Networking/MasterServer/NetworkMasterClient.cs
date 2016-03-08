@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 public class NetworkMasterClient : MonoBehaviour
 {
 
-	public delegate void OnReceiveMessageFromClient (string id, string str1, string str2, int val);
-	public delegate void OnReceiveMessageFromHost (string id, string str1, string str2, int val);
+	public delegate void OnReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg);
+	public delegate void OnReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg);
 
 	public bool dedicatedServer;
 	public string MasterServerIpAddress;
@@ -153,13 +153,13 @@ public class NetworkMasterClient : MonoBehaviour
 	void OnHostFromClient (NetworkMessage netMsg) {
 		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
 		if (onReceiveMessageFromClient != null)
-			onReceiveMessageFromClient (msg.id, msg.str1, msg.str2, msg.val);
+			onReceiveMessageFromClient (msg);
 	}
 
 	void OnClientsFromHost (NetworkMessage netMsg) {
 		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
 		if (onReceiveMessageFromHost != null)
-			onReceiveMessageFromHost (msg.id, msg.str1, msg.str2, msg.val);
+			onReceiveMessageFromHost (msg);
 	}
 
 	public void ClearHostList()
@@ -237,7 +237,7 @@ public class NetworkMasterClient : MonoBehaviour
 		Debug.Log("send UnregisterHost");
 	}
 
-	public void RegisterClient(string gameTypeName, string clientName, string gameName)//, System.Action<int, string> onRegisteredClient=null)
+	public void RegisterClient(string gameTypeName, string clientName, string gameName)
 	{
 		var msg = new MasterMsgTypes.RegisterClientMessage();
 		msg.gameTypeName = gameTypeName;
@@ -246,21 +246,11 @@ public class NetworkMasterClient : MonoBehaviour
 		client.Send(MasterMsgTypes.RegisterClientId, msg);
 	}
 
-	public void SendMessageToHost (string id, string str1, string str2, int val) {
-		var msg = new MasterMsgTypes.GenericMessage ();
-		msg.id = id;
-		msg.str1 = str1;
-		msg.str2 = str2;
-		msg.val = val;
+	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
 		client.Send (MasterMsgTypes.GenericClientToHostId, msg);
 	}
 
-	public void SendMessageToClients (string id, string str1, string str2, int val) {
-		var msg = new MasterMsgTypes.GenericMessage ();
-		msg.id = id;
-		msg.str1 = str1;
-		msg.str2 = str2;
-		msg.val = val;
+	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 		client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
 	}
 

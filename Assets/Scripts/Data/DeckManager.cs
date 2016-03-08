@@ -51,7 +51,7 @@ public class DeckManager : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("SetAgendaItem", SetAgendaItem);
 	}
 
-	public void SetDeck (NetworkMessageContent msg) {
+	public void SetDeck (MasterMsgTypes.GenericMessage msg) {
 		Deck = Decks.Find (x => x.Name == msg.str1);
 	}
 
@@ -88,7 +88,7 @@ public class DeckManager : GameInstanceBehaviour {
 		return true;
 	}
 
-	public void SetAgendaItem (NetworkMessageContent msg) {
+	public void SetAgendaItem (MasterMsgTypes.GenericMessage msg) {
 		Player p = Game.Manager.Players[msg.str1];
 		AgendaItem i = p.Role.AgendaItems[msg.val];
 		CurrentAgendaItem = new PlayerAgendaItem (p.Name, i.Description, i.Reward, msg.val);

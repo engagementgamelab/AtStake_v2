@@ -35,7 +35,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (ChooseWinner);
 		}
 
-		void ChooseWinner (NetworkMessageContent msg) {
+		void ChooseWinner (MasterMsgTypes.GenericMessage msg) {
 			Game.Manager.Winner = msg.str1;
 			GotoView ("winner");
 		}

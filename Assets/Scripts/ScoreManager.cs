@@ -96,7 +96,7 @@ public class ScoreManager : GameInstanceBehaviour, IInventoryHolder {
 		SendUpdateMessage ();
 	}
 
-	void AcceptExtraTime (NetworkMessageContent msg) {
+	void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
 		Inventory["pot"].Add (Settings.ExtraTimeCost);
 		Game.Manager.Players[msg.str1].CoinCount -= Settings.ExtraTimeCost;
 		SendUpdateMessage ();
