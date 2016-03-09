@@ -39,6 +39,8 @@ namespace Views {
 
 		protected override void OnHide () {
 			Game.Dispatcher.RemoveListener (StartTimer);
+			Game.Dispatcher.RemoveListener (TimeExpired);
+			Game.Dispatcher.RemoveListener (AcceptExtraTime);
 			Game.Dispatcher.RemoveListener (DeclineExtraTime);
 		}
 

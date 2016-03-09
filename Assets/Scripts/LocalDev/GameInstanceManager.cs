@@ -58,7 +58,7 @@ public class GameInstanceManager : MonoBehaviour {
 					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
 					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
 						Co.WaitForSeconds (0.5f, () => {
-							instances[0].Dispatcher.ScheduleMessage ("GotoView", "deliberate");
+							instances[0].Dispatcher.ScheduleMessage ("GotoView", "pitch");
 						});
 					});
 				});

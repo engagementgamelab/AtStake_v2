@@ -129,7 +129,7 @@ public class DataManager {
 
             SaveDataToJson("data", data
                 #if UNITY_IOS || UNITY_ANDROID
-                ,true
+                ,false
                 #endif
             );
 
@@ -171,7 +171,11 @@ public class DataManager {
     }
 
     public static Models.Screen GetScreen (string symbol) {
-        return System.Array.Find (gameData.Screens, x => x.Symbol == symbol);
+        try {
+            return System.Array.Find (gameData.Screens, x => x.Symbol == symbol);
+        } catch {
+            throw new System.Exception ("No screen with the symbol '" + symbol + "' could be found.");
+        }
     }
 
     public static string GetTextFromScreen (Models.Screen screen, string key, Dictionary<string, string> vars=null) {

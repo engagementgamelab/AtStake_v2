@@ -181,6 +181,17 @@
       }
     },
     {
+      "Symbol": "extra_time_deliberate",
+      "Text": {
+        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time. Once everyone has declined we'll move on.",
+        "cant_afford": "You can't afford extra time :("
+      },
+      "Buttons": {
+        "accept": "More time",
+        "decline": "Nah"
+      }
+    },
+    {
       "Symbol": "final_scoreboard",
       "Text": {
         "scores": "And the final scores are:"

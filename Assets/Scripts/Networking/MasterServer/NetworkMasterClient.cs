@@ -233,7 +233,7 @@ public class NetworkMasterClient : MonoBehaviour
 	{
 		if (!isConnected)
 		{
-			Debug.LogError("UnregisterHost not connected");
+			// Debug.LogError("UnregisterHost not connected");
 			return;
 		}
 

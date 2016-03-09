@@ -62,22 +62,21 @@ namespace Views {
 
 		protected override void OnHide () {
 			Game.Dispatcher.RemoveListener (StartTimer);
+			Game.Dispatcher.RemoveListener (AcceptExtraTime);
+			Game.Dispatcher.RemoveListener (DeclineExtraTime);
 		}
 
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {
 
+			// Check if it's this player's turn to pitch
 			if (msg.str1 == Name) {
 
-				float duration;
+				// Set the timer duration based on the pitch state
+				float duration = msg.str2 == "pitch"
+					? Duration
+					: ExtraTimeDuration;
 
-				if (msg.str2 == "pitch") {
-					duration = Duration;
-					Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
-					Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
-				} else {
-					duration = ExtraTimeDuration;
-				}
-
+				// Start the timer
 				TimerElement timer = GetScreenElement<TimerElement> ("timer");
 				timer.Active = true;
 				timer.Reset (duration);
@@ -86,30 +85,23 @@ namespace Views {
 		}
 
 		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
-			if (IsDecider) {
-				AllGotoView ("pitch");
-				state = State.Extra;
-				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
-				t.Reset (ExtraTimeDuration);
-				t.StartTimer ();
-			}
+			AllGotoView ("pitch");
+			state = State.Extra;
+			TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
+			t.Reset (ExtraTimeDuration);
+			t.StartTimer ();
 		}
 
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
-			if (IsDecider) {
-				state = State.Pitch;
-				currentPeer ++;
-				if (currentPeer < peers.Count) {
-					AllGotoView ("pitch");
-					GetScreenElement<TextElement> ("decider_instructions")
-						.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
-					GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
-				} else {
-					AllGotoView ("deliberate_instructions");
-				}
+			state = State.Pitch;
+			currentPeer ++;
+			if (currentPeer < peers.Count) {
+				AllGotoView ("pitch");
+				GetScreenElement<TextElement> ("decider_instructions")
+					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
+				GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
 			} else {
-				Game.Dispatcher.RemoveListener (AcceptExtraTime);
-				Game.Dispatcher.RemoveListener (DeclineExtraTime);
+				AllGotoView ("deliberate_instructions");
 			}
 		}
 

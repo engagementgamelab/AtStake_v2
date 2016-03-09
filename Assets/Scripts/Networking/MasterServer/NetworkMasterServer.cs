@@ -23,7 +23,6 @@ public class Rooms
 		room.hostPort = hostPort;
 		room.connectionId = connectionId;
 		room.playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
-		// room.players = new string[0];
 		room.players = new MasterMsgTypes.Player[0];
 		rooms[gameName] = room;
 
@@ -237,7 +236,7 @@ public class NetworkMasterServer : MonoBehaviour
 			Debug.Log("OnServerUnregisterHost game not found: " + msg.gameName);
 			return;
 		}
-
+		
 		var room = rooms.rooms[msg.gameName];
 		if (room.connectionId != netMsg.conn.connectionId)
 		{

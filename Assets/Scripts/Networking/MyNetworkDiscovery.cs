@@ -31,7 +31,7 @@ public class MyNetworkDiscovery : NetworkDiscovery {
 	void OnEnable () { showGUI = false; }
 
 	public void StartBroadcasting () {
-
+		
 		if (running
 			#if SINGLE_SCREEN
 			|| broadcasting != null
