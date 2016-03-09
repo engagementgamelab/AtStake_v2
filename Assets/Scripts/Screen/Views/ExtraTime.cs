@@ -7,12 +7,18 @@ namespace Views {
 
 	public class ExtraTime : View {
 
+		string returnToView;
+
+		public ExtraTime (string returnToView) {
+			this.returnToView = returnToView;
+		}
+
 		protected override void OnInitElements () {
 			if (Game.Score.CanAffordExtraTime) {
 				Elements.Add ("instruction", new TextElement (
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
 				Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => {
-					GotoView ("pitch");
+					GotoView (returnToView);
 					Game.Dispatcher.ScheduleMessage ("AcceptExtraTime", Name);
 				}));
 			} else {
@@ -20,8 +26,10 @@ namespace Views {
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
 			}
 
-			Elements.Add ("decline", new ButtonElement (Model.Buttons["decline"], () => {
-				Game.Dispatcher.ScheduleMessage ("DeclineExtraTime");
+			Elements.Add ("decline", new ButtonElement (Model.Buttons["decline"], (ButtonElement b) => {
+				Game.Dispatcher.ScheduleMessage ("DeclineExtraTime", Name);
+				if (returnToView == "deliberate")
+					b.Interactable = false;
 			}));
 		}
 	}

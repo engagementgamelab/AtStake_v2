@@ -52,10 +52,15 @@ public class GameInstanceManager : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.RightBracket)) {
-			// Skip to decide screen (end of round 1)
+			// Skip to deliberate screen
 			SetupRoles (() => {
-				Co.YieldWhileTrue (() => { return instances.Find (x => x.Views.CurrView != "roles"); }, () => {
-					instances[0].Dispatcher.ScheduleMessage ("GotoView", "decide");
+				Co.YieldWhileTrue (() => { return !PlayersOnView ("roles"); }, () => {
+					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
+					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
+						Co.WaitForSeconds (0.5f, () => {
+							instances[0].Dispatcher.ScheduleMessage ("GotoView", "deliberate");
+						});
+					});
 				});
 			});
 		}
@@ -106,6 +111,10 @@ public class GameInstanceManager : MonoBehaviour {
 				});
 			}
 		});
+	}
+
+	bool PlayersOnView (string viewId) {
+		return instances.Find (x => x.Views.CurrView != viewId) == null;
 	}
 
 	#else

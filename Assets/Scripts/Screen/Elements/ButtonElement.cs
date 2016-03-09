@@ -21,9 +21,15 @@ public class ButtonElement : ScreenElement {
 	}
 
 	public readonly System.Action OnPress;
+	public readonly System.Action<ButtonElement> OnPressThis;
 
 	public ButtonElement (string text, System.Action onPress) {
 		Text = text;
 		OnPress = onPress;
+	}
+
+	public ButtonElement (string text, System.Action<ButtonElement> onPress) {
+		Text = text;
+		OnPressThis = onPress;
 	}
 }
