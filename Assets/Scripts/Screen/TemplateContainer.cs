@@ -65,6 +65,16 @@ namespace Templates {
 
 		}
 
+		public void SetInputEnabled () {
+			content.InputEnabled ();
+			if (backButton.gameObject.activeSelf)
+				backButton.InputEnabled ();
+			if (pot.gameObject.activeSelf)
+				pot.InputEnabled ();
+			if (coins.gameObject.activeSelf)
+				coins.InputEnabled ();
+		}
+
 		void SetBackground (Color bgColor, string bgImage) {
 			BackgroundColor = bgColor;
 			BackgroundImage = AssetLoader.LoadBackground (bgImage);

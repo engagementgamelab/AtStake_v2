@@ -6,6 +6,7 @@ public abstract class ScreenElementUI : UIElement {
 	public abstract bool Loaded { get; }
 	public abstract void Load (ScreenElement e);
 	public abstract void Unload ();
+	public abstract void InputEnabled ();
 }
 
 public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenElement {
@@ -31,6 +32,10 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		element = null;
 	}
 
+	public override void InputEnabled () {
+		OnInputEnabled (element);
+	}
+
 	void OnUpdate (ScreenElement element) {
 		OnSetActive (element.Active);
 		OnUpdate ((T)element);
@@ -43,4 +48,5 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	public abstract void ApplyElement (T element);
 	public virtual void RemoveElement (T element) {}
 	protected virtual void OnUpdate (T element) {}
+	protected virtual void OnInputEnabled (T element) {}
 }

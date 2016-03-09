@@ -45,7 +45,7 @@ public class UIElement : MB {
 	}
 
 	InputField inputField = null;
-	InputField InputField {
+	protected InputField InputField {
 		get {
 			if (inputField == null) {
 				inputField = GetComponent<InputField> ();
@@ -110,6 +110,10 @@ public class UIElement : MB {
 		throw new System.Exception ("No child named '" + name + "' exists on " + this);
 	}
 
+	/**
+	 *	Button listeners
+	 */
+
 	public void AddButtonListener (System.Action action) {
 		Button.onClick.AddListener (() => { action (); });
 	}
@@ -122,11 +126,20 @@ public class UIElement : MB {
 		Button.onClick.RemoveAllListeners ();
 	}
 
+	/**
+	 *	InputField listeners
+	 */
+
 	public void AddEndEditListener (System.Action<string> action) {
 		InputField.onEndEdit.AddListener ((string s) => { action (s); });
 	}
 
+	public void AddValueChangedListener (System.Action<string> action) {
+		InputField.onValueChanged.AddListener ((string s) => { action (s); });
+	}
+
 	public void RemoveInputFieldListeners () {
 		InputField.onEndEdit.RemoveAllListeners ();
+		InputField.onValueChanged.RemoveAllListeners ();
 	}
 }

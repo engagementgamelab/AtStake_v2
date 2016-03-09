@@ -118,6 +118,9 @@ namespace Templates {
 				// Enable the raycaster so that input is accepted again
 				Raycaster.enabled = true;
 				animating = false;
+
+				// Inform the newly active container that the animation has finished & input is being accepted
+				activeContainer.SetInputEnabled ();
 			});
 		}
 

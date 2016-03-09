@@ -32,13 +32,23 @@ namespace Templates {
 			}
 		}
 
+		Dictionary<string, ScreenElementUI> LoadedElements {
+			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
+		}
+
 		public void LoadView (View view) {
 			LoadElements (view.Elements);
 		}
 
 		public void UnloadView () {
-			foreach (var element in Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value)) {
+			foreach (var element in LoadedElements) {
 				element.Value.Unload ();
+			}
+		}
+
+		public void InputEnabled () {
+			foreach (var element in LoadedElements) {
+				element.Value.InputEnabled ();
 			}
 		}
 		
