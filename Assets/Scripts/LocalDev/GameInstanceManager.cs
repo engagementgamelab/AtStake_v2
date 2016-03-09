@@ -53,8 +53,11 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.RightBracket)) {
 			// Skip to decide screen (end of round 1)
-			SetupRoles ();
-			instances[0].Dispatcher.ScheduleMessage ("GotoView", "decide");
+			SetupRoles (() => {
+				Co.YieldWhileTrue (() => { return instances.Find (x => x.Views.CurrView != "roles"); }, () => {
+					instances[0].Dispatcher.ScheduleMessage ("GotoView", "decide");
+				});
+			});
 		}
 
 		if (Input.GetKeyDown (KeyCode.Backslash)) {
@@ -79,11 +82,13 @@ public class GameInstanceManager : MonoBehaviour {
 		}
 	}
 
-	void SetupRoles () {
+	void SetupRoles (System.Action callback=null) {
 		SetupGame ();
 		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer.Connected) != null; }, () => {
 			instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
 			instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
+			if (callback != null)
+				callback ();
 		});
 	}
 
