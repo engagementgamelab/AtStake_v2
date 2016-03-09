@@ -154,7 +154,8 @@
     },
     {
       "Symbol": "decide",
-      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!"
+      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!",
+      "PlayerInstructions": "listen to your gumptious decider"
     },
     {
       "Symbol": "deck",
@@ -167,7 +168,8 @@
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'"
+      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'",
+      "PlayerInstructions": "listen to your special decider"
     },
     {
       "Symbol": "extra_time",
@@ -234,7 +236,8 @@
     },
     {
       "Symbol": "pitch_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'"
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'",
+      "PlayerInstructions": "listen to your proud decider"
     },
     {
       "Symbol": "pot",
@@ -267,7 +270,8 @@
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'"
+      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'",
+      "PlayerInstructions": "listen to your decider"
     },
     {
       "Symbol": "winner",
