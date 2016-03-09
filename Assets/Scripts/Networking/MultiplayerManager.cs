@@ -30,6 +30,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		get { return Host == Game.Name; }
 	}
 
+	bool connected = false;
+	public bool Connected {
+		get { return Hosting || connected; }
+		set { connected = value;}
+	}
+
 	public OnConnect onConnect;
 	public OnDisconnect onDisconnect;
 	public OnUpdateClients onUpdateClients;
@@ -110,6 +116,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// Host & Client
 	public void OnDisconnected () {
 		Host = "";
+		Connected = false;
 		if (onDisconnect != null)
 			onDisconnect ();
 	}
@@ -136,8 +143,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				if (Hosting) {
 					ConnectClient (clientName);
 				} else if (thisClient) {
-					if (onConnect != null)
+					Connected = true;
+					if (onConnect != null) {
 						onConnect ();
+					}
 				}
 				break;
 		}

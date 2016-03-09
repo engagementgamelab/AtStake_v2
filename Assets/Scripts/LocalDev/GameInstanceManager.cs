@@ -81,21 +81,26 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void SetupRoles () {
 		SetupGame ();
-		instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
-		instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
+		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer.Connected) != null; }, () => {
+			instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
+			instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
+		});
 	}
 
 	void SetupGame () {
 		AddPlayer ();
 		instances[0].HostGame ();
-		instances[0].Views.Goto ("deck");
-		for (int i = 1; i < 3; i ++) {
-			AddPlayer ();
-			instances[i].Multiplayer.RequestHostList ((List<string> hosts) => {
-				instances[i].JoinGame ();
-				instances[i].Views.Goto ("deck");
-			});
-		}
+		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null; }, () => {
+			instances[0].Views.Goto ("deck");
+			for (int i = 1; i < 3; i ++) {
+				AddPlayer ();
+				GameInstance gi = instances[i];
+				gi.Multiplayer.RequestHostList((List<string> hosts) => {
+					gi.JoinGame ();
+					gi.Views.Goto ("deck");
+				});
+			}
+		});
 	}
 
 	#else

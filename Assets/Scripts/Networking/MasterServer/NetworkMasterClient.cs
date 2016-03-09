@@ -31,7 +31,6 @@ public class NetworkMasterClient : MonoBehaviour
 
 	// Callbacks
 	System.Action onConnect;
-	System.Action onDisconnect;
 	System.Action onUnregisterHost;
 
 	// Delegates
@@ -81,7 +80,7 @@ public class NetworkMasterClient : MonoBehaviour
 
 	}
 
-	public void ResetClient(System.Action onDisconnect=null)
+	public void ResetClient()
 	{
 		if (client == null)
 			return;
@@ -107,9 +106,10 @@ public class NetworkMasterClient : MonoBehaviour
 	void OnClientConnect(NetworkMessage netMsg)
 	{
 		// Debug.Log("Client Connected to Master");
-		if (onConnect != null)
+		if (onConnect != null) {
 			onConnect ();
-
+			onConnect = null;
+		}
 	}
 
 	void OnClientDisconnect(NetworkMessage netMsg)
@@ -137,8 +137,10 @@ public class NetworkMasterClient : MonoBehaviour
 	{
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredHostMessage>();
 		OnServerEvent((MasterMsgTypes.NetworkMasterServerEvent)msg.resultCode);
-		if (onUnregisterHost != null)
+		if (onUnregisterHost != null) {
 			onUnregisterHost ();
+			onUnregisterHost = null;
+		}
 	}
 
 	void OnListOfHosts(NetworkMessage netMsg)
@@ -267,7 +269,7 @@ public class NetworkMasterClient : MonoBehaviour
 	public virtual void OnFailedToConnectToMasterServer()
 	{
 		Debug.Log("OnFailedToConnectToMasterServer");
-		if (onDisconnected != null)
+		if (onDisconnected != null) 
 			onDisconnected ();
 	}
 

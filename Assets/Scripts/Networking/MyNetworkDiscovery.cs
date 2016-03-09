@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class MyNetworkDiscovery : NetworkDiscovery {
 
 	#if SINGLE_SCREEN
-	static MyNetworkDiscovery broadcasting = null;
-	static MyNetworkDiscovery listening = null;
+	public static MyNetworkDiscovery broadcasting { get; private set; }
+	public static MyNetworkDiscovery listening { get; private set; }
 	#endif
 
 	class BroadcastResult {
