@@ -5,3 +5,6 @@ Enables "single screen" version of the game. Multiple instances of the game are 
 
 Delays network messages by a random value (up to 1 second) to simulate poor connections
 -define:SIMULATE_LATENCY
+
+Overlays debug information to help monitor gameplay
+-define:SHOW_DEBUG_INFO

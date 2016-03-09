@@ -66,17 +66,34 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	Dictionary<OnReceiveMessage, string> listeners = new Dictionary<OnReceiveMessage, string> ();
 
+	#if SHOW_DEBUG_INFO
+	public delegate void OnUpdateListeners (Dictionary<OnReceiveMessage, string> listeners);
+	public OnUpdateListeners onUpdateListeners;
+	#endif
+
 	public void AddListener (string id, OnReceiveMessage action) {
 		if (!listeners.ContainsKey (action))
 			listeners.Add (action, id);
+		#if SHOW_DEBUG_INFO
+		if (onUpdateListeners != null)
+			onUpdateListeners (listeners);
+		#endif
 	}
 
 	public void RemoveListener (OnReceiveMessage action) {
 		listeners.Remove (action);
+		#if SHOW_DEBUG_INFO
+		if (onUpdateListeners != null)
+			onUpdateListeners (listeners);
+		#endif
 	}
 
 	public void RemoveAllListeners () {
 		listeners.Clear ();
+		#if SHOW_DEBUG_INFO
+		if (onUpdateListeners != null)
+			onUpdateListeners (listeners);
+		#endif
 	}
 
 	/**
@@ -126,8 +143,6 @@ public class MessageDispatcher : GameInstanceBehaviour {
 			}
 		}
 	}
-
-	// RPCs
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
 		if (msg.id.Contains ("__confirm")) {
