@@ -18,7 +18,6 @@ namespace Views {
 	///		3. Elements that only the Decider sees (override OnInitDeciderElements)
 	///		4. Elements that all players except the Decider see (override OnInitPlayerElements)
 	///
-	/// After the screen has loaded you can add additional elements by calling AddElement()
 	/// </summary>
 	public abstract class View : GameInstanceComponent {
 

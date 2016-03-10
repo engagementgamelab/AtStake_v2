@@ -9,13 +9,14 @@ namespace Templates {
 	/// <summary>
 	/// Template takes a view and renders the screen elements.
 	/// All ScreenElements in the view should correspond to ScreenElementUIs in the Template
+	/// Templates should handle any visual effects (animations, timers, etc.) but not contain any game logic
 	/// </summary>
 	public abstract class Template : MB {
 
 		public abstract TemplateSettings Settings { get; }
 
 		Dictionary<string, ScreenElementUI> elements;
-		Dictionary<string, ScreenElementUI> Elements {
+		protected Dictionary<string, ScreenElementUI> Elements {
 			get {
 				if (elements == null) {
 
@@ -38,18 +39,21 @@ namespace Templates {
 
 		public void LoadView (View view) {
 			LoadElements (view.Elements);
+			OnLoadView ();
 		}
 
 		public void UnloadView () {
 			foreach (var element in LoadedElements) {
 				element.Value.Unload ();
 			}
+			OnUnloadView ();
 		}
 
 		public void InputEnabled () {
 			foreach (var element in LoadedElements) {
 				element.Value.InputEnabled ();
 			}
+			OnInputEnabled ();
 		}
 		
 		void LoadElements (Dictionary<string, ScreenElement> data) {
@@ -78,6 +82,18 @@ namespace Templates {
 			}
 			#endif
 		}
+
+		protected T GetElement<T> (string id) where T : ScreenElementUI {
+			try {
+				return (T)Elements[id];
+			} catch {
+				throw new System.Exception ("The template '" + this + "' does not contain an element with the id '" + id + "'");
+			}
+		}
+
+		protected virtual void OnLoadView () {}
+		protected virtual void OnUnloadView () {}
+		protected virtual void OnInputEnabled () {}
 	}
 
 	public struct TemplateSettings {

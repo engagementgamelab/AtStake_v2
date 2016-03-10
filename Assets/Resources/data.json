@@ -248,7 +248,8 @@
       "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool"
     },
     {
-      "Symbol": "roles"
+      "Symbol": "roles",
+      "Instructions": "Assigning roles"
     },
     {
       "Symbol": "scoreboard",

@@ -27,6 +27,20 @@ public static class Co {
 		CoMb.Instance.StartCoroutine (CoYieldWhileTrue (condition, onEnd));
 	} 
 
+	public static void InvokeWhileTrue (float time, float rate, Func<bool> condition, System.Action onInvoke, System.Action onEnd=null) {
+		
+		float duration = time > 0f ? time : rate;
+
+		Co.WaitForSeconds (duration, () => {
+			if (condition ()) {
+				onInvoke ();
+				InvokeWhileTrue (0f, rate, condition, onInvoke, onEnd);
+			} else if (onEnd != null) {
+				onEnd ();
+			}
+		});
+	}
+
 	static IEnumerator CoWaitForSeconds (float seconds, System.Action onEnd) {
 		float e = 0f;
 		while (e < seconds) {

@@ -26,14 +26,9 @@ namespace Views {
 			if (IsHost) {
 
 				string decider = GetDecider ();
-				List<string[]> roles = GetRoles (decider);
-
-				/*foreach (string[] role in roles) {
-					Game.Dispatcher.ScheduleMessage ("AssignRole", role[0], role[1]);
-				}
-				Game.Dispatcher.ScheduleMessage ("AssignRole", decider, "Decider");*/
 				string msg = "";
-				foreach (string[] role in roles) {
+
+				foreach (string[] role in GetRoles (decider)) {
 					msg += role[0] + "," + role[1] + "|";
 				}
 				msg += decider + "," + "Decider";
@@ -85,9 +80,9 @@ namespace Views {
 		}
 
 		void AssignRoles (MasterMsgTypes.GenericMessage msg) {
-			
+
 			foreach (string[] role in Game.Manager.ReadRoles (msg.str1))
-				roleList.Add (role[0], new TextElement (role[0] + ": " + role[1]));
+				roleList.Add (role[0] + "|" + role[1], new TextElement (""));
 
 			if (IsDecider)
 				Elements["next"].Active = true;

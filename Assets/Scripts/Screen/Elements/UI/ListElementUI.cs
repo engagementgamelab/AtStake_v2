@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> where T : ScreenElementUI where U : ScreenElement {
 
-	Dictionary<string, T> Children {
+	public List<T> ChildElements {
 		get {
-			Dictionary<string, T> children = new Dictionary<string, T> ();
-			foreach (Transform child in RectTransform) {
-				T t = child.GetComponent<T> ();
-				children.Add (t.id, t);
-			}
-			return children;
+			List<T> childElements = new List<T> ();
+			foreach (Transform child in RectTransform)
+				childElements.Add (child.GetComponent<T> ());
+			return childElements;
 		}
 	}
 
@@ -41,7 +39,7 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 	}
 
 	void RemoveElement (string id) {
-		T t = Children[id];
+		T t = ChildElements.Find (x => x.id == id);
 		t.Unload ();
 		ObjectPool.Destroy<T> (t);
 	}

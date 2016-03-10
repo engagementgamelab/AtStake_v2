@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class ScreenElementUI : UIElement {
 	public string id;
 	public abstract bool Loaded { get; }
+	public abstract bool Visible { get; set; }
 	public abstract void Load (ScreenElement e);
 	public abstract void Unload ();
 	public abstract void InputEnabled ();
@@ -14,6 +15,19 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	T element;
 
 	public override bool Loaded { get { return element != null; } }
+
+	// Set by the view (via the data in ScreenElement)
+	bool activeState = true;
+
+	// Set by the template
+	bool visible = true;
+	public override bool Visible {
+		get { return visible; }
+		set {
+			visible = value;
+			gameObject.SetActive (visible && activeState);
+		}
+	}
 
 	public override void Load (ScreenElement element) {
 		this.element = (T)element;
@@ -42,7 +56,8 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	}
 
 	protected virtual void OnSetActive (bool active) {
-		gameObject.SetActive (active);
+		activeState = active;
+		gameObject.SetActive (visible && activeState);
 	}
 
 	public abstract void ApplyElement (T element);

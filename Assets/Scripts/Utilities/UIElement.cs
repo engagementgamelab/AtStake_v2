@@ -84,7 +84,6 @@ public class UIElement : MB {
 		}
 	}
 
-	FontStyle style = FontStyle.Normal;
 	public FontStyle Style {
 		get { return Text.fontStyle; }
 		set { Text.fontStyle = value; }
