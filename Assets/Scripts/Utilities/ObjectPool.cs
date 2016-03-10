@@ -120,6 +120,7 @@ public class ObjectPool {
 		GetPool<T> ().ReleaseInstance (go.GetComponent<MonoBehaviour> ());
 	}
 
+	// TODO: these appear to break if you've been using generic methods for e.g. instantiation (is it because (Clone) is being added to the name?)
 	public static void DestroyChildren (Transform t) {
 
 		List<Transform> children = new List<Transform> ();
@@ -129,13 +130,14 @@ public class ObjectPool {
 			Destroy (children[i]);
 	}
 
-	public static void DestroyChildren<T> (Transform t, System.Action<T> onDestroy) where T : MonoBehaviour {
+	public static void DestroyChildren<T> (Transform t, System.Action<T> onDestroy=null) where T : MonoBehaviour {
 
 		List<Transform> children = new List<Transform> ();
 		foreach (Transform child in t) children.Add (child);
 
 		for (int i = 0; i < children.Count; i ++) {
-			onDestroy (children[i].GetComponent<T> ());
+			if (onDestroy != null)
+				onDestroy (children[i].GetComponent<T> ());
 			Destroy<T> (children[i]);
 		}
 	}

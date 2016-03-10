@@ -35,6 +35,10 @@ namespace Views {
 			}
 		}
 
+		protected override void OnHide () {
+			Game.Dispatcher.RemoveListener (AssignRole);
+		}
+
 		string GetDecider () {
 			List<string> potentialDeciders = Game.Manager.Players
 				.Where (kv => !kv.Value.HasBeenDecider)

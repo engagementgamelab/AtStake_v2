@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MB : MonoBehaviour {
 
@@ -25,6 +26,11 @@ public class MB : MonoBehaviour {
 		set { Transform.position = value; }
 	}
 
+	public Vector3 LocalScale {
+		get { return Transform.localScale; }
+		set { Transform.localScale = value; }
+	}
+
 	public Vector3 LocalPosition {
 		get { return Transform.localPosition; }
 		set { Transform.localPosition = value; }
@@ -38,5 +44,14 @@ public class MB : MonoBehaviour {
 	public Transform Parent {
 		get { return Transform.parent; }
 		set { Transform.SetParent (value); }
+	}
+
+	public List<Transform> Children {
+		get {
+			List<Transform> children = new List<Transform> ();
+			foreach (Transform child in Transform) 
+				children.Add (child);
+			return children;
+		}
 	}
 }

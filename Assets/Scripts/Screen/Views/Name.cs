@@ -20,9 +20,11 @@ namespace Views {
 				// This allows the name to be submitted by pressing "done" on the ios/android keyboard
 				if (name != "")
 					GotoView ("hostjoin");
-			}) {
-				FocusedOnLoad = true	
-			});
+			}) 
+			#if !SINGLE_SCREEN
+			{ FocusedOnLoad = true }
+			#endif
+			);
 
 			Elements.Add ("submit", new ButtonElement (Model.Buttons["submit"], () => { 
 				GotoView ("hostjoin");

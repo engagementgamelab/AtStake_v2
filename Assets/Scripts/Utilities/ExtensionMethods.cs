@@ -160,6 +160,16 @@ public static class ExtensionMethods {
 		return children;
 	}
 
+	public static List<T> GetChildren<T> (this Transform transform) where T : MonoBehaviour {
+		List<T> children = new List<T> ();
+		foreach (Transform child in transform) {
+			T t = child.GetComponent<T> ();
+			if (t != null)
+				children.Add (t);
+		}
+		return children;
+	}
+
 	// TODO: rename to GetChildrenRecursively
 	public static List<Transform> GetAllChildren (this Transform transform) {
 		List<Transform> children = new List<Transform> ();

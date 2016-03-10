@@ -21,7 +21,7 @@ public class GameInstance : MonoBehaviour {
 		get { return Manager.Player.Name; }
 	}
 
-	void Awake () {
+	void OnEnable () {
 
 		Manager = ObjectPool.Instantiate<PlayerManager> ();
 		Manager.transform.SetParent (transform);

@@ -23,14 +23,16 @@ namespace Templates {
 			#else
 				Vector3.one;
 			#endif
+		}
 
+		void Start () {
 			debug.gameObject.SetActive (
 			#if SHOW_DEBUG_INFO
-				true
+				true);
+			debug.Init (Game);
 			#else
-				false
+				false);
 			#endif
-			);
 		}
 	}
 }
