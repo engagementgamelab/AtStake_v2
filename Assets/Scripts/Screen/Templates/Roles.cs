@@ -39,7 +39,7 @@ namespace Templates {
 		protected override void OnInputEnabled () {
 
 			// Introduce roles over time, ending with the Decider
-			Co.InvokeWhileTrue (0.25f, 0.5f, () => { return roleCounter < RoleList.ChildElements.Count * 2; }, () => {
+			Co.InvokeWhileTrue (0.25f, 0.75f, () => { return Loaded && roleCounter < RoleList.ChildElements.Count * 2; }, () => {
 
 				RoleList.Visible = true;
 
@@ -55,8 +55,11 @@ namespace Templates {
 					if (index == roleIndex) {
 						string[] playerRole = t.id.Split ('|');
 						t.Text.text = playerRole[0];
-						if (roleCounter % 2 != 0)
+						if (roleCounter % 2 != 0) {
 							t.Text.text += " the " + playerRole[1];
+							if (playerRole[1] == "Decider")
+								t.Style = FontStyle.Bold;
+						}
 					}
 				}
 				roleCounter ++;

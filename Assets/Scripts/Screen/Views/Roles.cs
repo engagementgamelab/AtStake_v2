@@ -83,7 +83,7 @@ namespace Views {
 
 			foreach (string[] role in Game.Manager.ReadRoles (msg.str1))
 				roleList.Add (role[0] + "|" + role[1], new TextElement (""));
-
+				
 			if (IsDecider)
 				Elements["next"].Active = true;
 		}

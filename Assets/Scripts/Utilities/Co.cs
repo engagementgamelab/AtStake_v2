@@ -81,6 +81,7 @@ public class CoMb : MonoBehaviour {
 				instance = UnityEngine.Object.FindObjectOfType (typeof (CoMb)) as CoMb;
 				if (instance == null) {
 					GameObject go = new GameObject ("CoMb");
+					go.hideFlags = HideFlags.HideInHierarchy;
 					DontDestroyOnLoad (go);
 					instance = go.AddComponent<CoMb> ();
 				}

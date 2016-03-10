@@ -53,27 +53,21 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.RightBracket)) {
 			// Skip to deliberate screen
-			SetupRoles (() => {
-				Co.YieldWhileTrue (() => { return !PlayersOnView ("roles"); }, () => {
-					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
-					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
-						Co.WaitForSeconds (0.5f, () => {
-							instances[0].Dispatcher.ScheduleMessage ("GotoView", "pitch");
-						});
-					});
-				});
-			});
+			GotoView ("pitch");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Backslash)) {
-			// Skip to last round
+			// Skip to decide
+			GotoView ("decide");
+
+			/*// Skip to last round
 			SetupRoles ();
 			GameInstance i = instances[0];
 			i.Rounds.NextRound ();
 			i.Dispatcher.ScheduleMessage ("ChooseWinner", i.Manager.Player.Name);
 			i.Rounds.NextRound ();
 			i.Dispatcher.ScheduleMessage ("ChooseWinner", instances[1].Manager.Player.Name);
-			i.Dispatcher.ScheduleMessage ("GotoView", "roles");
+			i.Dispatcher.ScheduleMessage ("GotoView", "roles");*/
 		}
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
@@ -110,6 +104,23 @@ public class GameInstanceManager : MonoBehaviour {
 					gi.Views.Goto ("deck");
 				});
 			}
+		});
+	}
+
+	void GotoView (string id) {
+		
+		// js-style callback hell
+		SetupRoles (() => {
+			Co.YieldWhileTrue (() => { return !PlayersOnView ("roles"); }, () => {
+				Co.WaitForSeconds (0.5f, () => {
+					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
+					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
+						Co.WaitForSeconds (0.5f, () => {
+							instances[0].Dispatcher.ScheduleMessage ("GotoView", id);
+						});
+					});
+				});
+			});
 		});
 	}
 

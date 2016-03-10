@@ -15,6 +15,13 @@ namespace Views {
 			get { return DataManager.GetSettings ().DeliberateSeconds; }
 		}
 
+		float ExtraTimeDuration {
+			get { return DataManager.GetSettings ().ExtraSeconds; }
+		}
+
+		enum State { Deliberate, Extra }
+		State state = State.Deliberate;
+
 		List<string> declinedPlayers = new List<string> ();
 
 		protected override void OnInitDeciderElements () {
@@ -47,16 +54,17 @@ namespace Views {
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {
 			if (HasElement ("timer")) {
 				TimerElement timer = GetScreenElement<TimerElement> ("timer");
-				timer.Reset ();
+				timer.Reset (state == State.Deliberate ? Duration : ExtraTimeDuration);
 				timer.StartTimer ();
 			}
+			state = State.Extra;
 		}
 
 		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
 			AllGotoView ("deliberate");
 			declinedPlayers.Clear ();
 			TimerButtonElement timer = GetScreenElement<TimerButtonElement> ("timer_button");
-			timer.Reset ();
+			timer.Reset (state == State.Deliberate ? Duration : ExtraTimeDuration);
 			timer.StartTimer ();
 		}
 

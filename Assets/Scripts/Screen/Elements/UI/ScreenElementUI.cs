@@ -17,7 +17,7 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	public override bool Loaded { get { return element != null; } }
 
 	// Set by the view (via the data in ScreenElement)
-	bool activeState = true;
+	bool activeState = false;
 
 	// Set by the template
 	bool visible = true;
@@ -44,6 +44,7 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		}
 		RemoveElement (element);
 		element = null;
+		activeState = false;
 	}
 
 	public override void InputEnabled () {

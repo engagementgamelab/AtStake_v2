@@ -17,5 +17,17 @@ namespace Templates {
 				};
 			}
 		}
+
+		protected override void OnLoadView () {
+			Elements["winner_name"].Visible = false;
+			Elements["next"].Visible = false;
+		}
+
+		protected override void OnInputEnabled () {
+			Co.WaitForSeconds (1f, () => {
+				Elements["winner_name"].Visible = true;
+				Elements["next"].Visible = true;
+			});
+		}
 	}
 }

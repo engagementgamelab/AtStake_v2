@@ -37,9 +37,14 @@ namespace Templates {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
+		protected bool Loaded { get; private set; }
+
+		void OnEnable () { Loaded = false; }
+
 		public void LoadView (View view) {
 			LoadElements (view.Elements);
 			OnLoadView ();
+			Loaded = true;
 		}
 
 		public void UnloadView () {
@@ -47,6 +52,7 @@ namespace Templates {
 				element.Value.Unload ();
 			}
 			OnUnloadView ();
+			Loaded = false;
 		}
 
 		public void InputEnabled () {
@@ -85,7 +91,7 @@ namespace Templates {
 
 		protected T GetElement<T> (string id) where T : ScreenElementUI {
 			try {
-				return (T)Elements[id];
+				return (T)LoadedElements[id];
 			} catch {
 				throw new System.Exception ("The template '" + this + "' does not contain an element with the id '" + id + "'");
 			}

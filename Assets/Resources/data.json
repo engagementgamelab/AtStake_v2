@@ -277,7 +277,7 @@
     {
       "Symbol": "winner",
       "Text": {
-        "winner": "And the winner is {{winner}}"
+        "winner": "And the winner is..."
       }
     }
   ],
