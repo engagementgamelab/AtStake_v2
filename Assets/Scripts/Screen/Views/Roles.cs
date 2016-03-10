@@ -21,22 +21,28 @@ namespace Views {
 		protected override void OnShow () {
 
 			Game.Manager.Player.Role = null;
-			Game.Dispatcher.AddListener ("AssignRole", AssignRole);
+			Game.Dispatcher.AddListener ("AssignRoles", AssignRoles);
 			
 			if (IsHost) {
 
 				string decider = GetDecider ();
 				List<string[]> roles = GetRoles (decider);
 
-				foreach (string[] role in roles) {
+				/*foreach (string[] role in roles) {
 					Game.Dispatcher.ScheduleMessage ("AssignRole", role[0], role[1]);
 				}
-				Game.Dispatcher.ScheduleMessage ("AssignRole", decider, "Decider");
+				Game.Dispatcher.ScheduleMessage ("AssignRole", decider, "Decider");*/
+				string msg = "";
+				foreach (string[] role in roles) {
+					msg += role[0] + "," + role[1] + "|";
+				}
+				msg += decider + "," + "Decider";
+				Game.Dispatcher.ScheduleMessage ("AssignRoles", msg);
 			}
 		}
 
 		protected override void OnHide () {
-			Game.Dispatcher.RemoveListener (AssignRole);
+			Game.Dispatcher.RemoveListener (AssignRoles);
 		}
 
 		string GetDecider () {
@@ -46,7 +52,7 @@ namespace Views {
 			try {
 				return potentialDeciders[Random.Range (0, potentialDeciders.Count)];
 			} catch {
-				throw new System.Exception ("A decider could not be selected because all players have been deciders");
+				throw new System.Exception ("A decider could not be selected because all players have been deciders. The number of players must be >= the number of rounds.");
 			}
 		}
 
@@ -78,11 +84,13 @@ namespace Views {
 			return roles;
 		}
 
-		void AssignRole (MasterMsgTypes.GenericMessage msg) {
-			roleList.Add (msg.str1, new TextElement (msg.str1 + ": " + msg.str2));
-			if (IsDecider) {
+		void AssignRoles (MasterMsgTypes.GenericMessage msg) {
+			
+			foreach (string[] role in Game.Manager.ReadRoles (msg.str1))
+				roleList.Add (role[0], new TextElement (role[0] + ": " + role[1]));
+
+			if (IsDecider)
 				Elements["next"].Active = true;
-			}
 		}
 	}
 }

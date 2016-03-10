@@ -63,7 +63,7 @@ public class PlayerManager : GameInstanceBehaviour {
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
-		Game.Dispatcher.AddListener ("AssignRole", AssignRole);
+		Game.Dispatcher.AddListener ("AssignRoles", AssignRoles);
 		peers.Clear ();
 		Player.HasBeenDecider = false;
 	}
@@ -93,13 +93,28 @@ public class PlayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	public void AssignRole (MasterMsgTypes.GenericMessage msg) {
-		string player = msg.str1;
-		string role = msg.str2;
-		Players[player].Role = Game.Decks.GetRole (role);
-		if (role == "Decider") {
-			Decider = player;
-			Players[Decider].HasBeenDecider = true;
+	public List<string[]> ReadRoles (string roles) {
+
+		List<string[]> convertedRoles = new List<string[]> ();
+		List<string> playerRoles = new List<string> (roles.Split ('|'));
+
+		foreach (string role in playerRoles) {
+			string[] playerRole = role.Split(',');
+			convertedRoles.Add (new string[] { playerRole[0], playerRole[1] } );
+		}
+
+		return convertedRoles;
+	}
+
+	void AssignRoles (MasterMsgTypes.GenericMessage msg) {
+		foreach (string[] playerRole in ReadRoles (msg.str1)) {
+			string player = playerRole[0];
+			string role = playerRole[1];
+			Players[player].Role = Game.Decks.GetRole (role);
+			if (role == "Decider") {
+				Decider = player;
+				Players[Decider].HasBeenDecider = true;
+			}	
 		}
 	}
 
