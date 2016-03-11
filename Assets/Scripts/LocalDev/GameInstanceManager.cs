@@ -88,8 +88,10 @@ public class GameInstanceManager : MonoBehaviour {
 		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer.Connected) != null; }, () => {
 			instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
 			instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
-			if (callback != null)
-				callback ();
+			Co.WaitForSeconds (0.5f, () => {
+				if (callback != null)
+					callback ();
+			});
 		});
 	}
 
@@ -114,18 +116,16 @@ public class GameInstanceManager : MonoBehaviour {
 		// js-style callback hell
 		SetupRoles (() => {
 			Co.YieldWhileTrue (() => { return !PlayersOnView ("roles"); }, () => {
-				Co.WaitForSeconds (0.5f, () => {
 
-					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
+				instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
 
-					if (id != "pot") {
-						Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
-							Co.WaitForSeconds (0.5f, () => {
-								instances[0].Dispatcher.ScheduleMessage ("GotoView", id);
-							});
+				if (id != "pot") {
+					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
+						Co.WaitForSeconds (0.5f, () => {
+							instances[0].Dispatcher.ScheduleMessage ("GotoView", id);
 						});
-					}
-				});
+					});
+				}
 			});
 		});
 	}
@@ -141,6 +141,6 @@ public class GameInstanceManager : MonoBehaviour {
 	void Start () {
 		AddPlayer ();
 	}
-	
+
 	#endif
 }

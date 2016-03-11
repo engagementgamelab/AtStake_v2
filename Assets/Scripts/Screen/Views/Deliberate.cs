@@ -49,6 +49,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (TimeExpired);
 			Game.Dispatcher.RemoveListener (AcceptExtraTime);
 			Game.Dispatcher.RemoveListener (DeclineExtraTime);
+			state = State.Deliberate;
 		}
 
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {

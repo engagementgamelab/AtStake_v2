@@ -46,6 +46,8 @@ namespace Templates {
 
 		protected override void OnInputEnabled () {
 			Co.RepeatAscending (0.5f, 3.5f, Instructions.Count, (int i) => {
+				if (!Loaded)
+					return;
 				if (i > 0)
 					Instructions[i-1].Visible = false;
 				Instructions[i].Visible = true;
@@ -56,7 +58,8 @@ namespace Templates {
 				else if (i == 3)
 					Elements["pot"].Visible = true;
 			}, () => {
-				Elements["next"].Visible = true;
+				if (Loaded)
+					Elements["next"].Visible = true;
 			});
 		}
 	}

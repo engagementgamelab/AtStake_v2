@@ -59,12 +59,14 @@ public class ObjectPool {
 
 		active.Add (m);
 		m.gameObject.SetActive (true);
+		m.transform.parent = null;
 
 		return m;
 	}
 
 	void ReleaseInstance (MonoBehaviour instance) {
 		instance.gameObject.SetActive (false);
+		instance.transform.SetParent (InactiveInstancesContainer.Instance.Transform);
 		active.Remove (instance);
 		inactive.Push (instance);
 	}
@@ -258,4 +260,32 @@ public static class PoolIOHandler {
 		Object.DestroyImmediate (go);
 	}
 	#endif
+}
+
+public class InactiveInstancesContainer : MonoBehaviour {
+
+	static InactiveInstancesContainer instance = null;
+	static public InactiveInstancesContainer Instance {
+		get {
+			if (instance == null) {
+				instance = UnityEngine.Object.FindObjectOfType (typeof (InactiveInstancesContainer)) as InactiveInstancesContainer;
+				if (instance == null) {
+					GameObject go = new GameObject ("InactiveInstancesContainer");
+					go.hideFlags = HideFlags.HideInHierarchy;
+					DontDestroyOnLoad (go);
+					instance = go.AddComponent<InactiveInstancesContainer> ();
+				}
+			}
+			return instance;
+		}
+	}
+
+	Transform myTransform;
+	public Transform Transform {
+		get {
+			if (myTransform == null)
+				myTransform = transform;
+			return myTransform;
+		}
+	}
 }
