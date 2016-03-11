@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-// Utility class that allows non-MonoBehviour classes to run coroutines
-
+/// <summary>
+/// Utility class for running coroutines. Allows coroutines to be run in classes not derived from MonoBehaviour. Uses anonymous functions.
+/// </summary>
 public static class Co {
 
 	/// <summary>
@@ -75,7 +76,7 @@ public static class Co {
 	/// <summary>
 	/// Repeats an action a given number of times (like a 'for' loop with a delay between each iteration). Counts down to zero.
 	/// </summary>
-	/// <see cref="RepeatAscending" />
+	/// <seeAlso cref="RepeatAscending" />
 	/// <param name="time">(optional) The initial delay before counting begins</param>
 	/// <param name="rate">The delay between actions</param>
 	/// <param name="count">The number of times to repeat</param>
@@ -97,7 +98,7 @@ public static class Co {
 	/// <summary>
 	/// Repeats an action a given number of times (like a 'for' loop with a delay between each iteration). Counts up from zero.
 	/// </summary>
-	/// <see cref="Repeat" />
+	/// <seeAlso cref="Repeat" />
 	/// <param name="time">(optional) The initial delay before counting begins</param>
 	/// <param name="rate">The delay between actions</param>
 	/// <param name="count">The number of times to repeat</param>

@@ -52,8 +52,12 @@ namespace Templates {
 		}
 
 		public void UnloadView () {
+
+			// Unload all the elements
+			// Skip overlay elements - they get unloaded just before being loaded
 			foreach (var element in LoadedElements) {
-				element.Value.Unload ();
+				if (!IsOverlayElement (element.Key))
+					element.Value.Unload ();
 			}
 			OnUnloadView ();
 			Loaded = false;
@@ -71,21 +75,25 @@ namespace Templates {
 			// Loads the template elements based on the provided data
 			// If the template has an element without any associated data, it is not rendered
 			foreach (var element in Elements) {
-				
+
 				string k = element.Key;
 				ScreenElementUI v = element.Value;
 				ScreenElement elementData;
 
-				if (data.TryGetValue (k, out elementData)) {
-
+				// Special case: Unload overlay elements on load
+				// Then load them if they're active in this view
+				if (IsOverlayElement (k)) {
+					if (v.Loaded) v.Unload ();
 					if (k == "coins")
 						v.Visible = Settings.CoinsEnabled;
 					if (k == "pot")
 						v.Visible = Settings.PotEnabled;
+				}
 
+				if (data.TryGetValue (k, out elementData)) {
 					v.Load (elementData);
 				} else {
-					v.gameObject.SetActive (false);
+					v.gameObject.SetActive (false); 
 				}
 			}
 
@@ -108,6 +116,10 @@ namespace Templates {
 			} catch {
 				throw new System.Exception ("The template '" + this + "' does not contain an element with the id '" + id + "'");
 			}
+		}
+
+		bool IsOverlayElement (string id) {
+			return id == "coins" || id == "pot" || id == "back";
 		}
 
 		protected virtual void OnLoadView () {}

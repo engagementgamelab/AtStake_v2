@@ -45,7 +45,7 @@ namespace Templates {
 				childElements[i].Transform.SetSiblingIndex (i);
 
 			int counter = childElements.Count-1;
-			Co.InvokeWhileTrue (0.5f, 1f, () => { return counter >= 0; }, () => {
+			Co.InvokeWhileTrue (0.5f, 2.5f, () => { return counter >= 0; }, () => {
 				childElements[counter].Visible = true;
 				counter --;
 			}, () => {
