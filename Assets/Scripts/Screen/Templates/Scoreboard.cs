@@ -29,16 +29,29 @@ namespace Templates {
 		}
 
 		protected override void OnLoadView () {
-			// Scores.Visible = false;
+			Elements["next"].Visible = false;
+			Elements["decider_instructions"].Visible = false;
+			foreach (TextElementUI t in Scores.ChildElements)
+				t.Visible = false;
 		}
 
 		protected override void OnInputEnabled () {
-			// TODO: not quite working
+
 			List<TextElementUI> childElements = Scores.ChildElements;
 			childElements.Sort ((x, y) => ValueFromText (x.Text).CompareTo (ValueFromText (y.Text)));
-			for (int i = 0; i < childElements.Count; i ++) {
-				childElements[0].Transform.SetSiblingIndex (i);
-			}
+			childElements.Reverse ();
+
+			for (int i = 0; i < childElements.Count; i ++)
+				childElements[i].Transform.SetSiblingIndex (i);
+
+			int counter = childElements.Count-1;
+			Co.InvokeWhileTrue (0.5f, 1f, () => { return counter >= 0; }, () => {
+				childElements[counter].Visible = true;
+				counter --;
+			}, () => {
+				Elements["next"].Visible = true;
+				Elements["decider_instructions"].Visible = true;
+			});
 		}
 
 		int ValueFromText (Text text) {

@@ -58,7 +58,8 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Backslash)) {
 			// Skip to decide
-			GotoView ("decide");
+			// GotoView ("decide");
+			GotoView ("scoreboard");
 
 			/*// Skip to last round
 			SetupRoles ();

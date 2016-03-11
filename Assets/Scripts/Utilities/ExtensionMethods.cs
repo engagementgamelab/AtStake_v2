@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -372,5 +373,24 @@ public static class ExtensionMethods {
 	        list[k] = list[n];  
 	        list[n] = value;  
 	    }  
+	}
+
+	public static void Print (this IList list) {
+		foreach (var i in list) {
+			if (i.GetType () == typeof (IList)) {
+				((IList)i).Print ();
+			} else {
+				Debug.Log (i);
+			}
+		}
+	}
+
+	public static void Print<T> (this List<T> list, Func<T, object> onPrint) where T : class {
+		foreach (T t in list) {
+			if (onPrint != null)
+				Debug.Log (onPrint (t));
+			else
+				Debug.Log (t);
+		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Templates {
 
-	public class FinalScoreboard : Template {
+	public class FinalScoreboard : Scoreboard {
 
 		public override TemplateSettings Settings {
 			get {
