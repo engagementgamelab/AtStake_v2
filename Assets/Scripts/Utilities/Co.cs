@@ -41,6 +41,33 @@ public static class Co {
 		});
 	}
 
+	public static void Repeat (float rate, int count, System.Action<int> onInvoke, System.Action onEnd=null) {
+		Repeat (0f, rate, count, onInvoke, onEnd);
+	}
+
+	public static void Repeat (float time, float rate, int count, System.Action<int> onInvoke, System.Action onEnd=null) {
+		InvokeWhileTrue (time, rate, () => { return count > 0; }, () => {
+			count --;
+			onInvoke (count);
+			if (count == 0 && onEnd != null)
+				onEnd ();
+		});
+	}
+
+	public static void RepeatAscending (float rate, int max, System.Action<int> onInvoke, System.Action onEnd=null) {
+		RepeatAscending (0f, rate, max, onInvoke, onEnd);
+	}
+
+	public static void RepeatAscending (float time, float rate, int max, System.Action<int> onInvoke, System.Action onEnd=null) {
+		int count = 0;
+		InvokeWhileTrue (time, rate, () => { return count < max; }, () => {
+			onInvoke (count);
+			count ++;
+			if (count == max && onEnd != null)
+				onEnd ();
+		});
+	}
+
 	static IEnumerator CoWaitForSeconds (float seconds, System.Action onEnd) {
 		float e = 0f;
 		while (e < seconds) {

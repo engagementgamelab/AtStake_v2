@@ -16,6 +16,10 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 		}
 	}
 
+	public int Count {
+		get { return Elements.Count; }
+	}
+
 	public OnAdd onAdd;
 	public OnRemove onRemove;
 

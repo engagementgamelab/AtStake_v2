@@ -241,7 +241,13 @@
     },
     {
       "Symbol": "pot",
-      "Instructions": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins. Everyone else begins with {{player_start_coin_count}} coins. At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot. The pot has {{pot_coin_count}} coins to start."
+      "Text": {
+        "instruction1": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins.",
+        "instruction2": "Everyone else begins with {{player_start_coin_count}} coins.",
+        "instruction3": "At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot.",
+        "instruction4": "The round begins with {{pot_coin_count}} coins in the pot.",
+        "instruction5": "ok? let'S GO!!!"
+      }
     },
     {
       "Symbol": "question",

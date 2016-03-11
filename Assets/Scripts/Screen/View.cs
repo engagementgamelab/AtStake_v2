@@ -212,6 +212,10 @@ namespace Views {
 			return Elements.ContainsKey (id);
 		}
 
+		protected string GetText (string id) {
+			return DataManager.GetTextFromScreen (Model, id, TextVariables);
+		}
+
 		// Routing
 		public void GotoView (string id) {
 			views.Goto (id);

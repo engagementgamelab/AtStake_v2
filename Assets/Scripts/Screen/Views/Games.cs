@@ -11,6 +11,7 @@ namespace Views {
 		protected override void OnInitElements () {
 			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("game_list", new ListElement<ButtonElement> ());
+			Elements.Add ("searching", new TextElement ("Searching for games..."));
 		}
 
 		protected override void OnShow () {
@@ -30,6 +31,7 @@ namespace Views {
 					}));
 				}
 				list.Set (hostButtons);
+				Elements["searching"].Active = list.Count == 0;
 			});
 		}
 

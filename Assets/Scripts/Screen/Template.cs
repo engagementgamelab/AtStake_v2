@@ -25,9 +25,11 @@ namespace Templates {
 						.ConvertAll (x => x.GetComponent<ScreenElementUI> ());
 
 					elements = new Dictionary<string, ScreenElementUI> ();
-					foreach (ScreenElementUI e in childElements) {
+					foreach (ScreenElementUI e in childElements)
 						elements.Add (e.id, e);
-					}
+
+					foreach (var e in overlayElements)
+						elements.Add (e.Key, e.Value);
 				}
 				return elements;
 			}
@@ -38,10 +40,12 @@ namespace Templates {
 		}
 
 		protected bool Loaded { get; private set; }
+		Dictionary<string, ScreenElementUI> overlayElements;
 
 		void OnEnable () { Loaded = false; }
 
-		public void LoadView (View view) {
+		public void LoadView (View view, Dictionary<string, ScreenElementUI> overlayElements) {
+			this.overlayElements = overlayElements;
 			LoadElements (view.Elements);
 			OnLoadView ();
 			Loaded = true;
@@ -67,12 +71,21 @@ namespace Templates {
 			// Loads the template elements based on the provided data
 			// If the template has an element without any associated data, it is not rendered
 			foreach (var element in Elements) {
+				
 				string k = element.Key;
+				ScreenElementUI v = element.Value;
 				ScreenElement elementData;
+
 				if (data.TryGetValue (k, out elementData)) {
-					element.Value.Load (elementData);
+
+					if (k == "coins")
+						v.Visible = Settings.CoinsEnabled;
+					if (k == "pot")
+						v.Visible = Settings.PotEnabled;
+
+					v.Load (elementData);
 				} else {
-					element.Value.gameObject.SetActive (false);
+					v.gameObject.SetActive (false);
 				}
 			}
 

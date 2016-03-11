@@ -73,7 +73,8 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
 			// Skip to decks screen
-			SetupGame ();
+			// SetupGame ();
+			GotoView ("pot");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Minus)) {
@@ -114,12 +115,16 @@ public class GameInstanceManager : MonoBehaviour {
 		SetupRoles (() => {
 			Co.YieldWhileTrue (() => { return !PlayersOnView ("roles"); }, () => {
 				Co.WaitForSeconds (0.5f, () => {
+
 					instances[0].Dispatcher.ScheduleMessage ("GotoView", "pot");
-					Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
-						Co.WaitForSeconds (0.5f, () => {
-							instances[0].Dispatcher.ScheduleMessage ("GotoView", id);
+
+					if (id != "pot") {
+						Co.YieldWhileTrue (() => { return !PlayersOnView ("pot"); }, () => {
+							Co.WaitForSeconds (0.5f, () => {
+								instances[0].Dispatcher.ScheduleMessage ("GotoView", id);
+							});
 						});
-					});
+					}
 				});
 			});
 		});
