@@ -18,7 +18,7 @@ namespace Templates {
 				};
 			}
 		}
-
+		
 		ListElementUI<TextElementUI, TextElement> scores;
 		ListElementUI<TextElementUI, TextElement> Scores {
 			get {
