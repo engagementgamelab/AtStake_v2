@@ -43,28 +43,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public OnNameTaken onNameTaken;
 
 	public NetworkingManager networking;
-	// public BluetoothManager bluetooth;
-	// public LocalManager local;
-
-	/*IConnectionManager connectionManager;
-	IConnectionManager ConnectionManager {
-		get {
-			if (connectionManager == null) {
-				#if SINGLE_SCREEN
-				connectionManager = local;
-				#else
-				if (networking.Status == ConnectionStatus.Succeeded) {
-					connectionManager = networking;
-				} else {
-					connectionManager = bluetooth;
-				}
-				connectionManager = networking;
-				// #endif
-			}
-			connectionManager.Init (Game.Name, this);
-			return connectionManager;
-		}
-	}*/
 
 	NetworkingManager connectionManager;
 	NetworkingManager ConnectionManager {

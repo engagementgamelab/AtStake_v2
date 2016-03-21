@@ -12,6 +12,13 @@ public class GenericList : UIElement {
 		element.Transform.localPosition = Vector3.zero;
 	}
 
+	public void AddText (string s, bool bold=false) {
+		GenericText text = ObjectPool.Instantiate<GenericText> ();
+		text.Text.text = s;
+		text.Style = bold ? FontStyle.Bold : FontStyle.Normal;
+		Add<GenericText> (text);
+	}
+
 	public void Clear<T> () where T : UIElement {
 		ObjectPool.DestroyChildren<T> (Transform);
 	}

@@ -9,7 +9,7 @@ namespace Views {
 	public class Games : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
+			// Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("game_list", new ListElement<ButtonElement> ());
 			Elements.Add ("searching", new TextElement ("Searching for games..."));
 		}
@@ -18,7 +18,7 @@ namespace Views {
 
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
 
-			Game.Multiplayer.onRoomFull += OnRoomFull;
+			/*Game.Multiplayer.onRoomFull += OnRoomFull;
 			Game.Multiplayer.onNameTaken += OnNameTaken;
 			Game.Multiplayer.onConnect += OnConnect;
 
@@ -32,16 +32,16 @@ namespace Views {
 				}
 				list.Set (hostButtons);
 				Elements["searching"].Active = list.Count == 0;
-			});
+			});*/
 		}
 
 		protected override void OnHide () {
-			Game.Multiplayer.onRoomFull = null;
+			/*Game.Multiplayer.onRoomFull = null;
 			Game.Multiplayer.onNameTaken = null;
-			Game.Multiplayer.onConnect = null;
+			Game.Multiplayer.onConnect = null;*/
 		}
 		
-		void OnRoomFull () {
+		/*void OnRoomFull () {
 			Debug.Log ("ROOM FULL");
 		}
 
@@ -49,6 +49,6 @@ namespace Views {
 			Debug.Log ("NAME TAKEN");
 		}
 
-		void OnConnect () { GotoView ("lobby"); }
+		void OnConnect () { GotoView ("lobby"); }*/
 	}
 }

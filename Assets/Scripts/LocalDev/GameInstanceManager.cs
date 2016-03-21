@@ -85,7 +85,8 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void SetupRoles (System.Action callback=null) {
 		SetupGame ();
-		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer.Connected) != null; }, () => {
+		// Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer.Connected) != null; }, () => {
+		Co.YieldWhileTrue (() => { return MyNetworkDiscovery.broadcasting == null || instances.Find (x => !x.Multiplayer2.Connected) != null; }, () => {
 			instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
 			instances[0].Dispatcher.ScheduleMessage ("GotoView", "roles");
 			Co.WaitForSeconds (0.5f, () => {
@@ -103,7 +104,8 @@ public class GameInstanceManager : MonoBehaviour {
 			for (int i = 1; i < 3; i ++) {
 				AddPlayer ();
 				GameInstance gi = instances[i];
-				gi.Multiplayer.RequestHostList((List<string> hosts) => {
+				// gi.Multiplayer.RequestHostList((List<string> hosts) => {
+				gi.Multiplayer2.RequestHostList((List<string> hosts) => {
 					gi.JoinGame ();
 					gi.Views.Goto ("deck");
 				});

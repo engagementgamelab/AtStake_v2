@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using System.IO;
+using System.Linq;
 using UnityEditor;
 #endif
 
@@ -149,6 +150,7 @@ public class ObjectPool {
 	}
 }
 
+[InitializeOnLoad]
 public static class PoolIOHandler {
 
 	static string ApplicationPath {
@@ -159,7 +161,7 @@ public static class PoolIOHandler {
 		get { return ApplicationPath + "/Resources/Prefabs/"; }
 	}
 
-	static string Path {
+	static string PrefabsPath {
 		get { return "Prefabs/"; }
 	}
 
@@ -200,11 +202,56 @@ public static class PoolIOHandler {
 	}
 
 	static MonoBehaviour LoadMonoBehaviour (string id) {
-		return Resources.Load (Path + id, typeof (MonoBehaviour)) as MonoBehaviour;
+		return Resources.Load (PrefabsPath + id, typeof (MonoBehaviour)) as MonoBehaviour;
 	}
 
 	#if UNITY_EDITOR
-	
+
+	const string MONITOR_ITEM = "Object Pool/Monitor prefab changes";
+	static bool monitorEnabled;
+
+	static PoolIOHandler () {
+		PoolIOHandler.monitorEnabled = EditorPrefs.GetBool (PoolIOHandler.MONITOR_ITEM, true);
+		EditorApplication.delayCall += () => {
+			SetMonitorEnabled (monitorEnabled);
+		};
+	}
+
+	static void PrefabUpdated (GameObject go) {
+
+		GameObject prefab = PrefabUtility.GetPrefabParent (go) as GameObject;
+		string prefabPath = AssetDatabase.GetAssetPath (prefab);
+
+		// Skip if the prefab being updated is in the Resources directory
+		if (prefabPath.Contains ("Resources"))
+			return;
+		
+		string prefabName = Path.GetFileNameWithoutExtension (prefabPath);
+		string resourcePath = GetPrefabInResources (prefabName);
+		
+		// Only update if this prefab has been added to the Resources directory
+		if (resourcePath != null) {
+			AssetDatabase.DeleteAsset ("Assets" + resourcePath.Replace (Application.dataPath, ""));
+			AssetDatabase.CopyAsset (prefabPath, "Assets/Resources/Prefabs/" + prefabName + ".prefab");
+			AssetDatabase.Refresh ();
+		}
+	}
+
+	public static void SetMonitorEnabled (bool enabled) {
+		Menu.SetChecked (PoolIOHandler.MONITOR_ITEM, enabled);
+		EditorPrefs.SetBool (PoolIOHandler.MONITOR_ITEM, enabled);
+		PoolIOHandler.monitorEnabled = enabled;
+		if (enabled)
+			PrefabUtility.prefabInstanceUpdated += PrefabUpdated;
+		else
+			PrefabUtility.prefabInstanceUpdated -= PrefabUpdated;
+	}
+
+	[MenuItem (PoolIOHandler.MONITOR_ITEM)]
+	static void ToggleMonitor () {
+		SetMonitorEnabled (!PoolIOHandler.monitorEnabled);
+	}
+
 	[MenuItem ("Object Pool/Refresh Prefabs")]
 	static void RefreshResources () {
 
@@ -214,7 +261,7 @@ public static class PoolIOHandler {
 		string[] files = GetPrefabsInResources ();
 		foreach (string f in files) {
 
-			string fileName = f.Replace (ResourcesPath, "").Replace (".prefab", "");
+			string fileName = Path.GetFileNameWithoutExtension (f);
 			string projectPath = FindPrefabDirectory (fileName, ApplicationPath);
 
 			AssetDatabase.DeleteAsset ("Assets" + f.Replace (Application.dataPath, ""));
@@ -234,6 +281,12 @@ public static class PoolIOHandler {
 
 	public static string[] GetPrefabsInResources () {
 		return Directory.GetFiles (ResourcesPath, "*.prefab");
+	}
+
+	public static string GetPrefabInResources (string prefabName) {
+		return GetPrefabsInResources ()
+			.ToList<string> ()
+			.Find (x => x.Contains (prefabName + ".prefab"));
 	}
 
 	static string FindPrefabDirectory (string id, string path) {

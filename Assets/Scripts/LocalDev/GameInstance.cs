@@ -7,7 +7,8 @@ using Templates;
 public class GameInstance : MonoBehaviour {
 
 	public PlayerManager Manager { get; private set; }
-	public MultiplayerManager Multiplayer { get; private set; }
+	// public MultiplayerManager Multiplayer { get; private set; }
+	public MultiplayerManager2 Multiplayer2 { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public ViewManager Views { get; private set; }
 	public TemplateManager Templates { get; private set; }
@@ -22,7 +23,8 @@ public class GameInstance : MonoBehaviour {
 	void OnEnable () {
 
 		Manager 	= GameInstanceBehaviour.Init<PlayerManager> (transform);
-		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
+		// Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
+		Multiplayer2 = GameInstanceBehaviour.Init<MultiplayerManager2> (transform);
 		Dispatcher 	= GameInstanceBehaviour.Init<MessageDispatcher> (transform);
 		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
 		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
@@ -52,20 +54,20 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	public void EndGame () {
-		Multiplayer.Disconnect ();
+		// Multiplayer.Disconnect ();
 	}
 
 	public void HostGame () {
-		StartGame ();
+		/*StartGame ();
 		Multiplayer.HostGame ();
 		Multiplayer.onUpdateClients += OnUpdateClients;
-		Multiplayer.onDisconnect += OnDisconnect;
+		Multiplayer.onDisconnect += OnDisconnect;*/
 	}
 
 	public void JoinGame (string hostId="") {
-		StartGame ();
+		/*StartGame ();
 		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
-		Multiplayer.onDisconnect += OnDisconnect;
+		Multiplayer.onDisconnect += OnDisconnect;*/
 	}
 
 	void OnUpdateClients (List<string> clients) {
@@ -78,8 +80,8 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	void OnDisconnect () {
-		Views.OnDisconnect ();
+		/*Views.OnDisconnect ();
 		Multiplayer.onDisconnect -= OnDisconnect;
-		Dispatcher.RemoveAllListeners ();
+		Dispatcher.RemoveAllListeners ();*/
 	}
 }

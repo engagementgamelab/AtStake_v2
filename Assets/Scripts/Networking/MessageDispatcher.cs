@@ -23,11 +23,13 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	Confirmation confirmation = new Confirmation ("", new List<string> ());
 
 	bool Hosting {
-		get { return Game.Multiplayer.Hosting; }
+		// get { return Game.Multiplayer.Hosting; }
+		get { return Game.Multiplayer2.Hosting; }
 	}
 
 	List<string> Clients {
-		get { return Game.Multiplayer.Clients; }
+		// get { return Game.Multiplayer.Clients; }
+		get { return Game.Multiplayer2.Clients; }
 	}
 
 	/**
@@ -103,7 +105,8 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	// Client methods
 
 	void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
-		Game.Multiplayer.SendMessageToHost (msg);
+		// Game.Multiplayer.SendMessageToHost (msg);
+		Game.Multiplayer2.SendMessageToHost (msg);
 	}
 
 	// Host methods
@@ -129,7 +132,8 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		confirmation = new Confirmation (msg.id, Clients);
 
 		// Send message to all clients
-		Game.Multiplayer.SendMessageToClients (msg);
+		// Game.Multiplayer.SendMessageToClients (msg);
+		// Game.Multiplayer2.SendMessageToClients (msg);
 
 		// Fire off the message
 		ReceiveMessageEvent (msg);

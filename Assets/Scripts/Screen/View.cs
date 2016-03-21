@@ -25,7 +25,8 @@ namespace Views {
 		/// Returns true if this player is hosting
 		/// </summary>
 		protected bool IsHost {
-			get { return Game.Multiplayer.Hosting; }
+			// get { return Game.Multiplayer.Hosting; }
+			get { return Game.Multiplayer2.Hosting; }
 		}
 
 		/// <summary>

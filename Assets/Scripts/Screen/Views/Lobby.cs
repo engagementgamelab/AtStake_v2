@@ -15,7 +15,8 @@ namespace Views {
 			peerList = new ListElement<TextElement> ();
 			Elements.Add ("peer_list", peerList);
 
-			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
+			// MULTIPLAYER
+			// Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], 
 				() => { AllGotoView ("deck"); }) { Active = false });
 		}
@@ -50,8 +51,9 @@ namespace Views {
 				Elements["play"].Active = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
 		}
 
-		public override void OnDisconnect () {
+		// MULTIPLAYER
+		/*public override void OnDisconnect () {
 			GotoView ("hostjoin");
-		}
+		}*/
 	}
 }
