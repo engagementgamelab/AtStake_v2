@@ -7,6 +7,12 @@ public class GameInstanceBehaviour : MB {
 		get { return Parent.GetComponent<GameInstance> (); }
 	}
 
+	public static T Init<T> (Transform parent) where T : GameInstanceBehaviour {
+		T t = ObjectPool.Instantiate<T> ();
+		t.Transform.SetParent (parent);
+		return t;
+	}
+
 	protected void Log (object msg) {
 		Debug.Log (Game.Manager.Player.Name + ": " + msg);
 	}

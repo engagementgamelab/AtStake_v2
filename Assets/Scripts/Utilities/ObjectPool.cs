@@ -59,7 +59,7 @@ public class ObjectPool {
 
 		active.Add (m);
 		m.gameObject.SetActive (true);
-		m.transform.parent = null;
+		m.transform.SetParent (null);
 
 		return m;
 	}

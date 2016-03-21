@@ -81,7 +81,7 @@ public class MasterMsgTypes
 		public string gameName;
 		public string clientName;
 	}
-
+	
 	// -------------- server to client messages --------------
 
 	public class Room

@@ -9,10 +9,8 @@ public class GameInstance : MonoBehaviour {
 	public PlayerManager Manager { get; private set; }
 	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
-
 	public ViewManager Views { get; private set; }
 	public TemplateManager Templates { get; private set; }
-
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
@@ -23,29 +21,15 @@ public class GameInstance : MonoBehaviour {
 
 	void OnEnable () {
 
-		Manager = ObjectPool.Instantiate<PlayerManager> ();
-		Manager.transform.SetParent (transform);
-
-		Multiplayer = ObjectPool.Instantiate<MultiplayerManager> ();
-		Multiplayer.transform.SetParent (transform);
-
-		Dispatcher = ObjectPool.Instantiate<MessageDispatcher> ();
-		Dispatcher.transform.SetParent (transform);
-
-		Templates = ObjectPool.Instantiate<TemplateManager> ();
-
-		Views = ObjectPool.Instantiate<ViewManager> ();
-		Views.transform.SetParent (transform);
-
-		Decks = ObjectPool.Instantiate<DeckManager> ();
-		Decks.transform.SetParent (transform);
-
-		Rounds = ObjectPool.Instantiate<RoundManager> ();
-		Rounds.transform.SetParent (transform);
-
-		Score = ObjectPool.Instantiate<ScoreManager> ();
-		Score.transform.SetParent (transform);
-
+		Manager 	= GameInstanceBehaviour.Init<PlayerManager> (transform);
+		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
+		Dispatcher 	= GameInstanceBehaviour.Init<MessageDispatcher> (transform);
+		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
+		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
+		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
+		Rounds 		= GameInstanceBehaviour.Init<RoundManager> (transform);
+		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
+		
 		InitApp ();
 	}
 
