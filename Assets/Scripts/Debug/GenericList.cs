@@ -19,6 +19,12 @@ public class GenericList : UIElement {
 		Add<GenericText> (text);
 	}
 
+	public void AddButton (string label, System.Action onPress) {
+		GenericButton button = ObjectPool.Instantiate<GenericButton> ();
+		button.Init (label, onPress);
+		Add<GenericButton> (button);
+	}
+
 	public void Clear<T> () where T : UIElement {
 		ObjectPool.DestroyChildren<T> (Transform);
 	}

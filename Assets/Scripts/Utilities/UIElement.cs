@@ -103,6 +103,16 @@ public class UIElement : MB {
 		set { Button.interactable = value; }
 	}
 
+	LayoutElement layout = null;
+	protected LayoutElement Layout {
+		get {
+			if (layout == null) {
+				layout = GetComponent<LayoutElement> ();
+			}
+			return layout;
+		}
+	}
+
 	protected T GetChildComponent<T> (int childIndex) where T : MonoBehaviour {
 		return RectTransform.GetChild (childIndex).GetComponent<T> () as T;
 	}

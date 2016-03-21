@@ -43,19 +43,10 @@ public class MessageDispatcherDebug : MonoBehaviour {
 				
 				// Configure the new list
 				targetList.Id = target;
-				// AddTextToList (targetList, target + ":", true);
 				targetList.AddText (target + ":", true);
 			}
 
-			// AddTextToList (targetList, listener.Value);
 			targetList.AddText (listener.Value);
 		}
 	}
-
-	/*void AddTextToList (GenericList l, string s, bool bold=false) {
-		GenericText text = ObjectPool.Instantiate<GenericText> ();
-		text.Text.text = s;
-		text.Style = bold ? FontStyle.Bold : FontStyle.Normal;
-		l.Add<GenericText> (text);
-	}*/
 }
