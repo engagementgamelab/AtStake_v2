@@ -21,7 +21,7 @@ public static class Co {
 	/// </summary>
 	/// <param name="seconds">The amount of time to wait</param>
 	/// <param name="onEnd">The function to run</param>
-	public static void WaitForSeconds (float seconds, System.Action onEnd) {
+	public static void WaitForSeconds (float seconds, Action onEnd) {
 		CoMb.Instance.StartCoroutine (CoWaitForSeconds (seconds, onEnd));
 	}
 
@@ -29,7 +29,7 @@ public static class Co {
 	/// Waits one frame, and then runs a function
 	/// </summary>
 	/// <param name="onEnd">The function to run</param>
-	public static void WaitForFixedUpdate (System.Action onEnd) {
+	public static void WaitForFixedUpdate (Action onEnd) {
 		CoMb.Instance.StartCoroutine (CoWaitForFixedUpdate (onEnd));
 	}
 
@@ -39,7 +39,7 @@ public static class Co {
 	/// <param name="duration">The amount of time to run (in seconds)</param>
 	/// <param name="action">The function to call every frame. Passes the % of time that has elapsed as a float</param>
 	/// <param name="onEnd">(option) A function to run after the time has elapsed</param>
-	public static void StartCoroutine (float duration, System.Action<float> action, System.Action onEnd=null) {
+	public static void StartCoroutine (float duration, Action<float> action, Action onEnd=null) {
 		CoMb.Instance.StartCoroutine (CoCoroutine (duration, action, onEnd));
 	}
 
@@ -48,9 +48,19 @@ public static class Co {
 	/// </summary>
 	/// <param name="condition">The expression to evaluate. Continues waiting as long as the expression returns true.</param>
 	/// <param name="onEnd">The function to call when the expression returns false</param>
-	public static void YieldWhileTrue (Func<bool> condition, System.Action onEnd) {
+	public static void YieldWhileTrue (Func<bool> condition, Action onEnd) {
 		CoMb.Instance.StartCoroutine (CoYieldWhileTrue (condition, onEnd));
 	} 
+
+	/// <summary>
+	/// Runs a function every frame as long as the condition evaluates to true
+	/// </summary>
+	/// <param name="condition">The expression to evaluate</param>
+	/// <param name="onRun">The function to run while true</param>
+	/// <param name="onEnd">(optional) a function to run when the loop exits</param>
+	public static void RunWhileTrue (Func<bool> condition, Action onRun, Action onEnd=null) {
+		CoMb.Instance.StartCoroutine (CoRunWhileTrue (condition, onRun, onEnd));
+	}
 
 	/// <summary>
 	/// Repeatedly invokes a function as long as the condition is met
@@ -59,7 +69,7 @@ public static class Co {
 	/// <param name="rate">The delay between invoke calls</param>
 	/// <param name="condition">The expression to evaluate. When 'condition' is false, the coroutine stops.</param>
 	/// <param name="onEnd">(optional) A function to run after the coroutine has finished</param>
-	public static void InvokeWhileTrue (float time, float rate, Func<bool> condition, System.Action onInvoke, System.Action onEnd=null) {
+	public static void InvokeWhileTrue (float time, float rate, Func<bool> condition, Action onInvoke, Action onEnd=null) {
 		
 		float duration = time > 0f ? time : rate;
 
@@ -82,7 +92,7 @@ public static class Co {
 	/// <param name="count">The number of times to repeat</param>
 	/// <param name="onInvoke">The function to call. Passes in the loop index.</param>
 	/// <param name="onEnd">(optional) The function to call when the count is 0</param>
-	public static void Repeat (float time, float rate, int count, System.Action<int> onInvoke, System.Action onEnd=null) {
+	public static void Repeat (float time, float rate, int count, Action<int> onInvoke, Action onEnd=null) {
 		InvokeWhileTrue (time, rate, () => { return count > 0; }, () => {
 			count --;
 			onInvoke (count);
@@ -91,7 +101,7 @@ public static class Co {
 		});
 	}
 
-	public static void Repeat (float rate, int count, System.Action<int> onInvoke, System.Action onEnd=null) {
+	public static void Repeat (float rate, int count, Action<int> onInvoke, Action onEnd=null) {
 		Repeat (0f, rate, count, onInvoke, onEnd);
 	}
 
@@ -104,7 +114,7 @@ public static class Co {
 	/// <param name="count">The number of times to repeat</param>
 	/// <param name="onInvoke">The function to call. Passes in the loop index.</param>
 	/// <param name="onEnd">(optional) The function to call when the count is 0</param>
-	public static void RepeatAscending (float time, float rate, int max, System.Action<int> onInvoke, System.Action onEnd=null) {
+	public static void RepeatAscending (float time, float rate, int max, Action<int> onInvoke, Action onEnd=null) {
 		int count = 0;
 		InvokeWhileTrue (time, rate, () => { return count < max; }, () => {
 			onInvoke (count);
@@ -114,11 +124,11 @@ public static class Co {
 		});
 	}
 
-	public static void RepeatAscending (float rate, int max, System.Action<int> onInvoke, System.Action onEnd=null) {
+	public static void RepeatAscending (float rate, int max, Action<int> onInvoke, Action onEnd=null) {
 		RepeatAscending (0f, rate, max, onInvoke, onEnd);
 	}
 
-	static IEnumerator CoWaitForSeconds (float seconds, System.Action onEnd) {
+	static IEnumerator CoWaitForSeconds (float seconds, Action onEnd) {
 		float e = 0f;
 		while (e < seconds) {
 			e += Time.deltaTime;
@@ -127,12 +137,12 @@ public static class Co {
 		onEnd ();
 	}
 
-	static IEnumerator CoWaitForFixedUpdate (System.Action onEnd) {
+	static IEnumerator CoWaitForFixedUpdate (Action onEnd) {
 		yield return new WaitForFixedUpdate ();
 		onEnd ();
 	}
 
-	static IEnumerator CoCoroutine (float duration, System.Action<float> action, System.Action onEnd) {
+	static IEnumerator CoCoroutine (float duration, Action<float> action, Action onEnd) {
 		float e = 0f;
 		while (e < duration) {
 			e += Time.deltaTime;
@@ -143,9 +153,18 @@ public static class Co {
 			onEnd ();
 	}
 
-	static IEnumerator CoYieldWhileTrue (Func<bool> condition, System.Action onEnd) {
+	static IEnumerator CoYieldWhileTrue (Func<bool> condition, Action onEnd) {
 		while (condition ()) yield return null;
 		onEnd ();
+	}
+
+	static IEnumerator CoRunWhileTrue (Func<bool> condition, Action onRun, Action onEnd) {
+		while (condition ()) {
+			onRun ();
+			yield return null;
+		}
+		if (onEnd != null)
+			onEnd ();
 	}
 }
 

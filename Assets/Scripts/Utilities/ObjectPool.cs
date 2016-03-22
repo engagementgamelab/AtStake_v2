@@ -145,6 +145,16 @@ public class ObjectPool {
 		}
 	}
 
+	public static void DestroyChildrenWithCriteria<T> (Transform t, System.Func<T, bool> criteria) where T : MonoBehaviour {
+
+		List<T> children = new List<T> ();
+		foreach (Transform child in t) children.Add (child.GetComponent<T> ());
+
+		for (int i = 0; i < children.Count; i ++) {
+			if (criteria (children[i])) Destroy<T> (children[i]);
+		}
+	}
+
 	public static List<T> GetActiveInstances<T> () where T : MonoBehaviour {
 		return GetPool<T> ().active.ConvertAll (x => (T)x);
 	}

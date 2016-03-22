@@ -25,6 +25,10 @@ public class GenericList : UIElement {
 		Add<GenericButton> (button);
 	}
 
+	public void Remove<T> (T element) where T : UIElement {
+		ObjectPool.Destroy<T> (element);
+	}
+
 	public void Clear<T> () where T : UIElement {
 		ObjectPool.DestroyChildren<T> (Transform);
 	}
