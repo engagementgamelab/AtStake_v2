@@ -113,6 +113,11 @@ public class MasterMsgTypes
 		public int resultCode;
 	}
 
+	public class UnregisteredHostMessage : MessageBase
+	{
+		public int resultCode;
+	}
+
 	public class RegisteredClientMessage : MessageBase
 	{
 		public int resultCode;
