@@ -99,6 +99,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 		Listener.onUpdateHostsDelegates[multiplayer] (new Dictionary<string, string> ());
 		Listener.onUpdateHostsDelegates.Remove (multiplayer);
 		if (Listener.onUpdateHostsDelegates.Count == 0) {
+			Listener.StopBroadcast ();
 			ObjectPool.Destroy<MasterServerDiscovery> (Listener);
 			Listener = null;
 		}
@@ -112,7 +113,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 		Dictionary<string, string> hosts = new Dictionary<string, string> ();
 
-		// Build the host list
+		// Populate the host list
 		// Update the timers for all received broadcasts
 		// Broadcasts that have not timed out are added to the host list
 		foreach (var result in received) {
