@@ -37,7 +37,15 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 				if (buttons.Find (x => x.Id == host) == null) {
 					hostList.AddButton (host, () => {
 						multiplayer.JoinGame (host, (string response) => {
-							Debug.Log (response);
+							switch (response) {
+								case "registered": break;
+								case "room_full": 
+									RequestHostList ();
+									break;
+								case "name_taken": 
+									RequestHostList ();
+									break;
+							}
 						});
 					});
 				}

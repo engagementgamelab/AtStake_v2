@@ -6,9 +6,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 
 	public delegate void OnLogMessage (string msg);
 
-	public bool Hosting {
-		get { return Host == Game.Name; }
-	}
+	public bool Hosting { get; private set; }
 
 	public bool Connected {
 		get { return Hosting || connected; }
@@ -49,7 +47,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 
 		// Set this player as the host
 		Host = Game.Name;
-		Clients.Clear ();
+		Hosting = true;
 
 		// Start the server
 		server.Initialize ();
@@ -165,6 +163,8 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	void OnDisconnect () {
 		if (Hosting) {
 			MasterServerDiscovery.StopBroadcasting ();
+			Clients.Clear ();
+			Hosting = false;
 		} else {
 			MasterServerDiscovery.StopListening (this);
 		}
@@ -178,7 +178,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		
 		string keyword;
 		switch (resultCode) {
-			case -2: keyword = "room_full"; break;
+			case -2: keyword = "room_full"; break; // (technically this should never happen because the host will stop broadcasting when the room is maxed out)
 			case -1: keyword = "name_taken"; break;
 			default: 
 				keyword = "registered"; 

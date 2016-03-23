@@ -59,6 +59,10 @@ public class NetworkMasterServer2 : MonoBehaviour {
 
 			return clientName;
 		}
+
+		public bool HasPlayer (int connectId) {
+			return players.ToList<MasterMsgTypes.Player> ().FindIndex (x => x.connectionId == connectId) >= 0;
+		}
 	}
 
 	Settings settings = new Settings ();
@@ -117,9 +121,10 @@ public class NetworkMasterServer2 : MonoBehaviour {
 	void OnDisconnect (NetworkMessage netMsg) {
 		
 		var msg = new MasterMsgTypes.UnregisteredClientMessage ();
+		int connectionId = netMsg.conn.connectionId;
 
-		// Don't remove the player from the room if they are the host
-		if (netMsg.conn.connectionId != room.connectionId) {
+		// Only remove the player if they're in the room and not the host
+		if (connectionId != room.connectionId && room.HasPlayer (connectionId)) {
 			msg.clientName = room.RemovePlayer (netMsg.conn.connectionId);
 			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
 		}

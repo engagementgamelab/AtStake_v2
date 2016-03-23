@@ -155,7 +155,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 	}
 
 	public void UnregisterHost (string hostName, System.Action onUnregister) {
-
+		
 		if (!IsConnected) {
 			Log ("Could not unregister host because the client is not connected");
 			return;

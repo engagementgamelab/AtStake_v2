@@ -54,7 +54,6 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StopBroadcasting () {
 
-		Debug.Log ("STOP");
 		if (Broadcaster == null)
 			return;
 
