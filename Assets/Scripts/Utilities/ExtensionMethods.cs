@@ -377,8 +377,11 @@ public static class ExtensionMethods {
 
 	public static void Print (this IList list) {
 		foreach (var i in list) {
-			if (i.GetType () == typeof (IList)) {
+			System.Type t = i.GetType ();
+			if (t == typeof (IList)) {
 				((IList)i).Print ();
+			} else if (t == typeof (IDictionary)) {
+				((IDictionary)i).Print ();
 			} else {
 				Debug.Log (i);
 			}
@@ -391,6 +394,20 @@ public static class ExtensionMethods {
 				Debug.Log (onPrint (t));
 			else
 				Debug.Log (t);
+		}
+	}
+
+	public static void Print (this IDictionary dict) {
+		foreach (var d in dict) {
+			System.Type t = d.GetType ();
+			if (t == typeof (IList)) {
+				((IList)d).Print ();
+			} else if (t == typeof (IDictionary)) {
+				((IDictionary)d).Print ();
+			} else {
+				DictionaryEntry entry = (DictionaryEntry)d;
+				Debug.Log (entry.Key + ": " + entry.Value);
+			}
 		}
 	}
 }

@@ -46,11 +46,21 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	}
 
 	void Update () {
-		hostButton.gameObject.SetActive (!multiplayer.client.IsConnected && MasterServerDiscovery.Broadcaster == null);
-		hostListButton.gameObject.SetActive (!multiplayer.Hosting && !MasterServerDiscovery.HasListener (multiplayer));
-		disconnectButton.gameObject.SetActive (multiplayer.client.IsConnected || MasterServerDiscovery.HasListener (multiplayer));
 
-		broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Broadcaster not running" : "Broadcaster running";
+		hostButton.gameObject.SetActive (
+			!multiplayer.client.IsConnected 
+			&& MasterServerDiscovery.Broadcaster == null 
+			&& !MasterServerDiscovery.HasListener (multiplayer));
+
+		hostListButton.gameObject.SetActive (
+			!multiplayer.Hosting 
+			&& !MasterServerDiscovery.HasListener (multiplayer));
+
+		disconnectButton.gameObject.SetActive (
+			multiplayer.client.IsConnected
+			|| MasterServerDiscovery.HasListener (multiplayer));
+
+		broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
 		listenerStatus.text = MasterServerDiscovery.HasListener (multiplayer) ? "Listening" : "Not listening";
 	}
 

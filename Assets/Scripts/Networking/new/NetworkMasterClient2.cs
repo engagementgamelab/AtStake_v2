@@ -5,11 +5,16 @@ using System.Collections.Generic;
 
 public class NetworkMasterClient2 : MonoBehaviour {
 
-	class Callbacks {
+	public class Callbacks {
 		
 		Dictionary<string, System.Action> callbacks = new Dictionary<string, System.Action> () {
 			{ "connect", null },
-			{ "unregister_host", null }
+			{ "unregister_host", null },
+			{ "disconnected", null }
+		};
+
+		List<string> singleInvoke = new List<string> () {
+			"connect", "unregister_host"
 		};
 
 		public void AddListener (string id, System.Action action) {
@@ -24,7 +29,8 @@ public class NetworkMasterClient2 : MonoBehaviour {
 			try {
 				if (callbacks[id] != null) {
 					callbacks[id] ();
-					callbacks[id] = null;
+					if (singleInvoke.Contains (id))
+						callbacks[id] = null;
 				}
 			} catch {
 				throw new System.Exception ("Could not trigger the callback because '" + id + "' has not been added to the dictionary of callbacks");
@@ -60,7 +66,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 	public delegate void OnClientMessage (string msg);
 
-	Callbacks callbacks = new Callbacks ();
+	public readonly Callbacks callbacks = new Callbacks ();
 	Settings settings = new Settings ();
 	NetworkClient client;
 
@@ -135,6 +141,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 	void OnDisconnect (NetworkMessage netMsg) {
 		Log("Client Disconnected from Master");
 		Reset ();
+		callbacks.Call ("disconnected");
 	}
 
 	void OnError (NetworkMessage netMsg) {
@@ -149,6 +156,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 	void OnUnregisteredHost (NetworkMessage netMsg) {
 		callbacks.Call ("unregister_host");
+		callbacks.Call ("disconnected");
 		Reset ();
 		Log ("Unregistered host");
 	}

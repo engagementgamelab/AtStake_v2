@@ -56,10 +56,8 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StopBroadcasting () {
 
-		if (Broadcaster == null) {
-			Debug.LogWarning ("Discovery is not broadcasting");
+		if (Broadcaster == null)
 			return;
-		}
 
 		Broadcaster.StopBroadcast ();
 		ObjectPool.Destroy<MasterServerDiscovery> (Broadcaster);
@@ -91,14 +89,13 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StopListening (MultiplayerManager2 multiplayer) {
 
-		if (Listener == null) {
-			Debug.LogWarning ("Discovery is not listening");
+		if (Listener == null)
 			return;
-		}
 
 		Listener.onUpdateHostsDelegates[multiplayer] (new Dictionary<string, string> ());
 		Listener.onUpdateHostsDelegates.Remove (multiplayer);
 		if (Listener.onUpdateHostsDelegates.Count == 0) {
+			Listener.received.Clear ();
 			Listener.StopBroadcast ();
 			ObjectPool.Destroy<MasterServerDiscovery> (Listener);
 			Listener = null;
@@ -133,7 +130,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 			hosts.Add (broadcastResult.GameName.Replace (".", ""), address);
 		}
-		
+
 		SendUpdateHostsMessage (hosts);
 		timeSinceLastReceived = 0f;
 	}

@@ -30,6 +30,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;
 		MasterServerDiscovery.onLogMessage += SendLogMessage;
+		client.callbacks.AddListener ("disconnected", OnDisconnect);
 	}
 
 	public void HostGame () {
@@ -48,13 +49,15 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		});
 	}
 
+	// Intentional disconnect (player chose to terminate their connection)
+	// This will stop the discovery service
+	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
 		if (Hosting) {
 			MasterServerDiscovery.StopBroadcasting ();
 			client.UnregisterHost (Host, () => {
 				Co.WaitForFixedUpdate (() => {
 					server.Reset ();
-					Host = "";
 				});
 			});
 		} else {
@@ -78,6 +81,18 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
+	}
+
+	// -- Events
+
+	// Intentional & unintentional disconnect
+	void OnDisconnect () {
+		if (Hosting) {
+			MasterServerDiscovery.StopBroadcasting ();
+		} else {
+			MasterServerDiscovery.StopListening (this);
+		}
+		Host = "";
 	}
 
 	// -- Debugging
