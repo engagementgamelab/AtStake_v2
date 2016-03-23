@@ -133,7 +133,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 		// Send message to all clients
 		// Game.Multiplayer.SendMessageToClients (msg);
-		// Game.Multiplayer2.SendMessageToClients (msg);
+		Game.Multiplayer2.SendMessageToClients (msg);
 
 		// Fire off the message
 		ReceiveMessageEvent (msg);
@@ -142,9 +142,8 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	void ReceiveMessageEvent (MasterMsgTypes.GenericMessage msg) {
 		Dictionary<OnReceiveMessage, string> tempListeners = new Dictionary<OnReceiveMessage, string> (listeners);
 		foreach (var listener in tempListeners) {
-			if (listener.Value == msg.id) {
+			if (listener.Value == msg.id)
 				listener.Key (msg);
-			}
 		}
 	}
 

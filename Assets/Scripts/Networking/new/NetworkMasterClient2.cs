@@ -76,15 +76,20 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		}
 	}
 
+	// delegates
 	public delegate void OnClientMessage (string msg);
-
-	public readonly Callbacks callbacks = new Callbacks ();
-	Settings settings = new Settings ();
-	NetworkClient client;
+	public delegate void OnReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg);
+	public delegate void OnReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg);
 
 	public OnClientMessage onClientMessage;
 	public System.Action<int, string> onRegisteredClient;
 	public System.Action<string> onUnregisteredClient;
+	public OnReceiveMessageFromClient onReceiveMessageFromClient;
+	public OnReceiveMessageFromHost onReceiveMessageFromHost;
+
+	public readonly Callbacks callbacks = new Callbacks ();
+	Settings settings = new Settings ();
+	NetworkClient client;
 
 	public void StartAsHost (string hostName, System.Action onConnect) {
 		Initialize (() => {
@@ -119,8 +124,10 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		// application messages
 		client.RegisterHandler (MasterMsgTypes.RegisteredHostId, OnRegisteredHost);
 		client.RegisterHandler (MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
-		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
-		client.RegisterHandler(MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
+		client.RegisterHandler (MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
+		client.RegisterHandler (MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
+		client.RegisterHandler (MasterMsgTypes.GenericHostFromClientId, OnHostFromClient);
+		client.RegisterHandler (MasterMsgTypes.GenericClientsFromHostId, OnClientsFromHost);
 	}
 
 	void Reset () {
@@ -172,6 +179,28 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 	public void UnregisterClient () {
 		Reset ();
+	}
+
+	// -- Generic messages
+
+	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+		client.Send (MasterMsgTypes.GenericClientToHostId, msg);
+	}
+
+	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+		client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
+	}
+
+	void OnHostFromClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
+		if (onReceiveMessageFromClient != null)
+			onReceiveMessageFromClient (msg);
+	}
+
+	void OnClientsFromHost (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
+		if (onReceiveMessageFromHost != null)
+			onReceiveMessageFromHost (msg);
 	}
 
 	// -- System Handlers

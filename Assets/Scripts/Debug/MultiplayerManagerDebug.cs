@@ -12,6 +12,8 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	public Button disconnectButton;
 	public Text broadcasterStatus;
 	public Text listenerStatus;
+	public Text hostStatus;
+	public Text clientsStatus;
 	MultiplayerManager2 multiplayer;
 
 	public void Init (MultiplayerManager2 multiplayer) {
@@ -67,6 +69,19 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 
 		broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
 		listenerStatus.text = MasterServerDiscovery.HasListener (multiplayer) ? "Listening" : "Not listening";
+
+		if (multiplayer.Connected) {
+			hostStatus.text = "Host: " + multiplayer.Host;
+			if (multiplayer.Hosting)
+				hostStatus.text += " (me)";
+			clientsStatus.text = "Players: ";
+			foreach (string player in multiplayer.Game.Manager.PlayerNames) {
+				clientsStatus.text += player + ", ";
+			}
+		} else {
+			hostStatus.text = "not connected";
+			clientsStatus.text = "";
+		}
 	}
 
 	void OnLogMessage (string msg) {

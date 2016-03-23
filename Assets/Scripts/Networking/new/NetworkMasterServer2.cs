@@ -76,20 +76,37 @@ public class NetworkMasterServer2 : MonoBehaviour {
 		NetworkServer.Listen (settings.MasterServerPort);
 
 		// server msgs
-		NetworkServer.RegisterHandler(MsgType.Connect, OnConnect);
-		NetworkServer.RegisterHandler(MsgType.Disconnect, OnDisconnect);
-		NetworkServer.RegisterHandler(MsgType.Error, OnError);
+		NetworkServer.RegisterHandler (MsgType.Connect, OnConnect);
+		NetworkServer.RegisterHandler (MsgType.Disconnect, OnDisconnect);
+		NetworkServer.RegisterHandler (MsgType.Error, OnError);
 
 		// application msgs
-		NetworkServer.RegisterHandler(MasterMsgTypes.RegisterHostId, OnRegisterHost);
-		NetworkServer.RegisterHandler(MasterMsgTypes.UnregisterHostId, OnUnregisterHost);
-		NetworkServer.RegisterHandler(MasterMsgTypes.RegisterClientId, OnRegisterClient);
+		NetworkServer.RegisterHandler (MasterMsgTypes.RegisterHostId, OnRegisterHost);
+		NetworkServer.RegisterHandler (MasterMsgTypes.UnregisterHostId, OnUnregisterHost);
+		NetworkServer.RegisterHandler (MasterMsgTypes.RegisterClientId, OnRegisterClient);
+		NetworkServer.RegisterHandler (MasterMsgTypes.GenericClientToHostId, OnClientToHost);
+		NetworkServer.RegisterHandler (MasterMsgTypes.GenericHostToClientsId, OnHostToClients);
 
 		Log ("Server initialized");
 	}
 
 	public void Reset () {
 		NetworkServer.Shutdown();
+	}
+
+	// -- Generic messages
+
+	void OnClientToHost (NetworkMessage netMsg) {
+		NetworkServer.SendToClient (
+			room.connectionId,
+			MasterMsgTypes.GenericHostFromClientId, 
+			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
+	}
+
+	void OnHostToClients (NetworkMessage netMsg) {
+		NetworkServer.SendToAll (
+			MasterMsgTypes.GenericClientsFromHostId, 
+			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	// -- System Handlers

@@ -31,12 +31,18 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	bool connected = false;
 
 	void OnEnable () {
+
+		// debugging messages
 		server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;
 		MasterServerDiscovery.onLogMessage += SendLogMessage;
+
+		// events
 		client.callbacks.AddListener ("disconnected", OnDisconnect);
 		client.onRegisteredClient += OnRegisteredClient;
 		client.onUnregisteredClient += OnUnregisteredClient;
+		client.onReceiveMessageFromHost += ReceiveMessageFromHost;
+		client.onReceiveMessageFromClient += ReceiveMessageFromClient;
 	}
 
 	public void HostGame () {
@@ -99,26 +105,29 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 			players += player + "|";
 		}
 		players += Host;
-		Debug.Log (players);
-		// Dispatcher.ScheduleMessage ("UpdatePlayers", players);
+		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", players);
 	}
 
 	// -- Messaging
 
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
-
+		client.SendMessageToHost (msg);
 	}
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
-
+		Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
-
+		client.SendMessageToClients (msg);
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
-
+		
+		// Pass this on to all clients except the host
+		if (!Hosting) {
+			Game.Dispatcher.ReceiveMessageFromHost (msg);
+		}
 	}
 
 	// -- Events

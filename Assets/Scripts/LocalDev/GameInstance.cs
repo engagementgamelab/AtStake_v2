@@ -42,6 +42,7 @@ public class GameInstance : MonoBehaviour {
 	
 	// Called when the app is started
 	void InitApp () {
+		Manager.Init ();
 		Views.Init ();
 		Decks.Init ();
 	}
@@ -70,14 +71,15 @@ public class GameInstance : MonoBehaviour {
 		Multiplayer.onDisconnect += OnDisconnect;*/
 	}
 
-	void OnUpdateClients (List<string> clients) {
+	// deprecate
+	/*void OnUpdateClients (List<string> clients) {
 		string players = "";
 		foreach (string player in clients) {
 			players += player + "|";
 		}
 		players += Manager.Player.Name;
 		Dispatcher.ScheduleMessage ("UpdatePlayers", players);
-	}
+	}*/
 
 	void OnDisconnect () {
 		/*Views.OnDisconnect ();
