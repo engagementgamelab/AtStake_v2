@@ -46,7 +46,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 		// Hack to fix an infuriating unity bug where gameData was getting combined in NetworkDiscovery's OnReceivedBroadcast
 		// The periods act as a buffer. They should be removed before the data is actually rendered to the screen.
-		Broadcaster.broadcastData = gameName + "....................";
+		Broadcaster.broadcastData = gameName + "~~~~~~~~~~~~~~~~~~~~~~~~~~";
 
 		Broadcaster.Initialize ();
 		if (!Broadcaster.StartAsServer ()) {
@@ -128,7 +128,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 				}
 			}
 
-			hosts.Add (broadcastResult.GameName.Replace (".", ""), address);
+			hosts.Add (broadcastResult.GameName.Replace ("~", ""), address);
 		}
 
 		SendUpdateHostsMessage (hosts);

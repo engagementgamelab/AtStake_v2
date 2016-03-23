@@ -32,8 +32,13 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 
 			// Add new hosts
 			foreach (string host in hosts) {
-				if (buttons.Find (x => x.Id == host) == null)
-					hostList.AddButton (host, () => {});
+				if (buttons.Find (x => x.Id == host) == null) {
+					hostList.AddButton (host, () => {
+						multiplayer.JoinGame (host, (string response) => {
+							Debug.Log (response);
+						});
+					});
+				}
 			}
 
 			// Remove old hosts

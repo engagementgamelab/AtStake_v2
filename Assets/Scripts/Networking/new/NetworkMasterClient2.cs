@@ -13,27 +13,39 @@ public class NetworkMasterClient2 : MonoBehaviour {
 			{ "disconnected", null }
 		};
 
+		// For these callbacks, listeners will be removed after the callback has been invoked
 		List<string> singleInvoke = new List<string> () {
 			"connect", "unregister_host"
 		};
 
-		public void AddListener (string id, System.Action action) {
+		public void AddListener (string key, System.Action action) {
 			try {
-				callbacks[id] += action;
+				if (singleInvoke.Contains (key))
+					callbacks[key] = null;
+				callbacks[key] += action;
 			} catch {
-				throw new System.Exception ("No callback with the id '" + id + "' could be found");
+				throw new System.Exception ("No callback with the key '" + key + "' could be found");
 			}
 		}
 
-		public void Call (string id) {
+		public void RemoveListener (string key, System.Action action) {
 			try {
-				if (callbacks[id] != null) {
-					callbacks[id] ();
-					if (singleInvoke.Contains (id))
-						callbacks[id] = null;
+				callbacks[key] -= action;
+			} catch {
+				throw new System.Exception ("No callback with the key '" + key + "' could be found");
+			}
+		}
+
+		// Call the callback with the given key. Optionally provide a string to pass along as well.
+		public void Call (string key, string str="") {
+			try {
+				if (callbacks[key] != null) {
+					callbacks[key] ();
+					if (singleInvoke.Contains (key))
+						callbacks[key] = null;
 				}
 			} catch {
-				throw new System.Exception ("Could not trigger the callback because '" + id + "' has not been added to the dictionary of callbacks");
+				throw new System.Exception ("Could not trigger the callback because '" + key + "' has not been added to the dictionary of callbacks");
 			}
 		}
 	}
@@ -71,8 +83,23 @@ public class NetworkMasterClient2 : MonoBehaviour {
 	NetworkClient client;
 
 	public OnClientMessage onClientMessage;
+	public System.Action<int, string> onRegisteredClient;
 
-	public void Initialize (System.Action onConnect=null) {
+	public void StartAsHost (string hostName, System.Action onConnect) {
+		Initialize (() => {
+			RegisterHost (hostName);
+			onConnect ();
+		});
+	}
+
+	public void StartAsClient (string clientName, string hostIp, System.Action onConnect) {
+		Initialize (() => {
+			RegisterClient (clientName);
+			onConnect ();
+		}, hostIp);
+	}
+
+	void Initialize (System.Action onConnect, string ipAddress="") {
 
 		if (client != null) {
 			Log ("Already connected");
@@ -81,7 +108,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 		callbacks.AddListener ("connect", onConnect);
 		client = new NetworkClient ();
-		client.Connect (settings.IpAddress, settings.MasterServerPort);
+		client.Connect (ipAddress == "" ? settings.IpAddress : ipAddress, settings.MasterServerPort);
 
 		// system messages
 		client.RegisterHandler (MsgType.Connect, OnConnect);
@@ -91,9 +118,10 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		// application messages
 		client.RegisterHandler (MasterMsgTypes.RegisteredHostId, OnRegisteredHost);
 		client.RegisterHandler (MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
+		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
 	}
 
-	public void Reset () {
+	void Reset () {
 
 		if (client == null)
 			return;
@@ -102,7 +130,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		client = null;
 	}
 
-	public void RegisterHost (string gameName) {
+	void RegisterHost (string hostName) {
 
 		if (!IsConnected) {
 			Log ("Could not register host because client is not connected");
@@ -111,13 +139,13 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 		var msg = new MasterMsgTypes.RegisterHostMessage ();
 		msg.gameTypeName = settings.GameTypeName;
-		msg.gameName = gameName;
+		msg.gameName = hostName;
 		msg.hostPort = settings.GamePort;
 
 		client.Send (MasterMsgTypes.RegisterHostId, msg);
 	}
 
-	public void UnregisterHost (string gameName, System.Action onUnregister) {
+	public void UnregisterHost (string hostName, System.Action onUnregister) {
 
 		if (!IsConnected) {
 			Log ("Could not unregister host because the client is not connected");
@@ -128,8 +156,16 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 		var msg = new MasterMsgTypes.UnregisterHostMessage ();
 		msg.gameTypeName = settings.GameTypeName;
-		msg.gameName = gameName;
+		msg.gameName = hostName;
 		client.Send (MasterMsgTypes.UnregisterHostId, msg);
+	}
+
+	void RegisterClient (string clientName) {
+
+		var msg = new MasterMsgTypes.RegisterClientMessage ();
+		msg.gameTypeName = settings.GameTypeName;
+		msg.clientName = clientName;
+		client.Send (MasterMsgTypes.RegisterClientId, msg);
 	}
 
 	// -- System Handlers
@@ -159,6 +195,12 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		callbacks.Call ("disconnected");
 		Reset ();
 		Log ("Unregistered host");
+	}
+
+	void OnRegisteredClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
+		if (onRegisteredClient != null)
+			onRegisteredClient (msg.resultCode, msg.clientName);
 	}
 
 	// -- Debugging

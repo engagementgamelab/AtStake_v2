@@ -17,7 +17,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	public string Host { get; private set; }
 
 	public List<string> Clients {
-		get { return new List<string> (); }
+		get { return clients; }
 	}
 
 	public NetworkMasterServer2 server;
@@ -25,20 +25,44 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	public OnLogMessage onLogMessage;
 
 	Dictionary<string, string> hosts;
+	List<string> clients = new List<string> ();
+	System.Action<string> clientRegisterResponse;
 
 	void OnEnable () {
 		server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;
 		MasterServerDiscovery.onLogMessage += SendLogMessage;
 		client.callbacks.AddListener ("disconnected", OnDisconnect);
+		client.onRegisteredClient += OnRegisteredClient;
 	}
 
 	public void HostGame () {
+
+		// Set this player as the host
 		Host = Game.Name;
+
+		// Start the server
 		server.Initialize ();
-		client.Initialize (() => {
-			client.RegisterHost (Host);
+
+		// Start the client and connect to the server as the host
+		// Use the discovery service to broadcast this game
+		client.StartAsHost (Host, () => {
 			MasterServerDiscovery.StartBroadcasting (Host);
+		});
+	}
+
+	public void JoinGame (string hostName, System.Action<string> response) {
+
+		// Set the host
+		Host = hostName;
+
+		// Setup response callback
+		clientRegisterResponse += response;
+
+		// Start the client and request to join the host's game
+		// Stop the discovery service from listening for games to join
+		client.StartAsClient (Game.Name, hosts[Host], () => {
+			MasterServerDiscovery.StopListening (this);
 		});
 	}
 
@@ -63,6 +87,16 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		} else {
 			MasterServerDiscovery.StopListening (this);
 		}
+	}
+
+	void UpdatePlayers () {
+		string players = "";
+		foreach (string player in Clients) {
+			players += player + "|";
+		}
+		players += Host;
+		Debug.Log (players);
+		// Dispatcher.ScheduleMessage ("UpdatePlayers", players);
 	}
 
 	// -- Messaging
@@ -93,6 +127,32 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 			MasterServerDiscovery.StopListening (this);
 		}
 		Host = "";
+	}
+
+	void OnRegisteredClient (int resultCode, string clientName) {
+		bool thisClient = clientName == Game.Name;
+		string keyword;
+		switch (resultCode) {
+			case -2: keyword = "room_full"; break;
+			case -1: keyword = "name_taken"; break;
+			default: 
+				keyword = "registered"; 
+				if (Hosting) {
+					Clients.Add (clientName);
+					UpdatePlayers ();
+				}
+				break;
+		}
+		if (thisClient) {
+			SendClientRegisterResponse (keyword);
+		}
+	}
+
+	void SendClientRegisterResponse (string response) {
+		if (clientRegisterResponse != null) {
+			clientRegisterResponse (response);
+			clientRegisterResponse = null;
+		}
 	}
 
 	// -- Debugging
