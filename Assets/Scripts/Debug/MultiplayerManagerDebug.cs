@@ -85,6 +85,6 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	}
 
 	void OnLogMessage (string msg) {
-		msgList.AddText (msg);
+		// msgList.AddText (msg);
 	}
 }

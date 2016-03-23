@@ -49,6 +49,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 
 		// Set this player as the host
 		Host = Game.Name;
+		Clients.Clear ();
 
 		// Start the server
 		server.Initialize ();
@@ -96,7 +97,27 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		} else {
 			MasterServerDiscovery.StopListening (this);
 			client.UnregisterClient ();
+			OnDisconnect ();
 		}
+	}
+
+	// -- Client handling
+
+	// Only the host uses these methods
+	// Adds/removes clients to the list of clients as they join and leave the room
+	// Enables/disables the discovery broadcaster based on whether or not there are available slots in the room
+	// Sends a message whenever the client list is updated so that all players know who's in the game
+
+	void AddClient (string clientName) {
+		Clients.Add (clientName);
+		UpdateBroadcast ();
+		UpdatePlayers ();
+	}
+
+	void RemoveClient (string clientName) {
+		Clients.Remove (clientName);
+		UpdateBroadcast ();
+		UpdatePlayers ();
 	}
 
 	void UpdatePlayers () {
@@ -106,6 +127,14 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		}
 		players += Host;
 		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", players);
+	}
+
+	void UpdateBroadcast () {
+		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
+		if (Clients.Count+1 < maxPlayerCount)
+			MasterServerDiscovery.StartBroadcasting (Host);
+		else
+			MasterServerDiscovery.StopBroadcasting ();
 	}
 
 	// -- Messaging
@@ -123,7 +152,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
-		
+
 		// Pass this on to all clients except the host
 		if (!Hosting) {
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
@@ -154,8 +183,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 			default: 
 				keyword = "registered"; 
 				if (Hosting) {
-					Clients.Add (clientName);
-					UpdatePlayers ();
+					AddClient (clientName);
 				} else if (thisClient) {
 					Connected = true;
 				}
@@ -169,8 +197,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 
 	void OnUnregisteredClient (string clientName) {
 		if (Hosting) {
-			Clients.Remove (clientName);
-			UpdatePlayers ();
+			RemoveClient (clientName);
 		}
 	}
 

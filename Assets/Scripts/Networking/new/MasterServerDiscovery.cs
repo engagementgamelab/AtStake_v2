@@ -36,10 +36,8 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StartBroadcasting (string gameName) {
 
-		if (Broadcaster != null) {
-			Debug.LogWarning ("Discovery already broadcasting");
+		if (Broadcaster != null)
 			return;
-		}
 
 		Broadcaster = ObjectPool.Instantiate<MasterServerDiscovery> ();
 		Broadcaster.useNetworkManager = false;
@@ -56,6 +54,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StopBroadcasting () {
 
+		Debug.Log ("STOP");
 		if (Broadcaster == null)
 			return;
 
@@ -89,7 +88,7 @@ public class MasterServerDiscovery : NetworkDiscovery {
 
 	public static void StopListening (MultiplayerManager2 multiplayer) {
 
-		if (Listener == null)
+		if (Listener == null || !Listener.onUpdateHostsDelegates.ContainsKey (multiplayer))
 			return;
 
 		Listener.onUpdateHostsDelegates[multiplayer] (new Dictionary<string, string> ());

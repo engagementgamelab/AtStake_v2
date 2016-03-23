@@ -20,7 +20,7 @@ public class NetworkMasterServer2 : MonoBehaviour {
 			hostIp = ipAddress;
 			hostPort = port;
 			connectionId = connectId;
-			playerLimit = DataManager.GetSettings ().PlayerCountRange[0];
+			playerLimit = DataManager.GetSettings ().PlayerCountRange[1];
 			players = new MasterMsgTypes.Player[0];
 		}
 
@@ -47,7 +47,7 @@ public class NetworkMasterServer2 : MonoBehaviour {
 		public string RemovePlayer (int connectId) {
 
 			if (connectionId == connectId) {
-				throw new System.Exception ("Player could not be removed from the room because it is not the host");
+				throw new System.Exception ("Player could not be removed from the room because it is the host");
 			}
 
 			List<MasterMsgTypes.Player> playersList = players.ToList<MasterMsgTypes.Player> ();
@@ -115,9 +115,14 @@ public class NetworkMasterServer2 : MonoBehaviour {
 	void OnError (NetworkMessage netMsg) { Log ("Server received error"); }
 
 	void OnDisconnect (NetworkMessage netMsg) {
+		
 		var msg = new MasterMsgTypes.UnregisteredClientMessage ();
-		msg.clientName = room.RemovePlayer (netMsg.conn.connectionId);
-		NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+
+		// Don't remove the player from the room if they are the host
+		if (netMsg.conn.connectionId != room.connectionId) {
+			msg.clientName = room.RemovePlayer (netMsg.conn.connectionId);
+			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+		}
 	}
 
 	// -- Application Handlers
