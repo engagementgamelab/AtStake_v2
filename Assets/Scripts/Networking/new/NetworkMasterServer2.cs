@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -42,6 +43,22 @@ public class NetworkMasterServer2 : MonoBehaviour {
 			players = playersList.ToArray ();
 			return 0;
 		}
+
+		public string RemovePlayer (int connectId) {
+
+			if (connectionId == connectId) {
+				throw new System.Exception ("Player could not be removed from the room because it is not the host");
+			}
+
+			List<MasterMsgTypes.Player> playersList = players.ToList<MasterMsgTypes.Player> ();
+			int index = playersList.FindIndex (x => x.connectionId == connectId);
+			string clientName = playersList[index].name;
+			if (index >= 0)
+				playersList.RemoveAt (index);
+			players = playersList.ToArray ();
+
+			return clientName;
+		}
 	}
 
 	Settings settings = new Settings ();
@@ -77,9 +94,14 @@ public class NetworkMasterServer2 : MonoBehaviour {
 
 	// -- System Handlers
 
-	void OnConnect (NetworkMessage msg) { Log ("Master received client"); }
-	void OnDisconnect (NetworkMessage msg) { Log ("Master lost client"); }
-	void OnError (NetworkMessage msg) { Log ("Server received error"); }
+	void OnConnect (NetworkMessage netMsg) { Log ("Master received client"); }
+	void OnError (NetworkMessage netMsg) { Log ("Server received error"); }
+
+	void OnDisconnect (NetworkMessage netMsg) {
+		var msg = new MasterMsgTypes.UnregisteredClientMessage ();
+		msg.clientName = room.RemovePlayer (netMsg.conn.connectionId);
+		NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
+	}
 
 	// -- Application Handlers
 

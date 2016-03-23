@@ -58,7 +58,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 			&& !MasterServerDiscovery.HasListener (multiplayer));
 
 		hostListButton.gameObject.SetActive (
-			!multiplayer.Hosting 
+			!multiplayer.Connected 
 			&& !MasterServerDiscovery.HasListener (multiplayer));
 
 		disconnectButton.gameObject.SetActive (

@@ -84,6 +84,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 
 	public OnClientMessage onClientMessage;
 	public System.Action<int, string> onRegisteredClient;
+	public System.Action<string> onUnregisteredClient;
 
 	public void StartAsHost (string hostName, System.Action onConnect) {
 		Initialize (() => {
@@ -119,6 +120,7 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		client.RegisterHandler (MasterMsgTypes.RegisteredHostId, OnRegisteredHost);
 		client.RegisterHandler (MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
 		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
+		client.RegisterHandler(MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
 	}
 
 	void Reset () {
@@ -168,6 +170,10 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		client.Send (MasterMsgTypes.RegisterClientId, msg);
 	}
 
+	public void UnregisterClient () {
+		Reset ();
+	}
+
 	// -- System Handlers
 
 	void OnConnect (NetworkMessage netMsg) {
@@ -201,6 +207,12 @@ public class NetworkMasterClient2 : MonoBehaviour {
 		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
 		if (onRegisteredClient != null)
 			onRegisteredClient (msg.resultCode, msg.clientName);
+	}
+
+	void OnUnregisteredClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.UnregisteredClientMessage> ();
+		if (onUnregisteredClient != null)
+			onUnregisteredClient (msg.clientName);
 	}
 
 	// -- Debugging
