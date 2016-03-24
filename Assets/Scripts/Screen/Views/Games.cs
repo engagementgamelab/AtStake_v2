@@ -9,7 +9,7 @@ namespace Views {
 	public class Games : View {
 
 		protected override void OnInitElements () {
-			// Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
+			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("game_list", new ListElement<ButtonElement> ());
 			Elements.Add ("searching", new TextElement ("Searching for games..."));
 		}
@@ -18,37 +18,30 @@ namespace Views {
 
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
 
-			/*Game.Multiplayer.onRoomFull += OnRoomFull;
-			Game.Multiplayer.onNameTaken += OnNameTaken;
-			Game.Multiplayer.onConnect += OnConnect;
-
 			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
 				Dictionary<string, ButtonElement> hostButtons = new Dictionary<string, ButtonElement> ();
 				for (int i = 0; i < hosts.Count; i ++) {
 					string hostId = hosts[i];
 					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
-						Game.JoinGame (hostId);
+						Game.Multiplayer.JoinGame (hostId, (string response) => {
+							Game.StartGame ();
+							switch (response) {
+								case "room_full": OnShow (); break;
+								case "name_taken":
+									Debug.Log ("NAME TAKEN");
+									// todo
+									OnShow ();
+									break;
+								case "registered":
+									GotoView ("lobby");
+									break;
+							}
+						});
 					}));
 				}
 				list.Set (hostButtons);
 				Elements["searching"].Active = list.Count == 0;
-			});*/
+			});
 		}
-
-		protected override void OnHide () {
-			/*Game.Multiplayer.onRoomFull = null;
-			Game.Multiplayer.onNameTaken = null;
-			Game.Multiplayer.onConnect = null;*/
-		}
-		
-		/*void OnRoomFull () {
-			Debug.Log ("ROOM FULL");
-		}
-
-		void OnNameTaken () {
-			Debug.Log ("NAME TAKEN");
-		}
-
-		void OnConnect () { GotoView ("lobby"); }*/
 	}
 }

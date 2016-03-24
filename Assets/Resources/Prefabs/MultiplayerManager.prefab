@@ -1,53 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &107000
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 499918}
-  - 114: {fileID: 11431454}
-  m_Layer: 0
-  m_Name: MasterServer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &119046
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 427108}
-  - 114: {fileID: 11467344}
-  m_Layer: 0
-  m_Name: NetworkingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &188774
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 410586}
-  - 114: {fileID: 11460006}
-  m_Layer: 0
-  m_Name: MasterClient
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &196202
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 418260}
-  - 114: {fileID: 11452056}
+  - 114: {fileID: 11426440}
   m_Layer: 0
   m_Name: MultiplayerManager
   m_TagString: Untagged
@@ -64,18 +16,50 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &410586
+--- !u!1 &197344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 469064}
+  - 114: {fileID: 11484042}
+  m_Layer: 0
+  m_Name: NetworkMasterClient
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &198402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 404228}
+  - 114: {fileID: 11457816}
+  m_Layer: 0
+  m_Name: NetworkMasterServer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &404228
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 188774}
+  m_GameObject: {fileID: 198402}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 427108}
-  m_RootOrder: 1
+  m_Father: {fileID: 418260}
+  m_RootOrder: 0
 --- !u!4 &418260
 Transform:
   m_ObjectHideFlags: 1
@@ -86,48 +70,23 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 427108}
+  - {fileID: 404228}
+  - {fileID: 469064}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!4 &427108
+--- !u!4 &469064
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119046}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 499918}
-  - {fileID: 410586}
-  m_Father: {fileID: 418260}
-  m_RootOrder: 0
---- !u!4 &499918
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 107000}
+  m_GameObject: {fileID: 197344}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 427108}
-  m_RootOrder: 0
---- !u!114 &11431454
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 107000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2210b74bafe41449e981625a5f5ea11b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterServerPort: 31485
---- !u!114 &11452056
+  m_Father: {fileID: 418260}
+  m_RootOrder: 1
+--- !u!114 &11426440
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -135,42 +94,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 196202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d7ee2071dc6c47aa988f22ef6755f86, type: 3}
+  m_Script: {fileID: 11500000, guid: caadae1a997164dcc8c552341c04c4aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networking: {fileID: 11467344}
---- !u!114 &11460006
+  server: {fileID: 11457816}
+  client: {fileID: 11484042}
+--- !u!114 &11457816
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 188774}
+  m_GameObject: {fileID: 198402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 776c91af793fd4fee8c84a615404eda8, type: 3}
+  m_Script: {fileID: 11500000, guid: eeff84c1fcec74861a545c170daea720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dedicatedServer: 0
-  MasterServerIpAddress: 255.255.255.255
-  MasterServerPort: 31485
-  updateRate: 0
-  gameTypeName: AtStake
-  gameName: Forrest
-  gamePort: 0
-  yoffset: 0
---- !u!114 &11467344
+--- !u!114 &11484042
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119046}
+  m_GameObject: {fileID: 197344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26d553e80c31a4df0b84f947bf2dec25, type: 3}
+  m_Script: {fileID: 11500000, guid: 18b02e9262d6845d2807e5d7e5cf3756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: {fileID: 11431454}
-  client: {fileID: 11460006}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -7,8 +7,7 @@ using Templates;
 public class GameInstance : MonoBehaviour {
 
 	public PlayerManager Manager { get; private set; }
-	// public MultiplayerManager Multiplayer { get; private set; }
-	public MultiplayerManager2 Multiplayer2 { get; private set; }
+	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public ViewManager Views { get; private set; }
 	public TemplateManager Templates { get; private set; }
@@ -23,8 +22,7 @@ public class GameInstance : MonoBehaviour {
 	void OnEnable () {
 
 		Manager 	= GameInstanceBehaviour.Init<PlayerManager> (transform);
-		// Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
-		Multiplayer2 = GameInstanceBehaviour.Init<MultiplayerManager2> (transform);
+		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
 		Dispatcher 	= GameInstanceBehaviour.Init<MessageDispatcher> (transform);
 		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
 		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
@@ -48,42 +46,20 @@ public class GameInstance : MonoBehaviour {
 	}
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
-	void StartGame () {
+	public void StartGame () {
 		Manager.Init ();
 		Rounds.Init ();
 		Score.Init ();
+		Multiplayer.onDisconnected += OnDisconnect;
 	}
 
 	public void EndGame () {
-		// Multiplayer.Disconnect ();
+		Multiplayer.Disconnect ();
 	}
-
-	public void HostGame () {
-		/*StartGame ();
-		Multiplayer.HostGame ();
-		Multiplayer.onUpdateClients += OnUpdateClients;
-		Multiplayer.onDisconnect += OnDisconnect;*/
-	}
-
-	public void JoinGame (string hostId="") {
-		/*StartGame ();
-		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
-		Multiplayer.onDisconnect += OnDisconnect;*/
-	}
-
-	// deprecate
-	/*void OnUpdateClients (List<string> clients) {
-		string players = "";
-		foreach (string player in clients) {
-			players += player + "|";
-		}
-		players += Manager.Player.Name;
-		Dispatcher.ScheduleMessage ("UpdatePlayers", players);
-	}*/
 
 	void OnDisconnect () {
-		/*Views.OnDisconnect ();
-		Multiplayer.onDisconnect -= OnDisconnect;
-		Dispatcher.RemoveAllListeners ();*/
+		Views.OnDisconnect ();
+		Multiplayer.onDisconnected -= OnDisconnect;
+		Dispatcher.RemoveAllListeners ();
 	}
 }

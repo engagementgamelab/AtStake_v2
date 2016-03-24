@@ -14,9 +14,9 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	public Text listenerStatus;
 	public Text hostStatus;
 	public Text clientsStatus;
-	MultiplayerManager2 multiplayer;
+	MultiplayerManager multiplayer;
 
-	public void Init (MultiplayerManager2 multiplayer) {
+	public void Init (MultiplayerManager multiplayer) {
 		this.multiplayer = multiplayer;
 		#if SHOW_DEBUG_INFO
 		multiplayer.onLogMessage += OnLogMessage;

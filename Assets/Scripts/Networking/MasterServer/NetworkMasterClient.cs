@@ -1,99 +1,74 @@
-﻿#undef DEBUG
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections;
+using System.Collections.Generic;
 
-public class NetworkMasterClient : MonoBehaviour
-{
+public class NetworkMasterClient : MonoBehaviour {
 
-	public delegate void OnReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg);
-	public delegate void OnReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg);
+	public class Callbacks {
+		
+		Dictionary<string, System.Action> callbacks = new Dictionary<string, System.Action> () {
+			{ "connect", null },
+			{ "unregister_host", null },
+			{ "disconnected", null }
+		};
 
-	public bool dedicatedServer;
-	public string MasterServerIpAddress;
-	public int MasterServerPort;
-	public int updateRate;
-	public string gameTypeName;
-	public string gameName;
-	public int gamePort;
+		// For these callbacks, listeners will be removed after the callback has been invoked
+		List<string> singleInvoke = new List<string> () {
+			"connect", "unregister_host"
+		};
 
-	[SerializeField]
-	public int yoffset = 0;
-
-	string HostGameType = "";
-	string HostGameName = "";
-
-	MasterMsgTypes.Room[] hosts = null;
-
-	public NetworkClient client = null;
-
-	static NetworkMasterClient singleton;
-
-	// Callbacks
-	System.Action onConnect;
-	System.Action onUnregisterHost;
-
-	// Delegates
-	public System.Action<int, string> onRegisteredClient;
-	public System.Action<string> onUnregisteredClient;
-	public System.Action onDisconnected;
-	public OnReceiveMessageFromClient onReceiveMessageFromClient;
-	public OnReceiveMessageFromHost onReceiveMessageFromHost;
-
-	void Awake()
-	{
-		if (singleton == null)
-		{
-			singleton = this;
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
-	}
-	public void InitializeClient(string ipAddress="", System.Action onConnect=null)
-	{
-		if (client != null)
-		{
-			Debug.LogError("Already connected");
-			return;
+		public void AddListener (string key, System.Action action) {
+			try {
+				if (singleInvoke.Contains (key))
+					callbacks[key] = null;
+				callbacks[key] += action;
+			} catch {
+				throw new System.Exception ("No callback with the key '" + key + "' could be found");
+			}
 		}
 
-		this.onConnect = onConnect;
+		public void RemoveListener (string key, System.Action action) {
+			try {
+				callbacks[key] -= action;
+			} catch {
+				throw new System.Exception ("No callback with the key '" + key + "' could be found");
+			}
+		}
 
-		client = new NetworkClient();
-		client.Connect(ipAddress == "" ? MasterServerIpAddress : ipAddress, MasterServerPort);
-
-		// system msgs
-		client.RegisterHandler(MsgType.Connect, OnClientConnect);
-		client.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
-		client.RegisterHandler(MsgType.Error, OnClientError);
-
-		// application msgs
-		client.RegisterHandler(MasterMsgTypes.RegisteredHostId, OnRegisteredHost);
-		client.RegisterHandler(MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
-		client.RegisterHandler(MasterMsgTypes.ListOfHostsId, OnListOfHosts);
-		client.RegisterHandler(MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
-		client.RegisterHandler(MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
-		client.RegisterHandler(MasterMsgTypes.GenericHostFromClientId, OnHostFromClient);
-		client.RegisterHandler(MasterMsgTypes.GenericClientsFromHostId, OnClientsFromHost);
-
+		// Call the callback with the given key. Optionally provide a string to pass along as well.
+		public void Call (string key, string str="") {
+			try {
+				if (callbacks[key] != null) {
+					callbacks[key] ();
+					if (singleInvoke.Contains (key))
+						callbacks[key] = null;
+				}
+			} catch {
+				throw new System.Exception ("Could not trigger the callback because '" + key + "' has not been added to the dictionary of callbacks");
+			}
+		}
 	}
 
-	public void ResetClient()
-	{
-		if (client == null)
-			return;
+	class Settings {
 
-		client.Disconnect();
-		client = null;
-		hosts = null;
+		public string MasterServerIpAddress = "255.255.255.255";
+		public int MasterServerPort = 31485;
+		public string GameTypeName = "@Stake";
+		public int GamePort = 3148;
+		public readonly bool LogMessagesInConsole = false;
+
+		public string IpAddress {
+			#if SINGLE_SCREEN
+			get { return "127.0.0.1"; }
+			#else
+			get { return Network.player.ipAddress; }
+			#endif
+		}
 	}
 
-	public bool isConnected
-	{
-		get
-		{
+	public bool IsConnected {
+		get {
 			if (client == null) 
 				return false;
 			else 
@@ -101,65 +76,119 @@ public class NetworkMasterClient : MonoBehaviour
 		}
 	}
 
-	// --------------- System Handlers -----------------
+	// delegates
+	public delegate void OnClientMessage (string msg);
+	public delegate void OnReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg);
+	public delegate void OnReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg);
 
-	void OnClientConnect(NetworkMessage netMsg)
-	{
-		// Debug.Log("Client Connected to Master");
-		if (onConnect != null) {
+	public OnClientMessage onClientMessage;
+	public System.Action<int, string> onRegisteredClient;
+	public System.Action<string> onUnregisteredClient;
+	public OnReceiveMessageFromClient onReceiveMessageFromClient;
+	public OnReceiveMessageFromHost onReceiveMessageFromHost;
+
+	public readonly Callbacks callbacks = new Callbacks ();
+	Settings settings = new Settings ();
+	NetworkClient client;
+
+	public void StartAsHost (string hostName, System.Action onConnect) {
+		Initialize (() => {
+			RegisterHost (hostName);
 			onConnect ();
-			onConnect = null;
+		});
+	}
+
+	public void StartAsClient (string clientName, string hostIp, System.Action onConnect) {
+		Initialize (() => {
+			RegisterClient (clientName);
+			onConnect ();
+		}, hostIp);
+	}
+
+	void Initialize (System.Action onConnect, string ipAddress="") {
+
+		if (client != null) {
+			Log ("Already connected");
+			return;
 		}
+
+		callbacks.AddListener ("connect", onConnect);
+		client = new NetworkClient ();
+		client.Connect (ipAddress == "" ? settings.IpAddress : ipAddress, settings.MasterServerPort);
+
+		// system messages
+		client.RegisterHandler (MsgType.Connect, OnConnect);
+		client.RegisterHandler (MsgType.Disconnect, OnDisconnect);
+		client.RegisterHandler (MsgType.Error, OnError);
+
+		// application messages
+		client.RegisterHandler (MasterMsgTypes.RegisteredHostId, OnRegisteredHost);
+		client.RegisterHandler (MasterMsgTypes.UnregisteredHostId, OnUnregisteredHost);
+		client.RegisterHandler (MasterMsgTypes.RegisteredClientId, OnRegisteredClient);
+		client.RegisterHandler (MasterMsgTypes.UnregisteredClientId, OnUnregisteredClient);
+		client.RegisterHandler (MasterMsgTypes.GenericHostFromClientId, OnHostFromClient);
+		client.RegisterHandler (MasterMsgTypes.GenericClientsFromHostId, OnClientsFromHost);
 	}
 
-	void OnClientDisconnect(NetworkMessage netMsg)
-	{
-		Debug.Log("Client Disconnected from Master");
-		ResetClient();
-		OnFailedToConnectToMasterServer();
+	void Reset () {
+
+		if (client == null)
+			return;
+
+		client.Disconnect();
+		client = null;
 	}
 
-	void OnClientError(NetworkMessage netMsg)
-	{
-		Debug.Log("ClientError from Master");
-		OnFailedToConnectToMasterServer();
-	}
+	void RegisterHost (string hostName) {
 
-	// --------------- Application Handlers -----------------
-
-	void OnRegisteredHost(NetworkMessage netMsg)
-	{
-		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredHostMessage>();
-		OnServerEvent((MasterMsgTypes.NetworkMasterServerEvent)msg.resultCode);
-	}
-
-	void OnUnregisteredHost(NetworkMessage netMsg)
-	{
-		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredHostMessage>();
-		OnServerEvent((MasterMsgTypes.NetworkMasterServerEvent)msg.resultCode);
-		if (onUnregisterHost != null) {
-			onUnregisterHost ();
-			onUnregisterHost = null;
+		if (!IsConnected) {
+			Log ("Could not register host because client is not connected");
+			return;
 		}
+
+		var msg = new MasterMsgTypes.RegisterHostMessage ();
+		msg.gameTypeName = settings.GameTypeName;
+		msg.gameName = hostName;
+		msg.hostPort = settings.GamePort;
+
+		client.Send (MasterMsgTypes.RegisterHostId, msg);
 	}
 
-	void OnListOfHosts(NetworkMessage netMsg)
-	{
-		var msg = netMsg.ReadMessage<MasterMsgTypes.ListOfHostsMessage>();
-		hosts = msg.hosts;
-		OnServerEvent(MasterMsgTypes.NetworkMasterServerEvent.HostListReceived);
+	public void UnregisterHost (string hostName, System.Action onUnregister) {
+		
+		if (!IsConnected) {
+			Log ("Could not unregister host because the client is not connected");
+			return;
+		}
+
+		callbacks.AddListener ("unregister_host", onUnregister);
+
+		var msg = new MasterMsgTypes.UnregisterHostMessage ();
+		msg.gameTypeName = settings.GameTypeName;
+		msg.gameName = hostName;
+		client.Send (MasterMsgTypes.UnregisterHostId, msg);
 	}
 
-	void OnRegisteredClient(NetworkMessage netMsg) {
-		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
-		if (onRegisteredClient != null)
-			onRegisteredClient (msg.resultCode, msg.clientName);
+	void RegisterClient (string clientName) {
+
+		var msg = new MasterMsgTypes.RegisterClientMessage ();
+		msg.gameTypeName = settings.GameTypeName;
+		msg.clientName = clientName;
+		client.Send (MasterMsgTypes.RegisterClientId, msg);
 	}
 
-	void OnUnregisteredClient(NetworkMessage netMsg) {
-		var msg = netMsg.ReadMessage<MasterMsgTypes.UnregisteredClientMessage> ();
-		if (onUnregisteredClient != null)
-			onUnregisteredClient (msg.clientName);
+	public void UnregisterClient () {
+		Reset ();
+	}
+
+	// -- Generic messages
+
+	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+		client.Send (MasterMsgTypes.GenericClientToHostId, msg);
+	}
+
+	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+		client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
 	}
 
 	void OnHostFromClient (NetworkMessage netMsg) {
@@ -174,209 +203,52 @@ public class NetworkMasterClient : MonoBehaviour
 			onReceiveMessageFromHost (msg);
 	}
 
-	public void ClearHostList()
-	{
-		if (!isConnected)
-		{
-			Debug.LogError("ClearHostList not connected");
-			return;
-		}
-		hosts = null;
+	// -- System Handlers
 
+	void OnConnect (NetworkMessage netMsg) {
+		callbacks.Call ("connect");
 	}
 
-	public MasterMsgTypes.Room[] PollHostList()
-	{
-		if (!isConnected)
-		{
-			Debug.LogError("PollHostList not connected");
-			return null;
-		}
-		return hosts;
+	void OnDisconnect (NetworkMessage netMsg) {
+		Log("Client Disconnected from Master");
+		Reset ();
+		callbacks.Call ("disconnected");
 	}
 
-	public void RegisterHost(string gameTypeName, string gameName, string comment, bool passwordProtected, int playerLimit, int port)
-	{
-		if (!isConnected)
-		{
-			Debug.LogError("RegisterHost not connected");
-			return;
-		}
-
-		var msg = new MasterMsgTypes.RegisterHostMessage();
-		msg.gameTypeName = gameTypeName;
-		msg.gameName = gameName;
-		msg.comment = comment;
-		msg.passwordProtected = passwordProtected;
-		msg.playerLimit = playerLimit;
-		msg.hostPort = port;
-		client.Send(MasterMsgTypes.RegisterHostId, msg);
-
-		HostGameType = gameTypeName;
-		HostGameName = gameName;
+	void OnError (NetworkMessage netMsg) {
+		Log("ClientError from Master");
 	}
 
-	public void RequestHostList(string gameTypeName)
-	{
-		if (!isConnected)
-		{
-			Debug.LogError("RequestHostList not connected");
-			return;
-		}
+	// -- Application Handlers
 
-		var msg = new MasterMsgTypes.RequestHostListMessage();
-		msg.gameTypeName = gameTypeName;
-		client.Send(MasterMsgTypes.RequestListOfHostsId, msg);
+	void OnRegisteredHost (NetworkMessage netMsg) {
+		Log ("Registered host");
 	}
 
-	public void UnregisterHost(System.Action onUnregisterHost=null)
-	{
-		if (!isConnected)
-		{
-			// Debug.LogError("UnregisterHost not connected");
-			return;
-		}
-
-		this.onUnregisterHost = onUnregisterHost;
-
-		var msg = new MasterMsgTypes.UnregisterHostMessage();
-		msg.gameTypeName = HostGameType;
-		msg.gameName = HostGameName;
-		client.Send(MasterMsgTypes.UnregisterHostId, msg);
-		HostGameType = "";
-		HostGameName = "";
-
-		Debug.Log("send UnregisterHost");
+	void OnUnregisteredHost (NetworkMessage netMsg) {
+		callbacks.Call ("unregister_host");
+		callbacks.Call ("disconnected");
+		Reset ();
+		Log ("Unregistered host");
 	}
 
-	public void RegisterClient(string gameTypeName, string clientName, string gameName)
-	{
-		var msg = new MasterMsgTypes.RegisterClientMessage();
-		msg.gameTypeName = gameTypeName;
-		msg.clientName = clientName;
-		msg.gameName = gameName;
-		client.Send(MasterMsgTypes.RegisterClientId, msg);
+	void OnRegisteredClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.RegisteredClientMessage> ();
+		if (onRegisteredClient != null)
+			onRegisteredClient (msg.resultCode, msg.clientName);
 	}
 
-	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
-		client.Send (MasterMsgTypes.GenericClientToHostId, msg);
+	void OnUnregisteredClient (NetworkMessage netMsg) {
+		var msg = netMsg.ReadMessage<MasterMsgTypes.UnregisteredClientMessage> ();
+		if (onUnregisteredClient != null)
+			onUnregisteredClient (msg.clientName);
 	}
 
-	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
-		client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
+	// -- Debugging
+	void Log (string msg) {
+		if (settings.LogMessagesInConsole)
+			Debug.Log (msg);
+		if (onClientMessage != null)
+			onClientMessage (msg);
 	}
-
-	public virtual void OnFailedToConnectToMasterServer()
-	{
-		Debug.Log("OnFailedToConnectToMasterServer");
-		if (onDisconnected != null) 
-			onDisconnected ();
-	}
-
-	public virtual void OnServerEvent(MasterMsgTypes.NetworkMasterServerEvent evt)
-	{
-		Debug.Log("OnServerEvent " + evt);
-
-		if (evt == MasterMsgTypes.NetworkMasterServerEvent.HostListReceived)
-		{
-			foreach (var h in hosts)
-			{
-				Debug.Log("Host:" + h.name + "addr:" + h.hostIp + ":" + h.hostPort);
-			}
-		}
-
-		if (evt == MasterMsgTypes.NetworkMasterServerEvent.RegistrationSucceeded)
-		{
-			if (NetworkManager.singleton != null)
-			{
-				NetworkManager.singleton.StartHost();
-			}
-		}
-
-		if (evt == MasterMsgTypes.NetworkMasterServerEvent.UnregistrationSucceeded)
-		{
-			if (NetworkManager.singleton != null)
-			{
-				NetworkManager.singleton.StopHost();
-			}
-		}
-	}
-
-	#if DEBUG
-	void OnGUI()
-	{
-		if (client != null && client.isConnected)
-		{
-			if (GUI.Button(new Rect(100, 20+yoffset, 200, 20), "MasterClient Disconnect"))
-			{
-				ResetClient();
-				if (NetworkManager.singleton != null)
-				{
-					NetworkManager.singleton.StopServer();
-					NetworkManager.singleton.StopClient();
-				}
-				HostGameType = "";
-				HostGameName = "";
-			}
-		}
-		else
-		{
-			if (GUI.Button(new Rect(100, 20+yoffset, 200, 20), "MasterClient Connect"))
-			{
-				InitializeClient();
-			}
-			return;
-		}
-
-
-		if (HostGameType == "")
-		{
-			GUI.Label(new Rect(100, 50 + yoffset, 80, 20), "GameType:");
-			gameTypeName = GUI.TextField(new Rect(180, 50 + yoffset, 200, 20), gameTypeName);
-
-			GUI.Label(new Rect(100, 70 + yoffset, 80, 20), "GameName:");
-			gameName = GUI.TextField(new Rect(180, 70 + yoffset, 200, 20), gameName);
-
-			if (GUI.Button(new Rect(100, 90 + yoffset, 200, 20), "RegisterHost"))
-			{
-				int port = gamePort;
-				if (NetworkManager.singleton != null)
-				{
-					port = NetworkManager.singleton.networkPort;
-				}
-				RegisterHost(gameTypeName, gameName, "none", false, 8, port);
-			}
-
-			if (GUI.Button(new Rect(100, 120 + yoffset, 200, 20), "List Hosts"))
-			{
-				RequestHostList(gameTypeName);
-			}
-		}
-		else
-		{
-			if (GUI.Button(new Rect(100, 120 + yoffset, 120, 20), "UnregisterHost"))
-			{
-				UnregisterHost();
-			}
-		}
-
-		if (hosts != null)
-		{
-			int y = 140;
-			foreach (var h in hosts)
-			{
-				if (GUI.Button(new Rect(120, y + yoffset, 240, 20), "Host:" + h.name + "addr:" + h.hostIp + ":" + h.hostPort))
-				{
-					if (NetworkManager.singleton != null)
-					{
-						NetworkManager.singleton.networkAddress = h.hostIp;
-						NetworkManager.singleton.networkPort = h.hostPort;
-						NetworkManager.singleton.StartClient();
-					}
-				}
-				y += 22;
-			}
-		}
-	}
-	#endif
 }

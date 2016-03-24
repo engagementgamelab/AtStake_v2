@@ -17,7 +17,8 @@ namespace Views {
 		}
 
 		void Host () {
-			Game.HostGame ();
+			Game.StartGame ();
+			Game.Multiplayer.HostGame ();
 			GotoView ("lobby");
 		}
 
