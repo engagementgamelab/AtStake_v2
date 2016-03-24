@@ -54,6 +54,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1, "", val));
 	}
 
+	public void ScheduleMessage (string id, int val, byte[] bytes) {
+		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, "", "", val, bytes));
+	}
+
 	public void ScheduleMessage (MasterMsgTypes.GenericMessage msg) {
 		if (Hosting) {
 			QueueMessage (msg);
