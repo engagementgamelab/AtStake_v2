@@ -16,6 +16,8 @@ namespace Views {
 
 			if (!IsHost) return;
 
+			Game.Dispatcher.AddListener ("SetDeck", OnSetDeck);
+
 			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("deck_list");
 			List<string> names = Game.Decks.Names;
 
@@ -23,9 +25,23 @@ namespace Views {
 				string name = names[i];
 				list.Add (name, new ButtonElement (name, () => {
 					Game.Dispatcher.ScheduleMessage ("SetDeck", name);
-					AllGotoView ("roles");
 				}));
 			}
+		}
+
+		protected override void OnHide () {
+			Game.Dispatcher.RemoveListener (OnSetDeck);
+		}
+
+		void OnSetDeck (MasterMsgTypes.GenericMessage msg) {
+
+			// Wait a frame to ensure that DeckManager sets the deck before referencing it
+			Co.WaitForFixedUpdate (() => {
+				Game.Dispatcher.ScheduleMessage ("StartGame");
+				Co.YieldWhileTrue (() => { return !Game.Controller.DataLoaded; }, () => {
+					AllGotoView ("roles");
+				});
+			});
 		}
 	}
 }

@@ -53,7 +53,7 @@ namespace Views {
 		/// Returns this player's role
 		/// </summary>
 		protected Role Role {
-			get { return Game.Manager.Player.Role; }
+			get { return Game.Controller.Role; }
 		}
 
 		/// <summary>

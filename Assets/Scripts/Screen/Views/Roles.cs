@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Models;
 
 namespace Views {
 
@@ -12,15 +13,25 @@ namespace Views {
 
 		ListElement<TextElement> roleList;
 
+		protected override void OnInitDeciderElements () {
+			Elements.Add ("next", new NextButtonElement ("pot"));
+		}
+
 		protected override void OnInitElements () {
 			roleList = new ListElement<TextElement> ();
 			Elements.Add ("role_list", roleList);
-			Elements.Add ("next", new NextButtonElement ("pot") { Active = false });
+			// Elements.Add ("next", new NextButtonElement ("pot") { Active = false });
 		}
 
 		protected override void OnShow () {
 
-			Game.Manager.Player.Role = null;
+			// Co.YieldWhileTrue (() => { return !Game.Controller.DataLoaded; }, () => {
+				foreach (PlayerRole role in Game.Controller.Roles) {
+					roleList.Add (role.PlayerName + "|" + role.Title, new TextElement (""));
+				}
+			// });
+
+			/*Game.Manager.Player.Role = null;
 			Game.Dispatcher.AddListener ("AssignRoles", AssignRoles);
 			
 			if (IsHost) {
@@ -33,10 +44,10 @@ namespace Views {
 				}
 				msg += decider + "," + "Decider";
 				Game.Dispatcher.ScheduleMessage ("AssignRoles", msg);
-			}
+			}*/
 		}
 
-		protected override void OnHide () {
+		/*protected override void OnHide () {
 			Game.Dispatcher.RemoveListener (AssignRoles);
 		}
 
@@ -86,6 +97,6 @@ namespace Views {
 				
 			if (IsDecider)
 				Elements["next"].Active = true;
-		}
+		}*/
 	}
 }

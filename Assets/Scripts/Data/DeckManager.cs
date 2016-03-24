@@ -51,6 +51,10 @@ public class DeckManager : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("SetAgendaItem", SetAgendaItem);
 	}
 
+	public void Reset () {
+		Deck = null;
+	}
+
 	public void SetDeck (MasterMsgTypes.GenericMessage msg) {
 		Deck = Decks.Find (x => x.Name == msg.str1);
 	}

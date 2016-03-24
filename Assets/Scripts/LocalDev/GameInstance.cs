@@ -59,6 +59,7 @@ public class GameInstance : MonoBehaviour {
 	public void EndGame () {
 		Multiplayer.Disconnect ();
 		Controller.Reset ();
+		Decks.Reset ();
 	}
 
 	void OnDisconnect () {

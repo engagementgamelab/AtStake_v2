@@ -41,9 +41,12 @@ public class ScoreManager : GameInstanceBehaviour, IInventoryHolder {
 		}
 	}
 
-	int DeciderScore {
+	/*int DeciderScore {
 		get { return Game.Manager.DeciderPlayer.CoinCount; }
 		set { Game.Manager.DeciderPlayer.CoinCount = value; }
+	}*/
+	int DeciderScore {
+		get; set;
 	}
 
 	public int Pot {
