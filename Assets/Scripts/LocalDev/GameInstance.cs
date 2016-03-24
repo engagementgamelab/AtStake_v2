@@ -14,6 +14,7 @@ public class GameInstance : MonoBehaviour {
 	public DeckManager Decks { get; private set; }
 	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
+	public GameController Controller { get; private set; }
 
 	public string Name {
 		get { return Manager.Player.Name; }
@@ -29,6 +30,7 @@ public class GameInstance : MonoBehaviour {
 		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
 		Rounds 		= GameInstanceBehaviour.Init<RoundManager> (transform);
 		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
+		Controller 	= GameInstanceBehaviour.Init<GameController> (transform);
 		
 		InitApp ();
 	}
@@ -50,11 +52,13 @@ public class GameInstance : MonoBehaviour {
 		Manager.Init ();
 		Rounds.Init ();
 		Score.Init ();
+		Controller.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
 	}
 
 	public void EndGame () {
 		Multiplayer.Disconnect ();
+		Controller.Reset ();
 	}
 
 	void OnDisconnect () {

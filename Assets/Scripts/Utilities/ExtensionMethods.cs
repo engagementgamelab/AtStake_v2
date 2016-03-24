@@ -375,6 +375,12 @@ public static class ExtensionMethods {
 	    }  
 	}
 
+	public static List<T> ToShuffled<T> (this List<T> list) {
+		List<T> newList = new List<T> (list);
+		newList.Shuffle ();
+		return newList;
+	}
+
 	public static void Print (this IList list) {
 		foreach (var i in list) {
 			System.Type t = i.GetType ();

@@ -87,6 +87,7 @@ namespace Views {
 		}
 
 		public void AllGoto (string id) {
+			Game.Dispatcher.ScheduleMessage ("PreGotoView", id);
 			Game.Dispatcher.ScheduleMessage ("GotoView", id);
 		}
 

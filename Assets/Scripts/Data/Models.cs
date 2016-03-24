@@ -100,4 +100,33 @@ namespace Models {
 		// Instructions that only clients see (not the host)
 		public string ClientInstructions { get; set; }
 	}
+
+	// -- The following models are populated during a game instance
+
+	public class InstanceData {
+		public string DeckName { get; set; }
+		public Player[] Players { get; set; }
+		public Round[] Rounds { get; set; }
+		public int Pot { get; set; }
+		public int RoundIndex { get; set; }
+	}
+
+	public class Round {
+		public string Question { get; set; }
+		public PlayerRole[] Roles { get; set; }
+		public string[] PitchOrder { get; set; }
+		public PlayerAgendaItem2[] AgendaItemOrder { get; set; }
+		public string Decider {
+			get { return System.Array.Find (Roles, x => x.Title == "Decider").PlayerName; }
+		}
+	}
+
+	public class PlayerRole : Role {
+		public string PlayerName { get; set; }
+	}
+
+	public class PlayerAgendaItem2 : AgendaItem {
+		public string PlayerName { get; set; }
+		public int Index { get; set; }
+	}
 }
