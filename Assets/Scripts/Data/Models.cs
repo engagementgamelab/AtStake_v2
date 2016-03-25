@@ -113,7 +113,6 @@ namespace Models {
 
 	public class Round {
 		
-		public string Question { get; set; }
 		public PlayerRole[] Roles { get; set; }
 		public string[] PitchOrder { get; set; }
 		public int[][] AgendaItemOrder { get; set; }

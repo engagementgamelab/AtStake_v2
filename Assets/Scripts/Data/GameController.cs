@@ -9,6 +9,9 @@ public class GameController : GameInstanceBehaviour {
 
 	// -- Public properties
 
+	/// <summary>
+	/// Gets the data models for this round's roles
+	/// </summary>
 	public PlayerRole[] Roles {
 		get { 
 
@@ -29,6 +32,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the data model associated with this player's role
+	/// </summary>
 	public PlayerRole Role {
 		get { 
 			if (!DataLoaded)
@@ -41,6 +47,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the data model associated with the current Decider
+	/// </summary>
 	public Player Decider {
 		get {
 			if (!DataLoaded)
@@ -50,18 +59,30 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the name of the current Decider
+	/// </summary>
 	public string DeciderName {
 		get { return Decider == null ? "" : Decider.Name; }
 	}
 
+	/// <summary>
+	/// Gets the question for the current round
+	/// </summary>
 	public string Question {
-		get { return CurrentRound.Question; }
+		get { return Game.Decks.Deck.Questions[instance.RoundIndex]; }
 	}
 
+	/// <summary>
+	/// Gets the data models of the players
+	/// </summary>
 	public Player[] Players {
 		get { return instance.Players; }
 	}
 
+	/// <summary>
+	/// Gets the data model of the winning player
+	/// </summary>
 	public Player Winner {
 		get {
 			if (string.IsNullOrEmpty (WinnerName))
@@ -70,6 +91,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets/sets the name of the round's winner
+	/// </summary>
 	public string WinnerName {
 		get {
 			if (!DataLoaded)
@@ -77,11 +101,6 @@ public class GameController : GameInstanceBehaviour {
 			return CurrentRound.Winner;
 		}
 		set { CurrentRound.Winner = value; }
-	}
-
-	public int CoinCount {
-		get { return DataLoaded ? FindPlayer (Game.Name).CoinCount : 0; }
-		set { FindPlayer (Game.Name).CoinCount = value; }
 	}
 
 	/// <summary>
@@ -106,6 +125,17 @@ public class GameController : GameInstanceBehaviour {
 		set { instance.Pot = value; }
 	}	
 
+	/// <summary>
+	/// Gets/sets this player's coin count
+	/// </summary>
+	public int CoinCount {
+		get { return DataLoaded ? FindPlayer (Game.Name).CoinCount : 0; }
+		set { FindPlayer (Game.Name).CoinCount = value; }
+	}
+
+	/// <summary>
+	/// Gets the round number we're currently on
+	/// </summary>
 	public int RoundNumber {
 		get {
 			if (!DataLoaded)
@@ -114,6 +144,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the data model for the current round
+	/// </summary>
 	public Round CurrentRound {
 		get { 
 			if (roundItr.Position > instance.Rounds.Length-1)
@@ -122,6 +155,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the name of the player currently pitching
+	/// </summary>
 	public string CurrentPitcher {
 		get { 
 			if (pitchItr.Position > CurrentRound.PitchOrder.Length-1)
@@ -130,11 +166,17 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the data model for the current agenda item
+	/// </summary>
 	public PlayerAgendaItem CurrentAgendaItem {
 		get {
 			
 			if (agendaItemItr.Position > CurrentRound.AgendaItemOrder.Length-1)
 				return null;
+
+			// In order to keep the message size small, agenda item data isn't included in the instance data,
+			// so these fields are populated from the deck data as they're referenced
 
 			int[] item = CurrentRound.AgendaItemOrder[agendaItemItr.Position];
 			string playerName = Players[item[0]].Name;
@@ -149,6 +191,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Returns true if the instance data has been loaded
+	/// </summary>
 	public bool DataLoaded {
 		get { return instance != null; }
 	}
@@ -253,14 +298,12 @@ public class GameController : GameInstanceBehaviour {
 		// Randomly sets the order agenda items appear when bonus points are being awarded
 		
 		Round[] rounds = new Round[3];
-		string[] questions = DataManager.GetQuestions (instance.DeckName);
 		List<string> deciderOrder = PlayerNames.ToShuffled ();
 
 		for (int i = 0; i < rounds.Length; i ++) {
 
 			// Create the round and set the question
 			rounds[i] = new Round ();
-			rounds[i].Question = questions[i];
 
 			// -- Roles
 
@@ -281,8 +324,6 @@ public class GameController : GameInstanceBehaviour {
 				} else {
 					Role role = deckRoles.Dequeue ();
 					roles[j].Title = role.Title;
-					// roles[j].Bio = role.Bio;
-					// roles[j].AgendaItems = role.AgendaItems;
 					roles[j].AgendaItems = new AgendaItem[role.AgendaItems.Length];
 				}
 			}
@@ -329,8 +370,6 @@ public class GameController : GameInstanceBehaviour {
 		string data = JsonWriter.Serialize (instance);
 		byte[] compressed = CLZF2.Compress (System.Text.Encoding.UTF8.GetBytes (data));
 		int chunkCount = Mathf.CeilToInt (compressed.Length / maxDataSize);
-		Debug.Log (chunkCount);
-		Debug.Log (data);
 
 		List<byte>[] chunks = new List<byte>[chunkCount];
 		int chunkPosition = 0;
@@ -396,7 +435,7 @@ public class GameController : GameInstanceBehaviour {
 			Round r = instance.Rounds[i];
 			Debug.Log ("----------------");
 			Debug.Log ("round " + i);
-			Debug.Log ("Question: " + r.Question);
+			// Debug.Log ("Question: " + r.Question);
 			Debug.Log ("Roles:");
 			for (int j = 0; j < r.Roles.Length; j ++) {
 				PlayerRole role = r.Roles[j];
