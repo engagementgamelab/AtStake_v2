@@ -39,7 +39,7 @@ namespace Views {
 		/// Returns this player's name
 		/// </summary>
 		protected string Name {
-			get { return Game.Manager.Player.Name; }
+			get { return Game.Name; }
 		}
 
 		/// <summary>

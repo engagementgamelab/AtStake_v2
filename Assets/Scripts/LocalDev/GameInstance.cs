@@ -15,8 +15,9 @@ public class GameInstance : MonoBehaviour {
 	public ScoreManager Score { get; private set; }
 	public GameController Controller { get; private set; }
 
+	// For convenience - the player's name gets referenced quite a bit
 	public string Name {
-		get { return Manager.Player.Name; }
+		get { return Manager.Name; }
 	}
 
 	void OnEnable () {
@@ -47,7 +48,6 @@ public class GameInstance : MonoBehaviour {
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
 	public void StartGame () {
-		Manager.Init ();
 		Score.Init ();
 		Controller.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
@@ -57,6 +57,7 @@ public class GameInstance : MonoBehaviour {
 		Multiplayer.Disconnect ();
 		Controller.Reset ();
 		Decks.Reset ();
+		Manager.Reset ();
 	}
 
 	void OnDisconnect () {

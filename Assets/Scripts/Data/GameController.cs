@@ -205,7 +205,7 @@ public class GameController : GameInstanceBehaviour {
 			throw new System.Exception ("Failed to setup game controller because a deck has not been chosen.");
 		}
 		try {
-			instance.Players = Game.Manager.Players.Values.ToArray ();
+			instance.Players = Game.Manager.Players.ToArray ();
 		} catch {
 			throw new System.Exception ("Failed to setup game controller because the players have not been set.");
 		}

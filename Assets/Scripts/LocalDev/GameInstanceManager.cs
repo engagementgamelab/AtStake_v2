@@ -31,7 +31,7 @@ public class GameInstanceManager : MonoBehaviour {
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
 		i.transform.SetParent (transform);
 		instances.Add (i);
-		i.Manager.Player.Name = names[instances.Count-1];
+		i.Manager.Name = names[instances.Count-1];
 		i.SetTemplatePosition (instancePositions[instances.Count-1]);
 	}
 

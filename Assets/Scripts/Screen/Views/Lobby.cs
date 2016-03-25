@@ -22,9 +22,8 @@ namespace Views {
 
 		protected override void OnShow () {
 
-			OnAddPeer (Game.Manager.Player.Name);
-			foreach (var peer in Game.Manager.Peers)
-				OnAddPeer (peer.Key);
+			foreach (string player in Game.Manager.PlayerNames)
+				OnAddPeer (player);
 
 			Game.Manager.onAddPeer += OnAddPeer;
 			Game.Manager.onRemovePeer += OnRemovePeer;

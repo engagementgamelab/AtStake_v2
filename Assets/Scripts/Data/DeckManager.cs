@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using Models;
 
 //// <summary>
-/// Handles anything having to do with decks
-/// This includes selecting a deck from a list of decks,
-/// getting roles, and handling agenda items
+/// Interfaces with DataManager to retrieve the available decks; keeps track of which deck is being used for this game instance
 /// </summary>
 public class DeckManager : GameInstanceBehaviour {
 
