@@ -12,7 +12,6 @@ public class GameInstance : MonoBehaviour {
 	public ViewManager Views { get; private set; }
 	public TemplateManager Templates { get; private set; }
 	public DeckManager Decks { get; private set; }
-	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
 	public GameController Controller { get; private set; }
 
@@ -28,7 +27,6 @@ public class GameInstance : MonoBehaviour {
 		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
 		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
 		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
-		Rounds 		= GameInstanceBehaviour.Init<RoundManager> (transform);
 		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
 		Controller 	= GameInstanceBehaviour.Init<GameController> (transform);
 		
@@ -50,7 +48,6 @@ public class GameInstance : MonoBehaviour {
 	// Called when the game begins (considered to be when a player hosts or joins a game)
 	public void StartGame () {
 		Manager.Init ();
-		Rounds.Init ();
 		Score.Init ();
 		Controller.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;

@@ -62,7 +62,7 @@ public class PlayerManager : GameInstanceBehaviour {
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
-		Game.Dispatcher.AddListener ("AssignRoles", AssignRoles);
+		// Game.Dispatcher.AddListener ("AssignRoles", AssignRoles);
 		peers.Clear ();
 		Player.HasBeenDecider = false;
 	}
@@ -105,7 +105,7 @@ public class PlayerManager : GameInstanceBehaviour {
 		return convertedRoles;
 	}
 
-	void AssignRoles (MasterMsgTypes.GenericMessage msg) {
+	/*void AssignRoles (MasterMsgTypes.GenericMessage msg) {
 		foreach (string[] playerRole in ReadRoles (msg.str1)) {
 			string player = playerRole[0];
 			string role = playerRole[1];
@@ -116,7 +116,7 @@ public class PlayerManager : GameInstanceBehaviour {
 			}	
 		}
 	}
-
+*/
 	public void AddPeer (string name) {
 		peers.Add (name, new Player { Name = name });
 	}

@@ -46,13 +46,21 @@ public class GameController : GameInstanceBehaviour {
 		get { return instance.Players; }
 	}
 
-	string winner;
 	public Player Winner {
 		get {
-			if (string.IsNullOrEmpty (winner))
+			if (string.IsNullOrEmpty (WinnerName))
 				return null;
-			return System.Array.Find (Players, x => x.Name == winner);
+			return System.Array.Find (Players, x => x.Name == WinnerName);
 		}
+	}
+
+	public string WinnerName {
+		get {
+			if (!DataLoaded)
+				return "";
+			return CurrentRound.Winner;
+		}
+		set { CurrentRound.Winner = value; }
 	}
 
 	public int CoinCount {
@@ -81,6 +89,14 @@ public class GameController : GameInstanceBehaviour {
 		get { return DataLoaded ? instance.Pot : 0; }
 		set { instance.Pot = value; }
 	}	
+
+	public int RoundNumber {
+		get {
+			if (!DataLoaded)
+				return -1;
+			return instance.RoundIndex + 1;
+		}
+	}
 
 	public Round CurrentRound {
 		get { 
@@ -160,7 +176,7 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	public void SetWinner (string winnerName) {
-		winner = winnerName;
+		WinnerName = winnerName;
 	}
 
 	public bool NextRound () {
