@@ -140,7 +140,7 @@ public class GameController : GameInstanceBehaviour {
 		get {
 			if (!DataLoaded)
 				return -1;
-			return instance.RoundIndex + 1;
+			return instance.RoundIndex;
 		}
 	}
 
@@ -229,9 +229,9 @@ public class GameController : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("StartGame", InitializeInstanceData);
 		Game.Dispatcher.AddListener ("InstanceDataLoaded", LoadInstanceData);
 
-		roundItr = new ArrayIterator ("round", Game);
-		pitchItr = new ArrayIterator ("pitch", Game);
-		agendaItemItr = new ArrayIterator ("agenda_item", Game);
+		roundItr = new ArrayIterator ("round", Game, (int position) => { instance.RoundIndex = position; });
+		pitchItr = new ArrayIterator ("pitch", Game, (int position) => { CurrentRound.PitchIndex = position; });
+		agendaItemItr = new ArrayIterator ("agenda_item", Game, (int position) => { CurrentRound.AgendaItemIndex = position; });
 	}
 
 	public void Reset () {
@@ -252,19 +252,16 @@ public class GameController : GameInstanceBehaviour {
 
 	public bool NextRound () {
 		roundItr.Next (); 
-		instance.RoundIndex = roundItr.Position;
 		return roundItr.Position <= instance.Rounds.Length-1;
 	}
 
 	public bool NextPitch () { 
 		pitchItr.Next (); 
-		CurrentRound.PitchIndex = pitchItr.Position;
 		return pitchItr.Position <= CurrentRound.PitchOrder.Length-1;
 	}
 
 	public bool NextAgendaItem () {
 		agendaItemItr.Next (); 
-		CurrentRound.AgendaItemIndex = agendaItemItr.Position;
 		return agendaItemItr.Position <= CurrentRound.AgendaItemOrder.Length-1;
 	}
 
@@ -458,10 +455,12 @@ public class GameController : GameInstanceBehaviour {
 		}
 
 		GameInstance game;
+		System.Action<int> onNext;
 
-		public ArrayIterator (string id, GameInstance game) {
+		public ArrayIterator (string id, GameInstance game, System.Action<int> onNext) {
 			this.id = id;
 			this.game = game;
+			this.onNext = onNext;
 			game.Dispatcher.AddListener ("_Next", OnNext);
 		}
 
@@ -471,8 +470,10 @@ public class GameController : GameInstanceBehaviour {
 		}
 
 		void OnNext (MasterMsgTypes.GenericMessage msg) {
-			if (msg.str1 == id)
+			if (msg.str1 == id) {
 				position = msg.val;
+				onNext (position);
+			}
 		}
 	}
 }
