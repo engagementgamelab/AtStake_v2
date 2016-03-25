@@ -112,13 +112,11 @@ namespace Models {
 	}
 
 	public class Round {
+		
 		public string Question { get; set; }
 		public PlayerRole[] Roles { get; set; }
 		public string[] PitchOrder { get; set; }
-
-		// could bring down the size of the model by making this a 2d int array where [playerindex, agendaitemindex]
-		// then rebuild PlayerAgendaItem on load
-		public PlayerAgendaItem2[] AgendaItemOrder { get; set; }
+		public int[][] AgendaItemOrder { get; set; }
 		public int AgendaItemIndex { get; set; }
 		public int PitchIndex { get; set; }
 		public string Winner { get; set; }
@@ -132,8 +130,7 @@ namespace Models {
 		public string PlayerName { get; set; }
 	}
 
-	public class PlayerAgendaItem2 : AgendaItem {
+	public class PlayerAgendaItem : AgendaItem {
 		public string PlayerName { get; set; }
-		public int Index { get; set; }
 	}
 }

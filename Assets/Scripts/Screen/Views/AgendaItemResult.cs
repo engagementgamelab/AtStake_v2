@@ -7,8 +7,8 @@ namespace Views {
 
 	public class AgendaItemResult : View {
 
-		PlayerAgendaItem2 item;
-		protected PlayerAgendaItem2 Item {
+		PlayerAgendaItem item;
+		protected PlayerAgendaItem Item {
 			get {
 				if (item == null)
 					item = Game.Controller.CurrentAgendaItem;

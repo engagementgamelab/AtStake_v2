@@ -6,7 +6,7 @@ namespace Views {
 
 	public class AgendaItem : View {
 
-		PlayerAgendaItem2 Item {
+		PlayerAgendaItem Item {
 			get { return Game.Controller.CurrentAgendaItem; }
 		}
 

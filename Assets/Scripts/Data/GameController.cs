@@ -10,7 +10,23 @@ public class GameController : GameInstanceBehaviour {
 	// -- Public properties
 
 	public PlayerRole[] Roles {
-		get { return CurrentRound.Roles; }
+		get { 
+
+			// In order to keep the message size small, bio and agenda items aren't included in the instance data,
+			// so these fields are populated from the deck data the first time they're referenced
+
+			PlayerRole[] roles = CurrentRound.Roles; 
+			Role[] deckRoles = Game.Decks.Deck.Roles;
+
+			foreach (PlayerRole role in roles) {
+				if (role.Title != "Decider" && string.IsNullOrEmpty (role.Bio)) {
+					Role r = System.Array.Find (deckRoles, x => x.Title == role.Title);
+					role.Bio = r.Bio;
+					role.AgendaItems = r.AgendaItems;
+				}
+			}
+			return roles;
+		}
 	}
 
 	public PlayerRole Role {
@@ -114,11 +130,22 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
-	public PlayerAgendaItem2 CurrentAgendaItem {
+	public PlayerAgendaItem CurrentAgendaItem {
 		get {
+			
 			if (agendaItemItr.Position > CurrentRound.AgendaItemOrder.Length-1)
 				return null;
-			return CurrentRound.AgendaItemOrder[agendaItemItr.Position];
+
+			int[] item = CurrentRound.AgendaItemOrder[agendaItemItr.Position];
+			string playerName = Players[item[0]].Name;
+			AgendaItem agendaItem = System.Array.Find (Roles, x => x.PlayerName == playerName)
+				.AgendaItems[item[1]];
+
+			return new PlayerAgendaItem () {
+				PlayerName = playerName,
+				Description = agendaItem.Description,
+				Reward = agendaItem.Reward
+			};
 		}
 	}
 
@@ -145,7 +172,7 @@ public class GameController : GameInstanceBehaviour {
 
 	// Used to send the serialized model data to clients
 	List<byte[]> receivedChunks = new List<byte[]> ();
-	const int maxDataSize = 1100;
+	const int maxDataSize = 1000;
 
 	// Iterators
 	ArrayIterator roundItr; 
@@ -155,7 +182,6 @@ public class GameController : GameInstanceBehaviour {
 	public void Init () {
 
 		Game.Dispatcher.AddListener ("StartGame", InitializeInstanceData);
-		Game.Dispatcher.AddListener ("PreGotoView", GotoView);
 		Game.Dispatcher.AddListener ("InstanceDataLoaded", LoadInstanceData);
 
 		roundItr = new ArrayIterator ("round", Game);
@@ -255,8 +281,9 @@ public class GameController : GameInstanceBehaviour {
 				} else {
 					Role role = deckRoles.Dequeue ();
 					roles[j].Title = role.Title;
-					roles[j].Bio = role.Bio;
-					roles[j].AgendaItems = role.AgendaItems;
+					// roles[j].Bio = role.Bio;
+					// roles[j].AgendaItems = role.AgendaItems;
+					roles[j].AgendaItems = new AgendaItem[role.AgendaItems.Length];
 				}
 			}
 
@@ -275,26 +302,19 @@ public class GameController : GameInstanceBehaviour {
 			// -- Agenda Items
 
 			// Randomly set the agenda item order
-			List<PlayerAgendaItem2> items = new List<PlayerAgendaItem2> ();
+			List<int[]> items2 = new List<int[]> ();
 			for (int j = 0; j < roles.Length; j ++) {
 				PlayerRole r = roles[j];
 				if (r.Title == "Decider")
 					continue;
 
+				int playerIndex = System.Array.FindIndex (Players, x => x.Name == r.PlayerName);
 				for (int k = 0; k < r.AgendaItems.Length; k ++) {
-
-					AgendaItem item = r.AgendaItems[k];
-
-					items.Add (new PlayerAgendaItem2 () {
-						PlayerName = r.PlayerName,
-						Description = item.Description,
-						Reward = item.Reward,
-						Index = k
-					});
+					items2.Add (new int[] { playerIndex, k });
 				}
 			}
 
-			rounds[i].AgendaItemOrder = items.ToShuffled ().ToArray<PlayerAgendaItem2> ();
+			rounds[i].AgendaItemOrder = items2.ToShuffled ().ToArray<int[]> ();
 		}
 
 		instance.Rounds = rounds;
@@ -309,6 +329,8 @@ public class GameController : GameInstanceBehaviour {
 		string data = JsonWriter.Serialize (instance);
 		byte[] compressed = CLZF2.Compress (System.Text.Encoding.UTF8.GetBytes (data));
 		int chunkCount = Mathf.CeilToInt (compressed.Length / maxDataSize);
+		Debug.Log (chunkCount);
+		Debug.Log (data);
 
 		List<byte>[] chunks = new List<byte>[chunkCount];
 		int chunkPosition = 0;
@@ -329,13 +351,6 @@ public class GameController : GameInstanceBehaviour {
 		for (int i = chunks.Length-1; i >= 0; i --) {
 			Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", i, chunks[i].ToArray<byte> ());
 		}
-	}
-
-	void GotoView (MasterMsgTypes.GenericMessage msg) {
-		// if (msg.str1 == "roles") {
-			// if (Hosting && instance == null) 
-				// Setup ();
-		// }
 	}
 
 	void InitializeInstanceData (MasterMsgTypes.GenericMessage msg) {
@@ -390,11 +405,6 @@ public class GameController : GameInstanceBehaviour {
 			Debug.Log ("Pitch order:");
 			for (int j = 0; j < r.PitchOrder.Length; j ++) {
 				Debug.Log (j + ": " + r.PitchOrder[j]);
-			}
-			Debug.Log ("Agenda item order:");
-			for (int j = 0; j < r.AgendaItemOrder.Length; j ++) {
-				PlayerAgendaItem2 item = r.AgendaItemOrder[j];
-				Debug.Log (item.Index + ": " + item.PlayerName + " - " + item.Description + " (" + item.Reward + ")");
 			}
 		}
 	}

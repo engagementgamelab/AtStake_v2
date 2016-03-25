@@ -15,7 +15,7 @@ public class GameInstance : MonoBehaviour {
 	public ScoreManager Score { get; private set; }
 	public GameController Controller { get; private set; }
 
-	// For convenience - the player's name gets referenced quite a bit
+	// For convenience (the player's name gets referenced quite a bit)
 	public string Name {
 		get { return Manager.Name; }
 	}
