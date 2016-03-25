@@ -78,8 +78,8 @@ public class ScoreManager : GameInstanceBehaviour {
 		SendUpdateMessage ();
 	}
 
-	public void ApplyPlayerReward (PlayerAgendaItem item) {
-		Game.Controller.FindPlayer (item.Player).CoinCount += Settings.Rewards[item.Reward];
+	public void ApplyPlayerReward (PlayerAgendaItem2 item) {
+		Game.Controller.FindPlayer (item.PlayerName).CoinCount += Settings.Rewards[item.Reward];
 		SendUpdateMessage ();
 	}
 

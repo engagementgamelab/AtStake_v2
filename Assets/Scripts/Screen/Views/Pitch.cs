@@ -21,8 +21,8 @@ namespace Views {
 		enum State { Pitch, Extra }
 		State state = State.Pitch;
 
-		Dictionary<string, string> CurrentPeerTextVariable {
-			get { return new Dictionary<string, string> () { { "current_peer", Game.Controller.CurrentPeer } }; }
+		Dictionary<string, string> CurrentPitcherTextVariable {
+			get { return new Dictionary<string, string> () { { "current_peer", Game.Controller.CurrentPitcher } }; }
 		}
 
 		protected override void OnInitDeciderElements () {
@@ -34,7 +34,7 @@ namespace Views {
 			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
-					Game.Controller.CurrentPeer,
+					Game.Controller.CurrentPitcher,
 					state == State.Pitch ? "pitch" : "extra"
 				);
 			}));
@@ -51,7 +51,7 @@ namespace Views {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (HasElement ("decider_instructions")) {
 				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable);
+					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPitcherTextVariable);
 			}
 		}
 
@@ -90,10 +90,10 @@ namespace Views {
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
 			state = State.Pitch;
 			Game.Controller.NextPitch ();
-			if (Game.Controller.CurrentPeer != "") {
+			if (Game.Controller.CurrentPitcher != "") {
 				AllGotoView ("pitch");
 				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
+					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);
 				GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
 			} else {
 				AllGotoView ("deliberate_instructions");

@@ -8,7 +8,6 @@ namespace Views {
 	public class ExtraTimeDeliberate : View {
 
 		protected override void OnInitElements () {
-			// TODO: controller
 			if (Game.Score.CanAffordExtraTime) {
 				Elements.Add ("instruction", new TextElement (
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));

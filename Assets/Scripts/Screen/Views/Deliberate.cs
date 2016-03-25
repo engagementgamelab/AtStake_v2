@@ -72,7 +72,6 @@ namespace Views {
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
 			if (!declinedPlayers.Contains (msg.str1)) {
 				declinedPlayers.Add (msg.str1);
-				// if (declinedPlayers.Count == Game.Manager.Peers.Count) {
 				if (declinedPlayers.Count == Game.Controller.PeerCount) {
 					AllGotoView ("decide");
 				}

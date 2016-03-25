@@ -42,14 +42,6 @@ public class GameController : GameInstanceBehaviour {
 		get { return CurrentRound.Question; }
 	}
 
-	public string CurrentPeer {
-		get { 
-			if (pitchItr.Position > CurrentRound.PitchOrder.Length-1)
-				return "";
-			return CurrentRound.PitchOrder[pitchItr.Position]; 
-		}
-	}
-
 	public Player[] Players {
 		get { return instance.Players; }
 	}
@@ -90,19 +82,35 @@ public class GameController : GameInstanceBehaviour {
 		set { instance.Pot = value; }
 	}	
 
-	/*public PlayerAgendaItem2 CurrentAgendaItem {
-		// get {}
-	}*/
+	public Round CurrentRound {
+		get { 
+			if (roundItr.Position > instance.Rounds.Length-1)
+				return null;
+			return instance.Rounds[roundItr.Position];
+		}
+	}
+
+	public string CurrentPitcher {
+		get { 
+			if (pitchItr.Position > CurrentRound.PitchOrder.Length-1)
+				return "";
+			return CurrentRound.PitchOrder[pitchItr.Position]; 
+		}
+	}
+
+	public PlayerAgendaItem2 CurrentAgendaItem {
+		get {
+			if (agendaItemItr.Position > CurrentRound.AgendaItemOrder.Length-1)
+				return null;
+			return CurrentRound.AgendaItemOrder[agendaItemItr.Position];
+		}
+	}
 
 	public bool DataLoaded {
 		get { return instance != null; }
 	}
 
 	// -- Private properties
-
-	Round CurrentRound {
-		get { return instance.Rounds[instance.RoundIndex]; }
-	}
 
 	List<string> PlayerNames {
 		get { return Players.ToList ().ConvertAll (x => x.Name); }
@@ -155,9 +163,23 @@ public class GameController : GameInstanceBehaviour {
 		winner = winnerName;
 	}
 
-	public void NextRound () { roundItr.Next (); }
-	public void NextPitch () { pitchItr.Next (); }
-	public void NextAgendaItem () { agendaItemItr.Next (); }
+	public bool NextRound () {
+		roundItr.Next (); 
+		instance.RoundIndex = roundItr.Position;
+		return roundItr.Position <= instance.Rounds.Length-1;
+	}
+
+	public bool NextPitch () { 
+		pitchItr.Next (); 
+		CurrentRound.PitchIndex = pitchItr.Position;
+		return pitchItr.Position <= CurrentRound.PitchOrder.Length-1;
+	}
+
+	public bool NextAgendaItem () {
+		agendaItemItr.Next (); 
+		CurrentRound.AgendaItemIndex = agendaItemItr.Position;
+		return agendaItemItr.Position <= CurrentRound.AgendaItemOrder.Length-1;
+	}
 
 	void Setup () {
 		instance = new InstanceData ();
@@ -176,7 +198,7 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	void StartRound () {
-
+		NextRound ();
 	}
 
 	void PopulateData () {
