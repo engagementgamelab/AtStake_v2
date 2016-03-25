@@ -21,25 +21,20 @@ namespace Views {
 		enum State { Pitch, Extra }
 		State state = State.Pitch;
 
-		List<string> peers;
-		int currentPeer;
-
 		Dictionary<string, string> CurrentPeerTextVariable {
-			get { return new Dictionary<string, string> () { { "current_peer", peers[currentPeer] } }; }
+			get { return new Dictionary<string, string> () { { "current_peer", Game.Controller.CurrentPeer } }; }
 		}
 
 		protected override void OnInitDeciderElements () {
 
 			Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
-			peers = ShuffledPeers ();
-			currentPeer = 0;
 			state = State.Pitch;
 
 			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
-					peers[currentPeer], 
+					Game.Controller.CurrentPeer,
 					state == State.Pitch ? "pitch" : "extra"
 				);
 			}));
@@ -94,8 +89,8 @@ namespace Views {
 
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
 			state = State.Pitch;
-			currentPeer ++;
-			if (currentPeer < peers.Count) {
+			Game.Controller.NextPitch ();
+			if (Game.Controller.CurrentPeer != "") {
 				AllGotoView ("pitch");
 				GetScreenElement<TextElement> ("decider_instructions")
 					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
@@ -103,30 +98,6 @@ namespace Views {
 			} else {
 				AllGotoView ("deliberate_instructions");
 			}
-		}
-
-		List<string> ShuffledPeers () {
-			List<string> peers = Game.Manager.PeerNames;
-
-			int[] randomIndices = new int[peers.Count];
-			List<int> peerIndices = new List<int> ();
-			
-			// Generate a list of numbers iterating by 1
-			for (int i = 0; i < peers.Count; i ++)
-				peerIndices.Add (i);
-			
-			// Randomly assign the numbers to an array
-			for (int i = 0; i < randomIndices.Length; i ++) {
-				int r = Random.Range (0, peerIndices.Count);
-				randomIndices[i] = peerIndices[r];
-				peerIndices.Remove (peerIndices[r]);
-			}
-
-			List<string> newPeers = new List<string> ();
-			for (int i = 0; i < randomIndices.Length; i ++) {
-				newPeers.Add (peers[randomIndices[i]]);
-			}
-			return newPeers;
 		}
 	}
 }

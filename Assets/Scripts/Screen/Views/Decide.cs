@@ -17,7 +17,8 @@ namespace Views {
 			}) { Interactable = false });
 
 			// A button list of players
-			Dictionary<string, ButtonElement> peers = Game.Manager.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
+			// Dictionary<string, ButtonElement> peers = Game.Manager.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
+			Dictionary<string, ButtonElement> peers = Game.Controller.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
 				selectedPeer = x;
 				ButtonElement confirmButton = GetScreenElement<ButtonElement> ("confirm");
 				confirmButton.Text = "Confirm " + selectedPeer;

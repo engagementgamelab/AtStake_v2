@@ -9,12 +9,11 @@ namespace Views {
 	public class Question : View {
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("question", new TextElement (Game.Decks.GetQuestion ()));
 			Elements.Add ("next", new NextButtonElement ("think_instructions"));
 		}
 
-		protected override void OnInitPlayerElements () {
-			Elements.Add ("question", new TextElement (Game.Decks.GetQuestion ()));
+		protected override void OnInitElements () {
+			Elements.Add ("question", new TextElement (Game.Controller.Question));
 		}
 	}
 }

@@ -13,11 +13,11 @@ public class PotElement : ScreenElement {
 	}
 
 	protected override void OnInit () {
-		Game.Score.Inventory["pot"].onUpdate += SetText;
-		SetText ();
+		Game.Score.onUpdatePot += SetText;
+		SetText (Game.Score.Pot);
 	}
 
-	void SetText () {
-		Text = "Pot: " + Game.Score.Pot;
+	void SetText (int pot) {
+		Text = "Pot: " + pot;
 	}
 }

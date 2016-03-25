@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Models;
 
 namespace Views {
 
@@ -8,6 +9,10 @@ namespace Views {
 		PlayerAgendaItem Item {
 			get { return Game.Decks.CurrentAgendaItem; }
 		}
+
+		/*PlayerAgendaItem2 Item {
+			get { return Game.Controller.CurrentAgendaItem; }
+		}*/
 
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => { AllGotoView ("agenda_item_accept"); }));

@@ -97,7 +97,7 @@ namespace Views {
 		protected Dictionary<string, string> TextVariables {
 			get {
 				return new Dictionary<string, string> () {
-					{ "decider", Game.Manager.Decider },
+					{ "decider", Game.Controller.DeciderName },
 					{ "decider_start_coin_count", Settings.DeciderStartCoinCount.ToString () },
 					{ "player_start_coin_count", Settings.PlayerStartCoinCount.ToString () },
 					{ "pot_coin_count", Settings.PotCoinCount.ToString () },

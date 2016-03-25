@@ -7,7 +7,7 @@ using JsonFx.Json;
 
 public class GameController : GameInstanceBehaviour {
 
-	InstanceData instance;
+	// -- Public properties
 
 	public PlayerRole[] Roles {
 		get { return CurrentRound.Roles; }
@@ -15,7 +15,7 @@ public class GameController : GameInstanceBehaviour {
 
 	public PlayerRole Role {
 		get { 
-			if (instance == null)
+			if (!DataLoaded)
 				return null;
 			try {
 				return System.Array.Find (Roles, x => x.PlayerName == Game.Name); 
@@ -25,38 +25,139 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	public Player Decider {
+		get {
+			if (!DataLoaded)
+				return null;
+			string deciderName = System.Array.Find (Roles, x => x.Title == "Decider").PlayerName;
+			return FindPlayer (deciderName);
+		}
+	}
+
+	public string DeciderName {
+		get { return Decider == null ? "" : Decider.Name; }
+	}
+
+	public string Question {
+		get { return CurrentRound.Question; }
+	}
+
+	public string CurrentPeer {
+		get { 
+			if (pitchItr.Position > CurrentRound.PitchOrder.Length-1)
+				return "";
+			return CurrentRound.PitchOrder[pitchItr.Position]; 
+		}
+	}
+
+	public Player[] Players {
+		get { return instance.Players; }
+	}
+
+	string winner;
+	public Player Winner {
+		get {
+			if (string.IsNullOrEmpty (winner))
+				return null;
+			return System.Array.Find (Players, x => x.Name == winner);
+		}
+	}
+
+	public int CoinCount {
+		get { return DataLoaded ? FindPlayer (Game.Name).CoinCount : 0; }
+		set { FindPlayer (Game.Name).CoinCount = value; }
+	}
+
+	/// <summary>
+	/// Gets the number of players, excluding this one
+	/// </summary>
+	public int PeerCount {
+		get { return PlayerCount-1; }
+	}
+
+	/// <summary>
+	/// Gets the names of all players, excluding this one
+	/// </summary>
+	public List<string> PeerNames {
+		get { return PlayerNames.FindAll (x => x != Game.Name); }
+	}
+
+	/// <summary>
+	/// Gets/sets the amount of coins in the pot
+	/// </summary>
+	public int Pot {
+		get { return DataLoaded ? instance.Pot : 0; }
+		set { instance.Pot = value; }
+	}	
+
+	/*public PlayerAgendaItem2 CurrentAgendaItem {
+		// get {}
+	}*/
+
 	public bool DataLoaded {
 		get { return instance != null; }
 	}
+
+	// -- Private properties
 
 	Round CurrentRound {
 		get { return instance.Rounds[instance.RoundIndex]; }
 	}
 
 	List<string> PlayerNames {
-		get { return instance.Players.ToList ().ConvertAll (x => x.Name); }
+		get { return Players.ToList ().ConvertAll (x => x.Name); }
 	}
 
 	int PlayerCount {
-		get { return instance.Players.Length; }
+		get { return Players.Length; }
 	}
 
 	bool Hosting {
 		get { return Game.Multiplayer.Hosting;}
 	}
 
+	// Data model for this game instance
+	InstanceData instance;
+
+	// Used to send the serialized model data to clients
 	List<byte[]> receivedChunks = new List<byte[]> ();
-	const int maxDataSize = 1000;
+	const int maxDataSize = 1100;
+
+	// Iterators
+	ArrayIterator roundItr; 
+	ArrayIterator pitchItr;
+	ArrayIterator agendaItemItr;
 
 	public void Init () {
+
 		Game.Dispatcher.AddListener ("StartGame", InitializeInstanceData);
 		Game.Dispatcher.AddListener ("PreGotoView", GotoView);
 		Game.Dispatcher.AddListener ("InstanceDataLoaded", LoadInstanceData);
+
+		roundItr = new ArrayIterator ("round", Game);
+		pitchItr = new ArrayIterator ("pitch", Game);
+		agendaItemItr = new ArrayIterator ("agenda_item", Game);
 	}
 
 	public void Reset () {
 		instance = null;
 	}
+
+	public Player FindPlayer (string playerName) {
+		try {
+			return System.Array.Find (Players, x => x.Name == playerName);
+		} catch {
+			throw new System.Exception ("Could not find a player with the name '" + playerName + "'");
+		}
+	}
+
+	public void SetWinner (string winnerName) {
+		winner = winnerName;
+	}
+
+	public void NextRound () { roundItr.Next (); }
+	public void NextPitch () { pitchItr.Next (); }
+	public void NextAgendaItem () { agendaItemItr.Next (); }
 
 	void Setup () {
 		instance = new InstanceData ();
@@ -70,11 +171,15 @@ public class GameController : GameInstanceBehaviour {
 		} catch {
 			throw new System.Exception ("Failed to setup game controller because the players have not been set.");
 		}
-		PopulateRoundData ();
+		PopulateData ();
 		SendData ();
 	}
 
-	void PopulateRoundData () {
+	void StartRound () {
+
+	}
+
+	void PopulateData () {
 		
 		if (!Hosting) return;
 
@@ -253,6 +358,34 @@ public class GameController : GameInstanceBehaviour {
 				PlayerAgendaItem2 item = r.AgendaItemOrder[j];
 				Debug.Log (item.Index + ": " + item.PlayerName + " - " + item.Description + " (" + item.Reward + ")");
 			}
+		}
+	}
+
+	class ArrayIterator {
+
+		readonly string id;
+		int position = 0;
+
+		public int Position {
+			get { return position; }
+		}
+
+		GameInstance game;
+
+		public ArrayIterator (string id, GameInstance game) {
+			this.id = id;
+			this.game = game;
+			game.Dispatcher.AddListener ("_Next", OnNext);
+		}
+
+		public void Next () {
+			position ++;
+			game.Dispatcher.ScheduleMessage ("_Next", id, position);
+		}
+
+		void OnNext (MasterMsgTypes.GenericMessage msg) {
+			if (msg.str1 == id)
+				position = msg.val;
 		}
 	}
 }
