@@ -52,7 +52,7 @@ public class NetworkMasterClient : MonoBehaviour {
 
 	class Settings {
 
-		public string MasterServerIpAddress = "255.255.255.255";
+		// public string MasterServerIpAddress = "255.255.255.255";
 		public int MasterServerPort = 31485;
 		public string GameTypeName = "@Stake";
 		public int GamePort = 3148;
@@ -74,6 +74,10 @@ public class NetworkMasterClient : MonoBehaviour {
 			else 
 				return client.isConnected;
 		}
+	}
+
+	public string IpAddress {
+		get { return settings.IpAddress; }
 	}
 
 	// delegates

@@ -10,6 +10,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	public Button hostButton;
 	public Button hostListButton;
 	public Button disconnectButton;
+	public Text ipAddress;
 	public Text broadcasterStatus;
 	public Text listenerStatus;
 	public Text hostStatus;
@@ -21,6 +22,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		#if SHOW_DEBUG_INFO
 		multiplayer.onLogMessage += OnLogMessage;
 		#endif
+		ipAddress.text = multiplayer.client.IpAddress;
 	}
 
 	public void Host () {
