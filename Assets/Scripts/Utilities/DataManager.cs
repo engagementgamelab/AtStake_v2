@@ -28,27 +28,12 @@ public class DataManager {
             return currentConfig.root;
         }
     }
-    
-    /// <summary>
-    /// Get the IP address of the server that handles multiplayer connections
-    /// </summary>
-    /*public static string MultiplayerServerIp {
-        get { return currentConfig.multiplayerServerIp == "unity" ? MasterServer.ipAddress : currentConfig.multiplayerServerIp; }
-    }
 
-    /// <summary>
-    /// Get the port of the server that handles multiplayer connections
-    /// </summary>
-    public static int MultiplayerServerPort {
-        get { return currentConfig.multiplayerServerPort == -1 ? MasterServer.port : currentConfig.multiplayerServerPort; }
+    public static string MasterServerAddress {
+        get {
+            return currentConfig.master;
+        }
     }
-
-    /// <summary>
-    /// Get the port of the facilitator port for nat punchthroughs 
-    /// </summary>
-    public static int FacilitatorPort {
-        get { return currentConfig.facilitatorPort == -1 ? Network.natFacilitatorPort : currentConfig.facilitatorPort; }
-    }*/
 
     /// <summary>
     /// Set to production mode.
@@ -128,8 +113,8 @@ public class DataManager {
         #if !UNITY_WEBPLAYER 
 
             SaveDataToJson("data", data
-                #if UNITY_IOS || UNITY_ANDROID
-                ,false
+                #if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
+                ,true
                 #endif
             );
 

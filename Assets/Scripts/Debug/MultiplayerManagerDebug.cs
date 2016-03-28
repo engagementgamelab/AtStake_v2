@@ -15,6 +15,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	public Text listenerStatus;
 	public Text hostStatus;
 	public Text clientsStatus;
+	public InputField connectAddress;
 	MultiplayerManager multiplayer;
 
 	public void Init (MultiplayerManager multiplayer) {
@@ -62,23 +63,33 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		multiplayer.Disconnect ();
 	}
 
+	public void SubmitConnection () {
+		multiplayer.JoinGame (connectAddress.text);
+	}
+
 	void Update () {
 
 		hostButton.gameObject.SetActive (
 			!multiplayer.client.IsConnected 
-			&& MasterServerDiscovery.Broadcaster == null 
-			&& !MasterServerDiscovery.HasListener (multiplayer));
+			&& DiscoveryService.Broadcaster == null
+			&& !DiscoveryService.HasListener (multiplayer));
+			// && MasterServerDiscovery.Broadcaster == null 
+			// && !MasterServerDiscovery.HasListener (multiplayer));
 
 		hostListButton.gameObject.SetActive (
 			!multiplayer.Connected 
-			&& !MasterServerDiscovery.HasListener (multiplayer));
+			&& !DiscoveryService.HasListener (multiplayer));
+			// && !MasterServerDiscovery.HasListener (multiplayer));
 
 		disconnectButton.gameObject.SetActive (
 			multiplayer.client.IsConnected
-			|| MasterServerDiscovery.HasListener (multiplayer));
+			|| DiscoveryService.HasListener (multiplayer));
+			// || MasterServerDiscovery.HasListener (multiplayer));
 
-		broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
-		listenerStatus.text = MasterServerDiscovery.HasListener (multiplayer) ? "Listening" : "Not listening";
+		// broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
+		// listenerStatus.text = MasterServerDiscovery.HasListener (multiplayer) ? "Listening" : "Not listening";
+		broadcasterStatus.text = DiscoveryService.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
+		listenerStatus.text = DiscoveryService.HasListener (multiplayer) ? "Listening" : "Not listening";
 
 		if (multiplayer.Connected) {
 			hostStatus.text = "Host: " + multiplayer.Host;

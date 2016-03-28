@@ -23,9 +23,7 @@ namespace Models {
 
         public string root { get; set; }
         public string authKey { get; set; }
-        public string multiplayerServerIp { get; set; }
-        public int multiplayerServerPort { get; set; }
-        public int facilitatorPort { get; set; }
+        public string master { get; set; }
 
     }
 

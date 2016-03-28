@@ -65,7 +65,7 @@ public static class Co {
 	/// <summary>
 	/// Repeatedly invokes a function as long as the condition is met
 	/// </summary>
-	/// <param name="time">The initial delay before invoking begins</param>
+	/// <param name="time">(optional) The initial delay before invoking begins</param>
 	/// <param name="rate">The delay between invoke calls</param>
 	/// <param name="condition">The expression to evaluate. When 'condition' is false, the coroutine stops.</param>
 	/// <param name="onEnd">(optional) A function to run after the coroutine has finished</param>
@@ -81,6 +81,10 @@ public static class Co {
 				onEnd ();
 			}
 		});
+	}
+
+	public static void InvokeWhileTrue (float rate, Func<bool> condition, Action onInvoke, Action onEnd=null) {
+		InvokeWhileTrue (0f, rate, condition, onInvoke, onEnd);
 	}
 
 	/// <summary>
@@ -128,6 +132,15 @@ public static class Co {
 		RepeatAscending (0f, rate, max, onInvoke, onEnd);
 	}
 
+	/// <summary>
+	/// Makes a www request and sends a response callback
+	/// </summary>
+	/// <param name="address">The URL to request</param>
+	/// <param name="onResponse">The callback when a response has been received</param>
+	public static void WWW (string address, System.Action<WWW> onResponse) {
+		CoMb.Instance.StartCoroutine (CoWWW (address, onResponse));
+	}
+
 	static IEnumerator CoWaitForSeconds (float seconds, Action onEnd) {
 		float e = 0f;
 		while (e < seconds) {
@@ -165,6 +178,12 @@ public static class Co {
 		}
 		if (onEnd != null)
 			onEnd ();
+	}
+
+	static IEnumerator CoWWW (string address, System.Action<WWW> onResponse) {
+		WWW www = new WWW (address);
+		yield return www;
+		onResponse (www);
 	}
 }
 

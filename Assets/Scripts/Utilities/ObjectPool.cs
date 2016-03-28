@@ -321,6 +321,7 @@ public static class PoolIOHandler {
 
 	static void AddPrefab<T> (string id) where T : MonoBehaviour {
 		GameObject go = new GameObject (id);
+		go.AddComponent<T> ();
 		PrefabUtility.CreatePrefab ("Assets/Resources/Prefabs/" + id + ".prefab", go);
 		Object.DestroyImmediate (go);
 	}
