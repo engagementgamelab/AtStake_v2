@@ -3,6 +3,9 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
+// deprecated
+// this discovery approach requires that all devices be connected to the same router, so it's not as flexible as DiscoveryService
+
 public class MasterServerDiscovery : NetworkDiscovery {
 
 	class BroadcastResult {
