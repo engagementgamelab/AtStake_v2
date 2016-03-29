@@ -11,6 +11,7 @@ namespace Templates {
 		public Image backgroundColor;
 		public Image backgroundImage;
 		public Image topBar;
+		public Image bottomBar;
 
 		public BackButtonElementUI backButton;
 		public PotElementUI pot;
@@ -44,6 +45,10 @@ namespace Templates {
 
 		Color TopBarColor {
 			set { topBar.color = value; }
+		}
+
+		Color BottomBarColor {
+			set { bottomBar.color = value; }
 		}
 
 		public static TemplateContainer Init (TemplatesContainer myContainer, int siblingIndex) {
@@ -83,7 +88,8 @@ namespace Templates {
 
 		void ApplySettings (TemplateSettings settings) {
 			SetBackground (settings.BackgroundColor, settings.BackgroundImage);
-			SetTopBar (settings.TopBarEnabled, settings.TopBarColor);
+			SetTopBar (settings.TopBarHeight, settings.TopBarColor);
+			SetBottomBar (settings.BottomBarHeight, settings.BottomBarColor);
 		}
 
 		void SetBackground (Color bgColor, string bgImage) {
@@ -95,9 +101,22 @@ namespace Templates {
 				BackgroundImage = AssetLoader.LoadBackground (bgImage);
 		}
 
-		void SetTopBar (bool enabled, Color topBarColor=new Color()) {
-			topBar.gameObject.SetActive (enabled);
-			TopBarColor = topBarColor;
+		void SetTopBar (float height, Color topBarColor=new Color()) {
+
+			bool active = height > 0;
+			topBar.gameObject.SetActive (active);
+
+			if (active) {
+				topBar.GetComponent<LayoutElement> ().preferredHeight = height;
+				TopBarColor = topBarColor;
+				topBar.transform.GetChild (0).gameObject.SetActive (height > TemplateSettings.ShortBar);
+			}
+		}
+
+		void SetBottomBar (float height, Color bottomBarColor=new Color()) {
+			bottomBar.gameObject.SetActive (height > 0);
+			bottomBar.GetComponent<LayoutElement> ().preferredHeight = height;
+			BottomBarColor = bottomBarColor;
 		}
 
 		Template GetTemplateById (string id) {

@@ -12,6 +12,7 @@ namespace Views {
 			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("game_list", new ListElement<ButtonElement> ());
 			Elements.Add ("searching", new TextElement (GetText ("searching")) { Active = false });
+			Elements.Add ("logo", new ImageElement ("logo_small"));
 		}
 
 		protected override void OnShow () {

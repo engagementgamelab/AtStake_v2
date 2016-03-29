@@ -52,7 +52,7 @@ namespace Models {
 		public string Name { get; set; }
 		public int CoinCount { get; set; }
 		public Role Role { get; set; }
-		public bool HasBeenDecider { get; set; }
+		public string Avatar { get; set; }
 	}
 
 	public class Deck {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -8,12 +9,16 @@ namespace Templates {
 		public override TemplateSettings Settings {
 			get {
 				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
+					TopBarHeight = TemplateSettings.ShortBar,
+					TopBarColor = Palette.LtTeal,
+					BottomBarHeight = TemplateSettings.TallBar,
+					BottomBarColor = Palette.LtTeal,
 					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg",
 					PotEnabled = true,
-					CoinsEnabled = true
+					CoinsEnabled = true,
+					Colors = new Dictionary<string, Color> () {
+						{ "agenda_title", Palette.LtTeal }
+					}
 				};
 			}
 		}

@@ -70,7 +70,11 @@ public class GameController : GameInstanceBehaviour {
 	/// Gets the question for the current round
 	/// </summary>
 	public string Question {
-		get { return Game.Decks.Deck.Questions[instance.RoundIndex]; }
+		get { 
+			if (!DataLoaded)
+				return "";
+			return Game.Decks.Deck.Questions[instance.RoundIndex]; 
+		}
 	}
 
 	/// <summary>

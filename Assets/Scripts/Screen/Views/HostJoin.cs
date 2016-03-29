@@ -11,9 +11,10 @@ namespace Views {
 	public class HostJoin : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("host", new ButtonElement (Model.Buttons["host"], Host));
-			Elements.Add ("join", new ButtonElement (Model.Buttons["join"], Join));
+			Elements.Add ("host", new ButtonElement (GetButton ("host"), Host));
+			Elements.Add ("join", new ButtonElement (GetButton ("join"), Join));
 			Elements.Add ("back", new BackButtonElement ("start"));
+			Elements.Add ("logo", new ImageElement ("logo_small"));
 			Elements.Add ("error", new TextElement (GetText ("error")) { Active = Game.Multiplayer.DisconnectedWithError });
 		}
 

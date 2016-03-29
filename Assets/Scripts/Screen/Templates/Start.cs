@@ -10,8 +10,9 @@ namespace Templates {
 			get { 
 				return new TemplateSettings () {
 					BackgroundColor = Palette.Teal,
-					ButtonColors = new Dictionary<string, Color> () {
-						{ "submit", Palette.Green }
+					Colors = new Dictionary<string, Color> () {
+						{ "submit", Palette.Green },
+						{ "logo", Palette.Transparent.White (0.5f) }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "instructions", TextStyle.LtParagraph }

@@ -3,7 +3,14 @@ using System.Collections;
 
 public class TextElementUI : ScreenElementUI<TextElement> {
 
-	public TextStyle Style { get; set; }
+	TextStyle style;
+	public TextStyle Style {
+		get { return style; }
+		set {
+			style = value;
+			Text.ApplyStyle (style);
+		}
+	}
 
 	public override void ApplyElement (TextElement e) {
 		Text.text = e.Text;

@@ -16,6 +16,7 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 	protected override void OnUpdate (ButtonElement e) {
 		Text.text = e.Text;
 		Interactable = e.Interactable;
+		Text.ApplyStyle (TextStyle.Button);
 	}
 
 	public override void RemoveElement (ButtonElement e) {

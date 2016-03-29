@@ -10,10 +10,9 @@ namespace Templates {
 		public override TemplateSettings Settings {
 			get {
 				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
+					TopBarHeight = TemplateSettings.ShortBar,
+					TopBarColor = Palette.LtTeal,
 					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg",
 					PotEnabled = true,
 					CoinsEnabled = true
 				};
