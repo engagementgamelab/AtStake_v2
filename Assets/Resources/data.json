@@ -273,9 +273,9 @@
     },
     {
       "Symbol": "start",
-      "DisplayName": "@Stake",
+      "Instructions": "Welcome to\n@Stake: <i>a deliberation game!</i>\nYou will need 3-4 players.\nMake sure your WIFI is turned on.",
       "Buttons": {
-        "play": "Play"
+        "submit": "Let's go!"
       }
     },
     {

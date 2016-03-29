@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -8,10 +9,13 @@ namespace Templates {
 		public override TemplateSettings Settings {
 			get { 
 				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
+					BackgroundColor = Palette.Teal,
+					ButtonColors = new Dictionary<string, Color> () {
+						{ "submit", Palette.Green }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "instructions", TextStyle.LtParagraph }
+					}
 				};
 			}
 		}

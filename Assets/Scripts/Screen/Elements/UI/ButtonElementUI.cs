@@ -5,6 +5,7 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 
 	public override void ApplyElement (ButtonElement e) {
 		Text.text = e.Text;
+		Text.ApplyStyle (TextStyle.Button);
 		Interactable = e.Interactable;
 		if (e.OnPress != null)
 			AddButtonListener (e.OnPress);

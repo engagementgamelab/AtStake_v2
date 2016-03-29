@@ -20,10 +20,6 @@ public class DiscoveryService : MonoBehaviour {
 
 	Dictionary<MultiplayerManager, System.Action<Dictionary<string, string>>> onUpdateHostsDelegates = new Dictionary<MultiplayerManager, System.Action<Dictionary<string, string>>> ();
 
-	int timeoutBuffer = 1;				// Maximum number of times a host can be missing from broadcastsReceived before they are removed from the host list
-	float timeSinceLastReceived = 0f;	// Time (in seconds) that has passed since the last broadcast was received
-	float broadcastTimeout = 1.5f;		// Time (in seconds) to wait for broadcasts. If the time passes beyond this, the host list is cleared
-
 	class HostsData {
 
 		public HostData[] hosts { get; set; }

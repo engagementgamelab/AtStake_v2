@@ -103,6 +103,11 @@ public class UIElement : MB {
 		set { Button.interactable = value; }
 	}
 
+	public Color Color {
+		get { return Image.color; }
+		set { Image.color = value; }
+	}
+
 	LayoutElement layout = null;
 	protected LayoutElement Layout {
 		get {

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// deprecated
+
 namespace Views {
 
 	// Player enters their name on this screen

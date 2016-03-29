@@ -57,8 +57,8 @@ namespace Templates {
 						t.Text.text = playerRole[0];
 						if (roleCounter % 2 != 0) {
 							t.Text.text += " the " + playerRole[1];
-							if (playerRole[1] == "Decider")
-								t.Style = FontStyle.Bold;
+							/*if (playerRole[1] == "Decider")
+								t.Style = FontStyle.Bold;*/
 						}
 					}
 				}

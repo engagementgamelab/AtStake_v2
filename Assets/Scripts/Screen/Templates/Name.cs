@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// deprecated
+
 namespace Templates {
 
 	public class Name : Template {

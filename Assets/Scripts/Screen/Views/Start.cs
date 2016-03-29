@@ -9,7 +9,24 @@ namespace Views {
 	public class Start : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], () => { GotoView ("name"); }));
+			// Elements.Add ("play", new ButtonElement (Model.Buttons["play"], () => { GotoView ("name"); }));
+			Elements.Add ("logo", new ImageElement ("logo_small"));
+
+			Elements.Add ("input", new InputElement ("your name", (string name) => {
+				#if !SINGLE_SCREEN
+				GetScreenElement<ButtonElement> ("submit").Interactable = name != "";
+				#endif
+			}, (string name) => {
+				Game.Manager.Name = name;
+
+				// This allows the name to be submitted by pressing "done" on the ios/android keyboard
+				if (name != "")
+					GotoView ("hostjoin");
+			}));
+
+			Elements.Add ("submit", new ButtonElement (GetButton ("submit"), () => { 
+				GotoView ("hostjoin");
+			}));
 		}
 	}
 }

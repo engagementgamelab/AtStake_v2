@@ -88,7 +88,11 @@ namespace Templates {
 
 		void SetBackground (Color bgColor, string bgImage) {
 			BackgroundColor = bgColor;
-			BackgroundImage = AssetLoader.LoadBackground (bgImage);
+			
+			bool hasBg = !string.IsNullOrEmpty (bgImage);
+			backgroundImage.gameObject.SetActive (hasBg);
+			if (hasBg)
+				BackgroundImage = AssetLoader.LoadBackground (bgImage);
 		}
 
 		void SetTopBar (bool enabled, Color topBarColor=new Color()) {

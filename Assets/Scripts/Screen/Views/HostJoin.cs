@@ -13,7 +13,7 @@ namespace Views {
 		protected override void OnInitElements () {
 			Elements.Add ("host", new ButtonElement (Model.Buttons["host"], Host));
 			Elements.Add ("join", new ButtonElement (Model.Buttons["join"], Join));
-			Elements.Add ("back", new BackButtonElement ("name"));
+			Elements.Add ("back", new BackButtonElement ("start"));
 			Elements.Add ("error", new TextElement (GetText ("error")) { Active = Game.Multiplayer.DisconnectedWithError });
 		}
 

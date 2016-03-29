@@ -141,7 +141,7 @@ namespace Views {
 
 			// Header/title
 			if (!string.IsNullOrEmpty (Model.DisplayName)) {
-				Elements.Add ("title", new TextElement (Model.DisplayName, TextStyle.Header));
+				Elements.Add ("title", new TextElement (Model.DisplayName));
 			}
 
 			// Decider & Player instructions
@@ -214,6 +214,14 @@ namespace Views {
 
 		protected string GetText (string id) {
 			return DataManager.GetTextFromScreen (Model, id, TextVariables);
+		}
+
+		protected string GetButton (string id) {
+			try {
+				return Model.Buttons[id];
+			} catch (KeyNotFoundException e) {
+				throw new System.Exception ("Could not find data for a button with the id '" + id + "'");
+			}
 		}
 
 		// Routing

@@ -90,6 +90,26 @@ namespace Templates {
 						v.Visible = Settings.PotEnabled;
 				}
 
+				// Apply button styling
+				ButtonElementUI butt = v as ButtonElementUI;
+				if (butt != null) {
+					Color c = Palette.White;
+					if (Settings.ButtonColors != null && Settings.ButtonColors.ContainsKey (k))
+						c = Settings.ButtonColors[k];
+					butt.Color = c;
+				}
+
+				// Apply text styling
+				TextElementUI text = v as TextElementUI;
+				if (text != null) {
+					TextStyle style = TextStyle.Paragraph;
+					if (Settings.TextStyles != null && Settings.TextStyles.ContainsKey (k))
+						style = Settings.TextStyles[k];
+					text.Style = style;
+					text.Text.ApplyStyle (style);
+				}
+
+				// Apply content
 				if (data.TryGetValue (k, out elementData)) {
 					v.Load (elementData);
 				} else {
@@ -134,5 +154,7 @@ namespace Templates {
 		public string BackgroundImage { get; set; }
 		public bool PotEnabled { get; set; }
 		public bool CoinsEnabled { get; set; }
+		public Dictionary<string, Color> ButtonColors { get; set; }
+		public Dictionary<string, TextStyle> TextStyles { get; set; }
 	}
 }

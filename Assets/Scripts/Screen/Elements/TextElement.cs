@@ -12,10 +12,7 @@ public class TextElement : ScreenElement {
 		}
 	}
 
-	public readonly TextStyle Style;
-
-	public TextElement (string text, TextStyle style=null) {
+	public TextElement (string text) {
 		this.text = text;
-		Style = (style == null) ? TextStyle.Paragraph : style;
 	}
 }

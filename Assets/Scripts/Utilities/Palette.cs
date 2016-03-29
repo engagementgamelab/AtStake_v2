@@ -11,11 +11,19 @@ public static class Palette {
 	}
 
 	public static Color Orange {
-		get { return Color255 (255, 119, 0); }
+		get { return Color255 (255, 186, 0); }
 	}
 
 	public static Color Blue {
 		get { return Color255 (0, 0, 255); }
+	}
+
+	public static Color Teal {
+		get { return Color255 (28, 187, 180); }
+	}
+
+	public static Color Green {
+		get { return Color255 (211, 231, 73); }
 	}
 
 	public static class Transparent {

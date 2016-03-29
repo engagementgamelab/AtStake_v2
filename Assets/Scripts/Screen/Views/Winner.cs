@@ -11,7 +11,7 @@ namespace Views {
 
 		protected override void OnInitElements () {
 			Elements.Add ("winner", new TextElement (DataManager.GetTextFromScreen (Model, "winner")));
-			Elements.Add ("winner_name", new TextElement (Game.Controller.WinnerName + "!", TextStyle.Header));
+			Elements.Add ("winner_name", new TextElement (Game.Controller.WinnerName + "!"));
 		}
 
 		protected override void OnShow () {

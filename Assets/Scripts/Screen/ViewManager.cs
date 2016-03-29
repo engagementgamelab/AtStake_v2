@@ -17,7 +17,7 @@ namespace Views {
 
 					views = new Dictionary<string, View> () {
 						{ "start", new Start () },
-						{ "name", new Name () },
+						// { "name", new Name () },
 						{ "hostjoin", new HostJoin () },
 						{ "lobby", new Lobby () },
 						{ "games", new Games () },
@@ -71,10 +71,10 @@ namespace Views {
 			CurrView = id;
 
 			// Render the new view
-			try {
+			if (Views.ContainsKey (CurrView)) {
 				Game.Templates.Load (CurrView, Views[CurrView]);
-			} catch (KeyNotFoundException e) {
-				throw new System.Exception ("No template with the id '" + id + "' exists.\n" + e);
+			} else {
+				throw new System.Exception ("No template with the id '" + id + "' exists.");
 			}
 		}
 
