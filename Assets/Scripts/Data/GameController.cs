@@ -232,6 +232,7 @@ public class GameController : GameInstanceBehaviour {
 		roundItr = new ArrayIterator ("round", Game, (int position) => { instance.RoundIndex = position; });
 		pitchItr = new ArrayIterator ("pitch", Game, (int position) => { CurrentRound.PitchIndex = position; });
 		agendaItemItr = new ArrayIterator ("agenda_item", Game, (int position) => { CurrentRound.AgendaItemIndex = position; });
+		Debug.Log ("heard");
 	}
 
 	public void Reset () {

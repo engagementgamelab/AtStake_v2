@@ -45,7 +45,7 @@ public class DiscoveryService : MonoBehaviour {
 		public string address { get; set; }
 	}
 
-	public static void StartBroadcasting (string hostName, string ipAddress) {
+	public static void StartBroadcasting (string hostName, string ipAddress, System.Action onError) {
 
 		if (Broadcaster != null)
 			return;
@@ -58,6 +58,8 @@ public class DiscoveryService : MonoBehaviour {
 		Co.InvokeWhileTrue (0.5f, () => { return Broadcaster.broadcasting; }, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/addHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
 				// Debug.Log ("sent " + ipAddress);
+				if (www.error != null)
+					onError ();
 			});
 		}, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/removeHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
@@ -89,7 +91,15 @@ public class DiscoveryService : MonoBehaviour {
 
 		Co.InvokeWhileTrue (0.5f, () => { return Listener.listening; }, () => {
 			Co.WWW (Listener.MasterAddress + "/hosts", (WWW www) => {
-				Listener.received = JsonReader.Deserialize<HostsData> (www.text);
+				if (www.error != null) {
+					Listener.received = new HostsData () {
+						hosts = new HostData[] {
+							new HostData () { name = "__error" }
+						}
+					};
+				} else {
+					Listener.received = JsonReader.Deserialize<HostsData> (www.text);
+				}
 				Listener.SendUpdateHostsMessage ();
 			});
 		}, () => {
@@ -115,8 +125,12 @@ public class DiscoveryService : MonoBehaviour {
 	}
 
 	void SendUpdateHostsMessage () {
-		Dictionary<string, string> hosts = received.Package ();
+
+		Dictionary<string, string> hosts = new Dictionary<string, string> ();
+		if (received != null)
+			hosts = received.Package ();
 		foreach (var del in onUpdateHostsDelegates)
 			del.Value (hosts);
 	}
 }
+

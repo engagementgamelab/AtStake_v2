@@ -204,13 +204,20 @@
     },
     {
       "Symbol": "games",
-      "ClientInstructions": "Choose a game to join"
+      "ClientInstructions": "Choose a game to join",
+      "Text": {
+        "searching": "Searching for games...",
+        "error": "Could not connect to server - is your WIFI on?"
+      }
     },
     {
       "Symbol": "hostjoin",
       "Buttons": {
         "host": "Host",
         "join": "Join"
+      },
+      "Text": {
+        "error": "Could not connect to server - is your WIFI on?"
       }
     },
     {

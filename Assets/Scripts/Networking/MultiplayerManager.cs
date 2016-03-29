@@ -24,6 +24,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		get { return new List<string> (hosts.Keys); }
 	}
 
+	public bool DisconnectedWithError { get; private set; }
+
 	public NetworkMasterServer server;
 	public NetworkMasterClient client;
 	public OnLogMessage onLogMessage;
@@ -39,7 +41,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// debugging messages
 		server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;
-		MasterServerDiscovery.onLogMessage += SendLogMessage;
 
 		// events
 		client.callbacks.AddListener ("disconnected", OnDisconnect);
@@ -54,6 +55,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// Set this player as the host
 		Host = Game.Name;
 		Hosting = true;
+		DisconnectedWithError = false;
 
 		// Start the server
 		server.Initialize ();
@@ -61,16 +63,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// Start the client and connect to the server as the host
 		// Use the discovery service to broadcast this game
 		client.StartAsHost (Host, () => {
-			// MasterServerDiscovery.StartBroadcasting (Host);
-			DiscoveryService.StartBroadcasting (Host, client.IpAddress);
+			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
 		});
 	}
 
 	public void RequestHostList (System.Action<List<string>> callback) {
-		/*MasterServerDiscovery.StartListening (this, (Dictionary<string, string> hosts) => {
-			this.hosts = hosts;
-			callback (new List<string> (hosts.Keys));
-		});*/
 		DiscoveryService.StartListening (this, (Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
@@ -88,7 +85,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// Start the client and request to join the host's game
 		// Stop the discovery service from listening for games to join
 		client.StartAsClient (Game.Name, hosts[Host], () => {
-			// MasterServerDiscovery.StopListening (this);
 			DiscoveryService.StopListening (this);
 		});
 	}
@@ -105,7 +101,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
 		if (Hosting) {
-			// MasterServerDiscovery.StopBroadcasting ();
 			DiscoveryService.StopBroadcasting ();
 			client.UnregisterHost (Host, () => {
 				Co.WaitForFixedUpdate (() => {
@@ -113,7 +108,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				});
 			});
 		} else {
-			// MasterServerDiscovery.StopListening (this);
 			DiscoveryService.StopListening (this);
 			client.UnregisterClient ();
 			OnDisconnect ();
@@ -150,14 +144,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	void UpdateBroadcast () {
 		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
-		/*if (Clients.Count+1 < maxPlayerCount)
-			MasterServerDiscovery.StartBroadcasting (Host);
-		else
-			MasterServerDiscovery.StopBroadcasting ();*/
-		if (Clients.Count+1 < maxPlayerCount)
-			DiscoveryService.StartBroadcasting (Host, client.IpAddress);
-		else
+		if (Clients.Count+1 < maxPlayerCount) {
+			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
+		} else {
 			DiscoveryService.StopBroadcasting ();
+		}
 	}
 
 	// -- Messaging
@@ -187,12 +178,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// Intentional & unintentional disconnect
 	void OnDisconnect () {
 		if (Hosting) {
-			// MasterServerDiscovery.StopBroadcasting ();
 			DiscoveryService.StopBroadcasting ();
 			Clients.Clear ();
 			Hosting = false;
 		} else {
-			// MasterServerDiscovery.StopListening (this);
 			DiscoveryService.StopListening (this);
 		}
 		Host = "";
@@ -235,6 +224,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			clientRegisterResponse (response);
 			clientRegisterResponse = null;
 		}
+	}
+
+	void OnBroadcastError () {
+		DisconnectedWithError = true;
+		Disconnect ();
 	}
 
 	// -- Debugging

@@ -175,8 +175,10 @@ public class DataManager {
                 default: text = screen.Text[key]; break;
             }
         } catch {
-            throw new System.Exception ("The model " + screen + " does not contain text with the key " + key);
+            throw new System.Exception ("The screen " + screen.Symbol + " does not contain text with the key '" + key + "'");
         }
+
+        // Match and replace keywords
         if (vars != null) {
             foreach (Match match in Regex.Matches (text, @"\{\{(.*?)\}\}")) {
                 string m = match.Value;
