@@ -75,6 +75,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Host = Game.Name;
 		Hosting = true;
 		DisconnectedWithError = false;
+
+		// Initialize avatar manager and set the host's avatar
 		avatars = new AvatarsManager ();
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);

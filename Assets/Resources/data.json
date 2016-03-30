@@ -222,7 +222,7 @@
     },
     {
       "Symbol": "lobby",
-      "DisplayName": "Lobby",
+      "DisplayName": "Players",
       "Buttons": {
         "play": "Play"
       }

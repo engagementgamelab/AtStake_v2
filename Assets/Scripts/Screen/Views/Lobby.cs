@@ -8,11 +8,15 @@ namespace Views {
 
 	public class Lobby : View {
 
-		ListElement<TextElement> peerList;
+		// ListElement<TextElement> peerList;
+		ListElement<AvatarElement> peerList;
 
 		protected override void OnInitElements () {
 
-			peerList = new ListElement<TextElement> ();
+			/*peerList = new ListElement<TextElement> ();
+			Elements.Add ("peer_list", peerList);*/
+
+			peerList = new ListElement<AvatarElement> ();
 			Elements.Add ("peer_list", peerList);
 
 			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
@@ -22,8 +26,12 @@ namespace Views {
 
 		protected override void OnShow () {
 
-			foreach (string player in Game.Manager.PlayerNames)
-				OnAddPeer (player);
+			/*foreach (string player in Game.Manager.PlayerNames)
+				OnAddPeer (player);*/
+
+			foreach (var player in Game.Manager.Players) {
+				OnAddPeer (player.Key, player.Value.Avatar);
+			}
 
 			Game.Manager.onAddPeer += OnAddPeer;
 			Game.Manager.onRemovePeer += OnRemovePeer;
@@ -34,8 +42,9 @@ namespace Views {
 			Game.Manager.onRemovePeer -= OnRemovePeer;
 		}
 
-		void OnAddPeer (string peer) {
-			peerList.Add (peer, new TextElement (peer + "|" + Game.Manager.Players.Find (x => x.Name == peer).Avatar));
+		void OnAddPeer (string peer, string color) {
+			// peerList.Add (peer, new TextElement (peer + "|" + Game.Manager.Players.Find (x => x.Name == peer).Avatar));
+			peerList.Add (peer, new AvatarElement (peer, color));
 			SetPlayButton ();
 		}
 

@@ -90,8 +90,8 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 			if (multiplayer.Hosting)
 				hostStatus.text += " (me)";
 			clientsStatus.text = "Players: ";
-			foreach (string player in multiplayer.Game.Manager.PlayerNames) {
-				clientsStatus.text += player + ", ";
+			foreach (var player in multiplayer.Game.Manager.Players) {
+				clientsStatus.text += player.Key + ", ";
 			}
 		} else {
 			hostStatus.text = "not connected";

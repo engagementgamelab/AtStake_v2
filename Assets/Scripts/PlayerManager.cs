@@ -9,27 +9,15 @@ using Models;
 /// </summary>
 public class PlayerManager : GameInstanceBehaviour {
 
-	public delegate void OnAddPeer (string peer);
+	public delegate void OnAddPeer (string peer, string color);
 	public delegate void OnRemovePeer (string peer);
 
 	Dictionary<string, Player> players = new Dictionary<string, Player> ();
-	public List<Player> Players {
-		get { return new List<Player> (players.Values); }
+	public Dictionary<string, Player> Players {
+		get { return players; }
 	}
 
-	public List<string> PlayerNames {
-		get { return new List<string> (players.Keys); }
-	}
-
-	string myName;
-	public string Name {
-		get { return myName; }
-		set {
-			myName = value;
-			// if (!players.ContainsKey (myName))
-				// players.Add (myName, new Player { Name = myName });
-		}
-	}
+	public string Name { get; set; }
 
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
@@ -49,7 +37,7 @@ public class PlayerManager : GameInstanceBehaviour {
 				Avatar = color
 			});
 			if (onAddPeer != null)
-				onAddPeer (Name);
+				onAddPeer (Name, color);
 		}
 	}
 
@@ -61,16 +49,18 @@ public class PlayerManager : GameInstanceBehaviour {
 		foreach (var pc in playerColors) {
 
 			string name = pc.Key;
+			string color = pc.Value;
+
 			if (players.ContainsKey (name))
 				continue;
 
 			players.Add (name, new Player {
 				Name = name,
-				Avatar = pc.Value
+				Avatar = color
 			});
 
 			if (onAddPeer != null)
-				onAddPeer (name);
+				onAddPeer (name, color);
 		}
 
 		// Remove old players that weren't included in the message

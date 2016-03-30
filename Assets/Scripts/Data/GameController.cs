@@ -277,7 +277,7 @@ public class GameController : GameInstanceBehaviour {
 			throw new System.Exception ("Failed to setup game controller because a deck has not been chosen.");
 		}
 		try {
-			instance.Players = Game.Manager.Players.ToArray ();
+			instance.Players = Game.Manager.Players.Values.ToArray ();
 		} catch {
 			throw new System.Exception ("Failed to setup game controller because the players have not been set.");
 		}
@@ -464,12 +464,12 @@ public class GameController : GameInstanceBehaviour {
 			this.id = id;
 			this.game = game;
 			this.onNext = onNext;
-			game.Dispatcher.AddListener ("_Next", OnNext);
+			game.Dispatcher.AddListener ("__next", OnNext);
 		}
 
 		public void Next () {
 			position ++;
-			game.Dispatcher.ScheduleMessage ("_Next", id, position);
+			game.Dispatcher.ScheduleMessage ("__next", id, position);
 		}
 
 		void OnNext (MasterMsgTypes.GenericMessage msg) {
