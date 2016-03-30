@@ -181,6 +181,17 @@ public static class ExtensionMethods {
 		return children;
 	}
 
+	public static List<T> GetAllChildren<T> (this Transform transform) where T : MonoBehaviour {
+		List<T> children = new List<T> ();
+		List<Transform> transforms = transform.GetAllChildren ();
+		foreach (Transform child in transforms) {
+			T t = child.GetComponent<T> ();
+			if (t != null)
+				children.Add (t);
+		}
+		return children;
+	}
+
 	public static Transform GetNthParent (this Transform transform, int n) {
 		Transform parent = transform.parent;
 		if (parent == null) {
@@ -237,6 +248,10 @@ public static class ExtensionMethods {
 		transform.position = position;
 	}
 	
+	public static void SetLocalPosition (this Transform transform) {
+		transform.localPosition = Vector3.zero;
+	}
+
 	public static void SetLocalPosition (this Transform transform, Vector3 position) {
 		transform.localPosition = position;
 	}

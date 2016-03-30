@@ -61,6 +61,11 @@ namespace Templates {
 			c.backButton = myContainer.backButton;
 			c.pot = myContainer.pot;
 			c.coins = myContainer.coins;
+
+			// All templates should be deactivated to start
+			foreach (Template template in c.templates)
+				template.gameObject.SetActive (false);
+
 			return c;
 		}
 

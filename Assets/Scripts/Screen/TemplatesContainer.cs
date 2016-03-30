@@ -83,6 +83,13 @@ namespace Templates {
 
 		void OnEnable () {
 			canvasWidth = canvas.GetComponent<RectTransform> ().sizeDelta.x;
+
+			// When using the Template Editor, the container will already be a child so it needs to be removed.
+			TemplateContainer tempContainer = transform.GetChild (0).GetComponent<TemplateContainer> ();
+			if (tempContainer != null) {
+				ObjectPool.Destroy<TemplateContainer> (tempContainer);
+			}
+
 			container1 = TemplateContainer.Init (this, 0);
 			container2 = TemplateContainer.Init (this, 1);
 		}

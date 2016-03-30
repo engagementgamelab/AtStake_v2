@@ -155,8 +155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 
-  image: {fileID: 11499530}
-  text: {fileID: 11476736}
+  avatar: {fileID: 11499530}
+  name: {fileID: 11476736}
 --- !u!114 &11499530
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -11,6 +11,21 @@ namespace Templates {
 		public TemplatesContainer templatesContainer;
 		public DebugInfoContainer debug;
 
+		public static TemplateManager Init (Transform parent) {
+
+			TemplateManager[] objs = Object.FindObjectsOfType (typeof (TemplateManager)) as TemplateManager[];
+			foreach (TemplateManager m in objs) {
+				if (m.Parent == null) {
+					m.Transform.SetParent (parent);
+					return m;
+				}
+			}
+
+			TemplateManager manager = ObjectPool.Instantiate<TemplateManager> ();
+			manager.Transform.SetParent (parent);
+			return manager;
+		}
+
 		public void Load (string id, View view) {
 			templatesContainer.Load (id, view);
 		}

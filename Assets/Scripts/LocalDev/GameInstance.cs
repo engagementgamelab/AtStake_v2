@@ -26,7 +26,8 @@ public class GameInstance : MonoBehaviour {
 		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
 		Dispatcher 	= GameInstanceBehaviour.Init<MessageDispatcher> (transform);
 		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
-		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
+		// Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
+		Templates 	= TemplateManager.Init (transform);
 		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
 		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
 		Controller 	= GameInstanceBehaviour.Init<GameController> (transform);
