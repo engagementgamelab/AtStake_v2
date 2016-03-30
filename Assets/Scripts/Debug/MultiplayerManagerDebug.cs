@@ -69,6 +69,8 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 
 	void Update () {
 
+		if (multiplayer == null) return;
+
 		hostButton.gameObject.SetActive (
 			!multiplayer.client.IsConnected 
 			&& DiscoveryService.Broadcaster == null

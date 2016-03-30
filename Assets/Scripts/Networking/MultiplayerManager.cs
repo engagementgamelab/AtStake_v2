@@ -57,7 +57,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	void OnEnable () {
 
-		
+
 		// debugging messages
 		server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;

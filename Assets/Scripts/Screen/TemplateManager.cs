@@ -44,7 +44,9 @@ namespace Templates {
 			debug.gameObject.SetActive (
 			#if SHOW_DEBUG_INFO
 				true);
-			debug.Init (Game);
+			Co.YieldWhileTrue (() => { return Parent == null; }, () => {
+				debug.Init (Game);
+			});
 			#else
 				false);
 			#endif

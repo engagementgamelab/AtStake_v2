@@ -16,6 +16,7 @@ public class ViewManagerDebug : MonoBehaviour {
 
 	#if SHOW_DEBUG_INFO
 	void Update () {
+		if (views == null) return;
 		current.text = "Current view: " + views.CurrView;
 		previous.text = "Previous view: " + views.PrevView;
 	}

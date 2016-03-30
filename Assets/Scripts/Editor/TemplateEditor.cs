@@ -20,6 +20,10 @@ public class TemplateEditor : EditorWindow {
 		get { return Container.templates; }
 	}
 
+	DebugInfoContainer DebugInfo {
+		get { return Manager.Transform.GetChild (0).GetChildren<DebugInfoContainer> ()[0]; }
+	}
+
 	string[] templateNames;
 	string[] TemplateNames {
 		get { 
@@ -32,6 +36,8 @@ public class TemplateEditor : EditorWindow {
 	int currTemplateIdx = 0;
 	int prevTemplateIdx = 0;
 	Template currentTemplate;
+	bool showDebug = false;
+	bool prevShowDebug = true;
 
 	static TemplateEditor instance;
 
@@ -55,6 +61,12 @@ public class TemplateEditor : EditorWindow {
 			DeactivateTemplate ();
 			ActivateTemplate (Templates[currTemplateIdx]);
 			prevTemplateIdx = currTemplateIdx;
+		}
+
+		showDebug = GUILayout.Toggle (showDebug, "Show debug info");
+		if (showDebug != prevShowDebug) {
+			DebugInfo.gameObject.SetActive (showDebug);
+			prevShowDebug = showDebug;
 		}
 
 		if (GUILayout.Button ("Save changes")) {
