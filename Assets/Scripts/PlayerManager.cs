@@ -26,17 +26,13 @@ public class PlayerManager : GameInstanceBehaviour {
 		get { return myName; }
 		set {
 			myName = value;
-			if (!players.ContainsKey (myName))
-				players.Add (myName, new Player { Name = myName });
+			// if (!players.ContainsKey (myName))
+				// players.Add (myName, new Player { Name = myName });
 		}
 	}
 
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
-
-	string[] avatarColors = new string[] {
-		"red", "green", "orange", "pink", "yellow"
-	};
 
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
@@ -46,26 +42,50 @@ public class PlayerManager : GameInstanceBehaviour {
 		players.Clear ();
 	}
 
+	public void AddHost (string color) {
+		if (!players.ContainsKey (Name)) {
+			players.Add (Name, new Player {
+				Name = Name,
+				Avatar = color
+			});
+			if (onAddPeer != null)
+				onAddPeer (Name);
+		}
+	}
+
 	public void OnUpdatePlayers (MasterMsgTypes.GenericMessage msg) {
 
-		List<string> playersStr = new List<string> (msg.str1.Split ('|'));
+		Dictionary<string, string> playerColors = AvatarsManager.ToDict (msg.str1);
 
-		foreach (string newPeer in playersStr) {
-			if (!players.ContainsKey (newPeer)) {
-				players.Add (newPeer, new Player { Name = newPeer });
-				if (onAddPeer != null)
-					onAddPeer (newPeer);
-			}
+		// Add any players that haven't already been registered
+		foreach (var pc in playerColors) {
+
+			string name = pc.Key;
+			if (players.ContainsKey (name))
+				continue;
+
+			players.Add (name, new Player {
+				Name = name,
+				Avatar = pc.Value
+			});
+
+			if (onAddPeer != null)
+				onAddPeer (name);
 		}
 
-		Dictionary<string, Player> tempPeers = new Dictionary<string, Player> (players);
+		// Remove old players that weren't included in the message
+		Dictionary<string, Player> temp = new Dictionary<string, Player> (players);
 
-		foreach (var peer in tempPeers) {
-			string peerName = peer.Key;
-			if (!playersStr.Contains (peerName)) {
-				players.Remove (peerName);
+		foreach (var p in temp) {
+
+			string name = p.Key;
+
+			if (!playerColors.ContainsKey (name)) {
+
+				players.Remove (name);
+
 				if (onRemovePeer != null)
-					onRemovePeer (peerName);
+					onRemovePeer (name);
 			}
 		}
 	}

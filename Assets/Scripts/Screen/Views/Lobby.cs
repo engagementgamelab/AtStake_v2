@@ -35,7 +35,7 @@ namespace Views {
 		}
 
 		void OnAddPeer (string peer) {
-			peerList.Add (peer, new TextElement (peer));
+			peerList.Add (peer, new TextElement (peer + "|" + Game.Manager.Players.Find (x => x.Name == peer).Avatar));
 			SetPlayButton ();
 		}
 

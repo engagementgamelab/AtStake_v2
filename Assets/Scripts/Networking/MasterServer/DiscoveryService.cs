@@ -99,7 +99,6 @@ public class DiscoveryService : MonoBehaviour {
 				Listener.SendUpdateHostsMessage ();
 			});
 		}, () => {
-			Debug.Log ("destroyed");
 			ObjectPool.Destroy<DiscoveryService> (Listener);
 			Listener = null;
 		});

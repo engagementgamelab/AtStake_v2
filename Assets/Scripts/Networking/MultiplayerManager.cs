@@ -7,23 +7,41 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public delegate void OnLogMessage (string msg);
 	public delegate void OnDisconnected ();
 
+	/// <summary>
+	/// Returns true if this is the game's host
+	/// </summary>
 	public bool Hosting { get; private set; }
 
+	/// <summary>
+	/// Returns true if connected (always true if hosting)
+	/// </summary>
 	public bool Connected {
 		get { return Hosting || connected; }
 		private set { connected = value; }
 	}
 
+	/// <summary>
+	/// Gets/sets name of the game's host
+	/// </summary>
 	public string Host { get; private set; }
 
+	/// <summary>
+	/// If hosting, gets a list of client names connected to this host
+	/// </summary>
 	public List<string> Clients {
 		get { return clients; }
 	}
 
+	/// <summary>
+	/// Gets a list of host names populated from the master server
+	/// </summary>
 	public List<string> Hosts {
 		get { return new List<string> (hosts.Keys); }
 	}
 
+	/// <summary>
+	/// Returns true if the host was disconnected with an error. This flag is used to display an error message to the user.
+	/// </summary>
 	public bool DisconnectedWithError { get; private set; }
 
 	public NetworkMasterServer server;
@@ -35,6 +53,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	List<string> clients = new List<string> ();
 	System.Action<string> clientRegisterResponse;
 	bool connected = false;
+	AvatarsManager avatars;
 
 	void OnEnable () {
 
@@ -56,6 +75,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Host = Game.Name;
 		Hosting = true;
 		DisconnectedWithError = false;
+		avatars = new AvatarsManager ();
+		avatars.AddPlayer (Host);
+		Game.Manager.AddHost (avatars[Host]);
 
 		// Start the server
 		server.Initialize ();
@@ -90,7 +112,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void JoinGame (string ipAddress) {
-		Debug.Log (ipAddress);
 		client.StartAsClient (Game.Name, ipAddress, () => {
 			Debug.Log ("joined");
 		});
@@ -123,23 +144,28 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	void AddClient (string clientName) {
 		Clients.Add (clientName);
+		avatars.AddPlayer (clientName);
 		UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
 	void RemoveClient (string clientName) {
 		Clients.Remove (clientName);
+		avatars.RemovePlayer (clientName);
 		UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
 	void UpdatePlayers () {
-		string players = "";
-		foreach (string player in Clients) {
+		
+		/*string players = "";
+		foreach (string player in Clients)
 			players += player + "|";
-		}
-		players += Host;
-		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", players);
+		players += Host;*/
+
+		string colors = avatars.GetPlayers ();
+
+		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", colors);
 	}
 
 	void UpdateBroadcast () {
