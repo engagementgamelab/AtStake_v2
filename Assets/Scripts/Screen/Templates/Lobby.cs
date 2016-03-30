@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -10,7 +11,10 @@ namespace Templates {
 				return new TemplateSettings () {
 					TopBarHeight = TemplateSettings.TallBar,
 					TopBarColor = Palette.Pink,
-					BackgroundColor = Palette.White
+					BackgroundColor = Palette.White,
+					Colors = new Dictionary<string, Color> () {
+						{ "play", Palette.LtBlue }
+					}
 				};
 			}
 		}

@@ -121,13 +121,13 @@
   "Screens": [
     {
       "Symbol": "agenda",
-      "DeciderInstructions": "Read this out loud: 'everyone secretly review yr agenda' Press next when everyone is ready"
+      "DeciderInstructions": "Decider Instructions. Read out loud: 'OK, now everyone review your agenda items. You'll earn extra coins if these are included in the winning proposal (even if you're not the winner). Keep them secret! I'll give you a few seconds...' Press Next when the players understand the instructions."
     },
     {
       "Symbol": "agenda_item",
-      "Instructions": "Did the winning plan include this agenda item?",
+      "Instructions": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. Press 'Yes' if you think the winning proposal include the following agenda item:",
       "Text": {
-        "your_item": "This is your agenda item! Convince the decider you're awesome!!"
+        "your_item": "The Decider is reviewing your agenda points! Make your case if your points made it into the final proposal!"
       },
       "Buttons": {
         "accept": "Yes",
@@ -137,60 +137,60 @@
     {
       "Symbol": "agenda_item_accept",
       "Text": {
-        "your_item": "Decider chose your agenda item!! :D You get {{reward}} coins",
-        "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} coins :D"
+        "your_item": "The Decider chose your agenda item! You get {{reward}} coins",
+        "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} bonus coins."
       }
     },
     {
       "Symbol": "agenda_item_reject",
       "Text": {
-        "your_item": "Decider did not choose your agenda item",
-        "their_item": "{{rewarded_player}}'s agenda item was not accepted."
+        "your_item": "The Decider did not choose your agenda item",
+        "their_item": "{{rewarded_player}}'s agenda item did not fit the winning proposal and no bonus coins were awarded."
       }
     },
     {
       "Symbol": "bio",
-      "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next"
+      "DeciderInstructions": "Read out loud: 'Everyone, please introduce your character roles. You will be playing from this perspective this round.'When everyone is done, press 'next.'"
     },
     {
       "Symbol": "decide",
-      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!",
-      "PlayerInstructions": "listen to your gumptious decider"
+      "DeciderInstructions": "Decider Instructions. Read out loud:: 'Time's up! I will now choose the best proposal.' Who had the best proposal?",
+      "PlayerInstructions": "The Decider is selecting the winner for the best proposal!"
     },
     {
       "Symbol": "deck",
-      "ClientInstructions": "Please wait while the host chooses a deck",
-      "HostInstructions": "Please choose a deck genius"
+      "ClientInstructions": "Important stuff happening! Please wait while the Host picks a topic for your game... ",
+      "HostInstructions": "Please pick a topic for your game:"
     },
     {
       "Symbol": "deliberate",
-      "DeciderInstructions": "When everyone is ready, start the timer"
+      "DeciderInstructions": "Press 'deliberate' to start the next round. Be sure to ask probing questions about the proposal and encourage questions among players."
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'",
-      "PlayerInstructions": "listen to your special decider"
+      "DeciderInstructions": "Read out loud: 'This is the deliberation round! Let's talk more about your proposals. This round is three minutes long, and more free-form. Once the round is done, players could buy more time to deliberate.'",
+      "PlayerInstructions": "This is the deliberation round. Answer questions, expand your ideas, and try to get other players to agree with your agenda items."
     },
     {
       "Symbol": "extra_time",
       "Text": {
-        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time.",
-        "cant_afford": "You can't afford extra time :("
+        "can_afford": "Need more time? You can buy {{extra_time_cost}} for {{extra_seconds}} seconds additional time.",
+        "cant_afford": "No thanks"
       },
       "Buttons": {
         "accept": "More time",
-        "decline": "Nah"
+        "decline": "No thanks"
       }
     },
     {
       "Symbol": "extra_time_deliberate",
       "Text": {
-        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time. Once everyone has declined we'll move on.",
-        "cant_afford": "You can't afford extra time :("
+        "can_afford": "Need more time? You can buy {{extra_time_cost}} for {{extra_seconds}} seconds additional time. Once everyone has declined we'll move on.",
+        "cant_afford": "No thanks"
       },
       "Buttons": {
         "accept": "More time",
-        "decline": "Nah"
+        "decline": "No thanks"
       }
     },
     {
@@ -204,7 +204,7 @@
     },
     {
       "Symbol": "games",
-      "ClientInstructions": "Choose a game to join",
+      "ClientInstructions": "Choose a game to join. There may be multiple games in your area, so be sure to join the right one!",
       "Text": {
         "searching": "Searching for games...",
         "error": "Could not connect to server - is your WIFI on?"
@@ -237,32 +237,32 @@
       "Symbol": "pitch",
       "DeciderInstructions": ".",
       "Text": {
-        "first_up": "{{current_peer}} is first up. Start the timer when they're ready!",
-        "next_up": "next up is {{current_peer}} Start the timer when they're ready!"
+        "first_up": "It's {{current_peer}}'s turn to pitch first",
+        "next_up": "Next up is {{current_peer}}. Start the timer when they're ready!"
       }
     },
     {
       "Symbol": "pitch_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'",
-      "PlayerInstructions": "listen to your proud decider"
+      "DeciderInstructions": "Decider Instructions. Read out loud: 'OK! There will be 60 seconds are on the clock. Are you ready?' Press 'Pitch' to begin!",
+      "PlayerInstructions": "You will have 60 seconds to pitch your proposal and an option to buy more time afterwards!"
     },
     {
       "Symbol": "pot",
       "Text": {
         "instruction1": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins.",
         "instruction2": "Everyone else begins with {{player_start_coin_count}} coins.",
-        "instruction3": "At the end of the round, {{decider}} will choose a winner and they will get the coins from the pot.",
-        "instruction4": "The round begins with {{pot_coin_count}} coins in the pot.",
-        "instruction5": "ok? let'S GO!!!"
+        "instruction3": "At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot.",
+        "instruction4": "{{pot_coin_count}} coins are up for grabs!",
+        "instruction5": "The pot could grow if you play boldly..."
       }
     },
     {
       "Symbol": "question",
-      "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool"
+      "DeciderInstructions": "Decider Instructions. Read this out loud: 'Here is the question you'll answer this round' {{question}}. Is everyone ready to ponder a solution? When everyone is ready, press next."
     },
     {
       "Symbol": "roles",
-      "Instructions": "Assigning roles"
+      "Instructions": "We're working hard to randomly select roles..."
     },
     {
       "Symbol": "scoreboard",
@@ -280,17 +280,17 @@
     },
     {
       "Symbol": "think",
-      "DeciderInstructions": "When everyone is ready, start the timer"
+      "DeciderInstructions": "Press 'Think' to start."
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'",
-      "PlayerInstructions": "listen to your decider"
+      "DeciderInstructions": "Read out loud: 'You will have 60 seconds to think of a proposal from your character's perspective.'",
+      "PlayerInstructions": "Think of a solution from your character's perspective. You have 60 seconds to think of how to pitch your proposal."
     },
     {
       "Symbol": "winner",
       "Text": {
-        "winner": "And the winner is..."
+        "winner": "The winner is..."
       }
     }
   ],

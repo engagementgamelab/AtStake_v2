@@ -154,20 +154,26 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// -- Messaging
 
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
+
+		// Client sends message to host so that host can relay it to all clients
 		client.SendMessageToHost (msg);
 	}
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
+
+		// Host receives message from client so that it can relay it to all other clients
 		Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+
+		// Host sends message to all clients
 		client.SendMessageToClients (msg);
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
-		// Pass this on to all clients except the host
+		// Clients receive message from host
 		if (!Hosting) {
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
 		}

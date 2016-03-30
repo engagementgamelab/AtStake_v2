@@ -30,8 +30,8 @@ public class MasterMsgTypes
 	public const short ListOfHostsId = 162;
 	public const short RegisteredClientId = 163;
 	public const short UnregisteredClientId = 164;
-	public const short GenericHostFromClientId = 168;
-	public const short GenericClientsFromHostId = 169;	
+	public const short GenericHostFromClientId = 166;
+	public const short GenericClientsFromHostId = 167;
 
 	// -------------- message for passing common values --------------
 
@@ -48,6 +48,35 @@ public class MasterMsgTypes
 			msg.id = id;
 			msg.str1 = str1;
 			msg.str2 = str2;
+			msg.val = val;
+			msg.bytes = bytes;
+			return msg;
+		}
+
+		public CompressedGenericMessage ToCompressed () {
+			CompressedGenericMessage msg = new CompressedGenericMessage ();
+			msg.id = CLZF2.Compress (id);
+			msg.str1 = CLZF2.Compress (str1);
+			msg.str2 = CLZF2.Compress (str2);
+			msg.val = val;
+			msg.bytes = bytes;
+			return msg;
+		}
+	}
+
+	public class CompressedGenericMessage : MessageBase
+	{
+		public byte[] id;
+		public byte[] str1;
+		public byte[] str2;
+		public int val;
+		public byte[] bytes;
+
+		public GenericMessage ToDecompressed () {
+			GenericMessage msg = new GenericMessage ();
+			msg.id = CLZF2.DecompressToString (id);
+			msg.str1 = CLZF2.DecompressToString (str1);
+			msg.str2 = CLZF2.DecompressToString (str2);
 			msg.val = val;
 			msg.bytes = bytes;
 			return msg;

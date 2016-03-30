@@ -95,6 +95,13 @@ public static class CLZF2
     /// </summary>
     private static readonly long[] HashTable = new long[HSIZE];
     
+    public static byte[] Compress (string data) {
+        byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes (data);
+        if (inputBytes.Length == 0)
+            return inputBytes;
+        return Compress (inputBytes);
+    }
+
     // Compresses inputBytes
     public static byte[] Compress(byte[] inputBytes)
     {
@@ -135,6 +142,13 @@ public static class CLZF2
         byte[] outputBytes = new byte[byteCount];
         Buffer.BlockCopy(tempBuffer, 0, outputBytes, 0, byteCount);
         return outputBytes;
+    }
+
+    public static string DecompressToString (byte[] inputBytes) {
+        if (inputBytes == null || inputBytes.Length == 0)
+            return "";
+        byte[] d = Decompress (inputBytes);
+        return System.Text.Encoding.UTF8.GetString (d, 0, d.Length);
     }
     
     /// <summary>

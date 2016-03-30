@@ -104,13 +104,15 @@ public class NetworkMasterServer : MonoBehaviour {
 		NetworkServer.SendToClient (
 			room.connectionId,
 			MasterMsgTypes.GenericHostFromClientId, 
-			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
+			netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ());
+			// netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	void OnHostToClients (NetworkMessage netMsg) {
 		NetworkServer.SendToAll (
 			MasterMsgTypes.GenericClientsFromHostId, 
-			netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
+			netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ());
+			// netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	// -- System Handlers
@@ -126,8 +128,7 @@ public class NetworkMasterServer : MonoBehaviour {
 		// Only remove the player if they're in the room and not the host
 		if (connectionId != room.connectionId && room.HasPlayer (connectionId)) {
 			msg.clientName = room.RemovePlayer (netMsg.conn.connectionId);
-			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg);
-		}
+			NetworkServer.SendToAll (MasterMsgTypes.UnregisteredClientId, msg); }
 	}
 
 	// -- Application Handlers

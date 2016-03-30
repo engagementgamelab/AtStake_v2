@@ -369,7 +369,7 @@ public class GameController : GameInstanceBehaviour {
 		// (Host) Serialize the data, compress the resultant string, and send the data in chunks not larger than maxDataSize
 
 		string data = JsonWriter.Serialize (instance);
-		byte[] compressed = CLZF2.Compress (System.Text.Encoding.UTF8.GetBytes (data));
+		byte[] compressed = CLZF2.Compress (data);
 		int chunkCount = Mathf.CeilToInt (compressed.Length / maxDataSize);
 
 		List<byte>[] chunks = new List<byte>[chunkCount];

@@ -34,6 +34,10 @@ public class PlayerManager : GameInstanceBehaviour {
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
 
+	string[] avatarColors = new string[] {
+		"red", "green", "orange", "pink", "yellow"
+	};
+
 	public void Init () {
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
 	}
