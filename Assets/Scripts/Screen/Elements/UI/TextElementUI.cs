@@ -4,7 +4,7 @@ using System.Collections;
 public class TextElementUI : ScreenElementUI<TextElement> {
 
 	TextStyle style;
-	public TextStyle Style {
+	new public TextStyle Style {
 		get { return style; }
 		set {
 			style = value;

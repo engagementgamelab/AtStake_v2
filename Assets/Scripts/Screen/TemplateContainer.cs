@@ -52,6 +52,7 @@ namespace Templates {
 		}
 
 		public static TemplateContainer Init (TemplatesContainer myContainer, int siblingIndex) {
+
 			TemplateContainer c = ObjectPool.Instantiate<TemplateContainer> ();
 			c.transform.SetParent (myContainer.transform);
 			c.transform.SetSiblingIndex (siblingIndex);

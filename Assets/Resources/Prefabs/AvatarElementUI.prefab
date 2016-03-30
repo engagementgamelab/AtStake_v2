@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   avatar: {fileID: 11499530}
-  name: {fileID: 11476736}
+  playerName: {fileID: 11476736}
 --- !u!114 &11499530
 MonoBehaviour:
   m_ObjectHideFlags: 1

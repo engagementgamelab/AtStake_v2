@@ -221,7 +221,7 @@ namespace Views {
 			try {
 				return Model.Buttons[id];
 			} catch (KeyNotFoundException e) {
-				throw new System.Exception ("Could not find data for a button with the id '" + id + "'");
+				throw new System.Exception ("Could not find data for a button with the id '" + id + "'\n" + e);
 			}
 		}
 

@@ -15,10 +15,8 @@ namespace Templates {
 
 			TemplateManager[] objs = Object.FindObjectsOfType (typeof (TemplateManager)) as TemplateManager[];
 			foreach (TemplateManager m in objs) {
-				if (m.Parent == null) {
-					m.Transform.SetParent (parent);
-					return m;
-				}
+				if (m.Parent == null)
+					m.gameObject.SetActive (false);
 			}
 
 			TemplateManager manager = ObjectPool.Instantiate<TemplateManager> ();

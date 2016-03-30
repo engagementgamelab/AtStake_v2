@@ -160,15 +160,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	void UpdatePlayers () {
-		
-		/*string players = "";
-		foreach (string player in Clients)
-			players += player + "|";
-		players += Host;*/
-
-		string colors = avatars.GetPlayers ();
-
-		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", colors);
+		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", avatars.GetPlayers ());
 	}
 
 	void UpdateBroadcast () {
