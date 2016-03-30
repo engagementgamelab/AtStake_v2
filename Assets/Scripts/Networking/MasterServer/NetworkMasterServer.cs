@@ -105,14 +105,12 @@ public class NetworkMasterServer : MonoBehaviour {
 			room.connectionId,
 			MasterMsgTypes.GenericHostFromClientId, 
 			netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ());
-			// netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	void OnHostToClients (NetworkMessage netMsg) {
 		NetworkServer.SendToAll (
 			MasterMsgTypes.GenericClientsFromHostId, 
 			netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ());
-			// netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ());
 	}
 
 	// -- System Handlers

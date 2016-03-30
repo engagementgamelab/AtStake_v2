@@ -187,24 +187,20 @@ public class NetworkMasterClient : MonoBehaviour {
 	// -- Generic messages
 
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
-		// client.Send (MasterMsgTypes.GenericClientToHostId, msg);
 		client.Send (MasterMsgTypes.GenericClientToHostId, msg.ToCompressed ());
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
-		// client.Send (MasterMsgTypes.GenericHostToClientsId, msg);
 		client.Send (MasterMsgTypes.GenericHostToClientsId, msg.ToCompressed ());
 	}
 
 	void OnHostFromClient (NetworkMessage netMsg) {
-		// var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
 		var msg = netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ().ToDecompressed ();
 		if (onReceiveMessageFromClient != null)
 			onReceiveMessageFromClient (msg);
 	}
 
 	void OnClientsFromHost (NetworkMessage netMsg) {
-		// var msg = netMsg.ReadMessage<MasterMsgTypes.GenericMessage> ();
 		var msg = netMsg.ReadMessage<MasterMsgTypes.CompressedGenericMessage> ().ToDecompressed ();
 		if (onReceiveMessageFromHost != null)
 			onReceiveMessageFromHost (msg);

@@ -422,9 +422,8 @@ public class GameController : GameInstanceBehaviour {
 					decompressed[i + j * chunkCount] = chunk[j];
 				}
 			}
-
-			byte[] d = CLZF2.Decompress (decompressed);
-			string data = System.Text.Encoding.UTF8.GetString (d, 0, d.Length);
+			
+			string data = CLZF2.DecompressToString (decompressed);
 			
 			instance = JsonReader.Deserialize<InstanceData> (data);
 			// PrintData ();
