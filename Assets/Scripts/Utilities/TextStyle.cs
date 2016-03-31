@@ -48,7 +48,12 @@ public class TextStyle {
 	}
 
 	public static TextStyle Paragraph {
-		get { return new TextStyle () { FontSize = 18 }; }
+		get { 
+			return new TextStyle () {
+				FontSize = 18,
+				FontColor = Palette.Grey
+			};
+		}
 	}
 
 	public static TextStyle LtParagraph {
@@ -64,18 +69,18 @@ public class TextStyle {
 		get {
 			return new TextStyle () {
 				FontSize = 22,
-				FontStyle = FontStyle.BoldAndItalic,
-				FontColor = Palette.White,
+				FontColor = Palette.Teal,
 				TextTransform = TextTransform.Lowercase
 			};
 		}
 	}
-
-	public static TextStyle DkButton {
+	
+	public static TextStyle LtButton {
 		get {
 			return new TextStyle () {
 				FontSize = 22,
-				FontColor = Palette.Teal,
+				FontStyle = FontStyle.BoldAndItalic,
+				FontColor = Palette.White,
 				TextTransform = TextTransform.Lowercase
 			};
 		}

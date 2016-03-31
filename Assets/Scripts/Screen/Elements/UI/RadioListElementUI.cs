@@ -24,6 +24,7 @@ public class RadioListElementUI : ListElementUI<ButtonElementUI, ButtonElement> 
 
 	public override void RemoveElement (ListElement<ButtonElement> e) {
 		ObjectPool.Destroy<SpacerElementUI> (spacer);
+		spacer = null;
 		base.RemoveElement (e);
 	}
 }

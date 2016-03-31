@@ -24,15 +24,6 @@ namespace Templates {
 
 		int roleCounter = 0;
 
-		/*ListElementUI<TextElementUI, TextElement> roleList;
-		ListElementUI<TextElementUI, TextElement> RoleList {
-			get {
-				if (roleList == null)
-					roleList = GetElement<ListElementUI<TextElementUI, TextElement>> ("role_list");
-				return roleList;
-			}
-		}*/
-
 		ListElementUI<AvatarElementUI, AvatarElement> roleList;
 		ListElementUI<AvatarElementUI, AvatarElement> RoleList {
 			get {

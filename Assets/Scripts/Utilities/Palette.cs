@@ -14,6 +14,10 @@ public static class Palette {
 		get { return Color.black; }
 	}
 
+	public static Color Grey {
+		get { return new Color (0.5f, 0.5f, 0.5f); }
+	}
+
 	public static Color Orange {
 		get { return Color255 (255, 186, 0); }
 	}

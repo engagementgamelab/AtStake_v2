@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -14,7 +15,13 @@ namespace Templates {
 					BottomBarColor = Palette.LtTeal,
 					BackgroundColor = Palette.White,
 					PotEnabled = true,
-					CoinsEnabled = true
+					CoinsEnabled = true,
+					Colors = new Dictionary<string, Color> () {
+						{ "next", Palette.Orange }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "next", TextStyle.LtButton }
+					}
 				};
 			}
 		}

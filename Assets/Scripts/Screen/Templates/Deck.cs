@@ -15,9 +15,10 @@ namespace Templates {
 						{ "logo", Palette.Transparent.White (0.5f) }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "deck_list", TextStyle.DkButton },
+						{ "deck_list", TextStyle.Button },
 						{ "client_instructions", TextStyle.LtParagraph },
-						{ "host_instructions", TextStyle.LtParagraph }
+						{ "host_instructions", TextStyle.LtParagraph },
+						{ "confirm", TextStyle.LtButton }
 					}
 				};
 			}

@@ -3,10 +3,13 @@ using System.Collections;
 
 public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 
-	TextStyle style = TextStyle.Button;
-	public TextStyle Style {
+	TextStyle style = TextStyle.LtButton;
+	public override TextStyle Style {
 		get { return style; }
-		set { style = value; }
+		set { 
+			style = value; 
+			Text.ApplyStyle (style);
+		}
 	}
 
 	public override Color Color {
@@ -25,8 +28,8 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 
 	protected override void OnUpdate (ButtonElement e) {
 		Text.text = e.Text;
-		Interactable = e.Interactable;
 		Text.ApplyStyle (Style);
+		Interactable = e.Interactable;
 	}
 
 	public override void RemoveElement (ButtonElement e) {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -14,7 +15,10 @@ namespace Templates {
 					BottomBarColor = Palette.LtTeal,
 					BackgroundColor = Palette.White,
 					PotEnabled = true,
-					CoinsEnabled = true
+					CoinsEnabled = true,
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "rc_agenda", TextStyle.Paragraph }
+					}
 				};
 			}
 		}

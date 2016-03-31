@@ -62,6 +62,11 @@ public class TemplateEditor : EditorWindow {
 			prevTemplateIdx = currTemplateIdx;
 		}
 
+		GUILayout.Label ("Screen Elements:");
+		foreach (string id in Templates[currTemplateIdx].ElementIds) {
+			GUILayout.Label (id);
+		}
+
 		showDebug = GUILayout.Toggle (showDebug, "Show debug info");
 		if (showDebug != prevShowDebug) {
 			DebugInfo.gameObject.SetActive (showDebug);

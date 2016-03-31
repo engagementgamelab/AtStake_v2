@@ -17,7 +17,8 @@ namespace Templates {
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "client_instructions", TextStyle.LtParagraph },
 						{ "searching", TextStyle.LtParagraph },
-						{ "game_list", TextStyle.DkButton }
+						{ "game_list", TextStyle.Button },
+						{ "confirm", TextStyle.LtButton }
 					}
 				};
 			}

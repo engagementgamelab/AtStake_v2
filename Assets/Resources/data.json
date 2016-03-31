@@ -22,6 +22,48 @@
               "Reward": 1
             }
           ]
+        },
+        {
+          "Title": "Property Owner",
+          "Bio": "Owner of several large apartment buildings",
+          "AgendaItems": [
+            {
+              "Description": "Is paid for by private investors",
+              "Reward": 0
+            },
+            {
+              "Description": "Increases property values",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Community Activist",
+          "Bio": "Popular activist and community volunteer",
+          "AgendaItems": [
+            {
+              "Description": "Benefits are local, with no profit for global corporations",
+              "Reward": 0
+            },
+            {
+              "Description": "Government funded",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Artist",
+          "Bio": "Creative thinker who expresses complex ideas through art",
+          "AgendaItems": [
+            {
+              "Description": "Innovative use of public space for community engagement",
+              "Reward": 0
+            },
+            {
+              "Description": "Funding for public art",
+              "Reward": 1
+            }
+          ]
         }
       ]
     },
@@ -111,6 +153,48 @@
             },
             {
               "Description": "Project will take at least 2 years to complete",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Property Owner",
+          "Bio": "Owner of several large apartment buildings",
+          "AgendaItems": [
+            {
+              "Description": "Is paid for by private investors",
+              "Reward": 0
+            },
+            {
+              "Description": "Increases property values",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Community Activist",
+          "Bio": "Popular activist and community volunteer",
+          "AgendaItems": [
+            {
+              "Description": "Benefits are local, with no profit for global corporations",
+              "Reward": 0
+            },
+            {
+              "Description": "Government funded",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Artist",
+          "Bio": "Creative thinker who expresses complex ideas through art",
+          "AgendaItems": [
+            {
+              "Description": "Innovative use of public space for community engagement",
+              "Reward": 0
+            },
+            {
+              "Description": "Funding for public art",
               "Reward": 1
             }
           ]

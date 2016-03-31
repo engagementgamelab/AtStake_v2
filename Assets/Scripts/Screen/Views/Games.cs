@@ -13,7 +13,7 @@ namespace Views {
 		protected override void OnInitElements () {
 			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("searching", new TextElement (GetText ("searching")));
-			Elements.Add ("logo", new ImageElement ("logo_small"));
+			Elements.Add ("logo", new ImageElement ("logo"));
 			Elements.Add ("game_list", new RadioListElement (GetButton ("confirm"), (string selected) => {
 				JoinGame (selected);
 			}));

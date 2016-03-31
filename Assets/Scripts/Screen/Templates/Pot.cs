@@ -14,7 +14,13 @@ namespace Templates {
 					TopBarColor = Palette.LtTeal,
 					BackgroundColor = Palette.White,
 					PotEnabled = true,
-					CoinsEnabled = true
+					CoinsEnabled = true,
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "next", TextStyle.LtButton }
+					},
+					Colors = new Dictionary<string, Color> () {
+						{ "next", Palette.Orange }
+					}
 				};
 			}
 		}

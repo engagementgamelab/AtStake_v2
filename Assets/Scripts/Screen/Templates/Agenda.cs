@@ -17,7 +17,12 @@ namespace Templates {
 					PotEnabled = true,
 					CoinsEnabled = true,
 					Colors = new Dictionary<string, Color> () {
-						{ "agenda_title", Palette.LtTeal }
+						{ "agenda_title", Palette.LtTeal },
+						{ "next", Palette.Orange }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "rc_agenda", TextStyle.Paragraph },
+						{ "next", TextStyle.LtButton }
 					}
 				};
 			}

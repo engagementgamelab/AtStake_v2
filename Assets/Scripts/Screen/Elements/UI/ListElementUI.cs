@@ -21,8 +21,12 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		get { return style; }
 		set {
 			style = value;
-			foreach (T child in ChildElements)
-				child.Style = style;
+
+			// Update styles in child elements (unless their style is being overriden)
+			foreach (T child in ChildElements) {
+				if (!Settings.TextStyles.ContainsKey (child.id))
+					child.Style = style;
+			}
 		}
 	}
 
@@ -31,8 +35,12 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		get { return listColor; }
 		set {
 			listColor = value;
-			foreach (T child in ChildElements)
-				child.Color = listColor;
+
+			// Update colors in child elements (unless their color is being overriden)
+			foreach (T child in ChildElements) {
+				if (!Settings.Colors.ContainsKey (child.id))
+					child.Color = listColor;
+			}
 		}
 	}
 

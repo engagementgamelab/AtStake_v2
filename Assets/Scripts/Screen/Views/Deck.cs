@@ -16,7 +16,7 @@ namespace Views {
 		}
 
 		protected override void OnInitElements () {
-			Elements.Add ("logo", new ImageElement ("logo_small"));
+			Elements.Add ("logo", new ImageElement ("logo"));
 		}
 		
 		protected override void OnHide () {

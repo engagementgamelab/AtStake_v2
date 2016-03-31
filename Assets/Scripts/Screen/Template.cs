@@ -35,12 +35,16 @@ namespace Templates {
 			}
 		}
 
+		public List<string> ElementIds {
+			get { return new List<string> (Elements.Keys); }
+		}
+
 		protected Dictionary<string, ScreenElementUI> LoadedElements {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
 		protected bool Loaded { get; private set; }
-		Dictionary<string, ScreenElementUI> overlayElements;
+		Dictionary<string, ScreenElementUI> overlayElements = new Dictionary<string, ScreenElementUI> ();
 
 		void OnEnable () { Loaded = false; }
 
