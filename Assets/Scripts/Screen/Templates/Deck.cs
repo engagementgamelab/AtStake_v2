@@ -11,7 +11,8 @@ namespace Templates {
 				return new TemplateSettings () {
 					BackgroundColor = Palette.Teal,
 					Colors = new Dictionary<string, Color> () {
-						{ "confirm", Palette.Orange }
+						{ "confirm", Palette.Orange },
+						{ "logo", Palette.Transparent.White (0.5f) }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "deck_list", TextStyle.DkButton },

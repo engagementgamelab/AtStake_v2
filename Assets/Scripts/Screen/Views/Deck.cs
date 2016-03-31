@@ -15,6 +15,10 @@ namespace Views {
 			Game.Dispatcher.AddListener ("SetDeck", OnSetDeck);
 		}
 
+		protected override void OnInitElements () {
+			Elements.Add ("logo", new ImageElement ("logo_small"));
+		}
+		
 		protected override void OnHide () {
 			Game.Dispatcher.RemoveListener (OnSetDeck);
 		}

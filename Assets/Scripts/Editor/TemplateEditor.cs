@@ -81,7 +81,7 @@ public class TemplateEditor : EditorWindow {
 	}
 
 	void BeginEdit () {
-		
+
 		ConnectContainer ();
 
 		if (currTemplateIdx == -1) {
@@ -123,6 +123,7 @@ public class TemplateEditor : EditorWindow {
 
 	void DisconnectContainer () {
 		Container.Parent = null;
+		Selection.activeGameObject = Container.gameObject;
 	}
 
 	T GetObject<T> (string directory="UI") where T : MonoBehaviour {

@@ -7,8 +7,11 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 	public List<T> ChildElements {
 		get {
 			List<T> childElements = new List<T> ();
-			foreach (Transform child in RectTransform)
-				childElements.Add (child.GetComponent<T> ());
+			foreach (Transform child in RectTransform) {
+				T t = child.GetComponent<T> ();
+				if (t != null)
+					childElements.Add (t);
+			}
 			return childElements;
 		}
 	}

@@ -55,7 +55,7 @@ public class UIElement : MB {
 	}
 
 	Text text = null;
-	public Text Text {
+	public virtual Text Text {
 		get {
 			if (text == null) {
 				if (Button != null) {

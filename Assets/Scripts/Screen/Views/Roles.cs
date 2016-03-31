@@ -11,20 +11,32 @@ namespace Views {
 
 	public class Roles : View {
 
-		ListElement<TextElement> roleList;
+		ListElement<AvatarElement> roleList;
 
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("next", new NextButtonElement ("pot"));
 		}
 
 		protected override void OnInitElements () {
-			roleList = new ListElement<TextElement> ();
+			roleList = new ListElement<AvatarElement> ();
 			Elements.Add ("role_list", roleList);
 		}
 
 		protected override void OnShow () {
-			foreach (PlayerRole role in Game.Controller.Roles)
-				roleList.Add (role.PlayerName + "|" + role.Title, new TextElement (""));
+
+			string deciderName = "";
+
+			foreach (PlayerRole role in Game.Controller.Roles) {
+				string playerName = role.PlayerName;
+				string title = role.Title;
+				if (title != "Decider") {
+					roleList.Add (playerName + "|" + title, new AvatarElement ("", Game.Manager.Players[playerName].Avatar));
+				} else {
+					deciderName = playerName;
+				}
+			}
+
+			roleList.Add (deciderName + "|Decider", new AvatarElement ("", Game.Manager.Players[deciderName].Avatar));
 		}
 	}
 }

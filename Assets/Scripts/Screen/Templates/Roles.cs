@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -10,18 +11,33 @@ namespace Templates {
 				return new TemplateSettings () {
 					TopBarHeight = TemplateSettings.TallBar,
 					TopBarColor = Palette.Pink,
-					BackgroundColor = Palette.White
+					BackgroundColor = Palette.White,
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "role_list", TextStyle.Paragraph }
+					},
+					Colors = new Dictionary<string, Color> () {
+						{ "next", Palette.LtBlue }
+					}
 				};
 			}
 		}
 
 		int roleCounter = 0;
 
-		ListElementUI<TextElementUI, TextElement> roleList;
+		/*ListElementUI<TextElementUI, TextElement> roleList;
 		ListElementUI<TextElementUI, TextElement> RoleList {
 			get {
 				if (roleList == null)
 					roleList = GetElement<ListElementUI<TextElementUI, TextElement>> ("role_list");
+				return roleList;
+			}
+		}*/
+
+		ListElementUI<AvatarElementUI, AvatarElement> roleList;
+		ListElementUI<AvatarElementUI, AvatarElement> RoleList {
+			get {
+				if (roleList == null)
+					roleList = GetElement<ListElementUI<AvatarElementUI, AvatarElement>> ("role_list");
 				return roleList;
 			}
 		}
@@ -46,18 +62,16 @@ namespace Templates {
 
 					int index = Mathf.FloorToInt ((float)i/2f);
 					int roleIndex = Mathf.FloorToInt ((float)roleCounter/2f);
-					TextElementUI t = RoleList.ChildElements[index];
+					AvatarElementUI t = RoleList.ChildElements[index];
 
 					bool active = index <= roleIndex;
 					t.gameObject.SetActive (active);
 					
 					if (index == roleIndex) {
 						string[] playerRole = t.id.Split ('|');
-						t.Text.text = playerRole[0];
+						t.playerName.text = playerRole[0];
 						if (roleCounter % 2 != 0) {
-							t.Text.text += " the " + playerRole[1];
-							/*if (playerRole[1] == "Decider")
-								t.Style = FontStyle.Bold;*/
+							t.playerName.text += "\nthe " + playerRole[1];
 						}
 					}
 				}
