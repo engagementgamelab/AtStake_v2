@@ -33,9 +33,8 @@ public class TemplateEditor : EditorWindow {
 		}
 	}
 
-	int currTemplateIdx = 0;
-	int prevTemplateIdx = 0;
-	Template currentTemplate;
+	int currTemplateIdx = -1;
+	int prevTemplateIdx = -1;
 	bool showDebug = false;
 	bool prevShowDebug = true;
 
@@ -69,25 +68,34 @@ public class TemplateEditor : EditorWindow {
 			prevShowDebug = showDebug;
 		}
 
+		GUILayout.BeginHorizontal ();
+		if (GUILayout.Button ("Connect Container"))
+			ConnectContainer ();
+		if (GUILayout.Button ("Disconnect Container"))
+			DisconnectContainer ();
+		GUILayout.EndHorizontal ();
+
 		if (GUILayout.Button ("Save changes")) {
 			ApplyChanges ();
 		}
 	}
 
 	void BeginEdit () {
-		TemplatesContainer templates = Manager.Transform.GetAllChildren<TemplatesContainer> ()[0];
-		Container.Parent = templates.Transform;
-		Container.Transform.Reset ();
-		RectTransform rect = Container.GetComponent<RectTransform> ();
-		rect.sizeDelta = Vector2.zero;
-		rect.anchoredPosition = Vector2.zero;
-		ActivateTemplate (Templates[0]);
+		
+		ConnectContainer ();
+
+		if (currTemplateIdx == -1) {
+			currTemplateIdx = 0;
+			prevTemplateIdx = 0;
+		}
+
+		ActivateTemplate (Templates[currTemplateIdx]);
 	}
 
 	void ApplyChanges () {
 
 		// Because TemplateContainer is a separate prefab, it needs to be unparented before the modifications are applied
-		Container.Parent = null;
+		DisconnectContainer ();
 		DeactivateTemplate ();
 		ApplyModifications<TemplateManager> ();
 		ApplyModifications<TemplateContainer> ();
@@ -95,37 +103,58 @@ public class TemplateEditor : EditorWindow {
 	}
 
 	void ActivateTemplate (Template template) {
-		currentTemplate = template;
-		currentTemplate.gameObject.SetActive (true);
-		Selection.activeGameObject = currentTemplate.gameObject;
+		template.gameObject.SetActive (true);
+		Selection.activeGameObject = template.gameObject;
 	}
 
 	void DeactivateTemplate () {
-		if (currentTemplate != null) {
-			currentTemplate.gameObject.SetActive (false);
-			currentTemplate = null;
-		}
+		foreach (Template template in Templates)
+			template.gameObject.SetActive (false);
+	}
+
+	void ConnectContainer () {
+		TemplatesContainer templates = Manager.Transform.GetAllChildren<TemplatesContainer> ()[0];
+		Container.Parent = templates.Transform;
+		Container.Transform.Reset ();
+		RectTransform rect = Container.GetComponent<RectTransform> ();
+		rect.sizeDelta = Vector2.zero;
+		rect.anchoredPosition = Vector2.zero;
+	}
+
+	void DisconnectContainer () {
+		Container.Parent = null;
 	}
 
 	T GetObject<T> (string directory="UI") where T : MonoBehaviour {
+
 		T[] objs = Object.FindObjectsOfType (typeof (T)) as T[];
 		string objName = typeof (T).Name;
+
+		// If none found in hierarchy, create a new object from the asset database
 		if (objs.Length == 0) {
 			GameObject prefab = AssetDatabase.LoadAssetAtPath ("Assets/Prefabs/" + directory + "/" + objName + ".prefab", typeof (GameObject)) as GameObject;
 			GameObject go = PrefabUtility.InstantiatePrefab (prefab) as GameObject;
 			go.transform.Reset ();
-			return go.GetComponent<T> ();
+			objs = new T[] { go.GetComponent<T> () };
 		}
+
+		// Don't allow for there to be multiple instances in the same scene
 		if (objs.Length > 1)
 			throw new System.Exception ("You have more than one " + objName + " in the scene. This will create problems when using the TemplateEditor.");
+
 		return objs[0];
 	}
 
 	void ApplyModifications<T> () where T : MonoBehaviour {
+
 		T t = GetObject<T> ();
+
+		PrefabUtility.ReconnectToLastPrefab (t.gameObject);
+
 		var prefabType = PrefabUtility.GetPrefabType (t);
 		var parentObj = t.transform.root.gameObject;
 		var prefabParent = PrefabUtility.GetPrefabParent (t);
+
 		if (prefabType == PrefabType.PrefabInstance)
 			PrefabUtility.ReplacePrefab (parentObj, prefabParent, ReplacePrefabOptions.ConnectToPrefab);
 	}

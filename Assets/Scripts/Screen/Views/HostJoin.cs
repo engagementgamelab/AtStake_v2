@@ -15,6 +15,7 @@ namespace Views {
 			Elements.Add ("join", new ButtonElement (GetButton ("join"), Join));
 			Elements.Add ("back", new BackButtonElement ("start"));
 			Elements.Add ("logo", new ImageElement ("logo_small"));
+			Elements.Add ("welcome", new TextElement (GetText ("welcome")));
 			Elements.Add ("error", new TextElement (GetText ("error")) { Active = Game.Multiplayer.DisconnectedWithError });
 		}
 

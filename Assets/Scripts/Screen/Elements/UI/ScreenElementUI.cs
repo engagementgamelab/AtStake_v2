@@ -2,10 +2,24 @@
 using System.Collections;
 
 public abstract class ScreenElementUI : UIElement {
+
 	public string id;
+
+	TextStyle style = TextStyle.Paragraph;
+	new public virtual TextStyle Style {
+		get { return style; }
+		set {
+			style = value;
+			if (Text != null)
+				Text.ApplyStyle (style);
+		}
+	}
+
 	public abstract bool Loaded { get; }
 	public abstract bool Visible { get; set; }
-	public abstract void Load (ScreenElement e);
+	protected abstract TemplateSettings Settings { get; }
+
+	public abstract void Load (ScreenElement e, TemplateSettings settings);
 	public abstract void Unload ();
 	public abstract void InputEnabled ();
 }
@@ -29,7 +43,13 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		}
 	}
 
-	public override void Load (ScreenElement element) {
+	TemplateSettings settings;
+	protected override TemplateSettings Settings {
+		get { return settings; }
+	}
+
+	public override void Load (ScreenElement element, TemplateSettings settings) {
+		this.settings = settings;
 		this.element = (T)element;
 		ApplyElement (this.element);
 		element.onUpdate += OnUpdate;

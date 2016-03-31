@@ -7,7 +7,7 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 	public delegate void OnAdd (string id, T t);
 	public delegate void OnRemove (string id);
 
-	Dictionary<string, T> elements;
+	protected Dictionary<string, T> elements;
 	public Dictionary<string, T> Elements {
 		get {
 			if (elements == null)
@@ -27,7 +27,7 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 		this.elements = elements;
 	}
 
-	public void Add (string id, T t) {
+	public virtual void Add (string id, T t) {
 		Elements.Add (id, t);
 		if (onAdd != null)
 			onAdd (id, t);
@@ -41,7 +41,7 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 		SendUpdateMessage ();
 	}
 
-	public void Set (Dictionary<string, T> newElements) {
+	public virtual void Set (Dictionary<string, T> newElements) {
 		Dictionary<string, T> tempElements = new Dictionary<string, T> (Elements);
 		foreach (var element in tempElements) {
 			if (!newElements.ContainsKey (element.Key)) {

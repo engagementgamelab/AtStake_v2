@@ -3,9 +3,19 @@ using System.Collections;
 
 public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 
+	TextStyle style = TextStyle.Button;
+	public TextStyle Style {
+		get { return style; }
+		set { style = value; }
+	}
+
+	public override Color Color {
+		set { Image.color = value; }
+	}
+
 	public override void ApplyElement (ButtonElement e) {
 		Text.text = e.Text;
-		Text.ApplyStyle (TextStyle.Button);
+		Text.ApplyStyle (Style);
 		Interactable = e.Interactable;
 		if (e.OnPress != null)
 			AddButtonListener (e.OnPress);
@@ -16,7 +26,7 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 	protected override void OnUpdate (ButtonElement e) {
 		Text.text = e.Text;
 		Interactable = e.Interactable;
-		Text.ApplyStyle (TextStyle.Button);
+		Text.ApplyStyle (Style);
 	}
 
 	public override void RemoveElement (ButtonElement e) {

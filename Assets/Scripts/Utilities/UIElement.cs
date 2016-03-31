@@ -103,9 +103,16 @@ public class UIElement : MB {
 		set { Button.interactable = value; }
 	}
 
-	public Color Color {
-		get { return Image.color; }
-		set { Image.color = value; }
+	Color color;
+	public virtual Color Color {
+		get { return color; }
+		set {
+			color = value;
+			if (Image != null)
+				Image.color = color;
+			if (Text != null)
+				Text.color = color;
+		}
 	}
 
 	LayoutElement layout = null;

@@ -13,6 +13,26 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		}
 	}
 
+	TextStyle style = TextStyle.Paragraph;
+	public override TextStyle Style {
+		get { return style; }
+		set {
+			style = value;
+			foreach (T child in ChildElements)
+				child.Style = style;
+		}
+	}
+
+	Color color = Palette.White;
+	public override Color Color {
+		get { return color; }
+		set {
+			color = value;
+			foreach (T child in ChildElements)
+				child.Color = color;
+		}
+	}
+
 	public override void ApplyElement (ListElement<U> e) {
 
 		// Load initial elements (if any)
@@ -21,26 +41,54 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 
 		// Listen for elements being added/removed
 		e.onAdd += AddElement;
-		e.onRemove += RemoveElement;
+		e.onRemove += RemoveListElement;
 	}
 
 	public override void RemoveElement (ListElement<U> e) {
 		e.onAdd -= AddElement;
-		e.onRemove -= RemoveElement;
+		e.onRemove -= RemoveListElement;
 		ObjectPool.DestroyChildren<T> (RectTransform, (T t) => { t.Unload (); });
 	}
 
 	void AddElement (string id, U element) {
+
+		// Create a new child element and apply styling
+
 		T t = ObjectPool.Instantiate<T> ();
 		t.id = id;
-		t.Load (element);
+		t.Load (element, Settings);
 		t.Parent = RectTransform;
 		t.RectTransform.localScale = Vector3.one;
+
+		// All elements in the list will be styled with the default styling unless explicitely overriden
+
+		TextStyle overrideStyle;
+		if (Settings.TextStyles.TryGetValue (t.id, out overrideStyle)) {
+			t.Style = overrideStyle;
+		} else {
+			t.Style = Style;
+		}
+
+		Color overrideColor;
+		if (Settings.Colors.TryGetValue (t.id, out overrideColor)) {
+			t.Color = overrideColor;
+		} else {
+			t.Color = Color;
+		}
+
+		OnUpdateListElements ();
 	}
 
-	void RemoveElement (string id) {
-		T t = ChildElements.Find (x => x.id == id);
+	void RemoveListElement (string id) {
+		T t = GetChildElement (id);
 		t.Unload ();
 		ObjectPool.Destroy<T> (t);
+		OnUpdateListElements ();
 	}
+
+	protected T GetChildElement (string id) {
+		return ChildElements.Find (x => x.id == id);
+	}
+
+	protected virtual void OnUpdateListElements () {}
 }

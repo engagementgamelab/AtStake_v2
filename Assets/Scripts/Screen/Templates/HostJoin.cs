@@ -14,6 +14,10 @@ namespace Templates {
 						{ "host", Palette.Orange },
 						{ "join", Palette.Green },
 						{ "logo", Palette.Transparent.White (0.5f) }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "welcome", TextStyle.LtParagraph },
+						{ "error", TextStyle.LtParagraph }
 					}
 				};
 			}

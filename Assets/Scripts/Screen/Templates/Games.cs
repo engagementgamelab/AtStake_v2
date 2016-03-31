@@ -11,11 +11,13 @@ namespace Templates {
 				return new TemplateSettings () {
 					BackgroundColor = Palette.Teal,
 					Colors = new Dictionary<string, Color> () {
-						{ "logo", Palette.Transparent.White (0.5f) }
+						{ "logo", Palette.Transparent.White (0.5f) },
+						{ "confirm", Palette.Orange }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "client_instructions", TextStyle.LtParagraph },
-						{ "searching", TextStyle.LtParagraph }
+						{ "searching", TextStyle.LtParagraph },
+						{ "game_list", TextStyle.DkButton }
 					}
 				};
 			}

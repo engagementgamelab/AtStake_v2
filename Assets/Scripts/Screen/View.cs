@@ -105,7 +105,8 @@ namespace Views {
 					{ "extra_seconds", Settings.ExtraSeconds.ToString () },
 					{ "round_number", Game.Controller.RoundNumber.ToString () },
 					{ "winner", Game.Controller.WinnerName },
-					{ "question", Game.Controller.Question }
+					{ "question", Game.Controller.Question },
+					{ "player_name", Name }
 				};
 			}
 		}

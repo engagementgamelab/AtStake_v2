@@ -48,11 +48,7 @@ public class TextStyle {
 	}
 
 	public static TextStyle Paragraph {
-		get {
-			return new TextStyle () {
-				FontSize = 18
-			};
-		}
+		get { return new TextStyle () { FontSize = 18 }; }
 	}
 
 	public static TextStyle LtParagraph {
@@ -68,8 +64,18 @@ public class TextStyle {
 		get {
 			return new TextStyle () {
 				FontSize = 22,
-				FontStyle = FontStyle.Italic,
+				FontStyle = FontStyle.BoldAndItalic,
 				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
+	public static TextStyle DkButton {
+		get {
+			return new TextStyle () {
+				FontSize = 22,
+				FontColor = Palette.Teal,
 				TextTransform = TextTransform.Lowercase
 			};
 		}
@@ -79,10 +85,30 @@ public class TextStyle {
 public static class TextStyleExtension {
 	
 	public static void ApplyStyle (this Text text, TextStyle style) {
-		text.fontStyle = style.FontStyle;
+
+		// Set font and font style
+		text.fontStyle = FontStyle.Normal;
+		switch (style.FontStyle) {
+			case FontStyle.Normal:
+				text.font = AssetLoader.LoadFont ("Normal");
+				break;
+			case FontStyle.Bold:
+				text.font = AssetLoader.LoadFont ("Bold");
+				break;
+			case FontStyle.Italic:
+				text.font = AssetLoader.LoadFont ("Italic");
+				break;
+			case FontStyle.BoldAndItalic:
+				text.font = AssetLoader.LoadFont ("BoldAndItalic");
+				break;
+		}
+
+		// Set color, alignment, and size
 		text.color = style.FontColor;
 		text.alignment = style.TextAnchor;
 		text.fontSize = style.FontSize;
+
+		// Apply transformations
 		if (style.TextTransform == TextTransform.Lowercase) {
 			text.text = text.text.ToLower ();
 		} else if (style.TextTransform == TextTransform.Uppercase) {

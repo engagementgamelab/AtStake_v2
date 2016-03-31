@@ -94,7 +94,8 @@ public class DiscoveryService : MonoBehaviour {
 						}
 					};
 				} else {
-					Listener.received = JsonReader.Deserialize<HostsData> (www.text);
+					if (!string.IsNullOrEmpty (www.text))
+						Listener.received = JsonReader.Deserialize<HostsData> (www.text);
 				}
 				Listener.SendUpdateHostsMessage ();
 			});

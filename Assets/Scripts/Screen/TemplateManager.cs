@@ -13,6 +13,7 @@ namespace Templates {
 
 		public static TemplateManager Init (Transform parent) {
 
+			// When using the Template Editor, a "loose" manager will be floating around the scene - this disables it
 			TemplateManager[] objs = Object.FindObjectsOfType (typeof (TemplateManager)) as TemplateManager[];
 			foreach (TemplateManager m in objs) {
 				if (m.Parent == null)

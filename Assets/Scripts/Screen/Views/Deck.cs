@@ -8,8 +8,13 @@ namespace Views {
 
 	public class Deck : View {
 
+		string selected = "";
+
 		protected override void OnInitHostElements () {
 			Elements.Add ("deck_list", new ListElement<ButtonElement> ());
+			Elements.Add ("confirm", new ButtonElement (GetButton ("confirm"), () => {
+				Game.Dispatcher.ScheduleMessage ("SetDeck", selected);
+			}) { Interactable = false });
 		}
 
 		protected override void OnShow () {
@@ -23,8 +28,12 @@ namespace Views {
 
 			for (int i = 0; i < names.Count; i ++) {
 				string name = names[i];
-				list.Add (name, new ButtonElement (name, () => {
-					Game.Dispatcher.ScheduleMessage ("SetDeck", name);
+				list.Add (name, new ButtonElement (name, (ButtonElement b) => {
+					selected = name;
+					foreach (var button in list.Elements)
+						button.Value.Interactable = true;
+					b.Interactable = false;
+					GetScreenElement<ButtonElement> ("confirm").Interactable = true;
 				}));
 			}
 		}

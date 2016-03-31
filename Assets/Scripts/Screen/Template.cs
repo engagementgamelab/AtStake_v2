@@ -35,7 +35,7 @@ namespace Templates {
 			}
 		}
 
-		Dictionary<string, ScreenElementUI> LoadedElements {
+		protected Dictionary<string, ScreenElementUI> LoadedElements {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
@@ -92,7 +92,7 @@ namespace Templates {
 
 				// Apply content
 				if (data.TryGetValue (k, out elementData)) {
-					v.Load (elementData);
+					v.Load (elementData, Settings);
 				} else {
 					v.gameObject.SetActive (false); 
 				}
@@ -100,14 +100,22 @@ namespace Templates {
 
 			// Apply colors
 			if (Settings.Colors != null) {
-				foreach (var color in Settings.Colors)
-					Elements[color.Key].Color = color.Value;
+				foreach (var color in Settings.Colors) {
+					ScreenElementUI se;
+					if (Elements.TryGetValue (color.Key, out se)) {
+						se.Color = color.Value;
+					}
+				}
 			}
 
 			// Apply text styles
 			if (Settings.TextStyles != null) {
-				foreach (var style in Settings.TextStyles)
-					((TextElementUI)Elements[style.Key]).Style = style.Value;
+				foreach (var style in Settings.TextStyles) {
+					ScreenElementUI se;
+					if (Elements.TryGetValue (style.Key, out se)) {
+						se.Style = style.Value;
+					}
+				}
 			}
 
 			// Throw a warning if there's data without an associated template element (only in editor)
@@ -131,6 +139,16 @@ namespace Templates {
 			}
 		}
 
+		protected bool TryGetElement<T> (string id, out T elem) where T : ScreenElementUI {
+			ScreenElementUI se;
+			if (LoadedElements.TryGetValue (id, out se)) {
+				elem = (T)se;
+				return true;
+			}
+			elem = null;
+			return false;
+		}
+
 		bool IsOverlayElement (string id) {
 			return id == "coins" || id == "pot" || id == "back";
 		}
@@ -138,25 +156,5 @@ namespace Templates {
 		protected virtual void OnLoadView () {}
 		protected virtual void OnUnloadView () {}
 		protected virtual void OnInputEnabled () {}
-	}
-
-	public struct TemplateSettings {
-
-		public const float TallBar = 92;
-		public const float ShortBar = 24;
-
-		public float TopBarHeight { get; set; }
-		public Color TopBarColor { get; set; }
-		public float BottomBarHeight { get; set; }
-		public Color BottomBarColor { get; set; }
-
-		public Color BackgroundColor { get; set; }
-		public string BackgroundImage { get; set; }
-
-		public bool PotEnabled { get; set; }
-		public bool CoinsEnabled { get; set; }
-
-		public Dictionary<string, Color> Colors { get; set; }
-		public Dictionary<string, TextStyle> TextStyles { get; set; }
 	}
 }
