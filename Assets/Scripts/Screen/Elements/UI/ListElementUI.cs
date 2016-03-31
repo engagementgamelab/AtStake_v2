@@ -23,13 +23,13 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		}
 	}
 
-	Color color = Palette.White;
+	Color listColor = Palette.White;
 	public override Color Color {
-		get { return color; }
+		get { return listColor; }
 		set {
-			color = value;
+			listColor = value;
 			foreach (T child in ChildElements)
-				child.Color = color;
+				child.Color = listColor;
 		}
 	}
 

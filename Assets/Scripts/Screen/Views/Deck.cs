@@ -8,34 +8,11 @@ namespace Views {
 
 	public class Deck : View {
 
-		string selected = "";
-
 		protected override void OnInitHostElements () {
-			Elements.Add ("deck_list", new ListElement<ButtonElement> ());
-			Elements.Add ("confirm", new ButtonElement (GetButton ("confirm"), () => {
+			Elements.Add ("deck_list", new RadioListElement (GetButton ("confirm"), (string selected) => {
 				Game.Dispatcher.ScheduleMessage ("SetDeck", selected);
-			}) { Interactable = false });
-		}
-
-		protected override void OnShow () {
-
-			if (!IsHost) return;
-
+			}, Game.Decks.Names));
 			Game.Dispatcher.AddListener ("SetDeck", OnSetDeck);
-
-			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("deck_list");
-			List<string> names = Game.Decks.Names;
-
-			for (int i = 0; i < names.Count; i ++) {
-				string name = names[i];
-				list.Add (name, new ButtonElement (name, (ButtonElement b) => {
-					selected = name;
-					foreach (var button in list.Elements)
-						button.Value.Interactable = true;
-					b.Interactable = false;
-					GetScreenElement<ButtonElement> ("confirm").Interactable = true;
-				}));
-			}
 		}
 
 		protected override void OnHide () {

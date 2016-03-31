@@ -8,24 +8,12 @@ public class RadioListElement : ListElement<ButtonElement> {
 
 	public RadioListElement (string confirmText, System.Action<string> onConfirm, List<string> buttonNames=null) : base (null) {
 
-		if (buttonNames != null) {
-
-			foreach (string name in buttonNames) {
-
-				#if UNITY_EDITOR
-				if (name == "confirm")
-					throw new System.Exception ("'confirm' is a reserved name in RadioListElement - please use a different name");
-				#endif
-
-				Elements.Add (name, new ButtonElement (name, SelectButton));
-			}
-		}
-
 		Elements.Add ("confirm", new ButtonElement (confirmText, () => {
 			onConfirm (selected);
 		}) { Interactable = false });
 
-		Debug.Log (Elements["confirm"]);
+		if (buttonNames != null)
+			Set (buttonNames);
 	}
 
 	public void Add (string name) {
