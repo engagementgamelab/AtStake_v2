@@ -205,10 +205,6 @@ public class GameInstanceManager : MonoBehaviour {
 				if (GUILayout.Button ("Go")) {
 					GotoView (gotoView);
 				}
-				if (Input.GetKeyDown (KeyCode.Return)) {
-					Debug.Log ("heard");
-					GotoView (gotoView);
-				}
 			}
 		}
 		GUILayout.EndHorizontal ();

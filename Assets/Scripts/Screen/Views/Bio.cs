@@ -13,6 +13,7 @@ namespace Views {
 		}
 
 		protected override void OnInitPlayerElements () {
+			Elements.Add ("avatar", new ImageElement (AssetLoader.GetAvatarFilename (Game.Controller.Avatar)));
 			CreateRoleCard (true, true, false);
 		}
 	}

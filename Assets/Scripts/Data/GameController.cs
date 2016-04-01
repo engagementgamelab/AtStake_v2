@@ -67,6 +67,20 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	/// <summary>
+	/// Gets the data model associated with this player
+	/// </summary>
+	public Player Player {
+		get { return System.Array.Find (Players, x => x.Name == Game.Name); }
+	}
+
+	/// <summary>
+	/// Gets the name of the avatar for this player
+	/// </summary>
+	public string Avatar {
+		get { return Player.Avatar; }
+	}
+
+	/// <summary>
 	/// Gets the question for the current round
 	/// </summary>
 	public string Question {

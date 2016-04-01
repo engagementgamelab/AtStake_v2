@@ -102,22 +102,22 @@ namespace Templates {
 				}
 			}
 
-			// Apply colors
-			if (Settings.Colors != null) {
-				foreach (var color in Settings.Colors) {
-					ScreenElementUI se;
-					if (Elements.TryGetValue (color.Key, out se)) {
-						se.Color = color.Value;
-					}
-				}
-			}
-
 			// Apply text styles
 			if (Settings.TextStyles != null) {
 				foreach (var style in Settings.TextStyles) {
 					ScreenElementUI se;
 					if (Elements.TryGetValue (style.Key, out se)) {
 						se.Style = style.Value;
+					}
+				}
+			}
+
+			// Apply colors
+			if (Settings.Colors != null) {
+				foreach (var color in Settings.Colors) {
+					ScreenElementUI se;
+					if (Elements.TryGetValue (color.Key, out se)) {
+						se.Color = color.Value;
 					}
 				}
 			}

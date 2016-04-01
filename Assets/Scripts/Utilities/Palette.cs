@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// All the colors used in the game
+/// Contains subclasses for avatar colors and colors with transparency
+/// </summary>
 public static class Palette {
 
 	static Color Color255 (float r, float g, float b) {
@@ -49,7 +53,7 @@ public static class Palette {
 	public static class Avatar {
 
 		public static Color GetColor (string id) {
-			
+
 			id = id.ToLower ();
 
 			switch (id) {

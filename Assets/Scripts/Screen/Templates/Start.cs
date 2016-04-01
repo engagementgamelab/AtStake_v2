@@ -8,15 +8,14 @@ namespace Templates {
 
 		public override TemplateSettings Settings {
 			get { 
-				return new TemplateSettings () {
+				return new TemplateSettings ("logo", "lt_paragraph|instructions") {
 					BackgroundColor = Palette.Teal,
 					Colors = new Dictionary<string, Color> () {
-						{ "submit", Palette.Green },
-						{ "logo", Palette.Transparent.White (0.5f) }
-					},
+						{ "submit", Palette.Green }
+					}/*,
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "instructions", TextStyle.LtParagraph }
-					}
+					}*/
 				};
 			}
 		}

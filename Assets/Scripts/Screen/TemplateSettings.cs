@@ -43,13 +43,46 @@ public class TemplateSettings {
 
 	Dictionary<string, Color> colors = new Dictionary<string, Color> ();
 	public Dictionary<string, Color> Colors {
-		get { return colors; }
+		get {
+			Dictionary<string, Color> combinedColors = new Dictionary<string, Color> ();
+			foreach (var color in colors)
+				combinedColors.Add (color.Key, color.Value);
+			foreach (var snippetColor in snippetColors)
+				combinedColors.Add (snippetColor.Key, snippetColor.Value);
+			return combinedColors;
+		}
 		set { colors = value; }
 	}
 
 	Dictionary<string, TextStyle> textStyles = new Dictionary<string, TextStyle> ();
 	public Dictionary<string, TextStyle> TextStyles {
-		get { return textStyles; }
+		get {
+			Dictionary<string, TextStyle> combinedTextStyles = new Dictionary<string, TextStyle> ();
+			foreach (var textStyle in textStyles)
+				combinedTextStyles.Add (textStyle.Key, textStyle.Value);
+			foreach (var snippetTextStyle in snippetTextStyles)
+				combinedTextStyles.Add (snippetTextStyle.Key, snippetTextStyle.Value);
+			return combinedTextStyles;
+		}
 		set { textStyles = value; }
+	}
+
+	// Set by StyleSnippets
+	Dictionary<string, Color> snippetColors = new Dictionary<string, Color> ();
+	public Dictionary<string, Color> SnippetColors {
+		get { return snippetColors; }
+		set { snippetColors = value; }
+	}
+
+	// Set by StyleSnippets
+	Dictionary<string, TextStyle> snippetTextStyles = new Dictionary<string, TextStyle> ();
+	public Dictionary<string, TextStyle> SnippetTextStyles {
+		get { return snippetTextStyles; }
+		set { snippetTextStyles = value; }
+	}
+
+	// Optionally load in snippets
+	public TemplateSettings (params string[] snippets) {
+		this.ApplySnippets (snippets);
 	}
 }

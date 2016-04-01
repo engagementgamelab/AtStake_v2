@@ -6,6 +6,10 @@ public enum TextTransform {
 	Normal, Uppercase, Lowercase
 }
 
+/// <summary>
+/// All the text styles used in the game
+/// These get applied to UI Text elements using the extension method ApplyStyle
+/// </summary>
 public class TextStyle {
 
 	int fontSize = 18;
@@ -93,6 +97,14 @@ public class TextStyle {
 				FontColor = Palette.White,
 				TextTransform = TextTransform.Lowercase
 			};
+		}
+	}
+
+	public static TextStyle LargeButton {
+		get {
+			TextStyle style = LtButton;
+			style.FontSize = 30;
+			return style;
 		}
 	}
 }

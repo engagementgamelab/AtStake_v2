@@ -15,9 +15,11 @@ namespace Templates {
 					PotEnabled = true,
 					CoinsEnabled = true,
 					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "next", TextStyle.LtButton }
+						{ "next", TextStyle.LtButton },
+						{ "rc_title", TextStyle.Header2 }
 					},
 					Colors = new Dictionary<string, Color> () {
+						{ "decider_instructions", Palette.Grey },
 						{ "next", Palette.Orange }
 					}
 				};

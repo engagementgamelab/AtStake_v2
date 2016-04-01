@@ -21,13 +21,16 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 	};
 
 	public override void ApplyElement (AvatarElement e) {
-		
-		avatar.sprite = AssetLoader.LoadIcon ("avatar_" + e.Color);
 
+		// Set the sprite based on the avatar color
+		avatar.sprite = AssetLoader.LoadAvatar (e.Color);
+
+		// Set the content
 		playerName.text = e.Name;
 		playerRole.gameObject.SetActive (e.Role != "");
 		playerRole.text = e.Role;
 
+		// Style the text
 		roleStyle.FontColor = Palette.Avatar.GetColor (e.Color);
 		playerName.ApplyStyle (nameStyle);
 		playerRole.ApplyStyle (roleStyle);

@@ -49,6 +49,11 @@ namespace Templates {
 			#else
 				false);
 			#endif
+
+			#if UNITY_EDITOR
+			if (Parent == null)
+				gameObject.SetActive (false);
+			#endif
 		}
 	}
 }

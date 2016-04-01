@@ -8,12 +8,11 @@ namespace Templates {
 
 		public override TemplateSettings Settings {
 			get {
-				return new TemplateSettings () {
+				return new TemplateSettings ("logo") {
 					BackgroundColor = Palette.Teal,
 					Colors = new Dictionary<string, Color> () {
 						{ "host", Palette.Orange },
-						{ "join", Palette.Green },
-						{ "logo", Palette.Transparent.White (0.5f) }
+						{ "join", Palette.Green }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "welcome", TextStyle.LtParagraph },

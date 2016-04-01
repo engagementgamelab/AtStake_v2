@@ -16,12 +16,20 @@ public static class AssetLoader {
 		get { return "Fonts/"; }
 	}
 
+	public static string GetAvatarFilename (string color) {
+		return "avatar_" + color;
+	}
+
 	public static Sprite LoadBackground (string name) {
 		return LoadSprite (BackgroundsPath + name);
 	}
 
 	public static Sprite LoadIcon (string name) {
 		return LoadSprite (IconsPath + name);
+	}
+
+	public static Sprite LoadAvatar (string color) {
+		return LoadIcon (GetAvatarFilename (color));
 	}
 
 	static Sprite LoadSprite (string path) {

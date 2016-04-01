@@ -16,7 +16,8 @@ namespace Templates {
 						{ "play", Palette.LtBlue }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "title", TextStyle.Header2 }
+						{ "title", TextStyle.Header2 },
+						{ "play", TextStyle.LargeButton }
 					}
 				};
 			}

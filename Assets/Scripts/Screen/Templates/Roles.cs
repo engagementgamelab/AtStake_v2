@@ -13,7 +13,8 @@ namespace Templates {
 					TopBarColor = Palette.Pink,
 					BackgroundColor = Palette.White,
 					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "role_list", TextStyle.Paragraph }
+						{ "role_list", TextStyle.Paragraph },
+						{ "next", TextStyle.LargeButton }
 					},
 					Colors = new Dictionary<string, Color> () {
 						{ "next", Palette.LtBlue }
@@ -68,11 +69,6 @@ namespace Templates {
 						if (roleCounter % 2 != 0) {
 							t.playerRole.gameObject.SetActive (true);
 						}
-						/*string[] playerRole = t.id.Split ('|');
-						t.playerName.text = playerRole[0];
-						if (roleCounter % 2 != 0) {
-							t.playerName.text += "\nthe " + playerRole[1];
-						}*/
 					}
 				}
 				roleCounter ++;

@@ -200,13 +200,19 @@ namespace Views {
 			if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
 			if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
 			if (showAgenda) {
-				Dictionary<string, TextElement> agendaItems = new Dictionary<string, TextElement> ();
+
 				int[] rewardValues = DataManager.GetSettings ().Rewards;
+
+				Elements.Add ("rc_agenda_title", new TextElement ("Agenda"));
 				for (int i = 0; i < Role.AgendaItems.Length; i ++) {
-					agendaItems.Add ("rc_item" + i.ToString (), new TextElement (Role.AgendaItems[i].Description));
-					agendaItems.Add ("rc_reward" + i.ToString (), new TextElement ("Reward: " + rewardValues[Role.AgendaItems[i].Reward]));
+					string idx = i.ToString ();
+					Elements.Add ("rc_item" + idx, new TextElement (Role.AgendaItems[i].Description));
+					Elements.Add ("rc_reward_image" + idx, new ImageElement ("coin"));
+					Elements.Add ("rc_reward" + idx, new TextElement ("+" + rewardValues[Role.AgendaItems[i].Reward]));
+					if (i > 0) {
+						Elements.Add ("rc_reward_image" + idx + "b", new ImageElement ("coin"));
+					}
 				}
-				Elements.Add ("rc_agenda", new ListElement<TextElement> (agendaItems));
 			}
 		}
 
