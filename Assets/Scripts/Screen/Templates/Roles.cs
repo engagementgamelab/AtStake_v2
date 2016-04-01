@@ -44,6 +44,11 @@ namespace Templates {
 
 		protected override void OnInputEnabled () {
 
+			foreach (AvatarElementUI avatar in RoleList.ChildElements) {
+				avatar.playerName.gameObject.SetActive (false);
+				avatar.playerRole.gameObject.SetActive (false);
+			}
+
 			// Introduce roles over time, ending with the Decider
 			Co.InvokeWhileTrue (0.25f, 0.75f, () => { return Loaded && roleCounter < RoleList.ChildElements.Count * 2; }, () => {
 
@@ -59,11 +64,15 @@ namespace Templates {
 					t.gameObject.SetActive (active);
 					
 					if (index == roleIndex) {
-						string[] playerRole = t.id.Split ('|');
+						t.playerName.gameObject.SetActive (true);
+						if (roleCounter % 2 != 0) {
+							t.playerRole.gameObject.SetActive (true);
+						}
+						/*string[] playerRole = t.id.Split ('|');
 						t.playerName.text = playerRole[0];
 						if (roleCounter % 2 != 0) {
 							t.playerName.text += "\nthe " + playerRole[1];
-						}
+						}*/
 					}
 				}
 				roleCounter ++;

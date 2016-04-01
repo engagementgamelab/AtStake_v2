@@ -92,9 +92,6 @@ public class GameInstanceManager : MonoBehaviour {
 		// This must be called *before* any players have been added - it "fakes" a game playthrough
 		// (only for testing purposes)
 
-		if (id == "lobby")
-			throw new System.Exception ("Cannot skip to lobby because player must be specified as host or client");
-
 		bool beforeLobby = id == "start" || id == "hostjoin";
 		bool beforeDeck = beforeLobby || id == "lobby" || id == "games";
 		bool beforeBio = beforeDeck || id == "roles" && id == "pot";
@@ -204,8 +201,14 @@ public class GameInstanceManager : MonoBehaviour {
 		if (instances.Count == 0) {
 			GUILayout.Label (" OR: skip to view: ");
 			gotoView = GUILayout.TextField (gotoView, 25, GUILayout.Width (50));
-			if (gotoView != "" && GUILayout.Button ("Go")) {
-				GotoView (gotoView);
+			if (gotoView != "") {
+				if (GUILayout.Button ("Go")) {
+					GotoView (gotoView);
+				}
+				if (Input.GetKeyDown (KeyCode.Return)) {
+					Debug.Log ("heard");
+					GotoView (gotoView);
+				}
 			}
 		}
 		GUILayout.EndHorizontal ();

@@ -46,6 +46,45 @@ public static class Palette {
 		get { return Color255 (255, 44, 118); }
 	}
 
+	public static class Avatar {
+
+		public static Color GetColor (string id) {
+			
+			id = id.ToLower ();
+
+			switch (id) {
+				case "yellow": return Yellow;
+				case "orange": return Orange;
+				case "green": return Green;
+				case "pink": return Pink;
+				case "red": return Red;
+				default: 
+					Debug.LogWarning ("Could not find an avatar color called '" + id + "'");
+					return Palette.Grey;
+			}
+		}
+
+		public static Color Yellow {
+			get { return Color255 (255, 175, 0); }
+		}
+
+		public static Color Orange {
+			get { return Color255 (255, 138, 0); }
+		}
+
+		public static Color Green {
+			get { return Color255 (0, 221, 197); }
+		}
+
+		public static Color Red {
+			get { return Color255 (255, 71, 0); }
+		}
+
+		public static Color Pink {
+			get { return Color255 (255, 28, 87); }
+		}
+	}
+
 	public static class Transparent {
 
 		public static Color White (float alpha) {

@@ -14,6 +14,9 @@ namespace Templates {
 					BackgroundColor = Palette.White,
 					Colors = new Dictionary<string, Color> () {
 						{ "play", Palette.LtBlue }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "title", TextStyle.Header2 }
 					}
 				};
 			}

@@ -47,6 +47,16 @@ public class TextStyle {
 		}
 	}
 
+	public static TextStyle Header2 {
+		get { 
+			return new TextStyle () {
+				FontSize = 26,
+				FontColor = Palette.Grey,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
 	public static TextStyle Paragraph {
 		get { 
 			return new TextStyle () {
