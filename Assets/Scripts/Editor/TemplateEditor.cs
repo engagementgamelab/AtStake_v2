@@ -53,6 +53,11 @@ public class TemplateEditor : EditorWindow {
 
 	void OnGUI () {
 
+		if (Application.isPlaying) {
+			GUILayout.Label ("Editor disabled in play mode");
+			return;
+		}
+
 		EditorGUILayout.HelpBox ("Use the dropdown menu to select a template to edit in the hierarchy. Note that templates won't look the same as they do in the game because styling gets applied at runtime. Remember to save your changes!", MessageType.Info);
 		currTemplateIdx = EditorGUILayout.Popup ("Template", currTemplateIdx, TemplateNames);
 
