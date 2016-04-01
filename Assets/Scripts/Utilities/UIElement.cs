@@ -34,13 +34,13 @@ public class UIElement : MB {
 		set { Image.sprite = value; }
 	}
 
-	Button button = null;
-	public Button Button {
+	Button myButton = null;
+	public virtual Button Button {
 		get {
-			if (button == null) {
-				button = GetComponent<Button> ();
+			if (myButton == null) {
+				myButton = GetComponent<Button> ();
 			}
-			return button;
+			return myButton;
 		}
 	}
 

@@ -209,9 +209,10 @@
     },
     {
       "Symbol": "agenda_item",
-      "Instructions": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. Press 'Yes' if you think the winning proposal include the following agenda item:",
+      "DeciderInstructions": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. Press 'Yes' if you think the winning proposal include the following agenda item:",
+      "PlayerInstructions": "Did the winning plan include this agenda item?",
       "Text": {
-        "your_item": "The Decider is reviewing your agenda points! Make your case if your points made it into the final proposal!"
+        "your_item": "This is your agenda item! Convince the Decider to choose it and win bonus points!"
       },
       "Buttons": {
         "accept": "Yes",
@@ -251,7 +252,10 @@
     },
     {
       "Symbol": "deliberate",
-      "DeciderInstructions": "Press 'deliberate' to start the next round. Be sure to ask probing questions about the proposal and encourage questions among players."
+      "DeciderInstructions": "Press 'deliberate' to start the next round. Be sure to ask probing questions about the proposal and encourage questions among players.",
+      "Buttons": {
+        "timer_button": "Deliberate!"
+      }
     },
     {
       "Symbol": "deliberate_instructions",
@@ -330,6 +334,9 @@
       "Text": {
         "first_up": "It's {{current_peer}}'s turn to pitch first",
         "next_up": "Next up is {{current_peer}}. Start the timer when they're ready!"
+      },
+      "Buttons": {
+        "timer_button": "Pitch!"
       }
     },
     {
@@ -371,7 +378,10 @@
     },
     {
       "Symbol": "think",
-      "DeciderInstructions": "Press 'Think' to start."
+      "DeciderInstructions": "Press 'Think' to start.",
+      "Buttons": {
+        "timer_button": "Think!"
+      }
     },
     {
       "Symbol": "think_instructions",

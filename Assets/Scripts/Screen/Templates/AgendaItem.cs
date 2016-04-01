@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
@@ -9,10 +10,18 @@ namespace Templates {
 			get {
 				return new TemplateSettings () {
 					TopBarColor = Palette.Orange,
+					TopBarHeight = TemplateSettings.ShortBar,
 					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg",
 					PotEnabled = true,
-					CoinsEnabled = true
+					CoinsEnabled = true,
+					Colors = new Dictionary<string, Color> () {
+						{ "accept", Palette.Blue },
+						{ "reject", Palette.Orange }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "accept", TextStyle.LtButton },
+						{ "reject", TextStyle.LtButton }
+					}
 				};
 			}
 		}

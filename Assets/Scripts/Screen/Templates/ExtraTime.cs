@@ -18,11 +18,11 @@ namespace Templates {
 					CoinsEnabled = true,
 					Colors = new Dictionary<string, Color> () {
 						{ "accept", Palette.Blue },
-						{ "reject", Palette.Orange }
+						{ "decline", Palette.Orange }
 					},
 					TextStyles = new Dictionary<string, TextStyle> () {
 						{ "accept", TextStyle.LtButton },
-						{ "reject", TextStyle.LtButton }
+						{ "decline", TextStyle.LtButton }
 					}
 				};
 			}

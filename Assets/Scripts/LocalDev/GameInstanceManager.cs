@@ -31,6 +31,10 @@ public class GameInstanceManager : MonoBehaviour {
 	}
 
 	void AddPlayer () {
+
+		if (instances.Count == 4)
+			return;
+
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
 		i.transform.SetParent (transform);
 		instances.Add (i);
@@ -73,7 +77,7 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
 			// Skip to decks screen
-			GotoView ("deck");
+			GotoView ("think");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Minus)) {
@@ -84,11 +88,17 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void GotoView (string id) {
 		
+		// Skip ahead to the view with the given id
+		// This must be called *before* any players have been added - it "fakes" a game playthrough
+		// (only for testing purposes)
+
 		if (id == "lobby")
 			throw new System.Exception ("Cannot skip to lobby because player must be specified as host or client");
 
 		bool beforeLobby = id == "start" || id == "hostjoin";
-		bool beforeDeck = id == "start" || id == "hostjoin" || id == "lobby" || id == "games";
+		bool beforeDeck = beforeLobby || id == "lobby" || id == "games";
+		bool beforeBio = beforeDeck || id == "roles" && id == "pot";
+		bool beforeWinner = beforeBio || id == "agenda" || id == "question" || id == "think_instructions" || id == "think" || id == "pitch_instructions" || id == "pitch" || id == "extra_time" || id == "deliberate_instructions" || id == "deliberate" || id == "extra_time_deliberate" || id == "decide";
 		bool deck = id == "deck";
 
 		// Create host
@@ -151,8 +161,25 @@ public class GameInstanceManager : MonoBehaviour {
 						instances[0].Dispatcher.ScheduleMessage ("StartGame");
 
 						// Once the data has loaded, send all players to the supplied view
-						Co.YieldWhileTrue (() => { return !instances[0].Controller.DataLoaded; }, () => {
+						Co.YieldWhileTrue (() => { return instances.Find (x => !x.Controller.DataLoaded) != null;/*!instances[0].Controller.DataLoaded*/; }, () => {
+
 							instances[0].Views.AllGoto (id);
+
+							// If the view comes after the pot screen, set the scores
+							if (!beforeBio) {
+								for (int i = 0; i < instances.Count; i ++) {
+									instances[i].Score.FillPot ();
+									instances[i].Score.AddRoundStartScores ();
+								}
+							}
+
+							// If the view happens at or after the winner screen, choose a winner
+							if (!beforeWinner) {
+								string winner = System.Array.Find (instances[0].Controller.Roles, x => x.Title != "Decider").PlayerName;
+								for (int i = 0; i < instances.Count; i ++) {
+									instances[i].Controller.SetWinner (winner);
+								}
+							}
 						});
 					});
 				});
@@ -165,6 +192,23 @@ public class GameInstanceManager : MonoBehaviour {
 
 	bool PlayersOnView (string viewId) {
 		return instances.Find (x => x.Views.CurrView != viewId) == null;
+	}
+
+	string gotoView = "";
+
+	void OnGUI () {
+		GUILayout.BeginHorizontal ();
+		if (instances.Count < 4 && GUILayout.Button ("Add player")) {
+			AddPlayer ();
+		}
+		if (instances.Count == 0) {
+			GUILayout.Label (" OR: skip to view: ");
+			gotoView = GUILayout.TextField (gotoView, 25, GUILayout.Width (50));
+			if (gotoView != "" && GUILayout.Button ("Go")) {
+				GotoView (gotoView);
+			}
+		}
+		GUILayout.EndHorizontal ();
 	}
 
 	#else

@@ -1,5 +1,4 @@
-﻿#define FAST_TIME
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TimerButtonElement : ScreenElement {
 
@@ -11,6 +10,9 @@ public class TimerButtonElement : ScreenElement {
 			SendUpdateMessage ();
 		}
 	}
+
+	public float Progress { get; private set; }
+	public string TimeText { get; private set; }
 
 	bool interactable;
 	public bool Interactable {
@@ -29,7 +31,8 @@ public class TimerButtonElement : ScreenElement {
 	System.Action onStart;
 	System.Action onEnd;
 
-	public TimerButtonElement (float duration, System.Action onStart, System.Action onEnd=null) {
+	public TimerButtonElement (string text, float duration, System.Action onStart, System.Action onEnd=null) {
+		Text = text;
 		this.duration = duration
 		#if FAST_TIME
 		* 0.1f
@@ -65,7 +68,9 @@ public class TimerButtonElement : ScreenElement {
 	}
 
 	void OnUpdateTime (float p) {
+		Progress = p;
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
-		Text = time.ToString () + " seconds";
+		TimeText = time.ToString () + " seconds";
+		SendUpdateMessage ();
 	}
 }

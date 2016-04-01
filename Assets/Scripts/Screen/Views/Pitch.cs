@@ -31,7 +31,7 @@ namespace Views {
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			state = State.Pitch;
 
-			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
+			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
 					Game.Controller.CurrentPitcher,
@@ -42,7 +42,7 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			CreateRoleCard (true, true, true);
-			Elements.Add ("timer", new TimerElement (Duration, () => {
+			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, () => {
 				GotoView ("extra_time");
 			}) { Active = false });
 		}

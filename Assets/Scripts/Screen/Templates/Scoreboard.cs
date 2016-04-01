@@ -12,8 +12,15 @@ namespace Templates {
 			get {
 				return new TemplateSettings () {
 					TopBarColor = Palette.Orange,
+					TopBarHeight = TemplateSettings.ShortBar,
 					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
+					Colors = new Dictionary<string, Color> () {
+						{ "next", Palette.Orange }
+					},
+					TextStyles = new Dictionary<string, TextStyle> () {
+						{ "next", TextStyle.LtButton },
+						{ "score_list", TextStyle.Paragraph }
+					}
 				};
 			}
 		}
