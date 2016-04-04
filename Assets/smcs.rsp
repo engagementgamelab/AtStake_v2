@@ -1,2 +1,3 @@
--define:SINGLE_SCREEN
 -define:FAST_TIME
+-define:SINGLE_SCREEN
+-define:SHOW_DEBUG_INFO

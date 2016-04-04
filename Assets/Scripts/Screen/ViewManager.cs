@@ -40,7 +40,8 @@ namespace Views {
 						{ "agenda_item_accept", new AgendaItemAccept () },
 						{ "agenda_item_reject", new AgendaItemReject () },
 						{ "scoreboard", new Scoreboard () },
-						{ "final_scoreboard", new FinalScoreboard () }
+						{ "final_scoreboard", new FinalScoreboard () },
+						{ "disconnected", new Disconnected () }
 					};
 				}
 

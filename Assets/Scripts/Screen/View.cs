@@ -232,7 +232,8 @@ namespace Views {
 			}
 		}
 
-		// Routing
+		// -- Routing
+
 		public void GotoView (string id) {
 			views.Goto (id);
 		}
@@ -245,13 +246,17 @@ namespace Views {
 			views.AllGoto (id);
 		}
 
-		// Events
+		// -- Events
+
+		public virtual void OnDisconnect () {
+			GotoView ("disconnected");
+		}
+
 		protected virtual void OnInitElements () {}			// Static elements that all players see
 		protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
 		protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see
 		protected virtual void OnInitHostElements () {}		// Static elements that only the host sees
 		protected virtual void OnInitClientElements () {}	// Static elements that only clients seee
-		public virtual void OnDisconnect () {}
 		protected virtual void OnShow () {}
 		protected virtual void OnHide () {}
 	}

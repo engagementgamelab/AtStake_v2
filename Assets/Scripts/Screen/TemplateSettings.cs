@@ -46,9 +46,14 @@ public class TemplateSettings {
 		get {
 			Dictionary<string, Color> combinedColors = new Dictionary<string, Color> ();
 			foreach (var color in colors)
-				combinedColors.Add (color.Key, color.Value);
-			foreach (var snippetColor in snippetColors)
-				combinedColors.Add (snippetColor.Key, snippetColor.Value);
+				combinedColors[color.Key] = color.Value;
+			foreach (var snippetColor in snippetColors) {
+				#if UNITY_EDITOR
+				if (combinedColors.ContainsKey (snippetColor.Key))
+					Debug.LogWarning ("You are using a style snippet to set the color of the screen element with the id '" + snippetColor.Key + "' but also setting the color explicitly. Only the color from the style snippet will be used.");
+				#endif
+				combinedColors[snippetColor.Key] = snippetColor.Value;
+			}
 			return combinedColors;
 		}
 		set { colors = value; }
@@ -59,9 +64,14 @@ public class TemplateSettings {
 		get {
 			Dictionary<string, TextStyle> combinedTextStyles = new Dictionary<string, TextStyle> ();
 			foreach (var textStyle in textStyles)
-				combinedTextStyles.Add (textStyle.Key, textStyle.Value);
-			foreach (var snippetTextStyle in snippetTextStyles)
-				combinedTextStyles.Add (snippetTextStyle.Key, snippetTextStyle.Value);
+				combinedTextStyles[textStyle.Key] = textStyle.Value;
+			foreach (var snippetTextStyle in snippetTextStyles) {
+				#if UNITY_EDITOR
+				if (combinedTextStyles.ContainsKey (snippetTextStyle.Key))
+					Debug.LogWarning ("You are using a style snippet to set the color of the screen element with the id '" + snippetTextStyle.Key + "' but also setting the color explicitly. Only the color from the style snippet will be used.");
+				#endif
+				combinedTextStyles[snippetTextStyle.Key] = snippetTextStyle.Value;
+			}
 			return combinedTextStyles;
 		}
 		set { textStyles = value; }
