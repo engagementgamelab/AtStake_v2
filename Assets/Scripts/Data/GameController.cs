@@ -247,7 +247,14 @@ public class GameController : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("StartGame", InitializeInstanceData);
 		Game.Dispatcher.AddListener ("InstanceDataLoaded", LoadInstanceData);
 
-		roundItr = new ArrayIterator ("round", Game, (int position) => { instance.RoundIndex = position; });
+		roundItr = new ArrayIterator ("round", Game, (int position) => { 
+			instance.RoundIndex = position;
+
+			// Reset the pitch and agenda item iterators when a new round begins
+			pitchItr.Reset ();
+			agendaItemItr.Reset ();
+		});
+
 		pitchItr = new ArrayIterator ("pitch", Game, (int position) => { CurrentRound.PitchIndex = position; });
 		agendaItemItr = new ArrayIterator ("agenda_item", Game, (int position) => { CurrentRound.AgendaItemIndex = position; });
 	}
@@ -297,10 +304,6 @@ public class GameController : GameInstanceBehaviour {
 		}
 		PopulateData ();
 		SendData ();
-	}
-
-	void StartRound () {
-		NextRound ();
 	}
 
 	void PopulateData () {
@@ -491,6 +494,10 @@ public class GameController : GameInstanceBehaviour {
 				position = msg.val;
 				onNext (position);
 			}
+		}
+
+		public void Reset () {
+			position = 0;
 		}
 	}
 }
