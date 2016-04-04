@@ -14,7 +14,7 @@ namespace Templates {
 	public abstract class Template : MB {
 
 		TemplateSettings settings = null;
-		public virtual TemplateSettings Settings {
+		public TemplateSettings Settings {
 			get {
 				if (settings == null)
 					settings = LoadSettings ();
@@ -164,8 +164,7 @@ namespace Templates {
 			return id == "coins" || id == "pot" || id == "back";
 		}
 
-		// TODO: make abstract
-		protected virtual TemplateSettings LoadSettings () { return new TemplateSettings (); }
+		protected abstract TemplateSettings LoadSettings ();
 		protected virtual void OnLoadView () {}
 		protected virtual void OnUnloadView () {}
 		protected virtual void OnInputEnabled () {}

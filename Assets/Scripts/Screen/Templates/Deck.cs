@@ -6,22 +6,13 @@ namespace Templates {
 
 	public class Deck : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					BackgroundColor = Palette.Teal,
-					Colors = new Dictionary<string, Color> () {
-						{ "confirm", Palette.Orange },
-						{ "logo", Palette.Transparent.White (0.5f) }
-					},
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "deck_list", TextStyle.Button },
-						{ "client_instructions", TextStyle.LtParagraph },
-						{ "host_instructions", TextStyle.LtParagraph },
-						{ "confirm", TextStyle.LtButton }
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("logo", "orange_button|confirm", "lt_paragraph|client_instructions|host_instructions") {
+				BackgroundColor = Palette.Teal,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "deck_list", TextStyle.Button }
+				}
+			};
 		}
 	}
 }

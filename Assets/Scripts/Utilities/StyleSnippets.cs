@@ -12,7 +12,11 @@ public class StyleSnippets {
 				// snippets.Add ("role_card", RoleCard);
 				snippets.Add ("logo", Logo);
 				snippets.Add ("lt_paragraph", LtParagraph);
-				snippets.Add ("large_button", LargeButton);
+				snippets.Add ("next_button", NextButton);
+				snippets.Add ("bottom_button", BottomButton);
+				snippets.Add ("orange_button", OrangeButton);
+				snippets.Add ("green_button", GreenButton);
+				snippets.Add ("blue_button", BlueButton);
 			}
 			return snippets;
 		}
@@ -26,12 +30,28 @@ public class StyleSnippets {
 		get { return new StyleSnippet ("logo", Palette.Transparent.White (0.5f)); }
 	}
 
-	public StyleSnippet LargeButton {
+	public StyleSnippet LtParagraph {
+		get { return new StyleSnippet ("text", TextStyle.LtParagraph); }
+	}
+
+	public StyleSnippet NextButton {
+		get { return new StyleSnippet ("next", Palette.Orange, TextStyle.LtButton); }
+	}
+
+	public StyleSnippet BottomButton {
 		get { return new StyleSnippet ("button", Palette.LtBlue, TextStyle.LargeButton); }
 	}
 
-	public StyleSnippet LtParagraph {
-		get { return new StyleSnippet ("text", TextStyle.LtParagraph); }
+	public StyleSnippet OrangeButton {
+		get { return new StyleSnippet ("button", Palette.Orange, TextStyle.LtButton); }
+	}
+
+	public StyleSnippet GreenButton {
+		get { return new StyleSnippet ("button", Palette.Green, TextStyle.LtButton); }
+	}
+
+	public StyleSnippet BlueButton {
+		get { return new StyleSnippet ("button", Palette.Blue, TextStyle.LtButton); }
 	}
 }
 

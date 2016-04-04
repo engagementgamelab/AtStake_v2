@@ -6,21 +6,15 @@ namespace Templates {
 
 	public class Lobby : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings ("large_button|play") {
-					TopBarHeight = TemplateSettings.TallBar,
-					TopBarColor = Palette.Pink,
-					BackgroundColor = Palette.White,
-					/*Colors = new Dictionary<string, Color> () {
-						{ "play", Palette.LtBlue }
-					},*/
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "title", TextStyle.Header2 }/*,
-						{ "play", TextStyle.LargeButton }*/
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("bottom_button|play") {
+				TopBarHeight = TemplateSettings.TallBar,
+				TopBarColor = Palette.Pink,
+				BackgroundColor = Palette.White,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "title", TextStyle.Header2 }
+				}
+			};
 		}
 	}
 }

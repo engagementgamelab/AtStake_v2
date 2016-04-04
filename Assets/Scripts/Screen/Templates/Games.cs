@@ -6,20 +6,13 @@ namespace Templates {
 
 	public class Games : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings ("logo") {
-					BackgroundColor = Palette.Teal,
-					Colors = new Dictionary<string, Color> () {
-						{ "confirm", Palette.Orange }
-					},
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "client_instructions", TextStyle.LtParagraph },
-						{ "searching", TextStyle.LtParagraph },
-						{ "game_list", TextStyle.Button }
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("logo", "lt_paragraph|searching|client_instructions", "orange_button|confirm") {
+				BackgroundColor = Palette.Teal,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "game_list", TextStyle.Button }
+				}
+			};
 		}
 	}
 }

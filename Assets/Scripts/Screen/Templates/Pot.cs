@@ -7,22 +7,14 @@ namespace Templates {
 
 	public class Pot : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarHeight = TemplateSettings.ShortBar,
-					TopBarColor = Palette.LtTeal,
-					BackgroundColor = Palette.White,
-					PotEnabled = true,
-					CoinsEnabled = true,
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "next", TextStyle.LtButton }
-					},
-					Colors = new Dictionary<string, Color> () {
-						{ "next", Palette.Orange }
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("next_button") {
+				TopBarHeight = TemplateSettings.ShortBar,
+				TopBarColor = Palette.LtTeal,
+				BackgroundColor = Palette.White,
+				PotEnabled = true,
+				CoinsEnabled = true
+			};
 		}
 
 		List<TextElementUI> instructions;

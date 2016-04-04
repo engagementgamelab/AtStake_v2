@@ -6,23 +6,9 @@ namespace Templates {
 
 	public class Start : Template {
 
-		/*public override TemplateSettings Settings {
-			get { 
-				return new TemplateSettings ("logo", "lt_paragraph|instructions") {
-					BackgroundColor = Palette.Teal,
-					Colors = new Dictionary<string, Color> () {
-						{ "submit", Palette.Green }
-					}
-				};
-			}
-		}*/
-
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("logo", "lt_paragraph|instructions") {
-				BackgroundColor = Palette.Teal,
-				Colors = new Dictionary<string, Color> () {
-					{ "submit", Palette.Green }
-				}
+			return new TemplateSettings ("logo", "lt_paragraph|instructions", "green_button|submit") {
+				BackgroundColor = Palette.Teal
 			};
 		}
 	}

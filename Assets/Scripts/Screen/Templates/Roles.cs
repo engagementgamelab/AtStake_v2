@@ -6,21 +6,15 @@ namespace Templates {
 
 	public class Roles : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarHeight = TemplateSettings.TallBar,
-					TopBarColor = Palette.Pink,
-					BackgroundColor = Palette.White,
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "role_list", TextStyle.Paragraph },
-						{ "next", TextStyle.LargeButton }
-					},
-					Colors = new Dictionary<string, Color> () {
-						{ "next", Palette.LtBlue }
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("bottom_button|next") {
+				TopBarHeight = TemplateSettings.TallBar,
+				TopBarColor = Palette.Pink,
+				BackgroundColor = Palette.White,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "role_list", TextStyle.Paragraph }
+				}
+			};
 		}
 
 		int roleCounter = 0;

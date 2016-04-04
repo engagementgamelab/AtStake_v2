@@ -17,7 +17,6 @@ namespace Views {
 
 					views = new Dictionary<string, View> () {
 						{ "start", new Start () },
-						// { "name", new Name () },
 						{ "hostjoin", new HostJoin () },
 						{ "lobby", new Lobby () },
 						{ "games", new Games () },

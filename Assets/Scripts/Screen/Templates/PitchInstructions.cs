@@ -6,24 +6,16 @@ namespace Templates {
 
 	public class PitchInstructions : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarHeight = TemplateSettings.ShortBar,
-					TopBarColor = Palette.Pink,
-					BottomBarHeight = TemplateSettings.TallBar,
-					BottomBarColor = Palette.LtTeal,
-					BackgroundColor = Palette.White,
-					PotEnabled = true,
-					CoinsEnabled = true,
-					Colors = new Dictionary<string, Color> () {
-						{ "next", Palette.Orange }
-					},
-					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "next", TextStyle.LtButton }
-					}
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("next_button") {
+				TopBarHeight = TemplateSettings.ShortBar,
+				TopBarColor = Palette.Pink,
+				BottomBarHeight = TemplateSettings.TallBar,
+				BottomBarColor = Palette.LtTeal,
+				BackgroundColor = Palette.White,
+				PotEnabled = true,
+				CoinsEnabled = true
+			};
 		}
 	}
 }
