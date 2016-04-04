@@ -38,15 +38,15 @@ public class NetworkMasterClient : MonoBehaviour {
 
 		// Call the callback with the given key. Optionally provide a string to pass along as well.
 		public void Call (string key, string str="") {
-			// try {
+			try {
 				if (callbacks[key] != null) {
 					callbacks[key] ();
 					if (singleInvoke.Contains (key))
 						callbacks[key] = null;
 				}
-			/*} catch (KeyNotFoundException e) {
+			} catch (KeyNotFoundException e) {
 				throw new System.Exception ("Could not trigger the callback because '" + key + "' has not been added to the dictionary of callbacks\n" + e);
-			}*/
+			}
 		}
 	}
 

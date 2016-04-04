@@ -14,3 +14,6 @@ To aid with development there a few global preprocessors that can be defined in 
 * `-define:SIMULATE_LATENCY` Delays network messages by a random value (up to 1 second) to simulate poor connections
 * `-define:SHOW_DEBUG_INFO` Overlays debug information during gameplay
 * `-define:FAST_TIME` Timers will run 10x faster
+
+### Project overview
+@Stake is a local multiplayer game played with iOS and Android devices. Content is served by the Engagement Lab API.

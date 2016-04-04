@@ -77,7 +77,6 @@ public class GameInstanceManager : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
 			// Skip to decks screen
-			GotoView ("think");
 		}
 
 		if (Input.GetKeyDown (KeyCode.Minus)) {
@@ -158,7 +157,7 @@ public class GameInstanceManager : MonoBehaviour {
 						instances[0].Dispatcher.ScheduleMessage ("StartGame");
 
 						// Once the data has loaded, send all players to the supplied view
-						Co.YieldWhileTrue (() => { return instances.Find (x => !x.Controller.DataLoaded) != null;/*!instances[0].Controller.DataLoaded*/; }, () => {
+						Co.YieldWhileTrue (() => { return instances.Find (x => !x.Controller.DataLoaded) != null; }, () => {
 
 							instances[0].Views.AllGoto (id);
 

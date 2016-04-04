@@ -17,15 +17,20 @@ namespace Views {
 				#endif
 			}, (string name) => {
 				Game.Manager.Name = name;
-
+				
 				// This allows the name to be submitted by pressing "done" on the ios/android keyboard
 				if (name != "")
 					GotoView ("hostjoin");
 			}));
 
 			Elements.Add ("submit", new ButtonElement (GetButton ("submit"), () => { 
-				GotoView ("hostjoin");
-			}));
+				if (Game.Manager.Name != "")
+					GotoView ("hostjoin");
+			}) {
+				#if !SINGLE_SCREEN
+				Interactable = false 
+				#endif
+			});
 		}
 	}
 }
