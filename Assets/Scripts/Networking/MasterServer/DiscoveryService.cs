@@ -54,8 +54,12 @@ public class DiscoveryService : MonoBehaviour {
 		Co.InvokeWhileTrue (0.5f, () => { return Broadcaster.broadcasting; }, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/addHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
 				// Debug.Log ("sent " + ipAddress);
-				if (www.error != null)
+				if (www.error != null) {
 					onError ();
+					#if UNITY_EDITOR
+					Debug.Log (www.error);
+					#endif
+				}
 			});
 		}, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/removeHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
@@ -93,6 +97,9 @@ public class DiscoveryService : MonoBehaviour {
 							new HostData () { name = "__error" }
 						}
 					};
+					#if UNITY_EDITOR
+					Debug.Log (www.error);
+					#endif
 				} else {
 					if (!string.IsNullOrEmpty (www.text))
 						Listener.received = JsonReader.Deserialize<HostsData> (www.text);

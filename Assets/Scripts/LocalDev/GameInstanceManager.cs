@@ -54,33 +54,11 @@ public class GameInstanceManager : MonoBehaviour {
 	};
 
 	void Update () {
-		
-		if (Input.GetKeyDown (KeyCode.LeftBracket)) {
-		}
-
-		if (Input.GetKeyDown (KeyCode.RightBracket)) {
-			GotoView ("pitch");
-		}
-
-		if (Input.GetKeyDown (KeyCode.Backslash)) {
-			
-			GotoView ("scoreboard");
-
-			/*// Skip to last round
-			GameInstance i = instances[0];
-			i.Rounds.NextRound ();
-			i.Dispatcher.ScheduleMessage ("ChooseWinner", i.Manager.Player.Name);
-			i.Rounds.NextRound ();
-			i.Dispatcher.ScheduleMessage ("ChooseWinner", instances[1].Manager.Player.Name);
-			i.Dispatcher.ScheduleMessage ("GotoView", "roles");*/
-		}
 
 		if (Input.GetKeyDown (KeyCode.Equals)) {
-			// Skip to decks screen
 		}
 
 		if (Input.GetKeyDown (KeyCode.Minus)) {
-			// add game instance
 			AddPlayer ();
 		}
 	}

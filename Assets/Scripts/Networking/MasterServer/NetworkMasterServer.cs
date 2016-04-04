@@ -77,6 +77,7 @@ public class NetworkMasterServer : MonoBehaviour {
 			return;
 		}
 
+		NetworkServer.maxDelay = 0.1f;
 		NetworkServer.Listen (settings.MasterServerPort);
 
 		// server msgs

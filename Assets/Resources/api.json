@@ -2,7 +2,7 @@
 	"local": {
 		"root": "http://localhost:3000/api", 
 		"authKey": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-		"master": "http://104.131.39.64:3001"
+		"master": "https://atstake.bostoncivic.net"
 	},
 	"development": {
 		"root": "http://engage.dev.emerson.edu:3000/api",

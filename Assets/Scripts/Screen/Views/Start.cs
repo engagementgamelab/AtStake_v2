@@ -17,7 +17,7 @@ namespace Views {
 				#endif
 			}, (string name) => {
 				Game.Manager.Name = name;
-				
+
 				// This allows the name to be submitted by pressing "done" on the ios/android keyboard
 				if (name != "")
 					GotoView ("hostjoin");
