@@ -8,16 +8,16 @@ namespace Templates {
 
 		public override TemplateSettings Settings {
 			get {
-				return new TemplateSettings () {
+				return new TemplateSettings ("large_button|play") {
 					TopBarHeight = TemplateSettings.TallBar,
 					TopBarColor = Palette.Pink,
 					BackgroundColor = Palette.White,
-					Colors = new Dictionary<string, Color> () {
+					/*Colors = new Dictionary<string, Color> () {
 						{ "play", Palette.LtBlue }
-					},
+					},*/
 					TextStyles = new Dictionary<string, TextStyle> () {
-						{ "title", TextStyle.Header2 },
-						{ "play", TextStyle.LargeButton }
+						{ "title", TextStyle.Header2 }/*,
+						{ "play", TextStyle.LargeButton }*/
 					}
 				};
 			}

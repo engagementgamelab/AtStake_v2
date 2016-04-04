@@ -13,7 +13,14 @@ namespace Templates {
 	/// </summary>
 	public abstract class Template : MB {
 
-		public abstract TemplateSettings Settings { get; }
+		TemplateSettings settings = null;
+		public virtual TemplateSettings Settings {
+			get {
+				if (settings == null)
+					settings = LoadSettings ();
+				return settings;
+			}
+		}
 
 		Dictionary<string, ScreenElementUI> elements;
 		protected Dictionary<string, ScreenElementUI> Elements {
@@ -157,6 +164,8 @@ namespace Templates {
 			return id == "coins" || id == "pot" || id == "back";
 		}
 
+		// TODO: make abstract
+		protected virtual TemplateSettings LoadSettings () { return new TemplateSettings (); }
 		protected virtual void OnLoadView () {}
 		protected virtual void OnUnloadView () {}
 		protected virtual void OnInputEnabled () {}

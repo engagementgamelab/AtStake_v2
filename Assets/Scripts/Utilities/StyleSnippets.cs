@@ -5,103 +5,112 @@ using System.Collections.Generic;
 public class StyleSnippets {
 
 	Dictionary<string, StyleSnippet> snippets;
-	public Dictionary<string, StyleSnippet> Snippets {
+	Dictionary<string, StyleSnippet> Snippets {
 		get {
 			if (snippets == null) {
 				snippets = new Dictionary<string, StyleSnippet> ();
-				snippets.Add ("role_card", RoleCard);
+				// snippets.Add ("role_card", RoleCard);
 				snippets.Add ("logo", Logo);
 				snippets.Add ("lt_paragraph", LtParagraph);
+				snippets.Add ("large_button", LargeButton);
 			}
 			return snippets;
 		}
 	}
 
-	public StyleSnippet RoleCard {
-		get {
-			return new StyleSnippet () {
-				Colors = new Dictionary<string, Color> () {
-
-				},
-				TextStyles = new Dictionary<string, TextStyle> () {
-
-				}
-			};
-		}
+	public StyleSnippet this[string id] {
+		get { return Snippets[id].Clone (); }
 	}
 
 	public StyleSnippet Logo {
-		get {
-			return new StyleSnippet () {
-				Colors = new Dictionary<string, Color> () {
-					{ "logo", Palette.Transparent.White (0.5f) }
-				}
-			};
-		}
+		get { return new StyleSnippet ("logo", Palette.Transparent.White (0.5f)); }
 	}
 
 	public StyleSnippet LargeButton {
-		get {
-			return new StyleSnippet () {
-				Colors = new Dictionary<string, Color> () {
-
-				}
-			};
-		}
+		get { return new StyleSnippet ("button", Palette.LtBlue, TextStyle.LargeButton); }
 	}
 
 	public StyleSnippet LtParagraph {
-		get {
-			return new StyleSnippet () {
-				TextStyles = new Dictionary<string, TextStyle> () {
-					{ "text", TextStyle.LtParagraph }
-				}
-			};
-		}
+		get { return new StyleSnippet ("text", TextStyle.LtParagraph); }
 	}
 }
 
 public class StyleSnippet {
 
-	Dictionary<string, Color> colors = new Dictionary<string, Color> ();
-	public Dictionary<string, Color> Colors {
-		get { return colors; }
-		set { colors = value; }
+	string id;
+	public string Id {
+		get { return id; }
+		set { id = value; }
 	}
 
-	Dictionary<string, TextStyle> textStyles = new Dictionary<string, TextStyle> ();
-	public Dictionary<string, TextStyle> TextStyles {
-		get { return textStyles; }
-		set { textStyles = value; }
+	bool hasColor = false;
+	Color color;
+	public Color Color {
+		get { return color; }
+		set { 
+			color = value; 
+			hasColor = true;
+		}
 	}
 
-	// Will only work for snippets that have a single id (where the dictionaries basically operate like key value)
-	public void ApplyId (string id) {
-		Color c = Color.white;
-		TextStyle t = null;
-		foreach (var color in Colors)
-			c = color.Value;
-		foreach (var textStyle in TextStyles)
-			t = textStyle.Value;
-		Colors = new Dictionary<string, Color> () {{ id, c }};
-		TextStyles = new Dictionary<string, TextStyle> () {{ id, t }};
+	TextStyle textStyle;
+	public TextStyle TextStyle {
+		get { return textStyle; }
+		set { textStyle = value; }
+	}
+
+	List<StyleSnippet> snippets;
+	public List<StyleSnippet> Snippets {
+		get { return snippets; }
+		set { snippets = value; }
+	}
+
+	public StyleSnippet (string id, Color color, TextStyle textStyle=null) {
+		Id = id;
+		Color = color;
+		TextStyle = textStyle;
+	}
+
+	public StyleSnippet (string id, TextStyle textStyle) {
+		Id = id;
+		TextStyle = textStyle;
+	}
+
+	public StyleSnippet () {}
+
+	public void Apply (TemplateSettings settings) {
+
+		if (Snippets != null) {
+			foreach (StyleSnippet snippet in Snippets)
+				snippet.Apply (settings);
+		}
+
+		if (hasColor) {
+			settings.SnippetColors.Add (Id, Color);
+		}
+		if (TextStyle != null) {
+			settings.SnippetTextStyles.Add (Id, TextStyle);
+		}
+	}
+
+	public StyleSnippet Clone () {
+		StyleSnippet s = new StyleSnippet () {
+			Id = Id,
+			TextStyle = TextStyle,
+			Snippets = Snippets
+		};
+		if (hasColor)
+			s.Color = Color;
+		return s;
 	}
 }
 
 public static class StyleSnippetExtensions {
 
-	public static void ApplySnippet (this TemplateSettings settings, StyleSnippet snippet) {
-
-		foreach (var color in snippet.Colors)
-			settings.SnippetColors.Add (color.Key, color.Value);
-
-		foreach (var textStyle in snippet.TextStyles)
-			settings.SnippetTextStyles.Add (textStyle.Key, textStyle.Value);
-	}
-
 	public static void ApplySnippets (this TemplateSettings settings, StyleSnippet[] snippets) {
+
 		foreach (StyleSnippet snippet in snippets)
-			settings.ApplySnippet (snippet);
+			snippet.Apply (settings);
 	}
 
 	// Applies snippets to the given settings 
@@ -127,14 +136,13 @@ public static class StyleSnippetExtensions {
 				snippetId = ids[i];
 			}
 
-
 			if (elementIds == null) {
-				StyleSnippet outSnippet = snippets.Snippets[snippetId];
+				StyleSnippet outSnippet = snippets[snippetId];
 				outSnippets.Add (outSnippet);
 			} else {
 				for (int j = 0; j < elementIds.Length; j ++) {
-					StyleSnippet outSnippet = snippets.Snippets[snippetId];
-					outSnippet.ApplyId (elementIds[j]);
+					StyleSnippet outSnippet = snippets[snippetId];
+					outSnippet.Id = elementIds[j];
 					outSnippets.Add (outSnippet);
 				}
 			}

@@ -410,12 +410,8 @@ public static class ExtensionMethods {
 	}
 
 	public static void Print<T> (this List<T> list, Func<T, object> onPrint) where T : class {
-		foreach (T t in list) {
-			if (onPrint != null)
-				Debug.Log (onPrint (t));
-			else
-				Debug.Log (t);
-		}
+		foreach (T t in list)
+			Debug.Log (onPrint (t));
 	}
 
 	public static void Print (this IDictionary dict) {
