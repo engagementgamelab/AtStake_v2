@@ -55,8 +55,9 @@ public class GameInstanceManager : MonoBehaviour {
 
 	void Update () {
 
-		if (Input.GetKeyDown (KeyCode.Equals)) {
-		}
+		/*if (Input.GetKeyDown (KeyCode.Equals)) {
+			GotoView ("lobby");
+		}*/
 
 		if (Input.GetKeyDown (KeyCode.Minus)) {
 			AddPlayer ();
@@ -126,7 +127,7 @@ public class GameInstanceManager : MonoBehaviour {
 		} else if (!beforeDeck) {
 
 			// Wait for clients to connect
-			Co.YieldWhileTrue (() => { return instances[0].Multiplayer.Clients.Count < 2; }, () => {
+			Co.YieldWhileTrue (() => { return !ClientsConnected (); }, () => {
 
 				instances[0].Dispatcher.AddListener ("SetDeck", (MasterMsgTypes.GenericMessage msg) => {
 					Co.WaitForFixedUpdate (() => {
@@ -168,10 +169,22 @@ public class GameInstanceManager : MonoBehaviour {
 		return instances.Find (x => x.Views.CurrView != viewId) == null;
 	}
 
+	bool ClientsConnected () {
+		return instances[0].Multiplayer.Clients.Count == 2;
+	}
+
 	string gotoView = "";
 
 	void OnGUI () {
+		if (instances.Count > 0 && instances[0].Controller.DataLoaded)
+			return;
 		GUILayout.BeginHorizontal ();
+		if (instances.Count < 4 && GUILayout.Button ("Run test")) {
+			GotoView ("lobby");
+			Co.YieldWhileTrue (() => { return !ClientsConnected (); }, () => {
+				instances[0].Dispatcher.ScheduleMessage ("RunTest");
+			});
+		}
 		if (instances.Count < 4 && GUILayout.Button ("Add player")) {
 			AddPlayer ();
 		}

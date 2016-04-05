@@ -188,7 +188,7 @@ namespace Views {
 			}
 		}
 
-		protected T GetScreenElement<T> (string id) where T : ScreenElement {
+		public T GetScreenElement<T> (string id) where T : ScreenElement {
 			try {
 				return Elements[id] as T;
 			} catch (KeyNotFoundException) {

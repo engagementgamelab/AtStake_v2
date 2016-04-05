@@ -86,6 +86,16 @@ namespace Views {
 			Goto (PrevView);
 		}
 
+		public T GetView<T> (string id="") where T : View {
+			if (id == "") id = CurrView;
+			return (T)Views[id];
+		}
+
+		public View GetView (string id="") {
+			if (id == "") id = CurrView;
+			return Views[id];
+		}
+
 		void OnGotoView (MasterMsgTypes.GenericMessage msg) {
 			Goto (msg.str1);
 		}

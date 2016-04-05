@@ -36,6 +36,10 @@ namespace Templates {
 			}
 		}
 
+		public bool Animating {
+			get { return animating; }
+		}
+
 		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
 		// true = SlideIn
 		Dictionary<string, bool> transitionOverrides = new Dictionary<string, bool> () {
@@ -115,12 +119,15 @@ namespace Templates {
 				// Swap the active and inactive containers
 				UpdateActiveContainer ();
 
-				// Enable the raycaster so that input is accepted again
-				Raycaster.enabled = true;
 				animating = false;
 
 				// Inform the newly active container that the animation has finished & input is being accepted
 				activeContainer.SetInputEnabled ();
+
+				// Enable the raycaster so that input is accepted again (small pause so that players don't accidently 'double press' buttons)
+				Co.WaitForSeconds (0.1f, () => {
+					Raycaster.enabled = true;
+				});
 			});
 		}
 

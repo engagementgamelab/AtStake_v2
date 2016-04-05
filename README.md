@@ -24,12 +24,12 @@ This is a Unity3D 5.3 project. Be sure you are using the [correct version](http:
 ### Project structure
 **1.** **Models:** DataManager.cs downloads the data from the API (or loads locally as a fallback) and deserializes it into the patterns defined in Models.cs.
 
-**2.** **Views:**
+**2.** **Views:** Views are populated from the data and interface with the GameController. Each view has a template associeated with it, and the template decides how to display the information. Templates use Unity's UI.
 
-**3.** **Controller:**
+**3.** **Controller:** The GameController handles most of the game's logic, much of which is frontloaded when the host selects a deck (for example, players' roles are randomly chosen for each round at the very beginning of the game, rather than dynamically at the start of each round)
 
 #### Preprocessors
-To aid with development there a few global preprocessors that can be defined in the smcs.rs file:
+To aid with development there a few global preprocessors that can be defined in the smcs.rsp file:
 * `-define:SINGLE_SCREEN` Enables "single screen" version of the game. Multiple instances of the game are played on a single screen rather than between devices.
 * `-define:SIMULATE_LATENCY` Delays network messages by a random value (up to 1 second) to simulate poor connections
 * `-define:SHOW_DEBUG_INFO` Overlays debug information during gameplay

@@ -286,7 +286,10 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	public bool NextAgendaItem () {
-		agendaItemItr.Next (); 
+		Debug.Log (CurrentRound);
+		if (CurrentRound == null)
+			return false;
+		agendaItemItr.Next ();
 		return agendaItemItr.Position <= CurrentRound.AgendaItemOrder.Length-1;
 	}
 

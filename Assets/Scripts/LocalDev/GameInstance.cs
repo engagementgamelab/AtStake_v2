@@ -53,6 +53,7 @@ public class GameInstance : MonoBehaviour {
 		Decks.Init ();
 		Score.Init ();
 		Controller.Init ();
+		Test.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
 	}
 
