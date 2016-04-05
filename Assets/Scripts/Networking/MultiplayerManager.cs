@@ -129,7 +129,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			client.UnregisterHost (Host, () => {
 				Co.WaitForFixedUpdate (() => {
 					server.Reset ();
-
 				});
 			});
 		} else {

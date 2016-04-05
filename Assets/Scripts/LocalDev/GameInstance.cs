@@ -43,28 +43,29 @@ public class GameInstance : MonoBehaviour {
 	
 	// Called when the app is started
 	void InitApp () {
-		Manager.Init ();
 		Views.Init ();
-		Decks.Init ();
 	}
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
 	public void StartGame () {
+		Manager.Init ();
+		Views.Init ();
+		Decks.Init ();
 		Score.Init ();
 		Controller.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
 	}
 
 	public void EndGame () {
-		Multiplayer.Disconnect ();
-		Controller.Reset ();
-		Decks.Reset ();
-		Manager.Reset ();
+		Multiplayer.Disconnect (); // Also triggers OnDisconnect
 	}
 
 	void OnDisconnect () {
 		Views.OnDisconnect ();
 		Multiplayer.onDisconnected -= OnDisconnect;
 		Dispatcher.RemoveAllListeners ();
+		Controller.Reset ();
+		Decks.Reset ();
+		Manager.Reset ();
 	}
 }

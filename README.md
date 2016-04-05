@@ -16,12 +16,16 @@ This is a Unity3D 5.3 project. Be sure you are using the [correct version](http:
 
 ### Setup
 **1.** Clone this repository: `git clone https://github.com/engagementgamelab/AtStake_v2.git`
+
 **2.** Install and run the [Engagement Lab API](https://github.com/engagementgamelab/EL-API). If you skip this step the game will still run, but it will use a local fallback and populate the content using whatever is in data.json. Once running, update the configuration in api.json.
+
 **3.** Install and run the [master server](https://github.com/engagementgamelab/master-server). It is required that the master server be running in order to connect devices. Once running, update the configuration in api.json.
 
 ### Project structure
 **1.** **Models:** DataManager.cs downloads the data from the API (or loads locally as a fallback) and deserializes it into the patterns defined in Models.cs.
+
 **2.** **Views:**
+
 **3.** **Controller:**
 
 #### Preprocessors

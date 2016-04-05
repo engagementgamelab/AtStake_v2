@@ -415,6 +415,7 @@ public static class ExtensionMethods {
 	}
 
 	public static void Print (this IDictionary dict) {
+		Debug.Log (dict + ": " + dict.Count + " elements");
 		foreach (var d in dict) {
 			System.Type t = d.GetType ();
 			if (t == typeof (IList)) {

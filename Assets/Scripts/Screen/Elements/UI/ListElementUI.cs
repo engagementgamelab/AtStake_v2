@@ -45,7 +45,7 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 	}
 
 	public override void ApplyElement (ListElement<U> e) {
-
+		
 		// Load initial elements (if any)
 		foreach (var element in e.Elements)
 			AddElement (element.Key, element.Value);

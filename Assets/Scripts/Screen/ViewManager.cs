@@ -49,13 +49,17 @@ namespace Views {
 			}
 		}
 
+		bool Loaded { get { return views != null; } }
+
 		public string CurrView { get; private set; }
 		public string PrevView { get; private set; }
 
 		public void Init () {
-			foreach (var view in Views)
-				view.Value.Init (this, view.Key);
-			Goto ("start");
+			if (!Loaded) {
+				foreach (var view in Views)
+					view.Value.Init (this, view.Key);
+				Goto ("start");
+			}
 			Game.Dispatcher.AddListener ("GotoView", OnGotoView);
 		}
 
