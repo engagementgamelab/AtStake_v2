@@ -114,6 +114,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	void QueueMessage (MasterMsgTypes.GenericMessage msg) {
 		if (messages.Count > 0 || !confirmation.IsConfirmed (Clients)) {
+			Debug.Log ("queue");
 			messages.Enqueue (msg);
 		} else {
 			SendMessageToClients (msg);
@@ -130,7 +131,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
 		// Create a new confirmation to fulfill
-		confirmation = new Confirmation (msg.id, Clients);
+		// confirmation = new Confirmation (msg.id, Clients);
 
 		// Send message to all clients
 		Game.Multiplayer.SendMessageToClients (msg);
@@ -159,7 +160,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (msg));
 		#else
-			SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
+			// SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
 			ReceiveMessageEvent (msg);
 		#endif
 	}

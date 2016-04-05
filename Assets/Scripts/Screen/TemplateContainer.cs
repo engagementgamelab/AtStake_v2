@@ -79,7 +79,8 @@ namespace Templates {
 
 		public void UnloadView () {
 			content.UnloadView ();
-			content.gameObject.SetActive (false);
+			foreach (Template template in templates)
+				template.gameObject.SetActive (false);
 		}
 
 		public bool TemplateIsBefore (string template1, string template2) {

@@ -54,11 +54,6 @@ public class GameInstanceManager : MonoBehaviour {
 	};
 
 	void Update () {
-
-		/*if (Input.GetKeyDown (KeyCode.Equals)) {
-			GotoView ("lobby");
-		}*/
-
 		if (Input.GetKeyDown (KeyCode.Minus)) {
 			AddPlayer ();
 		}

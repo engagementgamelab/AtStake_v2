@@ -47,8 +47,6 @@ public class TimerElement : ScreenElement {
 	}
 
 	void OnUpdateTime (float p) {
-		// float time = Mathf.Round (Mathf.Abs (p * duration - duration));
-		// Text = time.ToString () + " seconds";
 		Progress = p;
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
 		TimeText = time.ToString () + " seconds";
