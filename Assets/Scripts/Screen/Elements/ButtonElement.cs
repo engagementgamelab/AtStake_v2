@@ -32,4 +32,11 @@ public class ButtonElement : ScreenElement {
 		Text = text;
 		OnPressThis = onPress;
 	}
+
+	public void TestPress () {
+		if (OnPress != null)
+			OnPress ();
+		if (OnPressThis != null)
+			OnPressThis (this);
+	}
 }
