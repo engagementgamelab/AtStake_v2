@@ -20,6 +20,14 @@ namespace Views {
 		}
 
 		void Host () {
+
+			#if SINGLE_SCREEN
+			if (UnityEngine.Networking.NetworkServer.active) {
+				Debug.LogWarning ("Only one host is allowed in Single Screen mode. Please choose 'Join.'");
+				return;
+			}
+			#endif
+
 			Game.StartGame ();
 			Game.Multiplayer.HostGame ();
 			GotoView ("lobby");

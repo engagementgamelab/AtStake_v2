@@ -72,6 +72,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public void HostGame () {
 
+		#if SINGLE_SCREEN
+		if (UnityEngine.Networking.NetworkServer.active) {
+			Debug.LogWarning ("Only one host is allowed in Single Screen mode.");
+			return;
+		}
+		#endif
+
 		// Set this player as the host
 		Host = Game.Name;
 		Hosting = true;

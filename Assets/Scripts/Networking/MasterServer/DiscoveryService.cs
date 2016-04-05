@@ -24,6 +24,16 @@ public class DiscoveryService : MonoBehaviour {
 
 		public HostData[] hosts { get; set; }
 
+		public static HostsData ErrorData {
+			get {
+				return new HostsData () {
+					hosts = new HostData[] {
+						new HostData () { name = "__error" }
+					}
+				};
+			}
+		}
+
 		public Dictionary<string, string> Package () {
 			Dictionary<string, string> data = new Dictionary<string, string> ();
 			foreach (HostData h in hosts)
@@ -53,7 +63,6 @@ public class DiscoveryService : MonoBehaviour {
 
 		Co.InvokeWhileTrue (0.5f, () => { return Broadcaster.broadcasting; }, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/addHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
-				// Debug.Log ("sent " + ipAddress);
 				if (www.error != null) {
 					onError ();
 					#if UNITY_EDITOR
@@ -63,7 +72,6 @@ public class DiscoveryService : MonoBehaviour {
 			});
 		}, () => {
 			Co.WWW (Broadcaster.MasterAddress + "/removeHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
-				// Debug.Log ("removed " + ipAddress);
 				ObjectPool.Destroy<DiscoveryService> (Broadcaster);
 				Broadcaster = null;
 			});
@@ -92,11 +100,7 @@ public class DiscoveryService : MonoBehaviour {
 		Co.InvokeWhileTrue (0.5f, () => { return Listener.listening; }, () => {
 			Co.WWW (Listener.MasterAddress + "/hosts", (WWW www) => {
 				if (www.error != null) {
-					Listener.received = new HostsData () {
-						hosts = new HostData[] {
-							new HostData () { name = "__error" }
-						}
-					};
+					Listener.received = HostsData.ErrorData;
 					#if UNITY_EDITOR
 					Debug.Log (www.error);
 					#endif
