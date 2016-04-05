@@ -3,7 +3,7 @@
 
 @Stake is a game that fosters democracy, empathy, and creative problem solving for civic issues. Players take on a variety of roles and pitch ideas under a time pressure, competing to produce the best idea in the eyes of the table's “Decider.” 
 
-This is a mobile (iOS & Android) version of the [tabletop game](http://engagementgamelab.org/games/@stake/) designed by the [Engagement Lab](http://elab.emerson.edu/) at Emerson College.
+This is a mobile (iOS & Android) version of the [tabletop game](https://elab.emerson.edu/projects/participation-and-engagement/atstake/) designed by the [Engagement Lab](http://elab.emerson.edu/) at Emerson College.
 
 # Developers
 
@@ -29,7 +29,7 @@ This is a Unity3D 5.3 project. Be sure you are using the [correct version](http:
 **3.** **Controller:** The GameController handles most of the game's logic, much of which is frontloaded when the host selects a deck (for example, players' roles are randomly chosen for each round at the very beginning of the game, rather than dynamically at the start of each round)
 
 #### Preprocessors
-To aid with development there a few global preprocessors that can be defined in the smcs.rsp file:
+To aid with development there a few global preprocessors that can be defined in the [smcs.rsp file](https://github.com/engagementgamelab/AtStake_v2/blob/master/Assets/smcs.rsp):
 * `-define:SINGLE_SCREEN` Enables "single screen" version of the game. Multiple instances of the game are played on a single screen rather than between devices.
 * `-define:SIMULATE_LATENCY` Delays network messages by a random value (up to 1 second) to simulate poor connections
 * `-define:SHOW_DEBUG_INFO` Overlays debug information during gameplay
