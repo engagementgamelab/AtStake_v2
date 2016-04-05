@@ -16,6 +16,8 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 *		5. The host receives confirmations from clients
 	 *		6. Once the host sees that all clients have confirmed receipt, it fires off 
 	 *				the next message if one exists in the queue
+	 *
+	 *	^ This appears to no longer be necessary because unet synchronizes messages by default now
 	 */
 
 	public delegate void OnReceiveMessage (MasterMsgTypes.GenericMessage msg);
