@@ -1,4 +1,5 @@
 ﻿#undef DEBUG
+#undef USE_CONFIRMATIONS
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	/**
 	 *	The MessageDispatcher sends and receives messages between players.
-	 *	In order to ensure synchronicity, messages go through the following steps:
+	 *	if USE_CONFIRMATIONS is enabled, in order to ensure synchronicity, messages go through the following steps:
 	 *		1. A device sends a message to the host (or, if hosting, skip to step 3)
 	 *		2. The host receives the message
 	 *		3. The host sends the message to all clients
@@ -130,8 +131,10 @@ public class MessageDispatcher : GameInstanceBehaviour {
 
 	void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
+		#if USE_CONFIRMATIONS
 		// Create a new confirmation to fulfill
-		// confirmation = new Confirmation (msg.id, Clients);
+		confirmation = new Confirmation (msg.id, Clients);
+		#endif
 
 		// Send message to all clients
 		Game.Multiplayer.SendMessageToClients (msg);
@@ -160,7 +163,9 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (msg));
 		#else
-			// SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
+			#if USE_CONFIRMATIONS
+			SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
+			#endif
 			ReceiveMessageEvent (msg);
 		#endif
 	}
