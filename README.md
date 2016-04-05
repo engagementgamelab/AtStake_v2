@@ -22,11 +22,11 @@ This is a Unity3D 5.3 project. Be sure you are using the [correct version](http:
 **3.** Install and run the [master server](https://github.com/engagementgamelab/master-server). It is required that the master server be running in order to connect devices. Once running, update the configuration in api.json.
 
 ### Project structure
-**1.** **Models:** DataManager.cs downloads the data from the API (or loads locally as a fallback) and deserializes it into the patterns defined in Models.cs.
+**1.** **Models:** [DataManager.cs](https://github.com/engagementgamelab/AtStake_v2/blob/master/Assets/Scripts/Utilities/DataManager.cs) downloads the data from the API (or loads locally as a fallback) and deserializes it into the patterns defined in [Models.cs](https://github.com/engagementgamelab/AtStake_v2/blob/master/Assets/Scripts/Data/Models.cs).
 
-**2.** **Views:** Views are populated from the data and interface with the GameController. Each view has a template associeated with it, and the template decides how to display the information. Templates use Unity's UI.
+**2.** **Views:** [Views](https://github.com/engagementgamelab/AtStake_v2/tree/master/Assets/Scripts/Screen/Views) are populated from the data and interface with the GameController. Each view has a [template](https://github.com/engagementgamelab/AtStake_v2/tree/master/Assets/Scripts/Screen/Templates) associeated with it, and the template decides how to display the information. Templates use Unity's UI.
 
-**3.** **Controller:** The GameController handles most of the game's logic, much of which is frontloaded when the host selects a deck (for example, players' roles are randomly chosen for each round at the very beginning of the game, rather than dynamically at the start of each round)
+**3.** **Controller:** The [GameController](https://github.com/engagementgamelab/AtStake_v2/blob/master/Assets/Scripts/Data/GameController.cs) handles most of the game's logic, much of which is frontloaded when the host selects a deck (for example, players' roles are randomly chosen for each round at the very beginning of the game, rather than dynamically at the start of each round)
 
 #### Preprocessors
 To aid with development there a few global preprocessors that can be defined in the [smcs.rsp file](https://github.com/engagementgamelab/AtStake_v2/blob/master/Assets/smcs.rsp):
