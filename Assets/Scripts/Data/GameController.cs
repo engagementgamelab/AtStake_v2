@@ -219,9 +219,7 @@ public class GameController : GameInstanceBehaviour {
 	// -- Private properties
 
 	bool GameOver {
-		get { 
-			Debug.Log (roundItr.Position + " ... " + instance.Rounds.Length);
-			return roundItr.Position == instance.Rounds.Length; }
+		get { return roundItr.Position == instance.Rounds.Length; }
 	}
 
 	List<string> PlayerNames {

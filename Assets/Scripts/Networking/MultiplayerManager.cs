@@ -127,6 +127,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		});
 	}
 
+	public void GameStarted () {
+		DiscoveryService.StopBroadcasting ();
+		DiscoveryService.StopListening (this);
+	}
+
 	// Intentional disconnect (player chose to terminate their connection)
 	// This will stop the discovery service
 	// If a connection has been established, the OnDisconnect event will also fire

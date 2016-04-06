@@ -6,8 +6,12 @@ namespace Templates {
 
 	public class FinalScoreboard : Scoreboard {
 
+		protected override ScreenElementUI ContinueButton {
+			get { return Elements["menu"]; }
+		}
+
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("bottom_button|menu") {
 				TopBarColor = Palette.Orange,
 				TopBarHeight = TemplateSettings.ShortBar,
 				BackgroundColor = Palette.White,

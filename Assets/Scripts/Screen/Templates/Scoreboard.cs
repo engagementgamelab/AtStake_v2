@@ -29,9 +29,13 @@ namespace Templates {
 			}
 		}
 
+		protected virtual ScreenElementUI ContinueButton {
+			get { return Elements["next"]; }
+		}
+
 		protected override void OnLoadView () {
 
-			Elements["next"].Visible = false;
+			ContinueButton.Visible = false;
 
 			TextElementUI instructions;
 			if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
@@ -56,7 +60,7 @@ namespace Templates {
 				childElements[counter].Visible = true;
 				counter --;
 			}, () => {
-				Elements["next"].Visible = true;
+				ContinueButton.Visible = true;
 				TextElementUI instructions;
 				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
 					instructions.Visible = true;

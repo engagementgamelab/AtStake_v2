@@ -30,6 +30,7 @@ namespace Views {
 		}
 
 		protected override void OnHide () {
+			Game.Multiplayer.GameStarted ();
 			Game.Manager.onAddPeer -= OnAddPeer;
 			Game.Manager.onRemovePeer -= OnRemovePeer;
 		}

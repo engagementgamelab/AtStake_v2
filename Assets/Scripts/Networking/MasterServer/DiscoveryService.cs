@@ -79,7 +79,8 @@ public class DiscoveryService : MonoBehaviour {
 	}
 
 	public static void StopBroadcasting () {
-		Broadcaster.broadcasting = false;
+		if (Broadcaster != null)
+			Broadcaster.broadcasting = false;
 	}
 
 	public static void StartListening (MultiplayerManager multiplayer, System.Action<Dictionary<string, string>> onUpdateHosts) {
