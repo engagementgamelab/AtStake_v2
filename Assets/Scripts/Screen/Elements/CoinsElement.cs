@@ -18,6 +18,6 @@ public class CoinsElement : ScreenElement {
 	}
 
 	void SetText (int score) {
-		Text = "Coins: " + score;
+		Text = score.ToString ();
 	}
 }

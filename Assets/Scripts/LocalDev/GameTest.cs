@@ -11,7 +11,7 @@ public class GameTest : GameInstanceBehaviour {
 	bool Hosting {
 		get { return Game.Multiplayer.Hosting; }
 	}
-
+	
 	bool IsDecider {
 		get { return Game.Controller.Role.Title == "Decider"; }
 	}

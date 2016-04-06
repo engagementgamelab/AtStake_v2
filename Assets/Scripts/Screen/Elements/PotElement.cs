@@ -18,6 +18,6 @@ public class PotElement : ScreenElement {
 	}
 
 	void SetText (int pot) {
-		Text = "Pot: " + pot;
+		Text = pot.ToString ();
 	}
 }
