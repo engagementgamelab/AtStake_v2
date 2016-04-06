@@ -72,7 +72,6 @@ public class GameTest : GameInstanceBehaviour {
 						if (Hosting)
 							PressRadioButton ("deck_list", "Default");
 						break;
-					case "roles":
 					case "pot":
 					case "bio":
 					case "agenda":
@@ -85,6 +84,10 @@ public class GameTest : GameInstanceBehaviour {
 					case "agenda_item_reject":
 					case "scoreboard":
 						PressNext ();
+						break;
+					case "roles":
+						if (IsDecider)
+							PressButton ("play");
 						break;
 					case "think":
 						if (IsDecider)

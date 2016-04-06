@@ -10,6 +10,8 @@ namespace Templates {
 			return new TemplateSettings ("next_button") {
 				TopBarColor = Palette.LtTeal,
 				TopBarHeight = TemplateSettings.ShortBar,
+				BottomBarHeight = TemplateSettings.MediumBar,
+				BottomBarColor = Palette.LtTeal,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
 				CoinsEnabled = true,

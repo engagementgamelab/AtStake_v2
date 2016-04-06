@@ -12,6 +12,7 @@ namespace Templates {
 			return new TemplateSettings ("next_button") {
 				TopBarColor = Palette.Orange,
 				TopBarHeight = TemplateSettings.ShortBar,
+				BottomBarHeight = TemplateSettings.MediumBar,
 				BackgroundColor = Palette.White,
 				TextStyles = new Dictionary<string, TextStyle> () {
 					{ "score_list", TextStyle.Paragraph }

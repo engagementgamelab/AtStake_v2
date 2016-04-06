@@ -7,7 +7,7 @@ namespace Templates {
 	public class Roles : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("bottom_button|next") {
+			return new TemplateSettings ("bottom_button|play") {
 				TopBarHeight = TemplateSettings.TallBar,
 				TopBarColor = Palette.Pink,
 				BackgroundColor = Palette.White,
@@ -30,7 +30,7 @@ namespace Templates {
 
 		protected override void OnLoadView () {
 			RoleList.Visible = false;
-			Elements["next"].Visible = false;
+			Elements["play"].Visible = false;
 		}
 
 		protected override void OnUnloadView () {
@@ -67,7 +67,7 @@ namespace Templates {
 				}
 				roleCounter ++;
 			}, () => {
-				Elements["next"].Visible = true;
+				Elements["play"].Visible = true;
 			});
 		}
 	}

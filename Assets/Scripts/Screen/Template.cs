@@ -75,9 +75,8 @@ namespace Templates {
 		}
 
 		public void InputEnabled () {
-			foreach (var element in LoadedElements) {
+			foreach (var element in LoadedElements)
 				element.Value.InputEnabled ();
-			}
 			OnInputEnabled ();
 		}
 		
@@ -133,7 +132,7 @@ namespace Templates {
 			#if UNITY_EDITOR
 			foreach (var element in data) {
 				string k = element.Key;
-				if (k == "back" || k == "pot" || k == "coins")
+				if (IsOverlayElement (k))
 					continue;
 				if (!Elements.ContainsKey (k)) {
 					Debug.LogWarning ("The template '" + this + "' does not contain a screen element with the id '" + k + "' so it will not be rendererd");
@@ -161,7 +160,7 @@ namespace Templates {
 		}
 
 		bool IsOverlayElement (string id) {
-			return id == "coins" || id == "pot" || id == "back";
+			return id == "coins" || id == "pot" || id == "back" || id == "next";
 		}
 
 		protected abstract TemplateSettings LoadSettings ();

@@ -12,10 +12,11 @@ namespace Templates {
 		public Image backgroundImage;
 		public Image topBar;
 		public Image bottomBar;
+		public ButtonElementUI nextButton;
 
-		public BackButtonElementUI backButton;
-		public PotElementUI pot;
-		public CoinsElementUI coins;
+		BackButtonElementUI backButton;
+		PotElementUI pot;
+		CoinsElementUI coins;
 
 		public Template[] templates;
 
@@ -28,6 +29,7 @@ namespace Templates {
 				if (overlayElements == null) {
 					overlayElements = new Dictionary<string, ScreenElementUI> ();
 					overlayElements.Add ("back", backButton);
+					overlayElements.Add ("next", nextButton);
 					overlayElements.Add ("pot", pot);
 					overlayElements.Add ("coins", coins);
 				}
@@ -59,15 +61,19 @@ namespace Templates {
 			c.RectTransform.localScale = Vector3.one;
 			c.RectTransform.anchoredPosition = Vector2.zero;
 			c.RectTransform.sizeDelta = Vector2.zero;
-			c.backButton = myContainer.backButton;
-			c.pot = myContainer.pot;
-			c.coins = myContainer.coins;
+			c.InitOverlayElements (myContainer);
 
 			// All templates should be deactivated to start
 			foreach (Template template in c.templates)
 				template.gameObject.SetActive (false);
 
 			return c;
+		}
+
+		public void InitOverlayElements (TemplatesContainer myContainer) {
+			backButton = myContainer.backButton;
+			pot = myContainer.pot;
+			coins = myContainer.coins;
 		}
 
 		public void LoadView (string id, View view) {

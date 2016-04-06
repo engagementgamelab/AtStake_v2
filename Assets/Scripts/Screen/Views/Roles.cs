@@ -14,7 +14,7 @@ namespace Views {
 		ListElement<AvatarElement> roleList;
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("next", new NextButtonElement ("pot"));
+			Elements.Add ("play", new NextButtonElement ("pot"));
 		}
 
 		protected override void OnInitElements () {
