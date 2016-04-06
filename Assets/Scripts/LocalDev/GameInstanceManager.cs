@@ -133,6 +133,14 @@ public class GameInstanceManager : MonoBehaviour {
 						// Once the data has loaded, send all players to the supplied view
 						Co.YieldWhileTrue (() => { return instances.Find (x => !x.Controller.DataLoaded) != null; }, () => {
 
+							// If the view happens at or after the winner screen, choose a winner
+							if (!beforeWinner) {
+								string winner = System.Array.Find (instances[0].Controller.Roles, x => x.Title != "Decider").PlayerName;
+								for (int i = 0; i < instances.Count; i ++) {
+									instances[i].Controller.SetWinner (winner);
+								}
+							}
+
 							instances[0].Views.AllGoto (id);
 
 							// If the view comes after the pot screen, set the scores
@@ -140,14 +148,6 @@ public class GameInstanceManager : MonoBehaviour {
 								for (int i = 0; i < instances.Count; i ++) {
 									instances[i].Score.FillPot ();
 									instances[i].Score.AddRoundStartScores ();
-								}
-							}
-
-							// If the view happens at or after the winner screen, choose a winner
-							if (!beforeWinner) {
-								string winner = System.Array.Find (instances[0].Controller.Roles, x => x.Title != "Decider").PlayerName;
-								for (int i = 0; i < instances.Count; i ++) {
-									instances[i].Controller.SetWinner (winner);
 								}
 							}
 						});
