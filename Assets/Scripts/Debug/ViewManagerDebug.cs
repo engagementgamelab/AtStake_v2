@@ -5,12 +5,10 @@ using Views;
 
 public class ViewManagerDebug : MonoBehaviour {
 
-	#if SHOW_DEBUG_INFO
 	ViewManager views;
 	public Text current;
 	public Text previous;
 	public Text inputText;
-	#endif
 
 	public void Init (ViewManager views) {
 		#if SHOW_DEBUG_INFO

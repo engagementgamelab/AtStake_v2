@@ -30,8 +30,14 @@ namespace Templates {
 		}
 
 		protected override void OnLoadView () {
+
 			Elements["next"].Visible = false;
-			Elements["decider_instructions"].Visible = false;
+
+			TextElementUI instructions;
+			if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+				instructions.Visible = false;
+			}
+
 			foreach (TextElementUI t in Scores.ChildElements)
 				t.Visible = false;
 		}
@@ -51,7 +57,10 @@ namespace Templates {
 				counter --;
 			}, () => {
 				Elements["next"].Visible = true;
-				Elements["decider_instructions"].Visible = true;
+				TextElementUI instructions;
+				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+					instructions.Visible = true;
+				}
 			});
 		}
 

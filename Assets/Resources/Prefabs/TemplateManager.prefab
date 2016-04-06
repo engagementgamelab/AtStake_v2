@@ -2555,7 +2555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 12
-    m_Right: 0
+    m_Right: 12
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
@@ -2890,6 +2890,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061571c2fafa742dfa439d6c59c0cbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current: {fileID: 11479640}
+  previous: {fileID: 11475374}
+  inputText: {fileID: 11421216}
 --- !u!114 &11481396
 MonoBehaviour:
   m_ObjectHideFlags: 1

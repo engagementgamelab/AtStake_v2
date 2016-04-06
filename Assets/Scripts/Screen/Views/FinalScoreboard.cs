@@ -10,7 +10,7 @@ namespace Views {
 		protected override void OnInitElements () {
 			Elements.Add ("scores", new TextElement (Model.Text["scores"]));
 			DisplayScores ();
-			Elements.Add ("menu", new ButtonElement (Model.Buttons["menu"], () => { 
+			Elements.Add ("next", new ButtonElement (Model.Buttons["menu"], () => { 
 				Game.EndGame ();
 				GotoView ("start"); 
 			}));

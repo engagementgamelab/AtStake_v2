@@ -37,7 +37,7 @@ public class GameController : GameInstanceBehaviour {
 	/// </summary>
 	public PlayerRole Role {
 		get { 
-			if (!DataLoaded)
+			if (!DataLoaded || GameOver)
 				return null;
 			try {
 				return System.Array.Find (Roles, x => x.PlayerName == Game.Name); 
@@ -218,6 +218,12 @@ public class GameController : GameInstanceBehaviour {
 
 	// -- Private properties
 
+	bool GameOver {
+		get { 
+			Debug.Log (roundItr.Position + " ... " + instance.Rounds.Length);
+			return roundItr.Position == instance.Rounds.Length; }
+	}
+
 	List<string> PlayerNames {
 		get { return Players.ToList ().ConvertAll (x => x.Name); }
 	}
@@ -286,9 +292,6 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	public bool NextAgendaItem () {
-		Debug.Log (CurrentRound);
-		if (CurrentRound == null)
-			return false;
 		agendaItemItr.Next ();
 		return agendaItemItr.Position <= CurrentRound.AgendaItemOrder.Length-1;
 	}
