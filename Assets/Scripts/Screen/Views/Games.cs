@@ -31,7 +31,7 @@ namespace Views {
 				} else {
 					GetScreenElement<TextElement> ("searching").Text = GetText ("searching");
 					list.Set (hosts);
-					Elements["searching"].Active = list.Count == 0;
+					Elements["searching"].Active = hosts.Count == 0;
 				}
 			});
 		}

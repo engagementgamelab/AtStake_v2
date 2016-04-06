@@ -10,7 +10,7 @@ namespace Templates {
 			return new TemplateSettings ("orange_button|confirm", "blue_button|peer_list") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
-				BottomBarHeight = TemplateSettings.TallBar,
+				BottomBarHeight = TemplateSettings.MediumBar,
 				BottomBarColor = Palette.LtTeal,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,

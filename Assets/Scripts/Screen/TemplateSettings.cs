@@ -7,7 +7,8 @@ public class TemplateSettings {
 	// -- Top & bottom bars
 
 	public const float TallBar = 92;
-	public const float ShortBar = 24;
+	public const float MediumBar = 72;
+	public const float ShortBar = 28;
 
 	public float TopBarHeight { get; set; }
 	public float BottomBarHeight { get; set; }

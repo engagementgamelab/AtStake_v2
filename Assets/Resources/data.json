@@ -304,7 +304,7 @@
       "Symbol": "games",
       "ClientInstructions": "Choose a game to join. There may be multiple games in your area, so be sure to join the right one!",
       "Text": {
-        "searching": "Searching for games...",
+        "searching": "Searching for games",
         "error": "Could not connect to server - is your WIFI on?"
       },
       "Buttons": {

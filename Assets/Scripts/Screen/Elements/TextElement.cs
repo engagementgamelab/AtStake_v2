@@ -7,8 +7,10 @@ public class TextElement : ScreenElement {
 	public string Text {
 		get { return text; }
 		set {
-			text = value;
-			SendUpdateMessage ();
+			if (text != value) {
+				text = value;
+				SendUpdateMessage ();
+			}
 		}
 	}
 

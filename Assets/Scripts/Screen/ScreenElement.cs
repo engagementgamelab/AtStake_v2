@@ -8,8 +8,10 @@ public abstract class ScreenElement : GameInstanceComponent {
 	public bool Active {
 		get { return active; }
 		set { 
-			active = value;
-			SendUpdateMessage ();
+			if (active != value) {
+				active = value;
+				SendUpdateMessage ();
+			}
 		}
 	}
 

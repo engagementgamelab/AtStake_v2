@@ -31,11 +31,6 @@ public class GameTest : GameInstanceBehaviour {
 		if (!Hosting)
 			return;
 
-		/*if (!Hosting) {
-			Debug.LogWarning ("Only the host can start the test");
-			return;
-		}*/
-
 		if (Game.Views.CurrView != "lobby") {
 			Debug.LogWarning ("Test must begin in the lobby");
 			return;
