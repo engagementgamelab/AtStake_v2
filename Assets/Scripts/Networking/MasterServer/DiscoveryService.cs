@@ -122,7 +122,6 @@ public class DiscoveryService : MonoBehaviour {
 		if (Listener == null || !Listener.onUpdateHostsDelegates.ContainsKey (multiplayer))
 			return;
 
-		// Listener.onUpdateHostsDelegates[multiplayer] (new Dictionary<string, string> ());
 		Listener.onUpdateHostsDelegates.Remove (multiplayer);
 		if (Listener.onUpdateHostsDelegates.Count == 0)
 			Listener.listening = false;
