@@ -95,7 +95,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		#endif
 	}
 
-	public void RemoveAllListeners () {
+	public void Reset () {
 		listeners.Clear ();
 		#if SHOW_DEBUG_INFO
 		if (onUpdateListeners != null)

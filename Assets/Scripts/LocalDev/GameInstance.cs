@@ -64,7 +64,7 @@ public class GameInstance : MonoBehaviour {
 	void OnDisconnect () {
 		Views.OnDisconnect ();
 		Multiplayer.onDisconnected -= OnDisconnect;
-		Dispatcher.RemoveAllListeners ();
+		Dispatcher.Reset ();
 		Controller.Reset ();
 		Decks.Reset ();
 		Manager.Reset ();

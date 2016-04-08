@@ -51,33 +51,34 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	Dictionary<string, string> hosts;
 	List<string> clients = new List<string> ();
-	System.Action<string> clientRegisterResponse;
+	// System.Action<string> clientRegisterResponse;
 	bool connected = false;
 	AvatarsManager avatars;
 
+	NetManager net = new NetManager ();
+
 	void OnEnable () {
-
-
+		
 		// debugging messages
-		server.onServerMessage += SendLogMessage;
-		client.onClientMessage += SendLogMessage;
+		/*server.onServerMessage += SendLogMessage;
+		client.onClientMessage += SendLogMessage;*/
 
 		// events
-		client.callbacks.AddListener ("disconnected", OnDisconnect);
+		/*client.callbacks.AddListener ("disconnected", OnDisconnect);
 		client.onRegisteredClient += OnRegisteredClient;
 		client.onUnregisteredClient += OnUnregisteredClient;
 		client.onReceiveMessageFromHost += ReceiveMessageFromHost;
-		client.onReceiveMessageFromClient += ReceiveMessageFromClient;
+		client.onReceiveMessageFromClient += ReceiveMessageFromClient;*/
 	}
 
 	public void HostGame () {
 
-		#if SINGLE_SCREEN
+		/*#if SINGLE_SCREEN
 		if (UnityEngine.Networking.NetworkServer.active) {
 			Debug.LogWarning ("Only one host is allowed in Single Screen mode.");
 			return;
 		}
-		#endif
+		#endif*/
 
 		// Set this player as the host
 		Host = Game.Name;
@@ -89,21 +90,29 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);
 
+		net.StartAsHost (Host, (bool connected) => {
+			// TODO: don't connect if name_taken
+			Debug.Log (connected);
+		});
 		// Start the server
-		server.Initialize ();
+		// server.Initialize ();
 
 		// Start the client and connect to the server as the host
 		// Use the discovery service to broadcast this game
-		client.StartAsHost (Host, () => {
+		/*client.StartAsHost (Host, () => {
 			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
-		});
+		});*/
 	}
 
 	public void RequestHostList (System.Action<List<string>> callback) {
-		DiscoveryService.StartListening (this, (Dictionary<string, string> hosts) => {
+		net.RequestRoomList ((Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
 		});
+		/*DiscoveryService.StartListening (this, (Dictionary<string, string> hosts) => {
+			this.hosts = hosts;
+			callback (new List<string> (hosts.Keys));
+		});*/
 	}
 
 	public void JoinGame (string hostName, System.Action<string> response) {
@@ -111,25 +120,27 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// Set the host
 		Host = hostName;
 
+		net.StartAsClient (hosts[Host], Game.Name, response);
+
 		// Setup response callback
-		clientRegisterResponse += response;
+		// clientRegisterResponse += response;
 
 		// Start the client and request to join the host's game
 		// Stop the discovery service from listening for games to join
-		client.StartAsClient (Game.Name, hosts[Host], () => {
+		/*client.StartAsClient (Game.Name, hosts[Host], () => {
 			DiscoveryService.StopListening (this);
-		});
+		});*/
 	}
 
 	public void JoinGame (string ipAddress) {
-		client.StartAsClient (Game.Name, ipAddress, () => {
+		/*client.StartAsClient (Game.Name, ipAddress, () => {
 			Debug.Log ("joined");
-		});
+		});*/
 	}
 
 	public void GameStarted () {
-		DiscoveryService.StopBroadcasting ();
-		DiscoveryService.StopListening (this);
+		// DiscoveryService.StopBroadcasting ();
+		// DiscoveryService.StopListening (this);
 	}
 
 	// Intentional disconnect (player chose to terminate their connection)
@@ -137,15 +148,15 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
 		if (Hosting) {
-			DiscoveryService.StopBroadcasting ();
+			/*DiscoveryService.StopBroadcasting ();
 			client.UnregisterHost (Host, () => {
 				Co.WaitForFixedUpdate (() => {
 					server.Reset ();
 				});
-			});
+			});*/
 		} else {
-			DiscoveryService.StopListening (this);
-			client.UnregisterClient ();
+			/*DiscoveryService.StopListening (this);
+			client.UnregisterClient ();*/
 			OnDisconnect ();
 		}
 	}
@@ -178,9 +189,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	void UpdateBroadcast () {
 		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
 		if (Clients.Count+1 < maxPlayerCount) {
-			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
+			// DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
 		} else {
-			DiscoveryService.StopBroadcasting ();
+			// DiscoveryService.StopBroadcasting ();
 		}
 	}
 
@@ -189,27 +200,27 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Client sends message to host so that host can relay it to all clients
-		client.SendMessageToHost (msg);
+		// client.SendMessageToHost (msg);
 	}
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
 
 		// Host receives message from client so that it can relay it to all other clients
-		Game.Dispatcher.ReceiveMessageFromClient (msg);
+		// Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
 		// Host sends message to all clients
-		client.SendMessageToClients (msg);
+		// client.SendMessageToClients (msg);
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Clients receive message from host
-		if (!Hosting) {
+		/*if (!Hosting) {
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
-		}
+		}*/
 	}
 
 	// -- Events
@@ -217,11 +228,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// Intentional & unintentional disconnect
 	void OnDisconnect () {
 		if (Hosting) {
-			DiscoveryService.StopBroadcasting ();
+			// DiscoveryService.StopBroadcasting ();
 			Clients.Clear ();
 			Hosting = false;
 		} else {
-			DiscoveryService.StopListening (this);
+			// DiscoveryService.StopListening (this);
 		}
 		Host = "";
 		Connected = false;
@@ -247,9 +258,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				break;
 		}
 
-		if (thisClient) {
+		/*if (thisClient) {
 			SendClientRegisterResponse (keyword);
-		}
+		}*/
 	}
 
 	void OnUnregisteredClient (string clientName) {
@@ -258,12 +269,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	void SendClientRegisterResponse (string response) {
+	/*void SendClientRegisterResponse (string response) {
 		if (clientRegisterResponse != null) {
 			clientRegisterResponse (response);
 			clientRegisterResponse = null;
 		}
-	}
+	}*/
 
 	void OnBroadcastError () {
 		DisconnectedWithError = true;
