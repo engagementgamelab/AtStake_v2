@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -92,7 +93,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		net.StartAsHost (Host, (bool connected) => {
 			// TODO: don't connect if name_taken
-			Debug.Log (connected);
+			Debug.Log ("Connected ? " + connected);
+			if (connected) {
+				net.ListenForClients (OnUpdateClients);
+				net.ReceiveMessage (ReceiveMessageFromClient);
+			}
 		});
 		// Start the server
 		// server.Initialize ();
@@ -104,7 +109,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		});*/
 	}
 
-	public void RequestHostList (System.Action<List<string>> callback) {
+	public void RequestHostList (Action<List<string>> callback) {
 		net.RequestRoomList ((Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
@@ -115,12 +120,18 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		});*/
 	}
 
-	public void JoinGame (string hostName, System.Action<string> response) {
+	public void JoinGame (string hostName, Action<string> response) {
 
 		// Set the host
 		Host = hostName;
 
-		net.StartAsClient (hosts[Host], Game.Name, response);
+		net.StartAsClient (hosts[Host], Game.Name, (string res) => {
+			if (res != "room_full" && res != "name_taken") {
+				Connected = true;
+				net.ReceiveMessage (ReceiveMessageFromHost);
+			}
+			response (res);
+		});
 
 		// Setup response callback
 		// clientRegisterResponse += response;
@@ -147,18 +158,20 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// This will stop the discovery service
 	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
-		if (Hosting) {
-			/*DiscoveryService.StopBroadcasting ();
+		net.Stop ();
+		OnDisconnect ();
+		/*if (Hosting) {
+			DiscoveryService.StopBroadcasting ();
 			client.UnregisterHost (Host, () => {
 				Co.WaitForFixedUpdate (() => {
 					server.Reset ();
 				});
-			});*/
+			});
 		} else {
-			/*DiscoveryService.StopListening (this);
-			client.UnregisterClient ();*/
+			DiscoveryService.StopListening (this);
+			client.UnregisterClient ();
 			OnDisconnect ();
-		}
+		}*/
 	}
 
 	// -- Client handling
@@ -171,14 +184,14 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	void AddClient (string clientName) {
 		Clients.Add (clientName);
 		avatars.AddPlayer (clientName);
-		UpdateBroadcast ();
+		// UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
 	void RemoveClient (string clientName) {
 		Clients.Remove (clientName);
 		avatars.RemovePlayer (clientName);
-		UpdateBroadcast ();
+		// UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
@@ -186,14 +199,14 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", avatars.GetPlayers ());
 	}
 
-	void UpdateBroadcast () {
+	/*void UpdateBroadcast () {
 		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
 		if (Clients.Count+1 < maxPlayerCount) {
-			// DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
+			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
 		} else {
-			// DiscoveryService.StopBroadcasting ();
+			DiscoveryService.StopBroadcasting ();
 		}
-	}
+	}*/
 
 	// -- Messaging
 
@@ -201,18 +214,20 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		// Client sends message to host so that host can relay it to all clients
 		// client.SendMessageToHost (msg);
+		net.SendMessage (msg);
 	}
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
 
 		// Host receives message from client so that it can relay it to all other clients
-		// Game.Dispatcher.ReceiveMessageFromClient (msg);
+		Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
 		// Host sends message to all clients
 		// client.SendMessageToClients (msg);
+		net.SendMessage (msg);
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
@@ -221,6 +236,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		/*if (!Hosting) {
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
 		}*/
+		if (!Hosting)
+			Game.Dispatcher.ReceiveMessageFromHost (msg);
 	}
 
 	// -- Events
@@ -240,6 +257,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			onDisconnected ();
 	}
 
+	// deprecate
 	void OnRegisteredClient (int resultCode, string clientName) {
 		
 		bool thisClient = clientName == Game.Name;
@@ -258,14 +276,31 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				break;
 		}
 
-		/*if (thisClient) {
-			SendClientRegisterResponse (keyword);
-		}*/
+		if (thisClient) {
+			// SendClientRegisterResponse (keyword);
+		}
 	}
 
+	// deprecate
 	void OnUnregisteredClient (string clientName) {
 		if (Hosting) {
 			RemoveClient (clientName);
+		}
+	}
+
+	void OnUpdateClients (string[] regClients) {
+
+		// Add new clients
+		foreach (string client in regClients) {
+			if (!Clients.Contains (client))
+				AddClient (client);
+		}
+
+		// Remove old clients
+		List<string> tempClients = new List<string> (Clients);
+		foreach (string client in tempClients) {
+			if (Array.FindIndex (regClients, (string c) => { return c.Equals (client); }) == -1)
+				RemoveClient (client);
 		}
 	}
 

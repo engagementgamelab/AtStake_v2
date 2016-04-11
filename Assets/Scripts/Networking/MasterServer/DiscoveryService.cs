@@ -62,19 +62,19 @@ public class DiscoveryService : MonoBehaviour {
 		Broadcaster.broadcasting = true;
 
 		Co.InvokeWhileTrue (0.5f, () => { return Broadcaster.broadcasting; }, () => {
-			Co.WWW (Broadcaster.MasterAddress + "/addHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
+			/*Co.WWW (Broadcaster.MasterAddress + "/addHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
 				if (www.error != null) {
 					onError ();
 					#if UNITY_EDITOR
 					Debug.Log (www.error);
 					#endif
 				}
-			});
+			});*/
 		}, () => {
-			Co.WWW (Broadcaster.MasterAddress + "/removeHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
+			/*Co.WWW (Broadcaster.MasterAddress + "/removeHost/" + Broadcaster.hostName + "/" + Broadcaster.ipAddress, (WWW www) => {
 				ObjectPool.Destroy<DiscoveryService> (Broadcaster);
 				Broadcaster = null;
-			});
+			});*/
 		});
 	}
 
@@ -99,7 +99,7 @@ public class DiscoveryService : MonoBehaviour {
 		Listener.listening = true;
 
 		Co.InvokeWhileTrue (0.5f, () => { return Listener.listening; }, () => {
-			Co.WWW (Listener.MasterAddress + "/hosts", (WWW www) => {
+			/*Co.WWW (Listener.MasterAddress + "/hosts", (WWW www) => {
 				if (www.error != null) {
 					Listener.received = HostsData.ErrorData;
 					#if UNITY_EDITOR
@@ -110,7 +110,7 @@ public class DiscoveryService : MonoBehaviour {
 						Listener.received = JsonReader.Deserialize<HostsData> (www.text);
 				}
 				Listener.SendUpdateHostsMessage ();
-			});
+			});*/
 		}, () => {
 			ObjectPool.Destroy<DiscoveryService> (Listener);
 			Listener = null;

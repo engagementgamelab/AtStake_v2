@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,19 +19,57 @@ public class NetManager {
 		#endif
 	}
 
-	bool connected = false;
 	const float timeout = 3f;
-
-	ResponseData.Room room;
 	ResponseData.RoomList roomList;
+
+	struct ConnectionInfo {
+		
+		public ResponseData.Room room;
+		public string name;
+
+		public bool Connected {
+			get { return room == null; }
+		}
+
+		public bool Hosting {
+			get { return room.host.name == name; }
+		}
+
+		public string ClientId {
+			get { 
+				string n = name;
+				ResponseData.Client myClient = Array.Find (room.clients, x => x.name == n);
+				if (myClient == null)
+					myClient = room.host;
+				return myClient._id; 
+			}
+		}
+
+		public string RoomId {
+			get { return room._id; }
+		}
+
+		public void Connect (ResponseData.Room connectRoom, string connectName) {
+			room = connectRoom;
+			name = connectName;
+		}
+
+		public void Reset () {
+			room = null;
+			name = "";
+		}
+	}
+
+	ConnectionInfo connection;
+
+	// -- Public API
 
 	public void StartAsHost (string name, Action<bool> connected) {
 
-		room = null;
 		string maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1].ToString ();
 
 		Request<ResponseData.Room> ((ResponseData.Room res) => {
-			room = res;
+			connection.Connect (res, name);
 			connected (true);
 		}, (string err) => {
 			connected (false);
@@ -50,20 +89,116 @@ public class NetManager {
 
 	public void StartAsClient (string roomId, string name, Action<string> result) {
 
-		room = null;
-
 		Request<ResponseData.Room> ((ResponseData.Room res) => {
-			room = res;
+			connection.Connect (res, name);
 			result ("registered");
 		}, (string err) => {
 			result (err);
 		}, "registerClient", roomId, name, IpAddress);
 	}
 
+	public void ListenForClients (Action<string[]> clients) {
+
+		#if UNITY_EDITOR
+		if (connection.Connected)
+			throw new Exception ("The method ListenForClients requires that the device be connected to a room as the host");
+		#endif
+
+		RepeatRequest<ResponseData.Room> ((ResponseData.Room res) => {
+			 clients (Array.ConvertAll (res.clients, x => x.name));
+		}, (string err) => {
+			Debug.LogError (err);
+		}, "getRoom", connection.RoomId);
+	}
+
+	public void Stop () {
+
+		#if UNITY_EDITOR
+		if (connection.Connected) {
+			Debug.LogWarning ("Client cannot be unregistered because it is not connected to the server");
+			return;
+		}
+		#endif
+
+		string[] path = connection.Hosting
+			? new string[] { "unregisterHost", connection.RoomId }
+			: new string[] { "unregisterClient", connection.RoomId, connection.ClientId };
+
+		connection.Reset ();
+
+		Request ((ResponseData.Base res) => {
+			Debug.Log ("successful disconnect!");
+		}, (string err) => {
+			Debug.LogError (err);
+		}, path);
+	}
+
+	// TODO: clean this up
+	WWWForm form;
+
+	public void SendMessage (MasterMsgTypes.GenericMessage msg) {
+
+		string str1 = msg.str1;
+		if (str1 == "")
+			str1 = "_";
+		string str2 = msg.str2;
+		if (str2 == "")
+			str2 = "_";
+		string val = msg.val.ToString ();
+
+		Request ((ResponseData.Base res) => {
+			Debug.Log ("sent message " + msg.id);
+		}, (string err) => {
+			Debug.LogError (err);
+		}, "sendMessage", connection.RoomId, connection.ClientId, msg.id, str1, str2, val);
+
+		/*form = new WWWForm ();
+		form.AddField ("key", msg.id);
+		form.AddField ("str1", msg.str1);
+		form.AddField ("str2", msg.str2);
+		form.AddField ("val", msg.val);
+		if (msg.bytes != null)
+			form.AddBinaryData ("bytes", msg.bytes);
+
+		Co.StartCoroutine (CoSendForm);*/
+	}
+
+	/*IEnumerator CoSendForm () {
+		
+		WWW www = new WWW (BuildAddress ("sendMessage", connection.RoomId, connection.ClientId), form);
+		yield return www;
+		if (!string.IsNullOrEmpty (www.error))
+			Debug.LogError (www.error);
+		else
+			Debug.Log ("sent form :)");
+	}*/
+
+	public void ReceiveMessage (Action<MasterMsgTypes.GenericMessage> onReceiveMessage) {
+		RepeatRequest ((ResponseData.Message res) => {
+			if (res.result != "no_messages" && res.key != null) {
+				onReceiveMessage (MasterMsgTypes.GenericMessage.Create (
+					res.key,
+					res.str1 == "_" ? "" : res.str1,
+					res.str2 == "_" ? "" : res.str2,
+					res.val)
+				);
+			}
+		}, (string err) => {
+			Debug.LogError (err);
+		}, "receiveMessage", connection.RoomId, connection.ClientId);
+	}
+
+	// -- Private methods
+
+	void Request (Action<ResponseData.Base> response, Action<string> error, params string[] path) {
+		Request<ResponseData.Base> (response, error, path);
+	}
+
 	void Request<T> (Action<T> response, Action<string> error, params string[] path) where T : ResponseData.Base {
 
 		Co.WWW (BuildAddress (path), timeout, (WWW www) => {
 
+			// T res = JsonReader.Deserialize<T> (www.downloadHandler.text);
 			T res = JsonReader.Deserialize<T> (www.text);
 			if (res.error != null && res.error != "")
 				error (res.error);
@@ -73,6 +208,18 @@ public class NetManager {
 		}, (string err) => {
 			error (err);
 		});
+	}
+
+	void RepeatRequest<T> (Action<T> response, Action<string> onError, params string[] path) where T : ResponseData.Base {
+
+		// Stop the loop if the client is no longer connected to the room
+		if (connection.Connected)
+			return;
+
+		Request<T> ((T t) => {
+			response (t);
+			RepeatRequest (response, onError, path);
+		}, onError, path);
 	}
 
 	void EstablishConnection (Action<bool> callback) {
@@ -93,6 +240,7 @@ public class ResponseData {
 
 	public class Base {
 		public string error { get; set; }
+		public string result { get; set; }
 	}
 
 	public class Room : Base {
@@ -119,7 +267,12 @@ public class ResponseData {
 		}
 	}
 
+	public class ClientList : Base {
+		public Client[] clients { get; set; }
+	}
+
 	public class Client : Base {
+		public string _id { get; set; }
 		public string name { get; set; }
 		public string address { get; set; }
 	}
