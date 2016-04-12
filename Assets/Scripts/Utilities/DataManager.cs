@@ -35,6 +35,12 @@ public class DataManager {
         }
     }
 
+    public static string SocketAddress {
+        get {
+            return currentConfig.socket;
+        }
+    }
+
     /// <summary>
     /// Set to production mode.
     /// </summary>

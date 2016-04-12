@@ -97,6 +97,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);
 
+		net2.Register (Game.Name);
+
 		// NetManager
 		/*net.StartAsHost (Host, (bool connected) => {
 			// TODO: don't connect if name_taken

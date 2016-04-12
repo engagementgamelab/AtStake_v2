@@ -35,18 +35,17 @@ namespace SocketIO
 		public int packetId;
 		public DateTime time;
 
-		private System.Action<JSONObject> action;
+		private System.Action<string> action;
 
-		public Ack(int packetId, System.Action<JSONObject> action)
+		public Ack (int packetId, System.Action<string> action)
 		{
 			this.packetId = packetId;
 			this.time = DateTime.Now;
 			this.action = action;
 		}
-
-		public void Invoke(JSONObject ev)
-		{
-			action.Invoke(ev);
+		
+		public void Invoke(string raw) {
+			action.Invoke(raw);
 		}
 
 		public override string ToString()

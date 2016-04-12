@@ -24,6 +24,7 @@ namespace Models {
         public string root { get; set; }
         public string authKey { get; set; }
         public string master { get; set; }
+        public string socket { get; set; }
 
     }
 

@@ -35,6 +35,7 @@ using System.Threading;
 using UnityEngine;
 using WebSocketSharp;
 using WebSocketSharp.Net;
+using JsonFx.Json;
 
 namespace SocketIO
 {
@@ -42,7 +43,6 @@ namespace SocketIO
 	{
 		#region Public Properties
 
-		public string url = "ws://127.0.0.1:4567/socket.io/?EIO=3&transport=websocket";
 		public int reconnectDelay = 5;
 		public float ackExpirationTime = 30f;
 		public float pingInterval = 25f;
@@ -55,6 +55,8 @@ namespace SocketIO
 		#endregion
 
 		#region Private Properties
+
+		private string url = "ws://127.0.0.1:4567/socket.io/?EIO=3&transport=websocket";
 
 		private volatile bool connected;
 		private volatile bool thPinging;
@@ -90,6 +92,9 @@ namespace SocketIO
 
 		public void OnEnable ()
 		{
+
+			url = DataManager.SocketAddress;
+
 			encoder = new Encoder();
 			decoder = new Decoder();
 			parser = new Parser();
@@ -116,8 +121,6 @@ namespace SocketIO
 			#if SOCKET_IO_DEBUG
 			if(debugMethod == null) { debugMethod = Debug.Log; };
 			#endif
-
-			Connect(); 
 		}
 
 		public void Update()
@@ -221,10 +224,12 @@ namespace SocketIO
 			EmitMessage(-1, string.Format("[\"{0}\"]", ev));
 		}
 
-		public void Emit(string ev, Action<JSONObject> action)
+		public void Emit<T> (string ev, Action<T> action) where T : class
 		{
 			EmitMessage(++packetId, string.Format("[\"{0}\"]", ev));
-			ackList.Add(new Ack(packetId, action));
+			ackList.Add(new Ack(packetId, (string s) => {
+				action (JsonReader.Deserialize<T> (s));
+			}));
 		}
 
 		public void Emit(string ev, string str)
@@ -237,10 +242,21 @@ namespace SocketIO
 			EmitMessage(-1, string.Format("[\"{0}\",{1}]", ev, data));
 		}
 
-		public void Emit(string ev, JSONObject data, Action<JSONObject> action)
+		public void Emit<T> (string ev, string str, Action<T> action) where T : class
+		{
+			
+			EmitMessage(++packetId, string.Format("[\"{0}\", \"{1}\"]", ev, str));
+			ackList.Add(new Ack(packetId, (string s) => {
+				action (JsonReader.Deserialize<T> (s));
+			}));
+		}
+
+		public void Emit<T> (string ev, JSONObject data, Action<T> action) where T : class
 		{
 			EmitMessage(++packetId, string.Format("[\"{0}\",{1}]", ev, data));
-			ackList.Add(new Ack(packetId, action));
+			ackList.Add(new Ack(packetId, (string s) => {
+				action (JsonReader.Deserialize<T> (s));
+			}));
 		}
 
 		#endregion
@@ -418,7 +434,7 @@ namespace SocketIO
 				if(ackList[i].packetId != packet.id){ continue; }
 				ack = ackList[i];
 				ackList.RemoveAt(i);
-				ack.Invoke(packet.json);
+				ack.Invoke(packet.RawJson);
 				return;
 			}
 		}

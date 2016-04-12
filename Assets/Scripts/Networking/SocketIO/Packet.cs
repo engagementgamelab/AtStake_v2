@@ -37,6 +37,13 @@ namespace SocketIO
 		public string nsp;
 		public int id;
 		public JSONObject json;
+		
+		public string RawJson {
+			get { 
+				string str = json.Print ();
+				return str.Substring(1, str.Length-2); 
+			}
+		}
 
 		public Packet() : this(EnginePacketType.UNKNOWN, SocketPacketType.UNKNOWN, -1, "/", -1, null) { }
 		public Packet(EnginePacketType enginePacketType) : this(enginePacketType, SocketPacketType.UNKNOWN, -1, "/", -1, null) { }
