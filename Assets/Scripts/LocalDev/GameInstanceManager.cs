@@ -78,7 +78,6 @@ public class GameInstanceManager : MonoBehaviour {
 			instances[0].Views.Goto (id);
 			for (int i = 1; i < 3; i ++) {
 				AddPlayer ();
-				GameInstance gi = instances[i];
 				instances[i].Views.Goto (id);
 			}
 			return;

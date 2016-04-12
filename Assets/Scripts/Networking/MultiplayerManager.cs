@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SocketIO;
 
 public class MultiplayerManager : GameInstanceBehaviour {
 
@@ -57,9 +58,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	AvatarsManager avatars;
 
 	NetManager net = new NetManager ();
+	NetManager2 net2;
 
 	void OnEnable () {
+
+		net2 = new NetManager2 (gameObject.AddComponent<SocketIOComponent> ());
 		
+		// MasterServer
 		// debugging messages
 		/*server.onServerMessage += SendLogMessage;
 		client.onClientMessage += SendLogMessage;*/
@@ -74,6 +79,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public void HostGame () {
 
+		// MasterServer
 		/*#if SINGLE_SCREEN
 		if (UnityEngine.Networking.NetworkServer.active) {
 			Debug.LogWarning ("Only one host is allowed in Single Screen mode.");
@@ -91,14 +97,17 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);
 
-		net.StartAsHost (Host, (bool connected) => {
+		// NetManager
+		/*net.StartAsHost (Host, (bool connected) => {
 			// TODO: don't connect if name_taken
 			Debug.Log ("Connected ? " + connected);
 			if (connected) {
 				net.ListenForClients (OnUpdateClients);
 				net.ReceiveMessage (ReceiveMessageFromClient);
 			}
-		});
+		});*/
+
+		// MasterServer
 		// Start the server
 		// server.Initialize ();
 
@@ -110,10 +119,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void RequestHostList (Action<List<string>> callback) {
-		net.RequestRoomList ((Dictionary<string, string> hosts) => {
+		// NetManager
+		/*net.RequestRoomList ((Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
-		});
+		});*/
+
+		// MasterServer
 		/*DiscoveryService.StartListening (this, (Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
 			callback (new List<string> (hosts.Keys));
@@ -125,14 +137,16 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		// Set the host
 		Host = hostName;
 
-		net.StartAsClient (hosts[Host], Game.Name, (string res) => {
+		// NetManager
+		/*net.StartAsClient (hosts[Host], Game.Name, (string res) => {
 			if (res != "room_full" && res != "name_taken") {
 				Connected = true;
 				net.ReceiveMessage (ReceiveMessageFromHost);
 			}
 			response (res);
-		});
+		});*/
 
+		// MasterServer
 		// Setup response callback
 		// clientRegisterResponse += response;
 
@@ -144,12 +158,14 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void JoinGame (string ipAddress) {
+		// MasterServer
 		/*client.StartAsClient (Game.Name, ipAddress, () => {
 			Debug.Log ("joined");
 		});*/
 	}
 
 	public void GameStarted () {
+		// MasterServer
 		// DiscoveryService.StopBroadcasting ();
 		// DiscoveryService.StopListening (this);
 	}
@@ -158,8 +174,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// This will stop the discovery service
 	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
-		net.Stop ();
-		OnDisconnect ();
+
+		// NetManager
+		/*net.Stop ();
+		OnDisconnect ();*/
+
+		// MasterServer
 		/*if (Hosting) {
 			DiscoveryService.StopBroadcasting ();
 			client.UnregisterHost (Host, () => {
@@ -199,6 +219,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", avatars.GetPlayers ());
 	}
 
+	// MasterServer
 	/*void UpdateBroadcast () {
 		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
 		if (Clients.Count+1 < maxPlayerCount) {
@@ -213,8 +234,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Client sends message to host so that host can relay it to all clients
+		// MasterServer
 		// client.SendMessageToHost (msg);
-		net.SendMessage (msg);
+
+		// NetManager
+		// net.SendMessage (msg);
 	}
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
@@ -226,16 +250,16 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
 
 		// Host sends message to all clients
+		// MasterServer
 		// client.SendMessageToClients (msg);
-		net.SendMessage (msg);
+
+		// NetManager
+		// net.SendMessage (msg);
 	}
 
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Clients receive message from host
-		/*if (!Hosting) {
-			Game.Dispatcher.ReceiveMessageFromHost (msg);
-		}*/
 		if (!Hosting)
 			Game.Dispatcher.ReceiveMessageFromHost (msg);
 	}
@@ -257,6 +281,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			onDisconnected ();
 	}
 
+	// MasterServer
 	// deprecate
 	void OnRegisteredClient (int resultCode, string clientName) {
 		
@@ -281,6 +306,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
+	// MasterServer
 	// deprecate
 	void OnUnregisteredClient (string clientName) {
 		if (Hosting) {
@@ -288,6 +314,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
+	// NetManager
 	void OnUpdateClients (string[] regClients) {
 
 		// Add new clients
@@ -311,6 +338,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}*/
 
+	// MasterServer
 	void OnBroadcastError () {
 		DisconnectedWithError = true;
 		Disconnect ();

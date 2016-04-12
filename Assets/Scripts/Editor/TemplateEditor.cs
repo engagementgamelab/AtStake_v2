@@ -33,7 +33,7 @@ public class TemplateEditor : EditorWindow {
 		}
 	}
 
-	int currTemplateIdx = -1;
+	int currTemplateIdx = 0;
 	int prevTemplateIdx = -1;
 	bool showDebug = false;
 	bool prevShowDebug = true;
@@ -43,7 +43,7 @@ public class TemplateEditor : EditorWindow {
 	[MenuItem ("Window/Template Editor")]
 	static void Init () {
 		if (instance == null) {
-			instance = new TemplateEditor ();
+			instance = CreateInstance<TemplateEditor> ();
 			EditorWindow editorWindow = GetWindow<TemplateEditor> ();
 			editorWindow.autoRepaintOnSceneChange = true;
 			editorWindow.Show ();
@@ -67,9 +67,11 @@ public class TemplateEditor : EditorWindow {
 			prevTemplateIdx = currTemplateIdx;
 		}
 
-		GUILayout.Label ("Screen Elements:");
-		foreach (string id in Templates[currTemplateIdx].ElementIds) {
-			GUILayout.Label (id);
+		if (currTemplateIdx > -1 && currTemplateIdx < Templates.Length) { 
+			GUILayout.Label ("Screen Elements:");
+			foreach (string id in Templates[currTemplateIdx].ElementIds) {
+				GUILayout.Label (id);
+			}
 		}
 
 		showDebug = GUILayout.Toggle (showDebug, "Show debug info");
