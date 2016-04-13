@@ -21,6 +21,7 @@ public class NetManager2 {
 		this.socket.On("open", OnOpen);
 		this.socket.On("error", OnError);
 		this.socket.On("close", OnClose);
+		this.socket.On("update_clients", OnUpdateClients);
 		this.socket.Connect ();
 	}
 
@@ -104,6 +105,10 @@ public class NetManager2 {
 				callback (ResponseType.Success);
 			}
 		});
+	}
+
+	void OnUpdateClients (SocketIOEvent e) {
+		Debug.Log (e.name + " ;;;; " + e.data);
 	}
 
 	void OnOpen (SocketIOEvent e) {
