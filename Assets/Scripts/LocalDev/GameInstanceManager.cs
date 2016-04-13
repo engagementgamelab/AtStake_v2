@@ -84,7 +84,7 @@ public class GameInstanceManager : MonoBehaviour {
 		}
 
 		instances[0].StartGame ();
-		instances[0].Multiplayer.HostGame ();
+		instances[0].Multiplayer.HostGame ((ResponseType res) => {}); // TODO: incorporate this callback
 
 		Co.YieldWhileTrue (() => { return DiscoveryService.Broadcaster == null; }, () => {
 
@@ -98,7 +98,7 @@ public class GameInstanceManager : MonoBehaviour {
 				AddPlayer ();
 				GameInstance gi = instances[i];
 				gi.Multiplayer.RequestHostList ((List<string> hosts) => {
-					gi.Multiplayer.JoinGame (instances[0].Name, (string response) => {
+					gi.Multiplayer.JoinGame (instances[0].Name, (ResponseType response) => {
 						gi.StartGame ();
 						if (deck) {
 							gi.Views.Goto ("deck");

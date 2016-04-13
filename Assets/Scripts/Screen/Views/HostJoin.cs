@@ -28,9 +28,13 @@ namespace Views {
 			}
 			#endif
 
-			Game.StartGame ();
-			Game.Multiplayer.HostGame ();
-			GotoView ("lobby");
+			// TODO: feedback for when name is taken (ResponseType.NameTaken)
+			Game.Multiplayer.HostGame ((ResponseType res) => {
+				if (res == ResponseType.Success) {
+					Game.StartGame ();
+					GotoView ("lobby");
+				}
+			});
 		}
 
 		void Join () {

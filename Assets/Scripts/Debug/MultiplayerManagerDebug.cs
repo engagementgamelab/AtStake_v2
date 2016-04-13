@@ -27,7 +27,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	}
 
 	public void Host () {
-		multiplayer.HostGame ();
+		// multiplayer.HostGame ();
 	}
 
 	public void RequestHostList () {
@@ -39,7 +39,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 			foreach (string host in hosts) {
 				if (buttons.Find (x => x.Id == host) == null) {
 					hostList.AddButton (host, () => {
-						multiplayer.JoinGame (host, (string response) => {
+						/*multiplayer.JoinGame (host, (string response) => {
 							switch (response) {
 								case "registered": break;
 								case "room_full": 
@@ -49,7 +49,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 									RequestHostList ();
 									break;
 							}
-						});
+						});*/
 					});
 				}
 			}
@@ -64,7 +64,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	}
 
 	public void SubmitConnection () {
-		multiplayer.JoinGame (connectAddress.text);
+		// multiplayer.JoinGame (connectAddress.text);
 	}
 
 	void Update () {

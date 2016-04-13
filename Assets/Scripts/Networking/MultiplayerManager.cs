@@ -77,7 +77,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		client.onReceiveMessageFromClient += ReceiveMessageFromClient;*/
 	}
 
-	public void HostGame () {
+	public void HostGame (Action<ResponseType> response) {
 
 		// MasterServer
 		/*#if SINGLE_SCREEN
@@ -97,7 +97,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);
 
-		net2.Register (Game.Name);
+		net2.StartAsHost (Game.Name, response);
 
 		// NetManager
 		/*net.StartAsHost (Host, (bool connected) => {
@@ -121,6 +121,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void RequestHostList (Action<List<string>> callback) {
+
+		net2.RequestRoomList ((Dictionary<string, string> hosts) => {
+			this.hosts = hosts;
+			callback (new List<string> (hosts.Keys));
+		});
+
 		// NetManager
 		/*net.RequestRoomList ((Dictionary<string, string> hosts) => {
 			this.hosts = hosts;
@@ -134,10 +140,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		});*/
 	}
 
-	public void JoinGame (string hostName, Action<string> response) {
+	public void JoinGame (string hostName, Action<ResponseType> response) {
 
 		// Set the host
 		Host = hostName;
+
+		net2.StartAsClient (Game.Name, hosts[Host], response);
 
 		// NetManager
 		/*net.StartAsClient (hosts[Host], Game.Name, (string res) => {

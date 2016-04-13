@@ -37,7 +37,16 @@ namespace Views {
 		}
 
 		void JoinGame (string hostId) {
-			Game.Multiplayer.JoinGame (hostId, (string response) => {
+			Game.Multiplayer.JoinGame (hostId, (ResponseType res) => {
+				Game.StartGame ();
+				switch (res) {
+					case ResponseType.Success: GotoView ("lobby"); break;
+					case ResponseType.NameTaken:
+						Debug.LogWarning ("Name taken!");
+						break;
+				}
+			});
+			/*Game.Multiplayer.JoinGame (hostId, (string response) => {
 				Game.StartGame ();
 				switch (response) {
 					case "room_full": 
@@ -53,7 +62,7 @@ namespace Views {
 						GotoView ("lobby");
 						break;
 				}
-			});
+			});*/
 		}
 	}
 }
