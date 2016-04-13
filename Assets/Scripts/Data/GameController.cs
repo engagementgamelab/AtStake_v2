@@ -390,7 +390,8 @@ public class GameController : GameInstanceBehaviour {
 		// (Host) Serialize the data, compress the resultant string, and send the data in chunks not larger than maxDataSize
 
 		string data = JsonWriter.Serialize (instance);
-		byte[] compressed = CLZF2.Compress (data);
+		
+		/*byte[] compressed = CLZF2.Compress (data);
 		int chunkCount = Mathf.CeilToInt (compressed.Length / maxDataSize);
 
 		List<byte>[] chunks = new List<byte>[chunkCount];
@@ -411,7 +412,8 @@ public class GameController : GameInstanceBehaviour {
 
 		for (int i = chunks.Length-1; i >= 0; i --) {
 			Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", i, chunks[i].ToArray<byte> ());
-		}
+		}*/
+		Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", data);
 	}
 
 	void InitializeInstanceData (MasterMsgTypes.GenericMessage msg) {
@@ -423,9 +425,11 @@ public class GameController : GameInstanceBehaviour {
 
 		if (Hosting) return;
 
+		instance = JsonReader.Deserialize<InstanceData> (msg.str1);
+
 		// (Clients) Receive chunks. Once all chunks have been received, reassemble, decompress, and deserialize the data
 
-		receivedChunks.Add (msg.bytes);
+		/*receivedChunks.Add (msg.bytes);
 
 		if (msg.val == 0) {
 
@@ -448,7 +452,7 @@ public class GameController : GameInstanceBehaviour {
 			
 			instance = JsonReader.Deserialize<InstanceData> (data);
 			// PrintData ();
-		}
+		}*/
 	}
 
 	void PrintData () {

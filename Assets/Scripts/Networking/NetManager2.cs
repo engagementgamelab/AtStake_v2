@@ -3,10 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SocketIO;
+using JsonFx.Json;
 
 public class NetManager2 {
-
-	SocketIOComponent socket;
 
 	struct ConnectionInfo {
 		public string name;
@@ -14,14 +13,22 @@ public class NetManager2 {
 		public Response.Room room;
 	}
 
+	public delegate void ClientsUpdated (string[] clients);
+	public delegate void MessageReceived (MasterMsgTypes.GenericMessage msg);
+
+	public ClientsUpdated clientsUpdated;
+	public MessageReceived messageReceived;
+
 	ConnectionInfo connection;
+	SocketIOComponent socket;
 
 	public NetManager2 (SocketIOComponent socket) {
 		this.socket = socket;
 		this.socket.On("open", OnOpen);
 		this.socket.On("error", OnError);
 		this.socket.On("close", OnClose);
-		this.socket.On("update_clients", OnUpdateClients);
+		this.socket.On("updateClients", OnUpdateClients);
+		this.socket.On("receiveMessage", OnMessage);
 		this.socket.Connect ();
 	}
 
@@ -45,21 +52,33 @@ public class NetManager2 {
 		});
 	}
 
-	public void SendMessage (string key, string str1, string str2, int val) {
+	public void SendMessage (MasterMsgTypes.GenericMessage msg) {
 
+		JSONObject obj;
+
+		if (msg.id == "InstanceDataLoaded") {
+			obj = new JSONObject (msg.str1);
+			obj.AddField ("roomId", connection.room._id);
+			obj.AddField ("key", msg.id);
+		} else {
+
+			obj = JSONObject.Create ();
+
+			obj.AddField ("roomId", connection.room._id);
+			obj.AddField ("key", msg.id);
+			obj.AddField ("str1", msg.str1);
+			obj.AddField ("str2", msg.str2);
+			obj.AddField ("val", msg.val);
+		}
+
+		socket.Emit ("sendMessage", obj);
+	}
+
+	public void Stop () {
 		JSONObject obj = JSONObject.Create ();
-
-		obj.AddField ("key", key);
-		if (str1 != "")
-			obj.AddField ("str1", str1);
-		if (str2 != "")
-			obj.AddField ("str2", str2);
-		if (val != -1)
-			obj.AddField ("val", val);
-
-		/*socket.Emit ("send", obj, (JSONObject json) => {
-
-		});*/
+		obj.AddField ("roomId", connection.room._id);
+		obj.AddField ("clientId", connection.clientId);
+		socket.Emit ("leaveRoom", obj);
 	}
 
 	void Register (string name, Action callback) {
@@ -68,8 +87,8 @@ public class NetManager2 {
 		if (!string.IsNullOrEmpty (connection.clientId))
 			callback ();
 
-		socket.Emit<Response.Registration> ("register", name, (Response.Registration res) => {
-			connection.clientId = res.id;
+		socket.Emit<Response.Client> ("register", name, (Response.Client res) => {
+			connection.clientId = res._id;
 			callback ();
 		});
 	}
@@ -108,11 +127,19 @@ public class NetManager2 {
 	}
 
 	void OnUpdateClients (SocketIOEvent e) {
-		Debug.Log (e.name + " ;;;; " + e.data);
+		if (clientsUpdated != null)
+			clientsUpdated (e.Deserialize<Response.ClientList> ().ClientNames);
+	}
+
+	void OnMessage (SocketIOEvent e) {
+		if (messageReceived != null) {
+			Response.Message msg = e.Deserialize<Response.Message> ();
+			messageReceived (MasterMsgTypes.GenericMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
+		}
 	}
 
 	void OnOpen (SocketIOEvent e) {
-		Debug.Log ("[SocketIO] Open received: " + e.name + ", " + e.data);
+		// Debug.Log ("[SocketIO] Open received: " + e.name + ", " + e.data);
 	}
 
 	void OnError (SocketIOEvent e) {
@@ -120,14 +147,10 @@ public class NetManager2 {
 	}
 
 	void OnClose (SocketIOEvent e) {
-		Debug.Log ("[SocketIO] Close received: " + e.name + ", " + e.data);
+		// Debug.Log ("[SocketIO] Close received: " + e.name + ", " + e.data);
 	}
 
 	class Response {
-
-		public class Registration {
-			public string id { get; set; }
-		}
 
 		public class CreateRoom {
 			public Room room { get; set; }
@@ -151,13 +174,48 @@ public class NetManager2 {
 			}
 		}
 
+		public class ClientList {
+			
+			public Client[] clients { get; set; }
+
+			public string[] ClientNames {
+				get { return Array.ConvertAll (clients, x => x.name); }
+			}
+		}
+
 		public class RoomListing {
 			public string id { get; set; }
 			public string host { get; set; }
 		}
 
 		public class Room {
+
 			public string _id { get; set; }
+			public Client host { get; set; }
+			public Client[] clients { get; set; }
+
+			/*public string[] ClientNames {
+				get {
+					string[] names = new string[clients.Length+1];
+					for (int i = 0; i < clients.Length; i ++) {
+						names[i] = clients[i].name;
+					}
+					names[names.Length-1] = host.name;
+					return names;
+				}
+			}*/
+		}
+
+		public class Client {
+			public string _id { get; set; }
+			public string name { get; set; }
+		}
+
+		public class Message {
+			public string key { get; set; }
+			public string str1 { get; set; }
+			public string str2 { get; set; }
+			public int val { get; set; }
 		}
 	}
 }

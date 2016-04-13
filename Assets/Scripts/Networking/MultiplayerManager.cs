@@ -58,11 +58,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	AvatarsManager avatars;
 
 	NetManager net = new NetManager ();
-	NetManager2 net2;
+	public NetManager2 net2;
 
 	void OnEnable () {
 
 		net2 = new NetManager2 (gameObject.AddComponent<SocketIOComponent> ());
+		net2.messageReceived += ReceiveMessageFromClient;
 		
 		// MasterServer
 		// debugging messages
@@ -97,7 +98,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		avatars.AddPlayer (Host);
 		Game.Manager.AddHost (avatars[Host]);
 
-		net2.StartAsHost (Game.Name, response);
+		net2.StartAsHost (Game.Name, (ResponseType res) => {
+
+			if (res == ResponseType.Success)
+				net2.clientsUpdated += OnUpdateClients;
+
+			response (res);
+		});
 
 		// NetManager
 		/*net.StartAsHost (Host, (bool connected) => {
@@ -185,6 +192,9 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// If a connection has been established, the OnDisconnect event will also fire
 	public void Disconnect () {
 
+		net2.Stop ();
+		OnDisconnect ();
+
 		// NetManager
 		/*net.Stop ();
 		OnDisconnect ();*/
@@ -243,6 +253,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public void SendMessageToHost (MasterMsgTypes.GenericMessage msg) {
 
+		net2.SendMessage (msg);
+
 		// Client sends message to host so that host can relay it to all clients
 		// MasterServer
 		// client.SendMessageToHost (msg);
@@ -253,11 +265,15 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
 
+		Game.Dispatcher.ReceiveMessageFromHost (msg);
+
 		// Host receives message from client so that it can relay it to all other clients
-		Game.Dispatcher.ReceiveMessageFromClient (msg);
+		// Game.Dispatcher.ReceiveMessageFromClient (msg);
 	}
 
 	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+
+		net2.SendMessage (msg);
 
 		// Host sends message to all clients
 		// MasterServer
@@ -270,8 +286,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public void ReceiveMessageFromHost (MasterMsgTypes.GenericMessage msg) {
 
 		// Clients receive message from host
-		if (!Hosting)
-			Game.Dispatcher.ReceiveMessageFromHost (msg);
+		// if (!Hosting)
+			// Game.Dispatcher.ReceiveMessageFromHost (msg);
 	}
 
 	// -- Events
@@ -295,6 +311,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// deprecate
 	void OnRegisteredClient (int resultCode, string clientName) {
 		
+		Debug.Log ("OOPS");
 		bool thisClient = clientName == Game.Name;
 		
 		string keyword;
@@ -327,17 +344,23 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	// NetManager
 	void OnUpdateClients (string[] regClients) {
 
+		Clients.Print ();
+
 		// Add new clients
-		foreach (string client in regClients) {
-			if (!Clients.Contains (client))
-				AddClient (client);
+		foreach (string cl in regClients) {
+			if (!Clients.Contains (cl)) {
+				Debug.Log ("ADDED " + cl);
+				AddClient (cl);
+			}
 		}
 
 		// Remove old clients
 		List<string> tempClients = new List<string> (Clients);
-		foreach (string client in tempClients) {
-			if (Array.FindIndex (regClients, (string c) => { return c.Equals (client); }) == -1)
-				RemoveClient (client);
+		foreach (string cl in tempClients) {
+			if (Array.FindIndex (regClients, (string c) => { return c.Equals (cl); }) == -1) {
+				Debug.Log ("REMVED " + cl);
+				RemoveClient (cl);
+			}
 		}
 	}
 

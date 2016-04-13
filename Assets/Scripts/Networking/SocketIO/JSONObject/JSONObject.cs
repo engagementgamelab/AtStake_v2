@@ -41,6 +41,14 @@ public class JSONObject {
 	public List<JSONObject> list;
 	public List<string> keys;
 	public string str;
+
+	public string Raw {
+		get { 
+			string str = Print ();
+			return str.Substring(1, str.Length-2); 
+		}
+	}
+
 #if USEFLOAT
 	public float n;
 	public float f {

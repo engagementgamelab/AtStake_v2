@@ -26,6 +26,8 @@
  */
 #endregion
 
+using JsonFx.Json;
+
 namespace SocketIO
 {
 	public class SocketIOEvent
@@ -45,6 +47,10 @@ namespace SocketIO
 		public override string ToString()
 		{
 			return string.Format("[SocketIOEvent: name={0}, data={1}]", name, data);
+		}
+
+		public T Deserialize<T> () where T : class {
+			return JsonReader.Deserialize<T> (data.Print ());
 		}
 	}
 }

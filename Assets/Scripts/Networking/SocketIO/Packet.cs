@@ -39,10 +39,7 @@ namespace SocketIO
 		public JSONObject json;
 		
 		public string RawJson {
-			get { 
-				string str = json.Print ();
-				return str.Substring(1, str.Length-2); 
-			}
+			get { return json.Raw; }
 		}
 
 		public Packet() : this(EnginePacketType.UNKNOWN, SocketPacketType.UNKNOWN, -1, "/", -1, null) { }

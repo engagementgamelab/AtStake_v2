@@ -132,7 +132,6 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	}
 
 	void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
-		Debug.Log (msg.id);
 
 		#if USE_CONFIRMATIONS
 		// Create a new confirmation to fulfill
