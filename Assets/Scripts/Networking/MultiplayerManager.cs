@@ -182,6 +182,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void GameStarted () {
+
+		if (Hosting)
+			net2.CloseRoom ();
+
 		// MasterServer
 		// DiscoveryService.StopBroadcasting ();
 		// DiscoveryService.StopListening (this);

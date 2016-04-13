@@ -11,6 +11,7 @@ public class NetManager2 {
 		public string name;
 		public string clientId;
 		public Response.Room room;
+		public string roomId { get { return room._id; } }
 	}
 
 	public delegate void ClientsUpdated (string[] clients);
@@ -21,6 +22,7 @@ public class NetManager2 {
 
 	ConnectionInfo connection;
 	SocketIOComponent socket;
+	Action<Dictionary<string, string>> roomListResult;
 
 	public NetManager2 (SocketIOComponent socket) {
 		this.socket = socket;
@@ -40,6 +42,10 @@ public class NetManager2 {
 	}
 
 	public void RequestRoomList (Action<Dictionary<string, string>> response) {
+
+		socket.On("roomListUpdated", OnUpdateRoomList);
+		roomListResult = response;
+
 		socket.Emit<Response.RoomList> ("requestRoomList", (Response.RoomList res) => {
 			response(res.ToDictionary ());
 		});
@@ -52,19 +58,23 @@ public class NetManager2 {
 		});
 	}
 
+	public void CloseRoom () {
+		socket.Emit ("closeRoom", connection.roomId);
+	}
+
 	public void SendMessage (MasterMsgTypes.GenericMessage msg) {
 
 		JSONObject obj;
 
 		if (msg.id == "InstanceDataLoaded") {
 			obj = new JSONObject (msg.str1);
-			obj.AddField ("roomId", connection.room._id);
+			obj.AddField ("roomId", connection.roomId);
 			obj.AddField ("key", msg.id);
 		} else {
 
 			obj = JSONObject.Create ();
 
-			obj.AddField ("roomId", connection.room._id);
+			obj.AddField ("roomId", connection.roomId);
 			obj.AddField ("key", msg.id);
 			obj.AddField ("str1", msg.str1);
 			obj.AddField ("str2", msg.str2);
@@ -76,7 +86,7 @@ public class NetManager2 {
 
 	public void Stop () {
 		JSONObject obj = JSONObject.Create ();
-		obj.AddField ("roomId", connection.room._id);
+		obj.AddField ("roomId", connection.roomId);
 		obj.AddField ("clientId", connection.clientId);
 		socket.Emit ("leaveRoom", obj);
 	}
@@ -120,6 +130,7 @@ public class NetManager2 {
 			if (res.nameTaken) {
 				callback (ResponseType.NameTaken);
 			} else {
+				socket.Off ("roomListUpdated", OnUpdateRoomList);
 				connection.room = res.room;
 				callback (ResponseType.Success);
 			}
@@ -132,9 +143,28 @@ public class NetManager2 {
 	}
 
 	void OnMessage (SocketIOEvent e) {
+
+		Response.Message msg = e.Deserialize<Response.Message> ();
+
 		if (messageReceived != null) {
-			Response.Message msg = e.Deserialize<Response.Message> ();
 			messageReceived (MasterMsgTypes.GenericMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
+		}
+
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("clientId", connection.clientId);
+		obj.AddField ("roomId", connection.roomId);
+		obj.AddField ("key", msg.key);
+
+		socket.Emit ("confirmReceipt", obj);
+	}
+
+	void OnUpdateRoomList (SocketIOEvent e) {
+		Debug.Log ("HIELLLOP " + roomListResult);
+		if (roomListResult != null) {
+			Debug.Log ("DESERIEALIZEING");
+			Response.RoomList msg = e.Deserialize<Response.RoomList> ();
+			Debug.Log (msg);
+			roomListResult (msg.ToDictionary ());
 		}
 	}
 
