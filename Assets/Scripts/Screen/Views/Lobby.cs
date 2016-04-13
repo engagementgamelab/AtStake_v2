@@ -22,6 +22,7 @@ namespace Views {
 
 		protected override void OnShow () {
 
+			Debug.Log (Game.Manager.Players.Count);
 			foreach (var player in Game.Manager.Players)
 				OnAddPeer (player.Key, player.Value.Avatar);
 

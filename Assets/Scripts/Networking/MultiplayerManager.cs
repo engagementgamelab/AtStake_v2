@@ -309,9 +309,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	// MasterServer
 	// deprecate
-	void OnRegisteredClient (int resultCode, string clientName) {
+	/*void OnRegisteredClient (int resultCode, string clientName) {
 		
-		Debug.Log ("OOPS");
 		bool thisClient = clientName == Game.Name;
 		
 		string keyword;
@@ -331,15 +330,15 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		if (thisClient) {
 			// SendClientRegisterResponse (keyword);
 		}
-	}
+	}*/
 
 	// MasterServer
 	// deprecate
-	void OnUnregisteredClient (string clientName) {
+	/*void OnUnregisteredClient (string clientName) {
 		if (Hosting) {
 			RemoveClient (clientName);
 		}
-	}
+	}*/
 
 	// NetManager
 	void OnUpdateClients (string[] regClients) {
@@ -348,19 +347,15 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		// Add new clients
 		foreach (string cl in regClients) {
-			if (!Clients.Contains (cl)) {
-				Debug.Log ("ADDED " + cl);
+			if (!Clients.Contains (cl))
 				AddClient (cl);
-			}
 		}
 
 		// Remove old clients
 		List<string> tempClients = new List<string> (Clients);
 		foreach (string cl in tempClients) {
-			if (Array.FindIndex (regClients, (string c) => { return c.Equals (cl); }) == -1) {
-				Debug.Log ("REMVED " + cl);
+			if (Array.FindIndex (regClients, (string c) => { return c.Equals (cl); }) == -1)
 				RemoveClient (cl);
-			}
 		}
 	}
 

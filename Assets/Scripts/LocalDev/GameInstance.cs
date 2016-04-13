@@ -44,11 +44,11 @@ public class GameInstance : MonoBehaviour {
 	// Called when the app is started
 	void InitApp () {
 		Views.Init ();
+		Manager.Init ();
 	}
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
 	public void StartGame () {
-		Manager.Init ();
 		Views.Init ();
 		Decks.Init ();
 		Score.Init ();
