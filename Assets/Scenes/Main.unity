@@ -923,7 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ea6a4c3ea8845f7b11221a54158202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environment: local
+  environment: development
 --- !u!4 &1944304490
 Transform:
   m_ObjectHideFlags: 0

@@ -77,7 +77,8 @@ public class DataManager {
         config = JsonReader.Deserialize<GameConfig>(data);
         
         // Set the current game config based on the environment
-        // #if UNITY_EDITOR
+        #if UNITY_EDITOR
+        
             currentConfig = config.local;
 
             // If override set, use that
@@ -91,13 +92,13 @@ public class DataManager {
             }
 
 
-        /*#elif DEVELOPMENT_BUILD
+        #elif DEVELOPMENT_BUILD
            currentConfig = config.development;
         #elif IS_PRODUCTION
            currentConfig = config.production;
         #else
            currentConfig = config.staging;
-        #endif*/
+        #endif
 
     }
 

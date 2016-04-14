@@ -56,7 +56,7 @@ namespace SocketIO
 
 		#region Private Properties
 
-		private string url = "ws://127.0.0.1:4567/socket.io/?EIO=3&transport=websocket";
+		private string url = "";
 
 		private volatile bool connected;
 		private volatile bool thPinging;
