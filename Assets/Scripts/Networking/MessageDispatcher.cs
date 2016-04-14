@@ -98,7 +98,6 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	#if SIMULATE_LATENCY
 	IEnumerator LatentSendConfirmation (MasterMsgTypes.GenericMessage msg) {
 		yield return new WaitForSeconds (Random.value);
-		SendMessageToHost (MasterMsgTypes.GenericMessage.Create ("__confirm" + msg.id, Game.Name, "", -1));
 		ReceiveMessageEvent (msg);
 	}
 	#endif

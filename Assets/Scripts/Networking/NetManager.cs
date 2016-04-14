@@ -9,10 +9,18 @@ using JsonFx.Json;
 public class NetManager {
 
 	struct ConnectionInfo {
+
 		public string name;
 		public string clientId;
 		public Response.Room room;
 		public string roomId { get { return room._id; } }
+		public bool connected { get { return room != null; } }
+
+		public void Reset () {
+			name = "";
+			clientId = "";
+			room = null;
+		}
 	}
 
 	public delegate void ClientsUpdated (string[] clients);
@@ -92,10 +100,21 @@ public class NetManager {
 	}
 
 	public void Stop () {
-		JSONObject obj = JSONObject.Create ();
-		obj.AddField ("roomId", connection.roomId);
-		obj.AddField ("clientId", connection.clientId);
-		socket.Emit ("leaveRoom", obj);
+
+		// If connected to a room, leave the room. Then unregister the client.
+		if (connection.connected) {
+
+			JSONObject obj = JSONObject.Create ();
+			obj.AddField ("roomId", connection.roomId);
+			obj.AddField ("clientId", connection.clientId);
+
+			socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
+				Unregister ();
+			});
+
+		} else {
+			Unregister ();
+		}
 	}
 
 	void Register (string name, Action callback) {
@@ -110,14 +129,26 @@ public class NetManager {
 		});
 	}
 
+	void Unregister (Action callback=null) {
+		socket.Emit ("unregister", connection.clientId, (SocketIOEvent e) => {
+			connection.Reset ();
+			if (callback != null)
+				callback();
+		});
+	}
+
 	void CreateRoom (Action<ResponseType> callback) {
 		
 		#if UNITY_EDITOR
 		if (string.IsNullOrEmpty (connection.clientId))
 			throw new System.Exception ("Client must register before creating a room.");
 		#endif
+
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("clientId", connection.clientId);
+		obj.AddField ("maxClientCount", 4);
 		
-		socket.Emit<Response.CreateRoom> ("createRoom", connection.clientId, (Response.CreateRoom res) => {
+		socket.Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
 			if (res.nameTaken) {
 				callback (ResponseType.NameTaken);
 			} else {
