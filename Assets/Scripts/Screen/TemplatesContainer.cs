@@ -60,7 +60,6 @@ namespace Templates {
 				activeContainer.LoadView (id, view);
 				inactiveContainer = container2;
 				inactiveContainer.RectTransform.SetAnchoredPositionX (canvasWidth);
-				Debug.Log ("load");
 			} else {
 				inactiveContainer.LoadView (id, view);
 

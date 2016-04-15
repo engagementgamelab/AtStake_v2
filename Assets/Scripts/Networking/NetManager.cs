@@ -233,7 +233,6 @@ public class NetManager {
 	}
 
 	void OnClose (SocketIOEvent e) {
-		Debug.Log ("CLOSED");
 		// Debug.Log ("[SocketIO] Close received: " + e.name + ", " + e.data);
 	}
 

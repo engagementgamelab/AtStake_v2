@@ -99,7 +99,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		net.StartAsClient (Game.Name, hosts[Host], (ResponseType res) => {
 
 			if (res == ResponseType.Success)
-				net.onDisconnected += OnDisconnect;
+				net.onDisconnected = OnDisconnect;
 
 			response(res);	
 		});
@@ -165,6 +165,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			onDisconnected ();
 	}
 
+	// Clients list updated (only the host should subscribe to this event because the host will broadcast it to connected clients)
 	void OnUpdateClients (string[] regClients) {
 
 		// Add new clients
