@@ -54,6 +54,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	AvatarsManager avatars;
 	NetManager net;
 
+	#if UNITY_EDITOR && SINGLE_SCREEN
+	public string RoomId {
+		get { return net.RoomId; }
+	}
+	#endif
+
 	void OnEnable () {
 		net = new NetManager (gameObject.AddComponent<SocketIOComponent> ());
 		net.messageReceived += ReceiveMessageFromClient;
@@ -89,13 +95,26 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	public void JoinGame (string hostName, Action<ResponseType> response) {
+		JoinGame (hostName, hosts[hostName], response);
+	}
+
+	public void JoinGame (string hostName, string roomId, Action<ResponseType> response) {
+
+		#if UNITY_EDITOR
+		if (Connected) {
+			Debug.LogWarning (Game.Name + " is attempting to join the '" + hostName + "' game but it is already connected to the '" + Host + "' game. This is not allowed: be sure to disconnect before joining a new room.");
+			return;
+		}
+		#endif
 
 		// Set the host
 		Host = hostName;
-		net.StartAsClient (Game.Name, hosts[Host], (ResponseType res) => {
+		net.StartAsClient (Game.Name, roomId, (ResponseType res) => {
 
-			if (res == ResponseType.Success)
+			if (res == ResponseType.Success) {
+				Connected = true;
 				net.onDisconnected = OnDisconnect;
+			}
 
 			response(res);	
 		});
@@ -112,6 +131,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public void Disconnect () {
 		net.Stop ();
 		OnDisconnect ();
+	}
+
+	public void OnApplicationQuit () {
+		Disconnect ();
 	}
 
 	// -- Client handling

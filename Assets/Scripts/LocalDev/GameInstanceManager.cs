@@ -84,45 +84,44 @@ public class GameInstanceManager : MonoBehaviour {
 		}
 
 		instances[0].StartGame ();
-		instances[0].Multiplayer.HostGame ((ResponseType res) => {}); // TODO: incorporate this callback
+		instances[0].Multiplayer.HostGame ((ResponseType res) => {
 
-		// Co.YieldWhileTrue (() => { return DiscoveryService.Broadcaster == null; }, () => {
-		Co.YieldWhileTrue (() => { return false; }, () => {
+			if (res != ResponseType.Success) {
+				Debug.LogWarning ("Failed to run test because the host name is already being used by another open room.");
+				return;
+			}
 
+			// Move the host to the view
 			if (deck) {
 				instances[0].Views.Goto ("deck");
 			} else if (beforeDeck) {
 				instances[0].Views.Goto (id);
 			}
 
+			string hostName = instances[0].Name;
+			string roomId = instances[0].Multiplayer.RoomId;
+
+			// Create the other players
 			for (int i = 1; i < 3; i ++) {
+
 				AddPlayer ();
 				GameInstance gi = instances[i];
-				gi.Multiplayer.RequestHostList ((List<string> hosts) => {
-					gi.Multiplayer.JoinGame (instances[0].Name, (ResponseType response) => {
-						gi.StartGame ();
-						if (deck) {
-							gi.Views.Goto ("deck");
-						} else if (beforeDeck) {
-							gi.Views.Goto (id);
-						}
-					});
+				string playerName = instances[i].Name;
+
+				gi.Multiplayer.JoinGame (hostName, roomId, (ResponseType response) => {
+					gi.StartGame ();
 				});
 			}
 		});
 
+
 		// WARNING: js-style callback hell approaching
+		// Wait for clients to connect
+		Co.YieldWhileTrue (() => { return !ClientsConnected (); }, () => {
 
-		if (deck) {
-
-			// Skip to the deck view
-			Co.YieldWhileTrue (() => { return !PlayersOnView ("deck"); }, () => {
-				instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
-			});
-		} else if (!beforeDeck) {
-
-			// Wait for clients to connect
-			Co.YieldWhileTrue (() => { return !ClientsConnected (); }, () => {
+			if (deck) {
+				instances[0].Views.AllGoto ("deck");
+			} else if (!beforeDeck) {
 
 				instances[0].Dispatcher.AddListener ("SetDeck", (MasterMsgTypes.GenericMessage msg) => {
 					Co.WaitForFixedUpdate (() => {
@@ -156,8 +155,8 @@ public class GameInstanceManager : MonoBehaviour {
 
 				// Set the default deck
 				instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
-			});
-		}
+			}
+		});
 	}
 
 	bool PlayersOnView (string viewId) {

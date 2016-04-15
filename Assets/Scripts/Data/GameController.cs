@@ -385,74 +385,19 @@ public class GameController : GameInstanceBehaviour {
 		// PrintData ();
 	}
 
-	void SendData () {
-		
-		// (Host) Serialize the data, compress the resultant string, and send the data in chunks not larger than maxDataSize
-
-		string data = JsonWriter.Serialize (instance);
-		
-		/*byte[] compressed = CLZF2.Compress (data);
-		int chunkCount = Mathf.CeilToInt (compressed.Length / maxDataSize);
-
-		List<byte>[] chunks = new List<byte>[chunkCount];
-		int chunkPosition = 0;
-
-		foreach (byte b in compressed) {
-
-			if (chunks[chunkPosition] == null)
-				chunks[chunkPosition] = new List<byte> ();
-
-			chunks[chunkPosition].Add (b);
-
-			if (chunkPosition < chunks.Length-1)
-				chunkPosition ++;
-			else
-				chunkPosition = 0;
-		}
-
-		for (int i = chunks.Length-1; i >= 0; i --) {
-			Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", i, chunks[i].ToArray<byte> ());
-		}*/
-		Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", data);
-	}
-
 	void InitializeInstanceData (MasterMsgTypes.GenericMessage msg) {
 		if (Hosting && instance == null) 
 			Setup ();
 	}
 
+	void SendData () {
+		string data = JsonWriter.Serialize (instance);
+		Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", data);
+	}
+
 	void LoadInstanceData (MasterMsgTypes.GenericMessage msg) {
-
-		if (Hosting) return;
-
-		instance = JsonReader.Deserialize<InstanceData> (msg.str1);
-
-		// (Clients) Receive chunks. Once all chunks have been received, reassemble, decompress, and deserialize the data
-
-		/*receivedChunks.Add (msg.bytes);
-
-		if (msg.val == 0) {
-
-			int byteCount = 0;
-			int chunkCount = receivedChunks.Count;
-			foreach (byte[] chunk in receivedChunks)
-				byteCount += chunk.Length;
-
-			byte[] decompressed = new byte[byteCount];
-			receivedChunks.Reverse ();
-
-			for (int i = 0; i < chunkCount; i ++) {
-				byte[] chunk = receivedChunks[i];
-				for (int j = 0; j < chunk.Length; j ++) {
-					decompressed[i + j * chunkCount] = chunk[j];
-				}
-			}
-			
-			string data = CLZF2.DecompressToString (decompressed);
-			
-			instance = JsonReader.Deserialize<InstanceData> (data);
-			// PrintData ();
-		}*/
+		if (!Hosting)
+			instance = JsonReader.Deserialize<InstanceData> (msg.str1);
 	}
 
 	void PrintData () {

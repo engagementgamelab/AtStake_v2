@@ -1,4 +1,4 @@
-#define RESET_ON_REGISTER
+#undef RESET_ON_REGISTER
 using UnityEngine;
 using System;
 using System.Collections;
@@ -45,6 +45,12 @@ public class NetManager {
 	ConnectionInfo connection;
 	SocketIOComponent socket;
 	Action<Dictionary<string, string>> roomListResult;
+
+	#if UNITY_EDITOR && SINGLE_SCREEN
+	public string RoomId {
+		get { return connection.roomId; }
+	}
+	#endif
 
 	public NetManager (SocketIOComponent socket) {
 		this.socket = socket;
@@ -117,7 +123,7 @@ public class NetManager {
 
 		JSONObject obj;
 
-		if (msg.id == "InstanceDataLoaded") {
+		if (msg.id == "InstanceDataLoaded") { // Special case
 			obj = new JSONObject (msg.str1);
 			obj.AddField ("roomId", connection.roomId);
 			obj.AddField ("key", msg.id);
@@ -153,6 +159,11 @@ public class NetManager {
 	void OnMessage (SocketIOEvent e) {
 
 		Response.Message msg = e.Deserialize<Response.Message> ();
+
+		if (msg.key == "InstanceDataLoaded") { // Special case
+			Models.InstanceData ins = e.Deserialize<Models.InstanceData> ();
+			msg.str1 = JsonWriter.Serialize (ins);
+		}
 
 		if (messageReceived != null) {
 			messageReceived (MasterMsgTypes.GenericMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
