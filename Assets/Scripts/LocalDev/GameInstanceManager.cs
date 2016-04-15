@@ -106,7 +106,6 @@ public class GameInstanceManager : MonoBehaviour {
 
 				AddPlayer ();
 				GameInstance gi = instances[i];
-				string playerName = instances[i].Name;
 
 				gi.Multiplayer.JoinGame (hostName, roomId, (ResponseType response) => {
 					gi.StartGame ();

@@ -11,5 +11,27 @@ namespace Templates {
 				BackgroundColor = Palette.Teal
 			};
 		}
+
+		bool inputFocused = false;
+
+		protected override void OnInputEnabled () {
+
+			InputElementUI input = GetElement<InputElementUI> ("input");
+			
+			Co.RunWhileTrue (() => { return Loaded; }, () => {
+
+				bool isInputFocused = input.InputField.isFocused;
+
+				if (inputFocused && !isInputFocused) {
+					anim.Animate (new TemplateAnimator.Peek (0.3f, 0, () => {
+						inputFocused = false;
+					}));
+				} else if (!inputFocused && isInputFocused) {
+					anim.Animate (new TemplateAnimator.Peek (0.3f, 60, () => {
+						inputFocused = true;
+					}));
+				}
+			});
+		}
 	}
 }

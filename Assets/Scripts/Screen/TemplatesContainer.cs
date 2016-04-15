@@ -40,6 +40,8 @@ namespace Templates {
 			get { return animating; }
 		}
 
+		TemplateAnimator anim;
+
 		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
 		// true = SlideIn
 		Dictionary<string, bool> transitionOverrides = new Dictionary<string, bool> () {
@@ -58,6 +60,7 @@ namespace Templates {
 				// Initialize if this is the first time loading a view
 				activeContainer = container1;
 				activeContainer.LoadView (id, view);
+				activeContainer.SetInputEnabled ();
 				inactiveContainer = container2;
 				inactiveContainer.RectTransform.SetAnchoredPositionX (canvasWidth);
 			} else {
@@ -89,6 +92,7 @@ namespace Templates {
 			canvasWidth = canvas.GetComponent<RectTransform> ().sizeDelta.x;
 			container1 = TemplateContainer.Init (this, 0);
 			container2 = TemplateContainer.Init (this, 1);
+			anim = TemplateAnimator.AttachTo (gameObject);
 		}
 
 		void SlideIn () { Slide (-canvasWidth); }
@@ -96,17 +100,7 @@ namespace Templates {
 
 		void Slide (float to) {
 
-			if (animating) return;
-			animating = true;
-
-			// Disable the raycaster while animating so that the user can't "double press" buttons
-			Raycaster.enabled = false;
-
-			inactiveContainer.RectTransform.SetAnchoredPositionX (-to);
-
-			Co.StartCoroutine (slideTime, (float p) => {
-				RectTransform.SetAnchoredPositionX (Mathf.Lerp (0f, to, Mathf.SmoothStep (0f, 1f, p)));
-			}, () => {
+			if (anim.Animate (new TemplateAnimator.Slide (slideTime, to, () => {
 
 				// Normalize positions
 				inactiveContainer.RectTransform.SetAnchoredPositionX (0f);
@@ -128,7 +122,13 @@ namespace Templates {
 				Co.WaitForSeconds (0.1f, () => {
 					Raycaster.enabled = true;
 				});
-			});
+
+			}))) {
+
+				// Disable the raycaster while animating so that the user can't "double press" buttons
+				Raycaster.enabled = false;
+				inactiveContainer.RectTransform.SetAnchoredPositionX (-to);
+			}
 		}
 
 		void UpdateActiveContainer () {

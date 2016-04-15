@@ -410,6 +410,8 @@
     "PotCoinCount": 50,
     "PlayerStartCoinCount": 30,
     "DeciderStartCoinCount": 100,
+    "PlayerRoundStartCoinCount": 0,
+    "DeciderRoundStarCoinCount": 30,
     "Rewards": [
       10,
       20

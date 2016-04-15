@@ -237,10 +237,6 @@ public class GameController : GameInstanceBehaviour {
 	// Data model for this game instance
 	InstanceData instance;
 
-	// Used to send the serialized model data to clients
-	List<byte[]> receivedChunks = new List<byte[]> ();
-	const int maxDataSize = 1000;
-
 	// Iterators
 	ArrayIterator roundItr; 
 	ArrayIterator pitchItr;

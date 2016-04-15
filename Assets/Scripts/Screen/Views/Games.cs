@@ -8,8 +8,6 @@ namespace Views {
 
 	public class Games : View {
 
-		string selectedGame = "";
-
 		protected override void OnInitElements () {
 			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("searching", new TextElement (GetText ("searching")));
@@ -17,7 +15,6 @@ namespace Views {
 			Elements.Add ("game_list", new RadioListElement (GetButton ("confirm"), (string selected) => {
 				JoinGame (selected);
 			}));
-			
 		}
 
 		protected override void OnShow () {

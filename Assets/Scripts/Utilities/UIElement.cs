@@ -45,7 +45,7 @@ public class UIElement : MB {
 	}
 
 	InputField inputField = null;
-	protected InputField InputField {
+	public InputField InputField {
 		get {
 			if (inputField == null) {
 				inputField = GetComponent<InputField> ();

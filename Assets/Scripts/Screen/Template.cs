@@ -51,9 +51,13 @@ namespace Templates {
 		}
 
 		protected bool Loaded { get; private set; }
+		protected TemplateAnimator anim;
 		Dictionary<string, ScreenElementUI> overlayElements = new Dictionary<string, ScreenElementUI> ();
 
-		void OnEnable () { Loaded = false; }
+		void OnEnable () { 
+			Loaded = false; 
+			anim = TemplateAnimator.AttachTo (gameObject);
+		}
 
 		public void LoadView (View view, Dictionary<string, ScreenElementUI> overlayElements) {
 			this.overlayElements = overlayElements;

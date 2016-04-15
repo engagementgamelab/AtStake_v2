@@ -120,7 +120,7 @@ namespace Views {
 		}
 
 		Settings settings;
-		Settings Settings {
+		protected Settings Settings {
 			get {
 				if (settings == null)
 					settings = DataManager.GetSettings ();
