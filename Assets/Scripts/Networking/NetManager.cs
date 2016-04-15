@@ -220,6 +220,7 @@ public class NetManager {
 	}
 
 	void OnRoomClosed (SocketIOEvent e) {
+		connection.Reset ();
 		if (onDisconnected != null)
 			onDisconnected ();
 	}
