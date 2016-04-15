@@ -25,7 +25,8 @@ namespace Templates {
 				if (instructions == null) {
 					instructions = new List<TextElementUI> ();
 					instructions.Add ((TextElementUI)Elements["instruction1"]);
-					instructions.Add ((TextElementUI)Elements["instruction2"]);
+					if (LoadedElements.ContainsKey ("instruction2"))
+						instructions.Add ((TextElementUI)Elements["instruction2"]);
 					instructions.Add ((TextElementUI)Elements["instruction3"]);
 					instructions.Add ((TextElementUI)Elements["instruction4"]);
 					instructions.Add ((TextElementUI)Elements["instruction5"]);
@@ -45,21 +46,30 @@ namespace Templates {
 
 		protected override void OnInputEnabled () {
 			Co.RepeatAscending (0.5f, 3.5f, Instructions.Count, (int i) => {
-				if (!Loaded)
-					return;
-				if (i > 0)
-					Instructions[i-1].Visible = false;
+
+				// Wait until the view is loaded
+				if (!Loaded) return;
+
+				// Remove the previous instruction
+				if (i > 0) Instructions[i-1].Visible = false;
+
+				// Show the current instruction
 				Instructions[i].Visible = true;
-				if (i == 0 && Elements["next"].Loaded)
+
+				if (Elements["instruction1"].Visible && Elements["next"].Loaded)
 					Elements["coins"].Visible = true;
-				else if (i == 1)
+				else if (Elements["instruction2"].Visible)
 					Elements["coins"].Visible = true;
-				else if (i == 3)
+				else if (Elements["instruction4"].Visible)
 					Elements["pot"].Visible = true;
 			}, () => {
 				if (Loaded)
 					Elements["next"].Visible = true;
 			});
+		}
+
+		protected override void OnUnloadView () {
+			instructions = null;
 		}
 	}
 }

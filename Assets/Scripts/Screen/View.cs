@@ -96,7 +96,8 @@ namespace Views {
 		/// </summary>
 		protected Dictionary<string, string> TextVariables {
 			get {
-				return new Dictionary<string, string> () {
+
+				Dictionary<string, string> textVars = new Dictionary<string, string> () {
 					{ "decider", Game.Controller.DeciderName },
 					{ "decider_start_coin_count", Settings.DeciderStartCoinCount.ToString () },
 					{ "player_start_coin_count", Settings.PlayerStartCoinCount.ToString () },
@@ -108,6 +109,13 @@ namespace Views {
 					{ "question", Game.Controller.Question },
 					{ "player_name", Name }
 				};
+
+				if (Game.Controller.RoundNumber > 0) {
+					textVars["decider_start_coin_count"] = Settings.DeciderRoundStartCoinCount.ToString ();
+					textVars["player_start_coin_count"] = Settings.PlayerRoundStartCoinCount.ToString ();
+				}
+
+				return textVars;
 			}
 		}
 

@@ -66,7 +66,7 @@ public class GameTest : GameInstanceBehaviour {
 	void GotoView (MasterMsgTypes.GenericMessage msg) {
 
 		Co.YieldWhileTrue (() => { return Animating; }, () => {
-			Co.WaitForSeconds (1f, () => {
+			Co.WaitForSeconds (0.5f, () => {
 				switch (msg.str1) {
 					case "deck": 
 						if (Hosting)
