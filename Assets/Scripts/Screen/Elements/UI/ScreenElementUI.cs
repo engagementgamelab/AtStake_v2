@@ -51,6 +51,7 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	public override void Load (ScreenElement element, TemplateSettings settings) {
 		this.settings = settings;
 		this.element = (T)element;
+		Transform.SetLocalScale (1f);
 		ApplyElement (this.element);
 		element.onUpdate += OnUpdate;
 		OnSetActive (element.Active);

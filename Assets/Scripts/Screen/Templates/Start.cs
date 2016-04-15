@@ -23,11 +23,11 @@ namespace Templates {
 				bool isInputFocused = input.InputField.isFocused;
 
 				if (inputFocused && !isInputFocused) {
-					anim.Animate (new TemplateAnimator.Peek (0.3f, 0, () => {
+					anim.Animate (new UIAnimator.Peek (0.3f, 0, () => {
 						inputFocused = false;
 					}));
 				} else if (!inputFocused && isInputFocused) {
-					anim.Animate (new TemplateAnimator.Peek (0.3f, 60, () => {
+					anim.Animate (new UIAnimator.Peek (0.3f, 60, () => {
 						inputFocused = true;
 					}));
 				}

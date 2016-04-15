@@ -67,9 +67,8 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 
 		T t = ObjectPool.Instantiate<T> ();
 		t.id = id;
-		t.Load (element, Settings);
 		t.Parent = RectTransform;
-		t.RectTransform.localScale = Vector3.one;
+		t.Load (element, Settings);
 
 		// All elements in the list will be styled with the default styling unless explicitely overriden
 

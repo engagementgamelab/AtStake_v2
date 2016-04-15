@@ -39,7 +39,7 @@ namespace Templates {
 			}
 		}
 
-		TemplateAnimator anim;
+		UIAnimator anim;
 
 		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
 		// true = SlideIn
@@ -91,7 +91,7 @@ namespace Templates {
 			canvasWidth = canvas.GetComponent<RectTransform> ().sizeDelta.x;
 			container1 = TemplateContainer.Init (this, 0);
 			container2 = TemplateContainer.Init (this, 1);
-			anim = TemplateAnimator.AttachTo (gameObject);
+			anim = UIAnimator.AttachTo (gameObject);
 		}
 
 		void SlideIn () { Slide (-canvasWidth); }
@@ -99,7 +99,7 @@ namespace Templates {
 
 		void Slide (float to) {
 
-			if (anim.Animate (new TemplateAnimator.Slide (slideTime, to, () => {
+			if (anim.Animate (new UIAnimator.Slide (slideTime, to, () => {
 
 				// Normalize positions
 				inactiveContainer.RectTransform.SetAnchoredPositionX (0f);
