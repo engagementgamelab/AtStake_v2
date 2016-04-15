@@ -141,6 +141,9 @@ public class NetManager {
 
 	public void Stop () {
 
+		if (connection.clientId == null)
+			return;
+
 		// Unregisters the client and leaves the room (if in one)
 		JSONObject obj = JSONObject.Create ();
 		obj.AddField ("roomId", connection.connected ? connection.roomId : "");

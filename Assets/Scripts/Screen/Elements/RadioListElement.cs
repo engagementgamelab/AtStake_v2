@@ -21,11 +21,20 @@ public class RadioListElement : ListElement<ButtonElement> {
 	}
 
 	public void Set (List<string> newNames) {
+
 		Dictionary<string, ButtonElement> newElements = new Dictionary<string, ButtonElement> ();
+
 		foreach (string name in newNames)
 			newElements.Add (name, new ButtonElement (name, SelectButton));
 		newElements.Add ("confirm", Elements["confirm"]);
+
 		Set (newElements);
+
+		// If the selected element was removed, unselect it
+		if (!Elements.ContainsKey (selected)) {
+			selected = "";
+			Elements["confirm"].Interactable = false;
+		}
 	}
 
 	void SelectButton (ButtonElement b) {

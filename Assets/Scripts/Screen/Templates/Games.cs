@@ -7,12 +7,23 @@ namespace Templates {
 	public class Games : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("logo", "lt_paragraph|searching|client_instructions", "orange_button|confirm") {
+			return new TemplateSettings ("logo", "lt_paragraph|client_instructions", "orange_button|confirm") {
 				BackgroundColor = Palette.Teal,
 				TextStyles = new Dictionary<string, TextStyle> () {
-					{ "game_list", TextStyle.Button }
+					{ "game_list", TextStyle.Button },
+					{ "searching", SearchingStyle }
 				}
 			};
+		}
+
+		TextStyle SearchingStyle {
+			get {
+				return new TextStyle () {
+					FontSize = 18,
+					FontColor = Palette.White,
+					FontStyle = FontStyle.Italic
+				};
+			}
 		}
 
 		TextElementUI searching;

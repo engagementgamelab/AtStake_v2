@@ -6,7 +6,7 @@ public class TemplateAnimator : UIElement {
 
 	TemplateAnimation currentAnimation;
 
-	bool Animating {
+	public bool Animating {
 		get { return currentAnimation != null && currentAnimation.Animating; }
 	}
 

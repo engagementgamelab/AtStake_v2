@@ -16,12 +16,15 @@ namespace Templates {
 		public PotElementUI pot;
 		public CoinsElementUI coins;
 
+		public bool Animating {
+			get { return anim == null ? false : anim.Animating; }
+		}
+
 		TemplateContainer container1;
 		TemplateContainer container2;
 
 		float canvasWidth;
 		float slideTime = 0.33f;
-		bool animating = false;
 		string prevId;
 
 		TemplateContainer activeContainer;
@@ -34,10 +37,6 @@ namespace Templates {
 					raycaster = canvas.GetComponent<GraphicRaycaster> ();
 				return raycaster;
 			}
-		}
-
-		public bool Animating {
-			get { return animating; }
 		}
 
 		TemplateAnimator anim;
@@ -113,13 +112,11 @@ namespace Templates {
 				// Swap the active and inactive containers
 				UpdateActiveContainer ();
 
-				animating = false;
-
 				// Inform the newly active container that the animation has finished & input is being accepted
 				activeContainer.SetInputEnabled ();
 
 				// Enable the raycaster so that input is accepted again (small pause so that players don't accidently 'double press' buttons)
-				Co.WaitForSeconds (0.1f, () => {
+				Co.WaitForSeconds (0.05f, () => {
 					Raycaster.enabled = true;
 				});
 
