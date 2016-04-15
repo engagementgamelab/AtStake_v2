@@ -21,7 +21,7 @@ public class GameInstanceManager : MonoBehaviour {
 
 	List<GameInstance> instances = new List<GameInstance> ();
 
-	#if SINGLE_SCREEN
+	#if UNITY_EDITOR && SINGLE_SCREEN
 	string[] names = new [] { "Forrest", "Jenny", "Momma", "Lt Dan" };
 	#endif
 
@@ -38,13 +38,13 @@ public class GameInstanceManager : MonoBehaviour {
 		GameInstance i = ObjectPool.Instantiate<GameInstance> ();
 		i.transform.SetParent (transform);
 		instances.Add (i);
-		#if SINGLE_SCREEN
+		#if UNITY_EDITOR && SINGLE_SCREEN
 		i.Manager.Name = names[instances.Count-1];
 		#endif
 		i.SetTemplatePosition (instancePositions[instances.Count-1]);
 	}
 
-	#if SINGLE_SCREEN
+	#if UNITY_EDITOR && SINGLE_SCREEN
 
 	Vector3[] instancePositions = new Vector3[] {
 		new Vector3 (0, 333, 0),

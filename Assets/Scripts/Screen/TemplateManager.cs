@@ -32,7 +32,7 @@ namespace Templates {
 		void OnEnable () {
 
 			transform.localScale = 			
-			#if SINGLE_SCREEN
+			#if UNITY_EDITOR && SINGLE_SCREEN
 				new Vector3 (0.5f, 0.5f, 0.5f);
 			#else
 				Vector3.one;

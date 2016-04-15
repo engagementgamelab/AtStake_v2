@@ -56,14 +56,25 @@ public class NetManager {
 	}
 
 	public void StartAsHost (string name, Action<ResponseType> response) {
-		connection.name = name;
+
 		#if RESET_ON_REGISTER
 		socket.Emit ("socketReset", (SocketIOEvent e) => {
 		#endif
-			Register (name, () => {
+			
+		connection.name = name;
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("name", name);
+		obj.AddField ("maxClientCount", 4);
+		
+		socket.Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
+			if (!res.nameTaken) {
 				socket.On("updateClients", OnUpdateClients);
-				CreateRoom (response);
-			});
+				connection.clientId = res.client._id;
+				connection.room = res.room;
+			}
+			response (res.nameTaken ? ResponseType.NameTaken : ResponseType.Success);
+		});
+
 		#if RESET_ON_REGISTER
 		});
 		#endif
@@ -80,10 +91,19 @@ public class NetManager {
 	}
 
 	public void StartAsClient (string name, string roomId, Action<ResponseType> response) {
-		connection.name = name;
-		Register (name, () => {
-			socket.On ("kick", OnRoomClosed);
-			JoinRoom (roomId, response);
+
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("name", name);
+		obj.AddField ("roomId", roomId);
+
+		socket.Emit<Response.JoinRoom> ("joinRoom", obj, (Response.JoinRoom res) => {
+			if (!res.nameTaken) {
+				socket.Off ("roomListUpdated", OnUpdateRoomList);
+				socket.On ("kick", OnRoomClosed);
+				connection.clientId = res.client._id;
+				connection.room = res.room;
+			}
+			response (res.nameTaken ? ResponseType.NameTaken : ResponseType.Success);
 		});
 	}
 
@@ -102,9 +122,7 @@ public class NetManager {
 			obj.AddField ("roomId", connection.roomId);
 			obj.AddField ("key", msg.id);
 		} else {
-
 			obj = JSONObject.Create ();
-
 			obj.AddField ("roomId", connection.roomId);
 			obj.AddField ("key", msg.id);
 			obj.AddField ("str1", msg.str1);
@@ -117,77 +135,13 @@ public class NetManager {
 
 	public void Stop () {
 
-		// If connected to a room, leave the room. Then unregister the client.
-		if (connection.connected) {
+		// Unregisters the client and leaves the room (if in one)
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("roomId", connection.connected ? connection.roomId : "");
+		obj.AddField ("clientId", connection.clientId);
 
-			JSONObject obj = JSONObject.Create ();
-			obj.AddField ("roomId", connection.roomId);
-			obj.AddField ("clientId", connection.clientId);
-
-			socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
-				Unregister ();
-			});
-
-		} else {
-			Unregister ();
-		}
-	}
-
-	void Register (string name, Action callback) {
-
-		// The client is only ever registered once. They remain in the database until the app is closed.
-		if (!string.IsNullOrEmpty (connection.clientId))
-			callback ();
-
-		socket.Emit<Response.Client> ("register", name, (Response.Client res) => {
-			connection.clientId = res._id;
-			callback ();
-		});
-	}
-
-	void Unregister (Action callback=null) {
-		socket.Emit ("unregister", connection.clientId, (SocketIOEvent e) => {
+		socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
 			connection.Reset ();
-			if (callback != null)
-				callback();
-		});
-	}
-
-	void CreateRoom (Action<ResponseType> callback) {
-		
-		#if UNITY_EDITOR
-		if (string.IsNullOrEmpty (connection.clientId))
-			throw new System.Exception ("Client must register before creating a room.");
-		#endif
-
-		JSONObject obj = JSONObject.Create ();
-		obj.AddField ("clientId", connection.clientId);
-		obj.AddField ("maxClientCount", 4);
-		
-		socket.Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
-			if (res.nameTaken) {
-				callback (ResponseType.NameTaken);
-			} else {
-				connection.room = res.room;
-				callback (ResponseType.Success);
-			}
-		});
-	}
-
-	void JoinRoom (string roomId, Action<ResponseType> callback) {
-
-		JSONObject obj = JSONObject.Create ();
-		obj.AddField ("clientId", connection.clientId);
-		obj.AddField ("roomId", roomId);
-
-		socket.Emit<Response.JoinRoom> ("joinRoom", obj, (Response.JoinRoom res) => {
-			if (res.nameTaken) {
-				callback (ResponseType.NameTaken);
-			} else {
-				socket.Off ("roomListUpdated", OnUpdateRoomList);
-				connection.room = res.room;
-				callback (ResponseType.Success);
-			}
 		});
 	}
 
@@ -241,11 +195,13 @@ public class NetManager {
 
 		public class CreateRoom {
 			public Room room { get; set; }
+			public Client client { get; set; }
 			public bool nameTaken { get; set; }
 		}
 
 		public class JoinRoom {
 			public Room room { get; set; }
+			public Client client { get; set; }
 			public bool nameTaken { get; set; }
 		}
 
