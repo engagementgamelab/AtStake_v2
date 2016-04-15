@@ -25,6 +25,9 @@ public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
 		AddButtonListener (() => { 
 			e.StartTimer (); 
 		});
+		
+		headerText.ApplyStyle (TextStyle.TimerHeader);
+		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
 	}
 
 	protected override void OnUpdate (TimerButtonElement e) {
@@ -32,6 +35,9 @@ public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
+
+		headerText.ApplyStyle (TextStyle.TimerHeader);
+		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
 	}
 
 	public override void RemoveElement (TimerButtonElement e) {

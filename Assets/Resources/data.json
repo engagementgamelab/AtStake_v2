@@ -343,7 +343,9 @@
         "next_up": "Next up is {{current_peer}}. Start the timer when they're ready!"
       },
       "Buttons": {
-        "timer_button": "Pitch!"
+        "timer_button": "Pitch!",
+        "pitching": "Pitch!",
+        "listening": "Listen!"
       }
     },
     {

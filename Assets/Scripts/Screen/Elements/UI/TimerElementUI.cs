@@ -17,11 +17,15 @@ public class TimerElementUI : ScreenElementUI<TimerElement> {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
+		headerText.ApplyStyle (TextStyle.TimerHeader);
+		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
 	}
 
 	protected override void OnUpdate (TimerElement e) {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
+		headerText.ApplyStyle (TextStyle.TimerHeader);
+		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
 	}
 }

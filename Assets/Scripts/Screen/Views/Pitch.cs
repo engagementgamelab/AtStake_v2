@@ -22,32 +22,45 @@ namespace Views {
 		State state = State.Pitch;
 
 		Dictionary<string, string> CurrentPitcherTextVariable {
-			get { return new Dictionary<string, string> () { { "current_peer", Game.Controller.CurrentPitcher } }; }
+			get { return new Dictionary<string, string> () { { "current_peer", CurrentPitcher } }; }
+		}
+
+		string CurrentPitcher {
+			get { return Game.Controller.CurrentPitcher; }
+		}
+
+		bool IsCurrentPitcher {
+			get { return CurrentPitcher == Name; }
 		}
 
 		protected override void OnInitDeciderElements () {
 
 			Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
-			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			state = State.Pitch;
 
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
-					Game.Controller.CurrentPitcher,
+					CurrentPitcher,
 					state == State.Pitch ? "pitch" : "extra"
 				);
 			}));
 		}
 
 		protected override void OnInitPlayerElements () {
+
 			CreateRoleCard (true, true, true);
-			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, () => {
-				GotoView ("extra_time");
-			}) { Active = false });
+
+			string timerText = GetButton (IsCurrentPitcher ? "pitching" : "listening"); 
+
+			Elements.Add ("timer", new TimerElement (timerText, Duration, () => {
+				if (IsCurrentPitcher)
+					GotoView ("extra_time");
+			}));
 		}
 
 		protected override void OnShow () {
+			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (HasElement ("decider_instructions")) {
 				GetScreenElement<TextElement> ("decider_instructions")
@@ -63,20 +76,16 @@ namespace Views {
 
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {
 
-			// Check if it's this player's turn to pitch
-			if (msg.str1 == Name) {
+			if (IsDecider) return;
 
-				// Set the timer duration based on the pitch state
-				float duration = msg.str2 == "pitch"
-					? Duration
-					: ExtraTimeDuration;
+			float duration = msg.str2 == "pitch"
+				? Duration
+				: ExtraTimeDuration;
 
-				// Start the timer
-				TimerElement timer = GetScreenElement<TimerElement> ("timer");
-				timer.Active = true;
-				timer.Reset (duration);
-				timer.StartTimer ();
-			}
+			// Start the timer
+			TimerElement timer = GetScreenElement<TimerElement> ("timer");
+			timer.Reset (duration);
+			timer.StartTimer ();
 		}
 
 		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
@@ -88,9 +97,19 @@ namespace Views {
 		}
 
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
+
+			// Update player timers
+			if (!IsDecider) {
+				TimerElement timer = GetScreenElement<TimerElement> ("timer");
+				timer.Text = GetButton (Game.Controller.NextPitcher == Name ? "pitching" : "listening");
+				timer.Reset ();
+				return;
+			}
+
+			// Decider logic
 			state = State.Pitch;
 			Game.Controller.NextPitch ();
-			if (Game.Controller.CurrentPitcher != "") {
+			if (CurrentPitcher != "") {
 				AllGotoView ("pitch");
 				GetScreenElement<TextElement> ("decider_instructions")
 					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);

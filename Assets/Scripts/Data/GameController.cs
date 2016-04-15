@@ -185,6 +185,17 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	/// <summary>
+	/// Gets the name of the next player to pitch
+	/// </summary>
+	public string NextPitcher {
+		get {
+			if (pitchItr.Position > CurrentRound.PitchOrder.Length-2)
+				return "";
+			return CurrentRound.PitchOrder[pitchItr.Position+1];
+		}
+	}
+
+	/// <summary>
 	/// Gets the data model for the current agenda item
 	/// </summary>
 	public PlayerAgendaItem CurrentAgendaItem {

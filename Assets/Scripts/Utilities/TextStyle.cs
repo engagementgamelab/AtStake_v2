@@ -107,6 +107,27 @@ public class TextStyle {
 			return style;
 		}
 	}
+
+	public static TextStyle TimerHeader {
+		get {
+			return new TextStyle () {
+				FontSize = 32,
+				FontStyle = FontStyle.Italic,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
+	public static TextStyle TimerSubheader {
+		get {
+			return new TextStyle () {
+				FontSize = 16,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
 }
 
 public static class TextStyleExtension {
