@@ -86,7 +86,8 @@ public class GameInstanceManager : MonoBehaviour {
 		instances[0].StartGame ();
 		instances[0].Multiplayer.HostGame ((ResponseType res) => {}); // TODO: incorporate this callback
 
-		Co.YieldWhileTrue (() => { return DiscoveryService.Broadcaster == null; }, () => {
+		// Co.YieldWhileTrue (() => { return DiscoveryService.Broadcaster == null; }, () => {
+		Co.YieldWhileTrue (() => { return false; }, () => {
 
 			if (deck) {
 				instances[0].Views.Goto ("deck");

@@ -23,7 +23,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		#if SHOW_DEBUG_INFO
 		multiplayer.onLogMessage += OnLogMessage;
 		#endif
-		ipAddress.text = multiplayer.client.IpAddress;
+		// ipAddress.text = multiplayer.client.IpAddress;
 	}
 
 	public void Host () {
@@ -71,7 +71,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 
 		if (multiplayer == null) return;
 
-		hostButton.gameObject.SetActive (
+		/*hostButton.gameObject.SetActive (
 			!multiplayer.client.IsConnected 
 			&& DiscoveryService.Broadcaster == null
 			&& !DiscoveryService.HasListener (multiplayer));
@@ -98,7 +98,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		} else {
 			hostStatus.text = "not connected";
 			clientsStatus.text = "";
-		}
+		}*/
 	}
 
 	void OnLogMessage (string msg) {

@@ -46,17 +46,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	/// </summary>
 	public bool DisconnectedWithError { get; private set; }
 
-	public NetworkMasterServer server;
-	public NetworkMasterClient client;
-	public OnLogMessage onLogMessage;
 	public OnDisconnected onDisconnected;
 
 	Dictionary<string, string> hosts;
 	List<string> clients = new List<string> ();
 	bool connected = false;
 	AvatarsManager avatars;
-
-	public NetManager net;
+	NetManager net;
 
 	void OnEnable () {
 		net = new NetManager (gameObject.AddComponent<SocketIOComponent> ());
@@ -112,7 +108,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	// Intentional disconnect (player chose to terminate their connection)
 	// This will stop the discovery service
-	// If a connection has been established, the OnDisconnect event will also fire
+	// The OnDisconnect event will also fire
 	public void Disconnect () {
 		net.Stop ();
 		OnDisconnect ();
