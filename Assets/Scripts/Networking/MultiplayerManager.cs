@@ -78,7 +78,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		net.StartAsHost (Game.Name, (ResponseType res) => {
 
 			if (res == ResponseType.Success)
-				net.clientsUpdated += OnUpdateClients;
+				net.clientsUpdated = OnUpdateClients;
 
 			response (res);
 		});
@@ -96,7 +96,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		// Set the host
 		Host = hostName;
-		net.StartAsClient (Game.Name, hosts[Host], response);
+		net.StartAsClient (Game.Name, hosts[Host], (ResponseType res) => {
+
+			if (res == ResponseType.Success)
+				net.onDisconnected += OnDisconnect;
+
+			response(res);	
+		});
 	}
 
 	public void GameStarted () {
@@ -122,30 +128,18 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	void AddClient (string clientName) {
 		Clients.Add (clientName);
 		avatars.AddPlayer (clientName);
-		// UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
 	void RemoveClient (string clientName) {
 		Clients.Remove (clientName);
 		avatars.RemovePlayer (clientName);
-		// UpdateBroadcast ();
 		UpdatePlayers ();
 	}
 
 	void UpdatePlayers () {
 		Game.Dispatcher.ScheduleMessage ("UpdatePlayers", avatars.GetPlayers ());
 	}
-
-	// MasterServer
-	/*void UpdateBroadcast () {
-		int maxPlayerCount = DataManager.GetSettings ().PlayerCountRange[1];
-		if (Clients.Count+1 < maxPlayerCount) {
-			DiscoveryService.StartBroadcasting (Host, client.IpAddress, OnBroadcastError);
-		} else {
-			DiscoveryService.StopBroadcasting ();
-		}
-	}*/
 
 	// -- Messaging
 

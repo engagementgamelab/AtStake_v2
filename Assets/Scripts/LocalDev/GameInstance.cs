@@ -50,6 +50,7 @@ public class GameInstance : MonoBehaviour {
 	// Called when the game begins (considered to be when a player hosts or joins a game)
 	public void StartGame () {
 		Views.Init ();
+		Manager.Init ();
 		Decks.Init ();
 		Score.Init ();
 		Controller.Init ();

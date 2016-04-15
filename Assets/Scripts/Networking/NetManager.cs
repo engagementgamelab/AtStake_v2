@@ -21,12 +21,25 @@ public class NetManager {
 			clientId = "";
 			room = null;
 		}
+
+		public override string ToString () {
+			string output = "";
+			if (!string.IsNullOrEmpty (name))
+				output += "name: " + name;
+			if (!string.IsNullOrEmpty (clientId))
+				output += ", clientId: " + clientId;
+			if (connected)
+				output += ", roomId: " + roomId;
+			return output;
+		}
 	}
 
 	public delegate void ClientsUpdated (string[] clients);
+	public delegate void OnDisconnected ();
 	public delegate void MessageReceived (MasterMsgTypes.GenericMessage msg);
 
 	public ClientsUpdated clientsUpdated;
+	public OnDisconnected onDisconnected;
 	public MessageReceived messageReceived;
 
 	ConnectionInfo connection;
@@ -38,7 +51,6 @@ public class NetManager {
 		this.socket.On("open", OnOpen);
 		this.socket.On("error", OnError);
 		this.socket.On("close", OnClose);
-		this.socket.On("updateClients", OnUpdateClients);
 		this.socket.On("receiveMessage", OnMessage);
 		this.socket.Connect ();
 	}
@@ -49,6 +61,7 @@ public class NetManager {
 		socket.Emit ("socketReset", (SocketIOEvent e) => {
 		#endif
 			Register (name, () => {
+				socket.On("updateClients", OnUpdateClients);
 				CreateRoom (response);
 			});
 		#if RESET_ON_REGISTER
@@ -69,11 +82,14 @@ public class NetManager {
 	public void StartAsClient (string name, string roomId, Action<ResponseType> response) {
 		connection.name = name;
 		Register (name, () => {
+			socket.On ("kick", OnRoomClosed);
 			JoinRoom (roomId, response);
 		});
 	}
 
 	public void CloseRoom () {
+
+		// The room is closed when the game begins so that other players will not be able to join an in-progress game
 		socket.Emit ("closeRoom", connection.roomId);
 	}
 
@@ -188,12 +204,12 @@ public class NetManager {
 			messageReceived (MasterMsgTypes.GenericMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
 		}
 
-		JSONObject obj = JSONObject.Create ();
+		/*JSONObject obj = JSONObject.Create ();
 		obj.AddField ("clientId", connection.clientId);
 		obj.AddField ("roomId", connection.roomId);
 		obj.AddField ("key", msg.key);
 
-		// socket.Emit ("confirmReceipt", obj);
+		socket.Emit ("confirmReceipt", obj);*/
 	}
 
 	void OnUpdateRoomList (SocketIOEvent e) {
@@ -203,15 +219,21 @@ public class NetManager {
 		}
 	}
 
+	void OnRoomClosed (SocketIOEvent e) {
+		if (onDisconnected != null)
+			onDisconnected ();
+	}
+
 	void OnOpen (SocketIOEvent e) {
 		// Debug.Log ("[SocketIO] Open received: " + e.name + ", " + e.data);
 	}
 
 	void OnError (SocketIOEvent e) {
-		Debug.Log("[SocketIO] Error received: " + e.name + ", " + e.data);
+		Debug.LogWarning("[SocketIO] Error received: " + e.name + ", " + e.data);
 	}
 
 	void OnClose (SocketIOEvent e) {
+		Debug.Log ("CLOSED");
 		// Debug.Log ("[SocketIO] Close received: " + e.name + ", " + e.data);
 	}
 
