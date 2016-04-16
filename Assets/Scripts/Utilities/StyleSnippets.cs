@@ -10,6 +10,7 @@ public class StyleSnippets {
 			if (snippets == null) {
 				snippets = new Dictionary<string, StyleSnippet> ();
 				snippets.Add ("role_card", RoleCard);
+				snippets.Add ("decider_instructions", DeciderInstructions);
 				snippets.Add ("logo", Logo);
 				snippets.Add ("lt_paragraph", LtParagraph);
 				snippets.Add ("next_button", NextButton);
@@ -86,6 +87,24 @@ public class StyleSnippets {
 					new StyleSnippet ("rc_item1", agendaItem),
 					new StyleSnippet ("rc_reward0", reward),
 					new StyleSnippet ("rc_reward1", reward)
+				}
+			};
+		}
+	}
+
+	public StyleSnippet DeciderInstructions {
+		get {
+
+			TextStyle readAloud = new TextStyle () {
+				FontSize = 26,
+				FontColor = Palette.Grey
+			};
+
+			return new StyleSnippet () {
+				Snippets = new List<StyleSnippet> () {
+					new StyleSnippet ("instructions_read", readAloud),
+					new StyleSnippet ("decider_instructions_out_loud", TextStyle.LtParagraph),
+					new StyleSnippet ("decider_instructions", TextStyle.Paragraph)
 				}
 			};
 		}

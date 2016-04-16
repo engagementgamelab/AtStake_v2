@@ -7,7 +7,7 @@ namespace Templates {
 	public class Bio : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("next_button", "decider_instructions") {
 				TopBarColor = Palette.LtTeal,
 				TopBarHeight = TemplateSettings.ShortBar,
 				BottomBarHeight = TemplateSettings.MediumBar,
@@ -17,9 +17,6 @@ namespace Templates {
 				CoinsEnabled = true,
 				TextStyles = new Dictionary<string, TextStyle> () {
 					{ "rc_title", TextStyle.Header2 }
-				},
-				Colors = new Dictionary<string, Color> () {
-					{ "decider_instructions", Palette.Grey }
 				}
 			};
 		}

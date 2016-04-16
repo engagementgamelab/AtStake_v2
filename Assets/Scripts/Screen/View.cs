@@ -156,6 +156,11 @@ namespace Views {
 
 			// Decider & Player instructions
 			if (IsDecider) {
+				if (!string.IsNullOrEmpty (Model.DeciderInstructionsOutLoud)) {
+					Elements.Add ("decider_instructions_out_loud", new TextElement (
+						DataManager.GetTextFromScreen (Model, "DeciderInstructionsOutLoud", TextVariables)));
+					Elements.Add ("instructions_read", new TextElement ("Read out loud:"));
+				}
 				if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
 					Elements.Add ("decider_instructions", new TextElement (
 						DataManager.GetTextFromScreen (Model, "DeciderInstructions", TextVariables)));

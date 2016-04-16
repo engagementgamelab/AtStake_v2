@@ -90,7 +90,8 @@ namespace Models {
 		public string Instructions { get; set; }
 
 		// Instructions that only the Decider sees
-		public string DeciderInstructions { get; set; }
+		public string DeciderInstructionsOutLoud { get; set; }	// Instructions that the Decider reads to other players
+		public string DeciderInstructions { get; set; }			// Instructions that only the Decider sees
 
 		// Instructions that only the players see (not the Decider)
 		public string PlayerInstructions { get; set; }
