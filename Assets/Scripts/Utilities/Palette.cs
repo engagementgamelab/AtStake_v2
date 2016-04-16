@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// All the colors used in the game
@@ -51,6 +52,20 @@ public static class Palette {
 	}
 
 	public static class Avatar {
+
+		static Dictionary<string, string> playerColors = new Dictionary<string, string> ();
+
+		public static void SetPlayerColors (Dictionary<string, string> colors) {
+			playerColors = colors;
+		}
+
+		public static Color GetPlayerColors (string id) {
+			try {
+				return GetColor (playerColors[id]);
+			} catch {
+				throw new System.Exception ("No color exists for the player with the id '" + id + "'");
+			}
+		}
 
 		public static Color GetColor (string id) {
 

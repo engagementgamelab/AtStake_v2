@@ -9,7 +9,7 @@ public class StyleSnippets {
 		get {
 			if (snippets == null) {
 				snippets = new Dictionary<string, StyleSnippet> ();
-				// snippets.Add ("role_card", RoleCard);
+				snippets.Add ("role_card", RoleCard);
 				snippets.Add ("logo", Logo);
 				snippets.Add ("lt_paragraph", LtParagraph);
 				snippets.Add ("next_button", NextButton);
@@ -54,11 +54,42 @@ public class StyleSnippets {
 		get { return new StyleSnippet ("button", Palette.Blue, TextStyle.LtButton); }
 	}
 
-	/*public StyleSnippet RoleCard {
+	public StyleSnippet RoleCard {
 		get {
-			return new StyleSnippet ("")
+
+			TextStyle title = new TextStyle () {
+				FontSize = 24,
+				FontColor = Palette.Grey
+			};
+
+			TextStyle agendaTitle = new TextStyle () {
+				FontSize = 20,
+				FontColor = Palette.LtTeal
+			};
+
+			TextStyle agendaItem = new TextStyle () {
+				FontSize = 16
+			};
+
+			TextStyle reward = new TextStyle () {
+				FontSize = 20,
+				FontStyle = FontStyle.Bold,
+				FontColor = Palette.White
+			};
+
+			return new StyleSnippet () {
+				Snippets = new List<StyleSnippet> () {
+					new StyleSnippet ("rc_title", title),
+					new StyleSnippet ("rc_bio", TextStyle.Paragraph),
+					new StyleSnippet ("rc_agenda_title", agendaTitle),
+					new StyleSnippet ("rc_item0", agendaItem),
+					new StyleSnippet ("rc_item1", agendaItem),
+					new StyleSnippet ("rc_reward0", reward),
+					new StyleSnippet ("rc_reward1", reward)
+				}
+			};
 		}
-	}*/
+	}
 }
 
 public class StyleSnippet {

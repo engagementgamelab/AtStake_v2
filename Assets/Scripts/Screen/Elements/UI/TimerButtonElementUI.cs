@@ -18,6 +18,27 @@ public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
 		get { return timerButton; }
 	}
 
+	public static TextStyle TimerHeader {
+		get {
+			return new TextStyle () {
+				FontSize = 32,
+				FontStyle = FontStyle.Italic,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
+	public static TextStyle TimerSubheader {
+		get {
+			return new TextStyle () {
+				FontSize = 16,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
 	public override void ApplyElement (TimerButtonElement e) {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
@@ -26,8 +47,8 @@ public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
 			e.StartTimer (); 
 		});
 		
-		headerText.ApplyStyle (TextStyle.TimerHeader);
-		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
+		headerText.ApplyStyle (TimerHeader);
+		subheaderText.ApplyStyle (TimerSubheader);
 	}
 
 	protected override void OnUpdate (TimerButtonElement e) {
@@ -36,8 +57,8 @@ public class TimerButtonElementUI : ScreenElementUI<TimerButtonElement> {
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
 
-		headerText.ApplyStyle (TextStyle.TimerHeader);
-		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
+		headerText.ApplyStyle (TimerHeader);
+		subheaderText.ApplyStyle (TimerSubheader);
 	}
 
 	public override void RemoveElement (TimerButtonElement e) {

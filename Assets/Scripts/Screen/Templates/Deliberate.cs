@@ -7,17 +7,14 @@ namespace Templates {
 	public class Deliberate : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings () {
+			return new TemplateSettings ("role_card") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,
 				BottomBarColor = Palette.LtTeal,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
-				CoinsEnabled = true,
-				TextStyles = new Dictionary<string, TextStyle> () {
-					{ "rc_agenda", TextStyle.Paragraph }
-				}
+				CoinsEnabled = true
 			};
 		}
 	}

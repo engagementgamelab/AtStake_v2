@@ -20,11 +20,13 @@ public class AvatarsManager {
 
 	public void AddPlayer (string name) {
 		players[name] = colorOrder.Pop ();
+		Palette.Avatar.SetPlayerColors (players);
 	}
 
 	public void RemovePlayer (string name) {
 		colorOrder.Push (players[name]);
 		players.Remove (name);
+		Palette.Avatar.SetPlayerColors (players);
 	}
 
 	public string GetPlayers () {

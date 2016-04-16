@@ -13,19 +13,40 @@ public class TimerElementUI : ScreenElementUI<TimerElement> {
 		get { return headerText; }
 	}
 
+	public static TextStyle TimerHeader {
+		get {
+			return new TextStyle () {
+				FontSize = 26,
+				FontStyle = FontStyle.Italic,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
+	public static TextStyle TimerSubheader {
+		get {
+			return new TextStyle () {
+				FontSize = 16,
+				FontColor = Palette.White,
+				TextTransform = TextTransform.Lowercase
+			};
+		}
+	}
+
 	public override void ApplyElement (TimerElement e) {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
-		headerText.ApplyStyle (TextStyle.TimerHeader);
-		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
+		headerText.ApplyStyle (TimerHeader);
+		subheaderText.ApplyStyle (TimerSubheader);
 	}
 
 	protected override void OnUpdate (TimerElement e) {
 		Text.text = e.Text;
 		subheaderText.text = e.TimeText;
 		timerForeground.fillAmount = e.Progress;
-		headerText.ApplyStyle (TextStyle.TimerHeader);
-		subheaderText.ApplyStyle (TextStyle.TimerSubheader);
+		headerText.ApplyStyle (TimerHeader);
+		subheaderText.ApplyStyle (TimerSubheader);
 	}
 }
