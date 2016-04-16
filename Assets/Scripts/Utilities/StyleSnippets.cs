@@ -71,13 +71,7 @@ public class StyleSnippets {
 			TextStyle agendaItem = new TextStyle () {
 				FontSize = 16
 			};
-
-			/*TextStyle reward = new TextStyle () {
-				FontSize = 20,
-				FontStyle = FontStyle.Bold,
-				FontColor = Palette.White
-			};*/
-
+			
 			return new StyleSnippet () {
 				Snippets = new List<StyleSnippet> () {
 					new StyleSnippet ("rc_title", title),

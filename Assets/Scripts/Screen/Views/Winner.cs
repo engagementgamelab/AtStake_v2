@@ -6,7 +6,7 @@ namespace Views {
 	public class Winner : View {
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("next", new NextButtonElement ("agenda_item"));
+			Elements.Add ("next", new NextButtonElement ("agenda_item_instructions"));
 		}
 
 		protected override void OnInitElements () {

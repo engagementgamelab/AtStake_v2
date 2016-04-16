@@ -36,6 +36,7 @@ namespace Views {
 						{ "extra_time_deliberate", new ExtraTimeDeliberate () },
 						{ "decide", new Decide () },
 						{ "winner", new Winner () },
+						{ "agenda_item_instructions", new AgendaItemInstructions () },
 						{ "agenda_item", new AgendaItem () },
 						{ "agenda_item_accept", new AgendaItemAccept () },
 						{ "agenda_item_reject", new AgendaItemReject () },

@@ -210,7 +210,7 @@
     },
     {
       "Symbol": "agenda_item",
-      "DeciderInstructions": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. Press 'Yes' if you think the winning proposal include the following agenda item:",
+      "DeciderInstructions": "Press 'Yes' if you think the winning proposal include the following agenda item:",
       "PlayerInstructions": "Did the winning plan include this agenda item?",
       "Text": {
         "your_item": "This is your agenda item! Convince the Decider to choose it and win bonus points!"
@@ -226,6 +226,12 @@
         "your_item": "The Decider chose your agenda item! You get {{reward}} coins",
         "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} bonus coins."
       }
+    },
+    {
+      "Symbol": "agenda_item_instructions",
+      "DeciderInstructionsOutLoud": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. ",
+      "DeciderInstructions": "Press next when everyone is ready",
+      "PlayerInstructions": "Listen to the Decider"
     },
     {
       "Symbol": "agenda_item_reject",
