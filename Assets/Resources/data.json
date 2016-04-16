@@ -205,7 +205,8 @@
   "Screens": [
     {
       "Symbol": "agenda",
-      "DeciderInstructions": "OK, now everyone review your agenda items. You'll earn extra coins if these are included in the winning proposal (even if you're not the winner). Keep them secret! I'll give you a few seconds...' Press Next when the players understand the instructions."
+      "DeciderInstructionsOutLoud": "OK, now everyone review your agenda items. You'll earn extra coins if these are included in the winning proposal (even if you're not the winner). Keep them secret! I'll give you a few seconds...'",
+      "DecuderInstructions": "Press Next when the players understand the instructions."
     },
     {
       "Symbol": "agenda_item",
@@ -260,7 +261,8 @@
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructions": "This is the deliberation round! Let's talk more about your proposals. This round is three minutes long, and more free-form. Once the round is done, players could buy more time to deliberate.",
+      "DeciderInstructionsOutLoud": "This is the deliberation round! Let's talk more about your proposals. This round is three minutes long, and more free-form. Once the round is done, players could buy more time to deliberate.",
+      "DeciderInstructions": "Press next when everyone is ready",
       "PlayerInstructions": "This is the deliberation round. Answer questions, expand your ideas, and try to get other players to agree with your agenda items."
     },
     {
@@ -351,7 +353,8 @@
     },
     {
       "Symbol": "pitch_instructions",
-      "DeciderInstructions": "OK! There will be 60 seconds are on the clock. Are you ready? Press 'Pitch' to begin!",
+      "DeciderInstructionsOutLoud": "Now everyone will take turns pitching their proposal.",
+      "DeciderInstructions": "Press next when everyone is ready",
       "PlayerInstructions": "You will have 60 seconds to pitch your proposal and an option to buy more time afterwards!"
     },
     {
@@ -366,7 +369,8 @@
     },
     {
       "Symbol": "question",
-      "DeciderInstructions": "Decider Instructions. Read this out loud: 'Here is the question you'll answer this round' {{question}}. Is everyone ready to ponder a solution? When everyone is ready, press next."
+      "DeciderInstructionsOutLoud": "'Here is the question you'll answer this round' {{question}}. Is everyone ready to ponder a solution?",
+      "DeciderInstructions": "When everyone is ready, press next."
     },
     {
       "Symbol": "roles",
@@ -395,7 +399,8 @@
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructions": "You will have 60 seconds to think of a proposal from your character's perspective.",
+      "DeciderInstructionsOutLoud": "You will have 60 seconds to think of a proposal from your character's perspective.",
+      "DeciderInstructions": "Press next when everyone is ready.",
       "PlayerInstructions": "Think of a solution from your character's perspective. You have 60 seconds to think of how to pitch your proposal."
     },
     {

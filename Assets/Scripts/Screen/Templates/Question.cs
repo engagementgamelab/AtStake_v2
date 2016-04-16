@@ -7,7 +7,7 @@ namespace Templates {
 	public class Question : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("next_button", "decider_instructions") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.LtTeal,
 				BottomBarHeight = TemplateSettings.MediumBar,

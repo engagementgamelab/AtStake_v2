@@ -16,7 +16,7 @@ public class TimerElementUI : ScreenElementUI<TimerElement> {
 	public static TextStyle TimerHeader {
 		get {
 			return new TextStyle () {
-				FontSize = 26,
+				FontSize = 22,
 				FontStyle = FontStyle.Italic,
 				FontColor = Palette.White,
 				TextTransform = TextTransform.Lowercase

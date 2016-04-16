@@ -7,7 +7,7 @@ namespace Templates {
 	public class ThinkInstructions : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("next_button", "decider_instructions") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,
