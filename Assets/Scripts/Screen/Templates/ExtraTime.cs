@@ -14,7 +14,10 @@ namespace Templates {
 				BottomBarColor = Palette.LtTeal,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
-				CoinsEnabled = true
+				CoinsEnabled = true,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "cost", TextStyle.Coin }
+				}
 			};
 		}
 	}

@@ -72,11 +72,11 @@ public class StyleSnippets {
 				FontSize = 16
 			};
 
-			TextStyle reward = new TextStyle () {
+			/*TextStyle reward = new TextStyle () {
 				FontSize = 20,
 				FontStyle = FontStyle.Bold,
 				FontColor = Palette.White
-			};
+			};*/
 
 			return new StyleSnippet () {
 				Snippets = new List<StyleSnippet> () {
@@ -85,8 +85,8 @@ public class StyleSnippets {
 					new StyleSnippet ("rc_agenda_title", agendaTitle),
 					new StyleSnippet ("rc_item0", agendaItem),
 					new StyleSnippet ("rc_item1", agendaItem),
-					new StyleSnippet ("rc_reward0", reward),
-					new StyleSnippet ("rc_reward1", reward)
+					new StyleSnippet ("rc_reward0", TextStyle.Coin),
+					new StyleSnippet ("rc_reward1", TextStyle.Coin)
 				}
 			};
 		}

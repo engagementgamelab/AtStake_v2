@@ -107,6 +107,16 @@ public class TextStyle {
 			return style;
 		}
 	}
+
+	public static TextStyle Coin {
+		get {
+			return new TextStyle () {
+				FontSize = 20,
+				FontStyle = FontStyle.Bold,
+				FontColor = Palette.White
+			};
+		}
+	}
 }
 
 public static class TextStyleExtension {

@@ -14,6 +14,7 @@ namespace Views {
 				Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => {
 					Game.Dispatcher.ScheduleMessage ("AcceptExtraTime", Name);
 				}));
+				Elements.Add ("cost", new TextElement ("-" + DataManager.GetSettings().ExtraTimeCost));
 			} else {
 				Elements.Add ("instruction", new TextElement (
 					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
