@@ -20,14 +20,11 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		FontStyle = FontStyle.Bold
 	};
 
-	UIAnimator anim;
-
-	void OnEnable () { 
-		anim = UIAnimator.AttachTo (gameObject); 
-		Transform.SetLocalScale (0);
-	}
+	void OnEnable () { Animate (new UIAnimator.Expand (1.5f)); }
 
 	public override void ApplyElement (AvatarElement e) {
+
+		Transform.localScale = Vector3.zero;
 
 		// Set the sprite based on the avatar color
 		avatar.sprite = AssetLoader.LoadAvatar (e.Color);
@@ -41,7 +38,5 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		roleStyle.FontColor = Palette.Avatar.GetColor (e.Color);
 		playerName.ApplyStyle (nameStyle);
 		playerRole.ApplyStyle (roleStyle);
-
-		anim.Animate (new UIAnimator.Expand (1.5f));
 	}
 }

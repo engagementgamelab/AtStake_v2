@@ -68,6 +68,7 @@ namespace Templates {
 				roleCounter ++;
 			}, () => {
 				Elements["play"].Visible = true;
+				Elements["play"].Animate (new UIAnimator.Expand (1f));
 			});
 		}
 	}

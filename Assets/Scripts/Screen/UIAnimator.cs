@@ -4,7 +4,7 @@ using System.Collections;
 
 public class UIAnimator : UIElement {
 
-	TemplateAnimation currentAnimation;
+	UIAnimation currentAnimation;
 
 	public bool Animating {
 		get { return currentAnimation != null && currentAnimation.Animating; }
@@ -17,7 +17,7 @@ public class UIAnimator : UIElement {
 		return obj.AddComponent<UIAnimator> ();
 	}
 
-	public bool Animate (TemplateAnimation animation) {
+	public bool Animate (UIAnimation animation) {
 		if (Animating)
 			return false;
 		animation.Rect = gameObject.GetComponent<RectTransform> ();
@@ -52,7 +52,7 @@ public class UIAnimator : UIElement {
 	 *	Animations
 	 */
 
-	public class Expand : TemplateAnimation {
+	public class Expand : UIAnimation {
 
 		EaseOutBounce curve = new EaseOutBounce ();
 
@@ -61,7 +61,7 @@ public class UIAnimator : UIElement {
 		}) {}
 	}
 
-	public class Peek : TemplateAnimation {
+	public class Peek : UIAnimation {
 		
 		float startPosition = 0;
 		Smooth curve = new Smooth ();
@@ -75,7 +75,7 @@ public class UIAnimator : UIElement {
 		}
 	}
 
-	public class Slide : TemplateAnimation {
+	public class Slide : UIAnimation {
 
 		Smooth curve = new Smooth ();
 
@@ -84,7 +84,7 @@ public class UIAnimator : UIElement {
 		}, onEnd) {}
 	}
 
-	public abstract class TemplateAnimation {
+	public abstract class UIAnimation {
 
 		public RectTransform Rect {
 			get { return rect; }
@@ -100,7 +100,7 @@ public class UIAnimator : UIElement {
 		Action onEnd;
 		RectTransform rect;
 
-		public TemplateAnimation (float time, Action<float> anim, Action onEnd=null) {
+		public UIAnimation (float time, Action<float> anim, Action onEnd=null) {
 			this.time = time;
 			this.anim = anim;
 			this.onEnd = onEnd;

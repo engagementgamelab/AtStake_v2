@@ -100,5 +100,10 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		return ChildElements.Find (x => x.id == id);
 	}
 
+	protected override void OnSetActive (bool active) {
+		foreach (T child in ChildElements)
+			child.Visible = Visible;
+	}
+
 	protected virtual void OnUpdateListElements () {}
 }

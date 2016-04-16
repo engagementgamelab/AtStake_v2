@@ -53,6 +53,12 @@ public class StyleSnippets {
 	public StyleSnippet BlueButton {
 		get { return new StyleSnippet ("button", Palette.Blue, TextStyle.LtButton); }
 	}
+
+	/*public StyleSnippet RoleCard {
+		get {
+			return new StyleSnippet ("")
+		}
+	}*/
 }
 
 public class StyleSnippet {
