@@ -22,7 +22,7 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			CreateRoleCard (true, true, true);
-			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration));
+			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, TimerType.Think));
 		}
 
 		protected override void OnShow () {

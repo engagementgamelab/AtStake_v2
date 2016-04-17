@@ -25,13 +25,9 @@ namespace Views {
 			get { return new Dictionary<string, string> () { { "current_peer", CurrentPitcher } }; }
 		}
 
-		string CurrentPitcher {
-			get { return Game.Controller.CurrentPitcher; }
-		}
-
-		bool IsCurrentPitcher {
-			get { return CurrentPitcher == Name; }
-		}
+		string CurrentPitcher { get { return Game.Controller.CurrentPitcher; } }
+		bool IsCurrentPitcher { get { return CurrentPitcher == Name; } }
+		bool IsNextPitcher { get { return Game.Controller.NextPitcher == Name; }}
 
 		protected override void OnInitDeciderElements () {
 
@@ -52,8 +48,9 @@ namespace Views {
 			CreateRoleCard (true, true, true);
 
 			string timerText = GetButton (IsCurrentPitcher ? "pitching" : "listening"); 
+			TimerType type = IsCurrentPitcher ? TimerType.Pitch : TimerType.Listen;
 
-			Elements.Add ("timer", new TimerElement (timerText, Duration, () => {
+			Elements.Add ("timer", new TimerElement (timerText, Duration, type, () => {
 				if (IsCurrentPitcher)
 					GotoView ("extra_time");
 			}));
@@ -101,7 +98,8 @@ namespace Views {
 			// Update player timers
 			if (!IsDecider) {
 				TimerElement timer = GetScreenElement<TimerElement> ("timer");
-				timer.Text = GetButton (Game.Controller.NextPitcher == Name ? "pitching" : "listening");
+				timer.Text = GetButton (IsNextPitcher ? "pitching" : "listening");
+				timer.Type = IsNextPitcher ? TimerType.Pitch : TimerType.Listen;
 				timer.Reset ();
 				return;
 			}

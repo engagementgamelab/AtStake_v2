@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+public enum TimerType { Think, Pitch, Listen, Deliberate }
+
 public class TimerElement : ScreenElement {
 
 	string text;
@@ -11,19 +13,29 @@ public class TimerElement : ScreenElement {
 		}
 	}
 
+	TimerType type = TimerType.Think;
+	public TimerType Type {
+		get { return type; }
+		set {
+			type = value;
+			SendUpdateMessage ();
+		}
+	}
+
 	public float Progress { get; private set; }
 	public string TimeText { get; private set; }
 
 	float duration;
 	System.Action onEnd;
 
-	public TimerElement (string text, float duration, System.Action onEnd=null) {
+	public TimerElement (string text, float duration, TimerType type, System.Action onEnd=null) {
 		Text = text;
 		this.duration = duration
 		#if FAST_TIME
 		* 0.1f
 		#endif
 		;
+		this.type = type;
 		this.onEnd = onEnd;
 		Reset ();
 	}

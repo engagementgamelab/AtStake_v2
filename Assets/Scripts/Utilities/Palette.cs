@@ -23,8 +23,11 @@ public static class Palette {
 		get { return new Color (0.5f, 0.5f, 0.5f); }
 	}
 
+	public static Color LtGrey {
+		get { return new Color (0.7f, 0.7f, 0.7f); }
+	}
+
 	public static Color Orange {
-	// 255, 166, 37
 		get { return Color255 (255, 186, 0); }
 	}
 
@@ -50,6 +53,14 @@ public static class Palette {
 
 	public static Color Pink {
 		get { return Color255 (255, 44, 118); }
+	}
+
+	public static Color Celeste {
+		get { return Color255 (166, 255, 241); }
+	}
+
+	public static Color Aquamarine {
+		get { return Color255 (69, 224, 200); }
 	}
 
 	public static class Avatar {
