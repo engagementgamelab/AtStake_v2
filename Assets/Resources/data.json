@@ -205,13 +205,13 @@
   "Screens": [
     {
       "Symbol": "agenda",
-      "DeciderInstructionsOutLoud": "OK, now everyone review your agenda items. You'll earn extra coins if these are included in the winning proposal (even if you're not the winner). Keep them secret! I'll give you a few seconds...'",
+      "DeciderInstructionsOutLoud": "Now everyone quietly review your agenda items. You'll earn extra coins if these are included in the winning proposal. Keep them secret!",
       "DeciderInstructions": "Press next when everyone's ready"
     },
     {
       "Symbol": "agenda_item",
-      "DeciderInstructions": "Press 'Yes' if you think the winning proposal include the following agenda item:",
-      "PlayerInstructions": "Did the winning plan include this agenda item?",
+      "DeciderInstructions": "Did the winning plan include this agenda item?",
+      "PlayerInstructions": "The Decider is reviewing this agenda item:",
       "Text": {
         "your_item": "This is your agenda item! Convince the Decider to choose it and win bonus points!"
       },
@@ -223,27 +223,27 @@
     {
       "Symbol": "agenda_item_accept",
       "Text": {
-        "your_item": "The Decider chose your agenda item! You get {{reward}} coins",
-        "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} bonus coins."
+        "your_item": "The Decider chose your agenda item! You get +{{reward}} coins",
+        "their_item": "{{rewarded_player}}'s agenda item was approved! They get +{{reward}} coins."
       }
     },
     {
       "Symbol": "agenda_item_instructions",
-      "DeciderInstructionsOutLoud": "Now it's time for bonus coins. You will review everyone's agenda points and decide if they were included in the final proposal. ",
+      "DeciderInstructionsOutLoud": "Now I'll award bonus points. I'll review each of your secret agenda points and award coins if they were included in the winning proposal.",
       "DeciderInstructions": "Press next when everyone is ready",
       "PlayerInstructions": "Listen to the Decider"
     },
     {
       "Symbol": "agenda_item_reject",
       "Text": {
-        "your_item": "The Decider did not choose your agenda item",
-        "their_item": "{{rewarded_player}}'s agenda item did not fit the winning proposal and no bonus coins were awarded."
+        "your_item": "The Decider did not choose your agenda item.",
+        "their_item": "{{rewarded_player}}'s agenda item was not accepted."
       }
     },
     {
       "Symbol": "bio",
       "DeciderInstructionsOutLoud": "Everyone, please introduce your character roles. You will be playing from this perspective this round.",
-      "DeciderInstructions": "When everyone is done, press 'next.'"
+      "DeciderInstructions": "Press done when everyone has introduced themselves"
     },
     {
       "Symbol": "decide",
@@ -252,7 +252,7 @@
     },
     {
       "Symbol": "deck",
-      "ClientInstructions": "Important stuff happening! Please wait while the Host picks a topic for your game... ",
+      "ClientInstructions": "Please wait while the Host picks a topic for your game... ",
       "HostInstructions": "Please pick a topic for your game:",
       "Buttons": {
         "confirm": "Go!"
@@ -267,7 +267,7 @@
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructionsOutLoud": "This is the deliberation round! Let's talk more about your proposals. This round is {{deliberate_seconds}} seconds long, and more free-form. Once the round is done, players could buy more time to deliberate.",
+      "DeciderInstructionsOutLoud": "Now we'll take {{deliberate_seconds}} seconds to talk about your proposals. Once the time runs out you'll have an opportunity to buy more time. Then I'll choose the winning proposal.",
       "DeciderInstructions": "Press next when everyone is ready",
       "PlayerInstructions": "Listen to the Decider"
     },
@@ -281,8 +281,8 @@
     {
       "Symbol": "extra_time",
       "Text": {
-        "can_afford": "Need more time? You can buy {{extra_time_cost}} for {{extra_seconds}} seconds additional time.",
-        "cant_afford": "No thanks"
+        "can_afford": "Need more time? You can pay {{extra_time_cost}} coins for {{extra_seconds}} more seconds.",
+        "cant_afford": "You don't have enough coins to buy extra time."
       },
       "Buttons": {
         "accept": "More time",
@@ -292,8 +292,8 @@
     {
       "Symbol": "extra_time_deliberate",
       "Text": {
-        "can_afford": "Need more time? You can buy {{extra_time_cost}} for {{extra_seconds}} seconds additional time. Once everyone has declined we'll move on.",
-        "cant_afford": "No thanks"
+        "can_afford": "Need more time? You can pay {{extra_time_cost}} coins for {{extra_seconds}} more seconds.",
+        "cant_afford": "You don't have enough coins to buy extra time."
       },
       "Buttons": {
         "accept": "More time",
@@ -380,7 +380,7 @@
     },
     {
       "Symbol": "roles",
-      "Instructions": "We're working hard to randomly select roles..."
+      "Instructions": "The character roles for this round are..."
     },
     {
       "Symbol": "scoreboard",

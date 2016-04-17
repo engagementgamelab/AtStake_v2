@@ -16,8 +16,8 @@ namespace Views {
 		}
 
 		protected override void OnInitPlayerElements () {
-			if (Item.PlayerName == Name)
-				Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
+			// if (Item.PlayerName == Name)
+				// Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
 		}
 
 		protected override void OnInitElements () {

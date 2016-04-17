@@ -61,6 +61,16 @@ public class TextStyle {
 		}
 	}
 
+	public static TextStyle Header3 {
+		get {
+			return new TextStyle () {
+				FontSize = 22,
+				FontColor = Palette.LtTeal,
+				FontStyle = FontStyle.Italic
+			};
+		}
+	}
+
 	public static TextStyle Paragraph {
 		get { 
 			return new TextStyle () {

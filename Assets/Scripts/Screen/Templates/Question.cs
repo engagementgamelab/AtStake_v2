@@ -25,13 +25,7 @@ namespace Templates {
 							FontColor = Palette.Orange
 						}
 					},
-					{ "question", new TextStyle () 
-						{
-							FontSize = 22,
-							FontColor = Palette.LtTeal,
-							FontStyle = FontStyle.Italic
-						}
-					}
+					{ "question", TextStyle.Header3 }
 				}
 			};
 		}

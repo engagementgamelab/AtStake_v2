@@ -12,7 +12,10 @@ namespace Templates {
 				TopBarHeight = TemplateSettings.ShortBar,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
-				CoinsEnabled = true
+				CoinsEnabled = true,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "item", TextStyle.Header3 }
+				}
 			};
 		}
 	}
