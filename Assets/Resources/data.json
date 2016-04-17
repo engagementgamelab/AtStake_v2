@@ -425,7 +425,7 @@
     "PlayerStartCoinCount": 30,
     "DeciderStartCoinCount": 100,
     "PlayerRoundStartCoinCount": 0,
-    "DeciderRoundStarCoinCount": 30,
+    "DeciderRoundStartCoinCount": 30,
     "Rewards": [
       10,
       20

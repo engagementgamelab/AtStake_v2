@@ -58,9 +58,9 @@ namespace Templates {
 
 				if (Elements["instruction1"].Visible && Elements["next"].Loaded)
 					Elements["coins"].Visible = true;
-				else if (Elements["instruction2"].Visible)
+				if (Elements["instruction2"].Visible)
 					Elements["coins"].Visible = true;
-				else if (Elements["instruction4"].Visible) {
+				if (Elements["instruction4"].Visible) {
 					Elements["pot"].Visible = true;
 				}
 			}, () => {
