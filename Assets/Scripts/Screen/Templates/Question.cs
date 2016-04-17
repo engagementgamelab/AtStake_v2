@@ -14,7 +14,25 @@ namespace Templates {
 				BottomBarColor = Palette.LtTeal,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
-				CoinsEnabled = true
+				CoinsEnabled = true,
+				Colors = new Dictionary<string, Color> () {
+					{ "separator", Palette.LtTeal }
+				},
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "round", new TextStyle () 
+						{
+							FontSize = 24,
+							FontColor = Palette.Orange
+						}
+					},
+					{ "question", new TextStyle () 
+						{
+							FontSize = 22,
+							FontColor = Palette.LtTeal,
+							FontStyle = FontStyle.Italic
+						}
+					}
+				}
 			};
 		}
 	}

@@ -12,8 +12,14 @@ namespace Views {
 			Elements.Add ("next", new NextButtonElement ("think_instructions"));
 		}
 
+		protected override void OnInitPlayerElements () {
+			Elements.Add ("trophy", new ImageElement ("trophy"));
+		}
+
 		protected override void OnInitElements () {
 			Elements.Add ("question", new TextElement (Game.Controller.Question));
+			Elements.Add ("separator", new ImageElement (""));
+			Elements.Add ("round", new TextElement ("Round " + (Game.Controller.RoundNumber+1).ToString ()));
 		}
 	}
 }

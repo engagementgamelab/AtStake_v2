@@ -107,7 +107,10 @@ namespace Views {
 					{ "round_number", Game.Controller.RoundNumber.ToString () },
 					{ "winner", Game.Controller.WinnerName },
 					{ "question", Game.Controller.Question },
-					{ "player_name", Name }
+					{ "player_name", Name },
+					{ "think_seconds", Settings.ThinkSeconds.ToString () },
+					{ "pitch_seconds", Settings.PitchSeconds.ToString () },
+					{ "deliberate_seconds", Settings.DeliberateSeconds.ToString () }
 				};
 
 				if (Game.Controller.RoundNumber > 0) {

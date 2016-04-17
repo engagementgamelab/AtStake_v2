@@ -24,6 +24,7 @@ public static class Palette {
 	}
 
 	public static Color Orange {
+	// 255, 166, 37
 		get { return Color255 (255, 186, 0); }
 	}
 

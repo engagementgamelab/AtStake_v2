@@ -267,7 +267,7 @@
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructionsOutLoud": "This is the deliberation round! Let's talk more about your proposals. This round is three minutes long, and more free-form. Once the round is done, players could buy more time to deliberate.",
+      "DeciderInstructionsOutLoud": "This is the deliberation round! Let's talk more about your proposals. This round is {{deliberate_seconds}} seconds long, and more free-form. Once the round is done, players could buy more time to deliberate.",
       "DeciderInstructions": "Press next when everyone is ready",
       "PlayerInstructions": "Listen to the Decider"
     },
@@ -375,7 +375,7 @@
     },
     {
       "Symbol": "question",
-      "DeciderInstructionsOutLoud": "'Here is the question you'll answer this round' {{question}}. Is everyone ready to ponder a solution?",
+      "DeciderInstructionsOutLoud": "Here is the question you'll answer this round. Is everyone ready to ponder a solution?",
       "DeciderInstructions": "When everyone is ready, press next."
     },
     {
@@ -405,7 +405,7 @@
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructionsOutLoud": "You will have 60 seconds to think of a proposal from your character's perspective.",
+      "DeciderInstructionsOutLoud": "You will have {{think_seconds}} seconds to think of a proposal from your character's perspective.",
       "DeciderInstructions": "Press next when everyone is ready.",
       "PlayerInstructions": "Listen to the Decider"
     },
