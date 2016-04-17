@@ -62,7 +62,6 @@ namespace Templates {
 					Elements["coins"].Visible = true;
 				else if (Elements["instruction4"].Visible) {
 					Elements["pot"].Visible = true;
-					Elements["pot"].Animate (new UIAnimator.Expand (1f));
 				}
 			}, () => {
 				if (Loaded)

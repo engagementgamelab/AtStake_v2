@@ -30,13 +30,13 @@ namespace Views {
 				string playerName = role.PlayerName;
 				string title = role.Title;
 				if (title != "Decider") {
-					roleList.Add (playerName + "|" + title, new AvatarElement (playerName, Game.Manager.Players[playerName].Avatar, "the " + title));
+					roleList.Add (playerName + "|" + title, new AvatarElement (playerName, Game.Controller.GetAvatarForPlayer (playerName), "the " + title));
 				} else {
 					deciderName = playerName;
 				}
 			}
 
-			roleList.Add (deciderName + "|Decider", new AvatarElement (deciderName, Game.Manager.Players[deciderName].Avatar, "the Decider"));
+			roleList.Add (deciderName + "|Decider", new AvatarElement (deciderName, Game.Controller.GetAvatarForPlayer (deciderName), "the Decider"));
 		}
 	}
 }

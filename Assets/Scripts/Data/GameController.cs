@@ -282,6 +282,10 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	public string GetAvatarForPlayer (string playerName) {
+		return Game.Manager.Players[playerName].Avatar;
+	}
+
 	public void SetWinner (string winnerName) {
 		WinnerName = winnerName;
 	}

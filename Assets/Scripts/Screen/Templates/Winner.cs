@@ -13,18 +13,23 @@ namespace Templates {
 				BottomBarHeight = TemplateSettings.MediumBar,
 				BackgroundColor = Palette.White,
 				PotEnabled = true,
-				CoinsEnabled = true
+				CoinsEnabled = true,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "winner_name", TextStyle.Header }
+				}
 			};
 		}
 
 		protected override void OnLoadView () {
 			Elements["winner_name"].Visible = false;
+			Elements["avatar"].Visible = false;
 			Elements["next"].Visible = false;
 		}
 
 		protected override void OnInputEnabled () {
 			Co.WaitForSeconds (1f, () => {
 				Elements["winner_name"].Visible = true;
+				Elements["avatar"].Visible = true;
 				Elements["next"].Visible = true;
 			});
 		}
