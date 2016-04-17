@@ -8,7 +8,7 @@ namespace Templates {
 	public class Pot : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("next_button", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.LtTeal,
 				BottomBarHeight = TemplateSettings.MediumBar,

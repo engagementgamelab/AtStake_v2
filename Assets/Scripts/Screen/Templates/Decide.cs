@@ -7,7 +7,7 @@ namespace Templates {
 	public class Decide : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("orange_button|confirm", "blue_button|peer_list") {
+			return new TemplateSettings ("orange_button|confirm", "blue_button|peer_list", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,

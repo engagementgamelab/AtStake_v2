@@ -11,6 +11,12 @@ public class CoinsElementUI : ScreenElementUI<CoinsElement> {
 	}
 
 	protected override void OnUpdate (CoinsElement e) {
-		coinsText.text = e.Text;
+		ApplyElement (e);
+	}
+
+	protected override void OnSetActive (bool active) {
+		Co.WaitForFixedUpdate (() => { // eh, not proud of this hack
+			coinsText.ApplyStyle (Style);
+		});
 	}
 }

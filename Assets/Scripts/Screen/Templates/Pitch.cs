@@ -7,7 +7,7 @@ namespace Templates {
 	public class Pitch : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button", "role_card") {
+			return new TemplateSettings ("next_button", "role_card", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,

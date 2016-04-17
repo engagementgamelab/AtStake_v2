@@ -67,7 +67,7 @@ public class GameInstanceManager : MonoBehaviour {
 
 		bool beforeLobby = id == "start" || id == "hostjoin";
 		bool beforeDeck = beforeLobby || id == "lobby" || id == "games";
-		bool beforeBio = beforeDeck || id == "roles" && id == "pot";
+		bool beforeBio = beforeDeck || id == "roles" || id == "pot";
 		bool beforeWinner = beforeBio || id == "agenda" || id == "question" || id == "think_instructions" || id == "think" || id == "pitch_instructions" || id == "pitch" || id == "extra_time" || id == "deliberate_instructions" || id == "deliberate" || id == "extra_time_deliberate" || id == "decide";
 		bool deck = id == "deck";
 

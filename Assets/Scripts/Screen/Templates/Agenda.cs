@@ -7,7 +7,7 @@ namespace Templates {
 	public class Agenda : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button", "role_card", "decider_instructions") {
+			return new TemplateSettings ("next_button", "role_card", "decider_instructions", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.LtTeal,
 				BottomBarHeight = TemplateSettings.MediumBar,

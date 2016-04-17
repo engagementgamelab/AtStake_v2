@@ -14,7 +14,7 @@ namespace Views {
 
 		protected override void OnInitElements () {
 			Elements.Add ("instruction1", new TextElement (GetText ("instruction1")));
-			if (Settings.PlayerRoundStartCoinCount > 0) // Don't display if no coins are being added
+			if (Game.Controller.RoundNumber == 0) // Don't display if no coins are being added
 				Elements.Add ("instruction2", new TextElement (GetText ("instruction2")));
 			Elements.Add ("instruction3", new TextElement (GetText ("instruction3")));
 			Elements.Add ("instruction4", new TextElement (GetText ("instruction4")));

@@ -7,7 +7,7 @@ namespace Templates {
 	public class DeliberateInstructions : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button", "decider_instructions") {
+			return new TemplateSettings ("next_button", "decider_instructions", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,

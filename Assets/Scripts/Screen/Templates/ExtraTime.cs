@@ -7,7 +7,7 @@ namespace Templates {
 	public class ExtraTime : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("blue_button|accept", "orange_button|decline") {
+			return new TemplateSettings ("blue_button|accept", "orange_button|decline", "coins_and_pot") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,

@@ -18,6 +18,8 @@ public class StyleSnippets {
 				snippets.Add ("orange_button", OrangeButton);
 				snippets.Add ("green_button", GreenButton);
 				snippets.Add ("blue_button", BlueButton);
+				snippets.Add ("coins_and_pot", CoinsAndPot);
+				snippets.Add ("lt_coins_and_pot", LtCoinsAndPot);
 			}
 			return snippets;
 		}
@@ -99,6 +101,40 @@ public class StyleSnippets {
 					new StyleSnippet ("instructions_read", readAloud),
 					new StyleSnippet ("decider_instructions_out_loud", TextStyle.LtParagraph),
 					new StyleSnippet ("decider_instructions", TextStyle.Paragraph)
+				}
+			};
+		}
+	}
+
+	public StyleSnippet CoinsAndPot {
+		get {
+
+			TextStyle style = new TextStyle () {
+				FontSize = 24,
+				FontColor = Palette.White
+			};
+
+			return new StyleSnippet () {
+				Snippets = new List<StyleSnippet> () {
+					new StyleSnippet ("coins", style),
+					new StyleSnippet ("pot", style)
+				}
+			};
+		}
+	}
+
+	public StyleSnippet LtCoinsAndPot {
+		get {
+
+			TextStyle style = new TextStyle () {
+				FontSize = 24,
+				FontColor = Palette.Grey
+			};
+
+			return new StyleSnippet () {
+				Snippets = new List<StyleSnippet> () {
+					new StyleSnippet ("coins", style),
+					new StyleSnippet ("pot", style)
 				}
 			};
 		}

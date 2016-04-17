@@ -7,7 +7,7 @@ namespace Templates {
 	public class Bio : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button", "decider_instructions") {
+			return new TemplateSettings ("next_button", "decider_instructions", "coins_and_pot") {
 				TopBarColor = Palette.LtTeal,
 				TopBarHeight = TemplateSettings.ShortBar,
 				BottomBarHeight = TemplateSettings.MediumBar,

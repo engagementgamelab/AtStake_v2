@@ -11,6 +11,12 @@ public class PotElementUI : ScreenElementUI<PotElement> {
 	}
 
 	protected override void OnUpdate (PotElement e) {
-		potText.text = e.Text;
+		ApplyElement (e);
+	}
+
+	protected override void OnSetActive (bool active) {
+		Co.WaitForFixedUpdate (() => { // eh, not proud of this hack
+			potText.ApplyStyle (Style);
+		});
 	}
 }
