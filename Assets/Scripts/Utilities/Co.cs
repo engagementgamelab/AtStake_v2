@@ -111,6 +111,18 @@ public static class Co {
 	}
 
 	/// <summary>
+	/// Repeats an action indefinitely
+	/// </summary>
+	/// <seeAlso cref="Repeat" />
+	/// <param name="rate">The delay between actions</param>
+	/// <param name="onInvoke">The function to call</param>
+	public static void Repeat (float rate, Action onInvoke) {
+		InvokeWhileTrue (0f, rate, () => { return Application.isPlaying; }, () => {
+			onInvoke ();
+		});
+	}
+
+	/// <summary>
 	/// Repeats an action a given number of times (like a 'for' loop with a delay between each iteration). Counts up from zero.
 	/// </summary>
 	/// <seeAlso cref="Repeat" />
@@ -138,10 +150,8 @@ public static class Co {
 	/// </summary>
 	/// <param name="address">The URL to request</param>
 	/// <param name="onResponse">The callback when a response has been received</param>
-	// public static void WWW (string address, Action<UnityWebRequest> onResponse) {
 	public static void WWW (string address, Action<WWW> onResponse) {
 		CoMb.Instance.StartCoroutine (CoWWW (address, onResponse));
-		// CoMb.Instance.StartCoroutine (CoWebRequest (address, onResponse));
 	}
 
 	/// <summary>
@@ -151,10 +161,8 @@ public static class Co {
 	/// <param name="timeout">How long to wait before timing out</param>
 	/// <param name="onResponse">The callback when a response has been received</param>
 	/// <param name="onTimeout">The callback when the request times out</param>
-	// public static void WWW (string address, float timeout, Action<UnityWebRequest> onResponse, Action<string> onTimeout) {
 	public static void WWW (string address, float timeout, Action<WWW> onResponse, Action<string> onTimeout) {
 		CoMb.Instance.StartCoroutine (CoWWW (address, timeout, onResponse, onTimeout));
-		// CoMb.Instance.StartCoroutine (CoWebRequest (address, timeout, onResponse, onTimeout));
 	}
 
 	static IEnumerator CoWaitForSeconds (float seconds, Action onEnd) {
@@ -202,12 +210,6 @@ public static class Co {
 		onResponse (www);
 	}
 
-	/*static IEnumerator CoWebRequest (string address, Action<UnityWebRequest> onResponse) {
-		UnityWebRequest www = UnityWebRequest.Get (address);
-		yield return www.Send ();
-		onResponse (www);
-	}*/
-
 	static IEnumerator CoWWW (string address, float timeout, Action<WWW> onResponse, Action<string> onTimeout) {
 
 		float e = 0f;
@@ -223,22 +225,6 @@ public static class Co {
 		else
 			onResponse (www);
 	}
-
-	/*static IEnumerator CoWebRequest (string address, float timeout, Action<UnityWebRequest> onResponse, Action<string> onTimeout) {
-
-		float e = 0f;
-		UnityWebRequest www = UnityWebRequest.Get (address);
-
-		while (e < timeout && !www.isDone) {
-			e += Time.deltaTime;
-			yield return www;
-		}
-
-		if (e >= timeout || www.error != null)
-			onTimeout (www.error);
-		else
-			onResponse (www);
-	}*/
 }
 
 public class CoMb : MonoBehaviour {

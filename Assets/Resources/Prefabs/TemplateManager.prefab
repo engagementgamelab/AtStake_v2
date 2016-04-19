@@ -2112,7 +2112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: pot
-  potText: {fileID: 11410214}
+  scoreText: {fileID: 11410214}
 --- !u!114 &11442028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2275,7 +2275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: coins
-  coinsText: {fileID: 11483816}
+  scoreText: {fileID: 11483816}
 --- !u!114 &11450256
 MonoBehaviour:
   m_ObjectHideFlags: 1
