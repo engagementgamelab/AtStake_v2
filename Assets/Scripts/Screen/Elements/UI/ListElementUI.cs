@@ -61,7 +61,7 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		ObjectPool.DestroyChildren<T> (RectTransform, (T t) => { t.Unload (); });
 	}
 
-	void AddListElement (string id, U element) {
+	protected virtual void AddListElement (string id, U element) {
 
 		// Create a new child element and apply styling
 
@@ -70,8 +70,13 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		t.Parent = RectTransform;
 		t.Load (element, Settings);
 
-		// All elements in the list will be styled with the default styling unless explicitely overriden
+		ApplyStyle (t);
+		OnUpdateListElements ();
+	}
 
+	protected void ApplyStyle (T t) {
+
+		// All elements in the list will be styled with the default styling unless explicitely overriden
 		TextStyle overrideStyle;
 		if (Settings.TextStyles.TryGetValue (t.id, out overrideStyle)) {
 			t.Style = overrideStyle;
@@ -85,11 +90,9 @@ public abstract class ListElementUI<T, U> : ScreenElementUI<ListElement<U>> wher
 		} else {
 			t.Color = Color;
 		}
-
-		OnUpdateListElements ();
 	}
 
-	void RemoveListElement (string id) {
+	protected virtual void RemoveListElement (string id) {
 		T t = GetChildElement (id);
 		t.Unload ();
 		ObjectPool.Destroy<T> (t);

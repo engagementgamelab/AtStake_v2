@@ -4,10 +4,17 @@ using System.Collections;
 using System.Collections.Generic;
 using SocketIO;
 
+public enum ConnectionStatus {
+	Searching,
+	Success,
+	Fail
+}
+
 public class MultiplayerManager : GameInstanceBehaviour {
 
 	public delegate void OnLogMessage (string msg);
 	public delegate void OnDisconnected ();
+	public delegate void OnUpdateConnectionStatus (ConnectionStatus status);
 
 	/// <summary>
 	/// Returns true if this is the game's host
@@ -46,8 +53,18 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	/// </summary>
 	public bool DisconnectedWithError { get; private set; }
 
-	public OnDisconnected onDisconnected;
+	/// <summary>
+	/// Returns true if the device is able to connect to the server.
+	/// </summary>
+	public ConnectionStatus ConnectionStatus {
+		get { return connectionStatus; }
+		private set { connectionStatus = value; }
+	}
 
+	public OnDisconnected onDisconnected;
+	public OnUpdateConnectionStatus onUpdateConnectionStatus;
+
+	ConnectionStatus connectionStatus = ConnectionStatus.Searching;
 	Dictionary<string, string> hosts;
 	List<string> clients = new List<string> ();
 	bool connected = false;
@@ -63,6 +80,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	void OnEnable () {
 		net = new NetManager (gameObject.AddComponent<SocketIOComponent> ());
 		net.messageReceived += ReceiveMessageFromClient;
+		net.onUpdateConnection += OnUpdateConnection;
 	}
 
 	public void HostGame (Action<ResponseType> response) {
@@ -171,6 +189,12 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// -- Events
+
+	void OnUpdateConnection (bool connected) {
+		ConnectionStatus = connected ? ConnectionStatus.Success : ConnectionStatus.Fail;
+		if (onUpdateConnectionStatus != null)
+			onUpdateConnectionStatus (ConnectionStatus);
+	}
 
 	// Intentional & unintentional disconnect
 	void OnDisconnect () {

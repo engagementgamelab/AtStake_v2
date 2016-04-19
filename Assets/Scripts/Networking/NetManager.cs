@@ -37,10 +37,12 @@ public class NetManager {
 	public delegate void ClientsUpdated (string[] clients);
 	public delegate void OnDisconnected ();
 	public delegate void MessageReceived (MasterMsgTypes.GenericMessage msg);
+	public delegate void OnUpdateConnection (bool connected);
 
 	public ClientsUpdated clientsUpdated;
 	public OnDisconnected onDisconnected;
 	public MessageReceived messageReceived;
+	public OnUpdateConnection onUpdateConnection;
 
 	ConnectionInfo connection;
 	SocketIOComponent socket;
@@ -194,15 +196,25 @@ public class NetManager {
 	}
 
 	void OnOpen (SocketIOEvent e) {
-		// Debug.Log ("[SocketIO] Open received: " + e.name + ", " + e.data);
+		SendUpdateConnectionMessage (true);
 	}
 
 	void OnError (SocketIOEvent e) {
+		/*#if UNITY_EDITOR
 		Debug.LogWarning("[SocketIO] Error received: " + e.name + ", " + e.data);
+		#endif*/
+		if (e.name == "An exception has occurred while connecting.") {
+			SendUpdateConnectionMessage (false);
+		}
 	}
 
 	void OnClose (SocketIOEvent e) {
-		// Debug.Log ("[SocketIO] Close received: " + e.name + ", " + e.data);
+		SendUpdateConnectionMessage (false);
+	}
+
+	void SendUpdateConnectionMessage (bool connected) {
+		if (onUpdateConnection != null)
+			onUpdateConnection (connected);
 	}
 
 	class Response {

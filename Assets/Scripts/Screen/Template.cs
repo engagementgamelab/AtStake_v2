@@ -27,9 +27,12 @@ namespace Templates {
 			get {
 				if (elements == null) {
 
-					List<ScreenElementUI> childElements = Transform.GetAllChildren ()
-						.FindAll (x => x.GetComponent<ScreenElementUI> () != null)
-						.ConvertAll (x => x.GetComponent<ScreenElementUI> ());
+					List<ScreenElementUI> childElements = new List<ScreenElementUI> ();
+					foreach (Transform child in Transform.GetAllChildren ()) {
+						ScreenElementUI s = child.GetComponent<ScreenElementUI> ();
+						if (s != null && s.id != "")
+							childElements.Add (s);
+					}
 
 					elements = new Dictionary<string, ScreenElementUI> ();
 					foreach (ScreenElementUI e in childElements)

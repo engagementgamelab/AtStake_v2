@@ -8,7 +8,16 @@ namespace Templates {
 
 		protected override TemplateSettings LoadSettings () {
 			return new TemplateSettings ("logo", "lt_paragraph|instructions", "green_button|submit") {
-				BackgroundColor = Palette.Teal
+				BackgroundColor = Palette.Teal,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "connection_failed", new TextStyle () 
+						{
+							FontSize = 16,
+							FontColor = Palette.White,
+							FontStyle = FontStyle.Bold
+						}
+					}
+				}
 			};
 		}
 

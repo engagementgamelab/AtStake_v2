@@ -391,7 +391,10 @@
     },
     {
       "Symbol": "start",
-      "Instructions": "Welcome to\n@Stake: <i>a deliberation game!</i>\nYou will need 3-4 players.\nMake sure your WIFI is turned on.",
+      "Instructions": "Welcome to\n@Stake: <i>a deliberation game!</i>\nYou will need 3-4 players.",
+      "Text": {
+        "connection_failed": "Couldn't connect to the Internet. Is your WIFI on?"
+      },
       "Buttons": {
         "submit": "Let's go!"
       }
