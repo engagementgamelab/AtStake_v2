@@ -51,22 +51,38 @@ namespace Templates {
 				if (!Loaded) return;
 
 				// Remove the previous instruction
-				if (i > 0) Instructions[i-1].Visible = false;
-
-				// Show the current instruction
-				Instructions[i].Visible = true;
-
-				if (Elements["instruction1"].Visible && Elements["next"].Loaded)
-					Elements["coins"].Visible = true;
-				if (Elements["instruction2"].Visible)
-					Elements["coins"].Visible = true;
-				if (Elements["instruction4"].Visible) {
-					Elements["pot"].Visible = true;
+				if (i > 0) {
+					Instructions[i-1].Animate (new UIAnimator.FadeOut (0.2f, () => {
+						Instructions[i-1].Visible = false;
+						ShowInstruction (i);
+					}));
+				} else {
+					ShowInstruction (i);
 				}
+				
 			}, () => {
 				if (Loaded)
 					Elements["next"].Visible = true;
 			});
+		}
+
+		void ShowInstruction (int index) {
+
+			// Show the current instruction
+			Instructions[index].Visible = true;
+			Instructions[index].Animate (new UIAnimator.FadeIn (0.5f));
+
+			if (Elements["instruction1"].Visible && Elements["next"].Loaded)
+				FadeInElement ("coins");
+			if (Elements["instruction2"].Visible)
+				FadeInElement ("coins");
+			if (Elements["instruction4"].Visible) 
+				FadeInElement ("pot");
+		}
+
+		void FadeInElement (string id) {
+			Elements[id].Visible = true;
+			Elements[id].Animate (new UIAnimator.FadeIn (0.5f));
 		}
 
 		protected override void OnUnloadView () {

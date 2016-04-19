@@ -48,9 +48,39 @@ public class UIAnimator : UIElement {
 		}
 	}
 
+	public class Linear : Curve {
+		public override float Get (float x) {
+			return Mathf.Lerp (0f, 1f, x);
+		}
+	}
+
 	/**
 	 *	Animations
 	 */
+
+	public class FadeOut : Fade {
+		public FadeOut (float time, Action onEnd=null) : base (time, 1f, 0f, onEnd) {}
+	}
+
+	public class FadeIn : Fade {
+		public FadeIn (float time, Action onEnd=null) : base (time, 0f, 1f, onEnd) {}
+	}
+
+	public class Fade : UIAnimation {
+
+		CanvasGroup cg;
+		Linear curve = new Linear ();
+
+		public Fade (float time, float from, float to, Action onEnd=null) : base (time, (float p) => {
+			cg.alpha = Mathf.Lerp (from, to, curve.Get (p));
+		}, onEnd) {}
+
+		protected override void OnLoad () {
+			cg = Rect.gameObject.GetComponent<CanvasGroup> ();
+			if (cg == null)
+				cg = Rect.gameObject.AddComponent<CanvasGroup> ();
+		}
+	}
 
 	public class Expand : UIAnimation {
 
