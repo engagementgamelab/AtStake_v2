@@ -77,7 +77,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 	#endif
 
-	void OnEnable () {
+	void Awake () {
 		net = new NetManager (gameObject.AddComponent<SocketIOComponent> ());
 		net.messageReceived += ReceiveMessageFromClient;
 		net.onUpdateConnection += OnUpdateConnection;

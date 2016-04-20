@@ -59,6 +59,18 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	//// <summary>
+	/// Gets the data model associated with the Decider from the previous round
+	/// </summary>
+	public Player PreviousDecider {
+		get {
+			if (!DataLoaded || instance.RoundIndex == 0)
+				return null;
+			string deciderName = System.Array.Find (instance.Rounds[roundItr.Position-1].Roles, x => x.Title == "Decider").PlayerName;
+			return FindPlayer (deciderName);
+		}
+	}
+
 	/// <summary>
 	/// Gets the name of the current Decider
 	/// </summary>

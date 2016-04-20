@@ -7,13 +7,15 @@ namespace Views {
 
 	public class Scoreboard : View {
 
-		protected override void OnInitDeciderElements () {
-			Elements.Add ("next", new NextButtonElement ("roles"));
-		}
-
 		protected override void OnInitElements () {
+
+			// Because the round has advanced by this point, the "previous decider" gets the "next" button
+			if (Game.Controller.PreviousDecider.Name == Name)
+				Elements.Add ("next", new NextButtonElement ("roles"));
+
 			Elements.Add ("round_end", new TextElement (
 				DataManager.GetTextFromScreen (Model, "round_end", TextVariables)));
+
 			DisplayScores ();
 		}
 

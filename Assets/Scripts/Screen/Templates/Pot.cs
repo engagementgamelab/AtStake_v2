@@ -81,8 +81,10 @@ namespace Templates {
 		}
 
 		void FadeInElement (string id) {
-			Elements[id].Visible = true;
-			Elements[id].Animate (new UIAnimator.FadeIn (0.5f));
+			if (!Elements[id].Visible) {
+				Elements[id].Visible = true;
+				Elements[id].Animate (new UIAnimator.FadeIn (0.5f));
+			}
 		}
 
 		protected override void OnUnloadView () {
