@@ -7,6 +7,7 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 	public Image avatar;
 	public Text playerName;
 	public Text playerRole;
+	bool spinning = false;
 
 	TextStyle nameStyle = new TextStyle () {
 		TextTransform = TextTransform.Lowercase,
@@ -38,5 +39,18 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		roleStyle.FontColor = Palette.Avatar.GetColor (e.Color);
 		playerName.ApplyStyle (nameStyle);
 		playerRole.ApplyStyle (roleStyle);
+
+		Spin ();
+	}
+
+	void Spin () {
+		if (!spinning) {
+			spinning = true;
+			Co.WaitForSeconds (Random.Range (5, 8), () => {
+				Animate (new UIAnimator.Spin (1f), avatar.GetComponent<RectTransform> ());
+				spinning = false;
+				Spin ();
+			});
+		}
 	}
 }

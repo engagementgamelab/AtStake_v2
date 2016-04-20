@@ -17,10 +17,11 @@ public class UIAnimator : UIElement {
 		return obj.AddComponent<UIAnimator> ();
 	}
 
-	public bool Animate (UIAnimation animation) {
+	public bool Animate (UIAnimation animation, RectTransform rect=null) {
 		if (Animating)
 			return false;
-		animation.Rect = gameObject.GetComponent<RectTransform> ();
+		// animation.Rect = gameObject.GetComponent<RectTransform> ();
+		animation.Rect = rect == null ? gameObject.GetComponent<RectTransform> () : rect;
 		currentAnimation = animation;
 		animation.Start ();
 		return true;
@@ -57,6 +58,15 @@ public class UIAnimator : UIElement {
 	/**
 	 *	Animations
 	 */
+
+	public class Spin : UIAnimation {
+
+		Smooth curve = new Smooth ();
+
+		public Spin (float time) : base (time, (float p) => {
+			Rect.SetLocalEulerAnglesZ (curve.Get (p) * 360f);
+		}) {}
+	}
 
 	public class FadeOut : Fade {
 		public FadeOut (float time, Action onEnd=null) : base (time, 1f, 0f, onEnd) {}

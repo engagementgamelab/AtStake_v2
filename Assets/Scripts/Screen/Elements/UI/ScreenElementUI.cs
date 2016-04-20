@@ -32,8 +32,8 @@ public abstract class ScreenElementUI : UIElement {
 	public abstract void Unload ();
 	public abstract void InputEnabled ();
 
-	public void Animate (UIAnimator.UIAnimation animation) {
-		Anim.Animate (animation);
+	public void Animate (UIAnimator.UIAnimation animation, RectTransform rect=null) {
+		Anim.Animate (animation, rect);
 	}
 }
 
