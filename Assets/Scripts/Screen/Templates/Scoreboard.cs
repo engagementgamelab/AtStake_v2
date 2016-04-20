@@ -38,7 +38,7 @@ namespace Templates {
 			ContinueButton.Visible = false;
 
 			TextElementUI instructions;
-			if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+			if (TryGetElement<TextElementUI> ("previous_decider_instructions", out instructions)) {
 				instructions.Visible = false;
 			}
 
@@ -62,7 +62,7 @@ namespace Templates {
 			}, () => {
 				ContinueButton.Visible = true;
 				TextElementUI instructions;
-				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+				if (TryGetElement<TextElementUI> ("previous_decider_instructions", out instructions)) {
 					instructions.Visible = true;
 				}
 			});

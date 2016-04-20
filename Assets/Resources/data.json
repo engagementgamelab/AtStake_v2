@@ -384,9 +384,9 @@
     },
     {
       "Symbol": "scoreboard",
-      "DeciderInstructions": "When everyone is ready, press 'next' to start the next round",
       "Text": {
-        "round_end": "At the end of round {{round_number}} the scores are:"
+        "round_end": "At the end of round {{round_number}} the scores are:",
+        "previous_decider_instructions": "When everyone is ready, press 'next' to start the next round"
       }
     },
     {

@@ -62,12 +62,25 @@ public class ScoreManager : GameInstanceBehaviour {
 	public void EmptyPot () { Pot = 0; }
 
 	public void AddRoundStartScores () {
+		
 		string deciderName = Game.Controller.DeciderName;
+		int playerCoinCount;
+		int deciderCoinCount;
+
+		if (Game.Controller.RoundNumber == 0) {
+			playerCoinCount = Settings.PlayerStartCoinCount;
+			deciderCoinCount = Settings.DeciderStartCoinCount;
+		} else {
+			playerCoinCount = Settings.PlayerRoundStartCoinCount;
+			deciderCoinCount = Settings.DeciderRoundStartCoinCount;
+		}
+
 		foreach (Player player in Game.Controller.Players) {
 			if (player.Name != deciderName)
-				player.CoinCount += Settings.PlayerStartCoinCount;
+				player.CoinCount += playerCoinCount;
 		}
-		Game.Controller.Decider.CoinCount += Settings.DeciderStartCoinCount;
+
+		Game.Controller.Decider.CoinCount += deciderCoinCount;
 		SendUpdateMessage ();
 	}
 

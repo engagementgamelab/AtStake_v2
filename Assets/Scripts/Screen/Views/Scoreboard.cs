@@ -9,9 +9,11 @@ namespace Views {
 
 		protected override void OnInitElements () {
 
-			// Because the round has advanced by this point, the "previous decider" gets the "next" button
-			if (Game.Controller.PreviousDecider.Name == Name)
+			// Because the round has advanced by this point, the "previous decider" gets the "decider" content
+			if (Game.Controller.PreviousDecider.Name == Name) {
 				Elements.Add ("next", new NextButtonElement ("roles"));
+				Elements.Add ("previous_decider_instructions", new TextElement (GetText ("previous_decider_instructions")));
+			}
 
 			Elements.Add ("round_end", new TextElement (
 				DataManager.GetTextFromScreen (Model, "round_end", TextVariables)));
