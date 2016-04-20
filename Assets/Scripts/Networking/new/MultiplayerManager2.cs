@@ -7,13 +7,12 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 	public delegate void OnLogMessage (string msg);
 
 	public bool Hosting { get; private set; }
+	public string Host { get; private set; }
 
 	public bool Connected {
 		get { return Hosting || connected; }
 		private set { connected = value; }
 	}
-
-	public string Host { get; private set; }
 
 	public List<string> Clients {
 		get { return clients; }
@@ -170,6 +169,7 @@ public class MultiplayerManager2 : GameInstanceBehaviour {
 		}
 		Host = "";
 		Connected = false;
+		Game.Manager.Peers.Clear ();
 	}
 
 	void OnRegisteredClient (int resultCode, string clientName) {
