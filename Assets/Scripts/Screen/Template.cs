@@ -181,6 +181,10 @@ namespace Templates {
 			return (T)data;
 		}
 
+		protected AnimElementUI CreateAnimation (Vector3 position=new Vector3()) {
+			return AnimElementUI.Create (AnimationContainer, position);
+		}
+
 		bool IsOverlayElement (string id) {
 			return id == "coins" || id == "pot" || id == "back" || id == "next";
 		}

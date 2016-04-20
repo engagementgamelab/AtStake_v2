@@ -84,6 +84,9 @@ namespace Templates {
 				FadeInElement ("pot");
 
 			RunDeciderAnimation ();
+			RunPlayerAnimation ();
+			RunWinnerAnimation ();
+			RunPotAnimation ();
 		}
 
 		void FadeInElement (string id) {
@@ -94,54 +97,89 @@ namespace Templates {
 		}
 
 		void RunDeciderAnimation () {
+			if (Elements["instruction1"].Visible)
+				RunCoinAnimation (data.DeciderCoinCount.ToString (), data.DeciderAvatarColor);
+		}
 
-			if (Elements["instruction1"].Visible) {
+		void RunPlayerAnimation () {
+			if (Elements["instruction2"].Visible)
+				RunCoinAnimation (data.PlayerCoinCount.ToString (), data.PlayerAvatarColor);
+		}
+
+		void RunWinnerAnimation () {
+
+			if (Elements["instruction3"].Visible) {
 
 				Co.WaitForSeconds (0.5f, () => {
+					AnimElementUI trophy = CreateAnimation ();
+					trophy.SpriteName = "trophy";
+					trophy.Size = new Vector2 (100, 100);
+					trophy.Animate (new UIAnimator.Expand (1f));
+					trophy.Animate (new UIAnimator.Spin (1f));
 
-					// Introduce the coin
-					AnimElementUI coin = AnimElementUI.Create (AnimationContainer, Vector3.zero);
-					coin.SpriteName = "coin";
-					coin.Text = "+" + data.DeciderCoinCount.ToString ();
-					coin.Size = new Vector2 (50, 50);
-					coin.LocalPosition = new Vector3 (-50, 25, 0);
-					coin.Animate (new UIAnimator.Expand (0.5f));
-
-					Co.WaitForSeconds (1f, () => {
-
-						// Introduce the Decider
-						Vector3 deciderPosition = new Vector3 (50, 25f, 0);
-						AnimElementUI decider = AnimElementUI.Create (AnimationContainer, Vector3.zero);
-						decider.AvatarName = data.DeciderAvatarColor;
-						decider.Size = new Vector2 (75, 75);
-						decider.LocalPosition = deciderPosition;
-						decider.Animate (new UIAnimator.Expand (0.5f));
-
-						Co.WaitForSeconds (1f, () => {
-
-							// Move the coin to the Decider and shrink out
-							Co.WaitForSeconds (0.5f, () => {
-								coin.Animate (new UIAnimator.Shrink (1.5f));
-							});
-
-							coin.Animate (new UIAnimator.Move (1f, deciderPosition, () => {
-								decider.Animate (new UIAnimator.Shrink (0.5f, () => {
-									coin.Destroy ();
-									decider.Destroy ();
-								}));
-							}));
-						});
+					Co.WaitForSeconds (3.5f, () => {
+						trophy.Animate (new UIAnimator.Spin (1f));
+						trophy.Animate (new UIAnimator.Shrink (1f, () => {
+							trophy.Destroy ();
+						}));
 					});
 				});
 			}
 		}
 
-		void RunPlayerAnimation () {
-			
+		void RunPotAnimation () {
+
+			if (Elements["instruction4"].Visible) {
+
+				Co.WaitForSeconds (0.5f, () => {
+					AnimElementUI pot = CreateAnimation ();
+					pot.SpriteName = "coin_stack";
+					pot.Text = data.PotCount.ToString ();
+					pot.Size = new Vector2 (100, 100);
+					pot.Animate (new UIAnimator.Expand (1.5f));
+				});
+			}
+		}
+
+		void RunCoinAnimation (string coinCount, string avatarColor) {
+
+			Co.WaitForSeconds (0.5f, () => {
+
+				// Introduce the coin
+				AnimElementUI coin = CreateAnimation ();
+				coin.SpriteName = "coin";
+				coin.Text = "+" + coinCount;
+				coin.Size = new Vector2 (50, 50);
+				coin.LocalPosition = new Vector3 (-50, 25, 0);
+				coin.Animate (new UIAnimator.Expand (0.5f));
+
+				Co.WaitForSeconds (1f, () => {
+
+					// Introduce the avatar
+					Vector3 deciderPosition = new Vector3 (50, 25f, 0);
+					AnimElementUI decider = CreateAnimation ();
+					decider.AvatarName = avatarColor;
+					decider.Size = new Vector2 (75, 75);
+					decider.LocalPosition = deciderPosition;
+					decider.Animate (new UIAnimator.Expand (0.5f));
+
+					Co.WaitForSeconds (1f, () => {
+
+						// Move the coin to the avatar and shrink out
+						coin.Animate (new UIAnimator.Move (1f, deciderPosition, () => {
+							coin.Destroy ();
+							decider.Animate (new UIAnimator.Shrink (0.5f, () => {
+								decider.Destroy ();
+							}));
+						}));
+					});
+				});
+			});
 		}
 
 		protected override void OnUnloadView () {
 			instructions = null;
+			AnimationContainer.Reset ();
 		}
 	}
 }

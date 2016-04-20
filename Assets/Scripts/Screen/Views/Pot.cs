@@ -11,9 +11,11 @@ namespace Views {
 		public override ViewData Data {
 			get {
 				return new PotData () {
+					PotCount = Settings.PotCoinCount,
 					DeciderCoinCount = DeciderRoundStartCoinCount,
 					PlayerCoinCount = PlayerRoundStartCoinCount,
-					DeciderAvatarColor = Game.Controller.Decider.Avatar
+					DeciderAvatarColor = Game.Controller.Decider.Avatar,
+					PlayerAvatarColor = Game.Controller.Player.Avatar
 				};
 			}
 		}

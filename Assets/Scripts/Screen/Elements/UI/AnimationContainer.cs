@@ -1,15 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnimationContainer : MonoBehaviour {
+public class AnimationContainer : MB {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void Reset () {
+		ObjectPool.DestroyChildren<AnimElementUI> (Transform);
 	}
 }
