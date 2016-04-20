@@ -20,7 +20,6 @@ public class UIAnimator : UIElement {
 	public bool Animate (UIAnimation animation, RectTransform rect=null) {
 		if (Animating)
 			return false;
-		// animation.Rect = gameObject.GetComponent<RectTransform> ();
 		animation.Rect = rect == null ? gameObject.GetComponent<RectTransform> () : rect;
 		currentAnimation = animation;
 		animation.Start ();
