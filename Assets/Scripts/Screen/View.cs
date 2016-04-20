@@ -25,8 +25,7 @@ namespace Views {
 		/// Returns true if this player is hosting
 		/// </summary>
 		protected bool IsHost {
-			// get { return Game.Multiplayer.Hosting; }
-			get { return Game.Multiplayer2.Hosting; }
+			get { return Game.Multiplayer.Hosting; }
 		}
 
 		/// <summary>
@@ -40,7 +39,7 @@ namespace Views {
 		/// Returns this player's name
 		/// </summary>
 		protected string Name {
-			get { return Game.Manager.Player.Name; }
+			get { return Game.Name; }
 		}
 
 		/// <summary>
@@ -54,7 +53,7 @@ namespace Views {
 		/// Returns this player's role
 		/// </summary>
 		protected Role Role {
-			get { return Game.Manager.Player.Role; }
+			get { return Game.Controller.Role; }
 		}
 
 		/// <summary>
@@ -97,21 +96,34 @@ namespace Views {
 		/// </summary>
 		protected Dictionary<string, string> TextVariables {
 			get {
-				return new Dictionary<string, string> () {
-					{ "decider", Game.Manager.Decider },
+
+				Dictionary<string, string> textVars = new Dictionary<string, string> () {
+					{ "decider", Game.Controller.DeciderName },
 					{ "decider_start_coin_count", Settings.DeciderStartCoinCount.ToString () },
 					{ "player_start_coin_count", Settings.PlayerStartCoinCount.ToString () },
 					{ "pot_coin_count", Settings.PotCoinCount.ToString () },
 					{ "extra_time_cost", Settings.ExtraTimeCost.ToString () },
 					{ "extra_seconds", Settings.ExtraSeconds.ToString () },
-					{ "round_number", (Game.Rounds.Current+1).ToString () },
-					{ "winner", Game.Manager.Winner }
+					{ "round_number", Game.Controller.RoundNumber.ToString () },
+					{ "winner", Game.Controller.WinnerName },
+					{ "question", Game.Controller.Question },
+					{ "player_name", Name },
+					{ "think_seconds", Settings.ThinkSeconds.ToString () },
+					{ "pitch_seconds", Settings.PitchSeconds.ToString () },
+					{ "deliberate_seconds", Settings.DeliberateSeconds.ToString () }
 				};
+
+				if (Game.Controller.RoundNumber > 0) {
+					textVars["decider_start_coin_count"] = Settings.DeciderRoundStartCoinCount.ToString ();
+					textVars["player_start_coin_count"] = Settings.PlayerRoundStartCoinCount.ToString ();
+				}
+
+				return textVars;
 			}
 		}
 
 		Settings settings;
-		Settings Settings {
+		protected Settings Settings {
 			get {
 				if (settings == null)
 					settings = DataManager.GetSettings ();
@@ -142,11 +154,16 @@ namespace Views {
 
 			// Header/title
 			if (!string.IsNullOrEmpty (Model.DisplayName)) {
-				Elements.Add ("title", new TextElement (Model.DisplayName, TextStyle.Header));
+				Elements.Add ("title", new TextElement (Model.DisplayName));
 			}
 
 			// Decider & Player instructions
 			if (IsDecider) {
+				if (!string.IsNullOrEmpty (Model.DeciderInstructionsOutLoud)) {
+					Elements.Add ("decider_instructions_out_loud", new TextElement (
+						DataManager.GetTextFromScreen (Model, "DeciderInstructionsOutLoud", TextVariables)));
+					Elements.Add ("instructions_read", new TextElement ("Read out loud:"));
+				}
 				if (!string.IsNullOrEmpty (Model.DeciderInstructions)) {
 					Elements.Add ("decider_instructions", new TextElement (
 						DataManager.GetTextFromScreen (Model, "DeciderInstructions", TextVariables)));
@@ -187,7 +204,7 @@ namespace Views {
 			}
 		}
 
-		protected T GetScreenElement<T> (string id) where T : ScreenElement {
+		public T GetScreenElement<T> (string id) where T : ScreenElement {
 			try {
 				return Elements[id] as T;
 			} catch (KeyNotFoundException) {
@@ -199,13 +216,19 @@ namespace Views {
 			if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
 			if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
 			if (showAgenda) {
-				Dictionary<string, TextElement> agendaItems = new Dictionary<string, TextElement> ();
+
 				int[] rewardValues = DataManager.GetSettings ().Rewards;
+
+				Elements.Add ("rc_agenda_title", new TextElement ("Agenda"));
 				for (int i = 0; i < Role.AgendaItems.Length; i ++) {
-					agendaItems.Add ("rc_item" + i.ToString (), new TextElement (Role.AgendaItems[i].Description));
-					agendaItems.Add ("rc_reward" + i.ToString (), new TextElement ("Reward: " + rewardValues[Role.AgendaItems[i].Reward]));
+					string idx = i.ToString ();
+					Elements.Add ("rc_item" + idx, new TextElement (Role.AgendaItems[i].Description));
+					Elements.Add ("rc_reward_image" + idx, new ImageElement ("coin"));
+					Elements.Add ("rc_reward" + idx, new TextElement ("+" + rewardValues[Role.AgendaItems[i].Reward]));
+					if (i > 0) {
+						Elements.Add ("rc_reward_image" + idx + "b", new ImageElement ("coin"));
+					}
 				}
-				Elements.Add ("rc_agenda", new ListElement<TextElement> (agendaItems));
 			}
 		}
 
@@ -217,7 +240,16 @@ namespace Views {
 			return DataManager.GetTextFromScreen (Model, id, TextVariables);
 		}
 
-		// Routing
+		protected string GetButton (string id) {
+			try {
+				return Model.Buttons[id];
+			} catch (KeyNotFoundException e) {
+				throw new System.Exception ("Could not find data for a button with the id '" + id + "'\n" + e);
+			}
+		}
+
+		// -- Routing
+
 		public void GotoView (string id) {
 			views.Goto (id);
 		}
@@ -230,13 +262,17 @@ namespace Views {
 			views.AllGoto (id);
 		}
 
-		// Events
+		// -- Events
+
+		public virtual void OnDisconnect () {
+			GotoView ("disconnected");
+		}
+
 		protected virtual void OnInitElements () {}			// Static elements that all players see
 		protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
 		protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see
 		protected virtual void OnInitHostElements () {}		// Static elements that only the host sees
 		protected virtual void OnInitClientElements () {}	// Static elements that only clients seee
-		public virtual void OnDisconnect () {}
 		protected virtual void OnShow () {}
 		protected virtual void OnHide () {}
 	}

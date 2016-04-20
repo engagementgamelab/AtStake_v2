@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Networking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ public static class Co {
 	/// <summary>
 	/// Repeatedly invokes a function as long as the condition is met
 	/// </summary>
-	/// <param name="time">The initial delay before invoking begins</param>
+	/// <param name="time">(optional) The initial delay before invoking begins</param>
 	/// <param name="rate">The delay between invoke calls</param>
 	/// <param name="condition">The expression to evaluate. When 'condition' is false, the coroutine stops.</param>
 	/// <param name="onEnd">(optional) A function to run after the coroutine has finished</param>
@@ -81,6 +82,10 @@ public static class Co {
 				onEnd ();
 			}
 		});
+	}
+
+	public static void InvokeWhileTrue (float rate, Func<bool> condition, Action onInvoke, Action onEnd=null) {
+		InvokeWhileTrue (0f, rate, condition, onInvoke, onEnd);
 	}
 
 	/// <summary>
@@ -106,6 +111,18 @@ public static class Co {
 	}
 
 	/// <summary>
+	/// Repeats an action indefinitely
+	/// </summary>
+	/// <seeAlso cref="Repeat" />
+	/// <param name="rate">The delay between actions</param>
+	/// <param name="onInvoke">The function to call</param>
+	public static void Repeat (float rate, Action onInvoke) {
+		InvokeWhileTrue (0f, rate, () => { return Application.isPlaying; }, () => {
+			onInvoke ();
+		});
+	}
+
+	/// <summary>
 	/// Repeats an action a given number of times (like a 'for' loop with a delay between each iteration). Counts up from zero.
 	/// </summary>
 	/// <seeAlso cref="Repeat" />
@@ -126,6 +143,26 @@ public static class Co {
 
 	public static void RepeatAscending (float rate, int max, Action<int> onInvoke, Action onEnd=null) {
 		RepeatAscending (0f, rate, max, onInvoke, onEnd);
+	}
+
+	/// <summary>
+	/// Makes a www request and sends a response callback
+	/// </summary>
+	/// <param name="address">The URL to request</param>
+	/// <param name="onResponse">The callback when a response has been received</param>
+	public static void WWW (string address, Action<WWW> onResponse) {
+		CoMb.Instance.StartCoroutine (CoWWW (address, onResponse));
+	}
+
+	/// <summary>
+	/// Makes a www request and sends a response callback if the response happens before timing out
+	/// </summary>
+	/// <param name="address">The URL to request</param>
+	/// <param name="timeout">How long to wait before timing out</param>
+	/// <param name="onResponse">The callback when a response has been received</param>
+	/// <param name="onTimeout">The callback when the request times out</param>
+	public static void WWW (string address, float timeout, Action<WWW> onResponse, Action<string> onTimeout) {
+		CoMb.Instance.StartCoroutine (CoWWW (address, timeout, onResponse, onTimeout));
 	}
 
 	static IEnumerator CoWaitForSeconds (float seconds, Action onEnd) {
@@ -165,6 +202,28 @@ public static class Co {
 		}
 		if (onEnd != null)
 			onEnd ();
+	}
+
+	static IEnumerator CoWWW (string address, Action<WWW> onResponse) {
+		WWW www = new WWW (address);
+		yield return www;
+		onResponse (www);
+	}
+
+	static IEnumerator CoWWW (string address, float timeout, Action<WWW> onResponse, Action<string> onTimeout) {
+
+		float e = 0f;
+		WWW www = new WWW (address);
+
+		while (e < timeout && !www.isDone) {
+			e += Time.deltaTime;
+			yield return www;
+		}
+
+		if (e >= timeout || www.error != null)
+			onTimeout (www.error);
+		else
+			onResponse (www);
 	}
 }
 

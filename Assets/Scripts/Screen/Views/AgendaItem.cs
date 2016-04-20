@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Models;
 
 namespace Views {
 
 	public class AgendaItem : View {
 
 		PlayerAgendaItem Item {
-			get { return Game.Decks.CurrentAgendaItem; }
+			get { return Game.Controller.CurrentAgendaItem; }
 		}
 
 		protected override void OnInitDeciderElements () {
@@ -15,8 +16,8 @@ namespace Views {
 		}
 
 		protected override void OnInitPlayerElements () {
-			if (Item.Player == Name)
-				Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
+			// if (Item.PlayerName == Name)
+				// Elements.Add ("your_item", new TextElement (Model.Text["your_item"]));
 		}
 
 		protected override void OnInitElements () {

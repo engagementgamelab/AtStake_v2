@@ -8,36 +8,35 @@ namespace Views {
 
 	public class Lobby : View {
 
-		ListElement<TextElement> peerList;
+		ListElement<AvatarElement> peerList;
 
 		protected override void OnInitElements () {
 
-			peerList = new ListElement<TextElement> ();
+			peerList = new ListElement<AvatarElement> ();
 			Elements.Add ("peer_list", peerList);
 
-			// MULTIPLAYER
-			// Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
+			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
 			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], 
 				() => { AllGotoView ("deck"); }) { Active = false });
 		}
 
 		protected override void OnShow () {
 
-			OnAddPeer (Game.Manager.Player.Name);
-			foreach (var peer in Game.Manager.Peers)
-				OnAddPeer (peer.Key);
+			foreach (var player in Game.Manager.Players)
+				OnAddPeer (player.Key, player.Value.Avatar);
 
 			Game.Manager.onAddPeer += OnAddPeer;
 			Game.Manager.onRemovePeer += OnRemovePeer;
 		}
 
 		protected override void OnHide () {
+			Game.Multiplayer.GameStarted ();
 			Game.Manager.onAddPeer -= OnAddPeer;
 			Game.Manager.onRemovePeer -= OnRemovePeer;
 		}
 
-		void OnAddPeer (string peer) {
-			peerList.Add (peer, new TextElement (peer));
+		void OnAddPeer (string peer, string color) {
+			peerList.Add (peer, new AvatarElement (peer, color));
 			SetPlayButton ();
 		}
 
@@ -51,9 +50,8 @@ namespace Views {
 				Elements["play"].Active = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
 		}
 
-		// MULTIPLAYER
-		/*public override void OnDisconnect () {
+		public override void OnDisconnect () {
 			GotoView ("hostjoin");
-		}*/
+		}
 	}
 }

@@ -22,6 +22,48 @@
               "Reward": 1
             }
           ]
+        },
+        {
+          "Title": "Property Owner",
+          "Bio": "Owner of several large apartment buildings",
+          "AgendaItems": [
+            {
+              "Description": "Is paid for by private investors",
+              "Reward": 0
+            },
+            {
+              "Description": "Increases property values",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Community Activist",
+          "Bio": "Popular activist and community volunteer",
+          "AgendaItems": [
+            {
+              "Description": "Benefits are local, with no profit for global corporations",
+              "Reward": 0
+            },
+            {
+              "Description": "Government funded",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Artist",
+          "Bio": "Creative thinker who expresses complex ideas through art",
+          "AgendaItems": [
+            {
+              "Description": "Innovative use of public space for community engagement",
+              "Reward": 0
+            },
+            {
+              "Description": "Funding for public art",
+              "Reward": 1
+            }
+          ]
         }
       ]
     },
@@ -114,6 +156,48 @@
               "Reward": 1
             }
           ]
+        },
+        {
+          "Title": "Property Owner",
+          "Bio": "Owner of several large apartment buildings",
+          "AgendaItems": [
+            {
+              "Description": "Is paid for by private investors",
+              "Reward": 0
+            },
+            {
+              "Description": "Increases property values",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Community Activist",
+          "Bio": "Popular activist and community volunteer",
+          "AgendaItems": [
+            {
+              "Description": "Benefits are local, with no profit for global corporations",
+              "Reward": 0
+            },
+            {
+              "Description": "Government funded",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Artist",
+          "Bio": "Creative thinker who expresses complex ideas through art",
+          "AgendaItems": [
+            {
+              "Description": "Innovative use of public space for community engagement",
+              "Reward": 0
+            },
+            {
+              "Description": "Funding for public art",
+              "Reward": 1
+            }
+          ]
         }
       ]
     }
@@ -121,13 +205,15 @@
   "Screens": [
     {
       "Symbol": "agenda",
-      "DeciderInstructions": "Read this out loud: 'everyone secretly review yr agenda' Press next when everyone is ready"
+      "DeciderInstructionsOutLoud": "Now everyone quietly review your agenda items. You'll earn extra coins if these are included in the winning proposal. Keep them secret!",
+      "DeciderInstructions": "Press next when everyone's ready"
     },
     {
       "Symbol": "agenda_item",
-      "Instructions": "Did the winning plan include this agenda item?",
+      "DeciderInstructions": "Did the winning plan include this agenda item?",
+      "PlayerInstructions": "The Decider is reviewing this agenda item:",
       "Text": {
-        "your_item": "This is your agenda item! Convince the decider you're awesome!!"
+        "your_item": "This is your agenda item! Convince the Decider to choose it and win bonus points!"
       },
       "Buttons": {
         "accept": "Yes",
@@ -137,60 +223,81 @@
     {
       "Symbol": "agenda_item_accept",
       "Text": {
-        "your_item": "Decider chose your agenda item!! :D You get {{reward}} coins",
-        "their_item": "{{rewarded_player}}'s agenda item was approved! They get {{reward}} coins :D"
+        "your_item": "The Decider chose your agenda item! You get +{{reward}} coins",
+        "their_item": "{{rewarded_player}}'s agenda item was approved! They get +{{reward}} coins."
       }
+    },
+    {
+      "Symbol": "agenda_item_instructions",
+      "DeciderInstructionsOutLoud": "Now I'll award bonus points. I'll review each of your secret agenda points and award coins if they were included in the winning proposal.",
+      "DeciderInstructions": "Press next when everyone is ready",
+      "PlayerInstructions": "Listen to the Decider"
     },
     {
       "Symbol": "agenda_item_reject",
       "Text": {
-        "your_item": "Decider did not choose your agenda item",
+        "your_item": "The Decider did not choose your agenda item.",
         "their_item": "{{rewarded_player}}'s agenda item was not accepted."
       }
     },
     {
       "Symbol": "bio",
-      "DeciderInstructions": "Read this out loud: 'Come on yall say what you are!!' When everyone has introduced themselves, press next"
+      "DeciderInstructionsOutLoud": "Everyone, please introduce your character roles. You will be playing from this perspective this round.",
+      "DeciderInstructions": "Press done when everyone has introduced themselves"
     },
     {
       "Symbol": "decide",
-      "DeciderInstructions": "read this out loud: ok i'm gonna choose a winner now!!",
-      "PlayerInstructions": "listen to your gumptious decider"
+      "DeciderInstructions": "Time's up! I will now choose the best proposal.",
+      "PlayerInstructions": "The Decider is selecting the winner for the best proposal!"
     },
     {
       "Symbol": "deck",
-      "ClientInstructions": "Please wait while the host chooses a deck",
-      "HostInstructions": "Please choose a deck genius"
+      "ClientInstructions": "Please wait while the Host picks a topic for your game... ",
+      "HostInstructions": "Please pick a topic for your game:",
+      "Buttons": {
+        "confirm": "Go!"
+      }
     },
     {
       "Symbol": "deliberate",
-      "DeciderInstructions": "When everyone is ready, start the timer"
+      "DeciderInstructions": "Press 'deliberate' to start the next round. Be sure to ask probing questions about the proposal and encourage questions among players.",
+      "Buttons": {
+        "timer_button": "Deliberate!"
+      }
     },
     {
       "Symbol": "deliberate_instructions",
-      "DeciderInstructions": "read this out loud: 'EVERYONE!!! we're gonna deliberate on who's got the best plan now'",
-      "PlayerInstructions": "listen to your special decider"
+      "DeciderInstructionsOutLoud": "Now we'll take {{deliberate_seconds}} seconds to talk about your proposals. Once the time runs out you'll have an opportunity to buy more time. Then I'll choose the winning proposal.",
+      "DeciderInstructions": "Press next when everyone is ready",
+      "PlayerInstructions": "Listen to the Decider"
+    },
+    {
+      "Symbol": "disconnected",
+      "Instructions": "Your device has disconnected from the game. This might be because the host left the game or because your device is having trouble connecting to the WIFI.",
+      "Buttons": {
+        "menu": "Main menu"
+      }
     },
     {
       "Symbol": "extra_time",
       "Text": {
-        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time.",
-        "cant_afford": "You can't afford extra time :("
+        "can_afford": "Need more time? You can pay {{extra_time_cost}} coins for {{extra_seconds}} more seconds.",
+        "cant_afford": "You don't have enough coins to buy extra time."
       },
       "Buttons": {
         "accept": "More time",
-        "decline": "Nah"
+        "decline": "No thanks"
       }
     },
     {
       "Symbol": "extra_time_deliberate",
       "Text": {
-        "can_afford": "Time's up but you can pay {{extra_time_cost}} for {{extra_seconds}} seconds additional time. Once everyone has declined we'll move on.",
-        "cant_afford": "You can't afford extra time :("
+        "can_afford": "Need more time? You can pay {{extra_time_cost}} coins for {{extra_seconds}} more seconds.",
+        "cant_afford": "You don't have enough coins to buy extra time."
       },
       "Buttons": {
         "accept": "More time",
-        "decline": "Nah"
+        "decline": "No thanks"
       }
     },
     {
@@ -204,18 +311,29 @@
     },
     {
       "Symbol": "games",
-      "ClientInstructions": "Choose a game to join"
+      "ClientInstructions": "Choose a game to join. There may be multiple games in your area, so be sure to join the right one!",
+      "Text": {
+        "searching": "Searching for games",
+        "error": "Could not connect to server - is your WIFI on?"
+      },
+      "Buttons": {
+        "confirm": "Go!"
+      }
     },
     {
       "Symbol": "hostjoin",
       "Buttons": {
         "host": "Host",
         "join": "Join"
+      },
+      "Text": {
+        "welcome": "Hi {{player_name}}!",
+        "error": "Could not connect to server - is your WIFI on?"
       }
     },
     {
       "Symbol": "lobby",
-      "DisplayName": "Lobby",
+      "DisplayName": "Players",
       "Buttons": {
         "play": "Play"
       }
@@ -230,32 +348,39 @@
       "Symbol": "pitch",
       "DeciderInstructions": ".",
       "Text": {
-        "first_up": "{{current_peer}} is first up. Start the timer when they're ready!",
-        "next_up": "next up is {{current_peer}} Start the timer when they're ready!"
+        "first_up": "It's {{current_peer}}'s turn to pitch first",
+        "next_up": "Next up is {{current_peer}}. Start the timer when they're ready!"
+      },
+      "Buttons": {
+        "timer_button": "Pitch!",
+        "pitching": "Pitch!",
+        "listening": "Listen!"
       }
     },
     {
       "Symbol": "pitch_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna take turns pitching now'",
-      "PlayerInstructions": "listen to your proud decider"
+      "DeciderInstructionsOutLoud": "Now everyone will take turns pitching their proposal.",
+      "DeciderInstructions": "Press next when everyone is ready",
+      "PlayerInstructions": "Listen to the Decider"
     },
     {
       "Symbol": "pot",
       "Text": {
         "instruction1": "As the Decider, {{decider}} begins with {{decider_start_coin_count}} coins.",
         "instruction2": "Everyone else begins with {{player_start_coin_count}} coins.",
-        "instruction3": "At the end of the round, {{decider}} will choose a winner and they will get the coins from the pot.",
-        "instruction4": "The round begins with {{pot_coin_count}} coins in the pot.",
-        "instruction5": "ok? let'S GO!!!"
+        "instruction3": "At the end of the round, {{decider}} will choose a winner and they will get the coins in the pot.",
+        "instruction4": "{{pot_coin_count}} coins are up for grabs!",
+        "instruction5": "The pot could grow if you play boldly..."
       }
     },
     {
       "Symbol": "question",
-      "DeciderInstructions": "read this out loud: 'yo everyone listen to this question' press next when everyone's cool"
+      "DeciderInstructionsOutLoud": "Here is the question you'll answer this round. Is everyone ready to ponder a solution?",
+      "DeciderInstructions": "When everyone is ready, press next."
     },
     {
       "Symbol": "roles",
-      "Instructions": "Assigning roles"
+      "Instructions": "The character roles for this round are..."
     },
     {
       "Symbol": "scoreboard",
@@ -266,24 +391,31 @@
     },
     {
       "Symbol": "start",
-      "DisplayName": "@Stake",
+      "Instructions": "Welcome to\n@Stake: <i>a deliberation game!</i>\nYou will need 3-4 players.",
+      "Text": {
+        "connection_failed": "Couldn't connect to the Internet. Is your WIFI on?"
+      },
       "Buttons": {
-        "play": "Play"
+        "submit": "Let's go!"
       }
     },
     {
       "Symbol": "think",
-      "DeciderInstructions": "When everyone is ready, start the timer"
+      "DeciderInstructions": "Press 'Think' to start.",
+      "Buttons": {
+        "timer_button": "Think!"
+      }
     },
     {
       "Symbol": "think_instructions",
-      "DeciderInstructions": "read this out load: 'EVERYONE!!! we're gonna think for like 30 secs now'",
-      "PlayerInstructions": "listen to your decider"
+      "DeciderInstructionsOutLoud": "You will have {{think_seconds}} seconds to think of a proposal from your character's perspective.",
+      "DeciderInstructions": "Press next when everyone is ready.",
+      "PlayerInstructions": "Listen to the Decider"
     },
     {
       "Symbol": "winner",
       "Text": {
-        "winner": "And the winner is..."
+        "winner": "The winner is..."
       }
     }
   ],
@@ -295,6 +427,8 @@
     "PotCoinCount": 50,
     "PlayerStartCoinCount": 30,
     "DeciderStartCoinCount": 100,
+    "PlayerRoundStartCoinCount": 0,
+    "DeciderRoundStartCoinCount": 30,
     "Rewards": [
       10,
       20

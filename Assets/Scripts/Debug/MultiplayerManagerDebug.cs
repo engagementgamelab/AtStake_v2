@@ -10,21 +10,24 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	public Button hostButton;
 	public Button hostListButton;
 	public Button disconnectButton;
+	public Text ipAddress;
 	public Text broadcasterStatus;
 	public Text listenerStatus;
 	public Text hostStatus;
 	public Text clientsStatus;
-	MultiplayerManager2 multiplayer;
+	public InputField connectAddress;
+	MultiplayerManager multiplayer;
 
-	public void Init (MultiplayerManager2 multiplayer) {
+	public void Init (MultiplayerManager multiplayer) {
 		this.multiplayer = multiplayer;
 		#if SHOW_DEBUG_INFO
 		multiplayer.onLogMessage += OnLogMessage;
 		#endif
+		// ipAddress.text = multiplayer.client.IpAddress;
 	}
 
 	public void Host () {
-		multiplayer.HostGame ();
+		// multiplayer.HostGame ();
 	}
 
 	public void RequestHostList () {
@@ -36,7 +39,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 			foreach (string host in hosts) {
 				if (buttons.Find (x => x.Id == host) == null) {
 					hostList.AddButton (host, () => {
-						multiplayer.JoinGame (host, (string response) => {
+						/*multiplayer.JoinGame (host, (string response) => {
 							switch (response) {
 								case "registered": break;
 								case "room_full": 
@@ -46,7 +49,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 									RequestHostList ();
 									break;
 							}
-						});
+						});*/
 					});
 				}
 			}
@@ -60,36 +63,42 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		multiplayer.Disconnect ();
 	}
 
+	public void SubmitConnection () {
+		// multiplayer.JoinGame (connectAddress.text);
+	}
+
 	void Update () {
 
-		hostButton.gameObject.SetActive (
+		if (multiplayer == null) return;
+
+		/*hostButton.gameObject.SetActive (
 			!multiplayer.client.IsConnected 
-			&& MasterServerDiscovery.Broadcaster == null 
-			&& !MasterServerDiscovery.HasListener (multiplayer));
+			&& DiscoveryService.Broadcaster == null
+			&& !DiscoveryService.HasListener (multiplayer));
 
 		hostListButton.gameObject.SetActive (
 			!multiplayer.Connected 
-			&& !MasterServerDiscovery.HasListener (multiplayer));
+			&& !DiscoveryService.HasListener (multiplayer));
 
 		disconnectButton.gameObject.SetActive (
 			multiplayer.client.IsConnected
-			|| MasterServerDiscovery.HasListener (multiplayer));
-
-		broadcasterStatus.text = MasterServerDiscovery.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
-		listenerStatus.text = MasterServerDiscovery.HasListener (multiplayer) ? "Listening" : "Not listening";
+			|| DiscoveryService.HasListener (multiplayer));
+		
+		broadcasterStatus.text = DiscoveryService.Broadcaster == null ? "Not broadcasting" : "Broadcasting";
+		listenerStatus.text = DiscoveryService.HasListener (multiplayer) ? "Listening" : "Not listening";
 
 		if (multiplayer.Connected) {
 			hostStatus.text = "Host: " + multiplayer.Host;
 			if (multiplayer.Hosting)
 				hostStatus.text += " (me)";
 			clientsStatus.text = "Players: ";
-			foreach (string player in multiplayer.Game.Manager.PlayerNames) {
-				clientsStatus.text += player + ", ";
+			foreach (var player in multiplayer.Game.Manager.Players) {
+				clientsStatus.text += player.Key + ", ";
 			}
 		} else {
 			hostStatus.text = "not connected";
 			clientsStatus.text = "";
-		}
+		}*/
 	}
 
 	void OnLogMessage (string msg) {

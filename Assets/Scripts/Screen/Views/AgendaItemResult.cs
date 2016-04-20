@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Models;
 
 namespace Views {
 
 	public class AgendaItemResult : View {
-		
+
 		PlayerAgendaItem item;
 		protected PlayerAgendaItem Item {
-			get { 
+			get {
 				if (item == null)
-					item = Game.Decks.CurrentAgendaItem;
+					item = Game.Controller.CurrentAgendaItem;
 				return item;
 			}
 		}
 
-		protected bool MyItem { get { return Item.Player == Name; } }
+		protected bool MyItem { get { return Item.PlayerName == Name; } }
 
 		protected int[] RewardValues {
 			get { return DataManager.GetSettings ().Rewards; }
@@ -25,18 +26,13 @@ namespace Views {
 			get { 
 				Dictionary<string, string> v = new Dictionary<string, string> (TextVariables);
 				v.Add ("reward", RewardValues[Item.Reward].ToString ());
-				v.Add ("rewarded_player", Item.Player);
+				v.Add ("rewarded_player", Item.PlayerName);
 				return v;
 			}
 		}
 
-		bool hasNextItem;
-
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("next", new NextButtonElement ("", Advance));
-			Co.WaitForFixedUpdate (() => {
-				hasNextItem = Game.Decks.NextAgendaItem ();
-			});
 		}
 
 		protected override void OnHide () {
@@ -44,13 +40,14 @@ namespace Views {
 		}
 
 		void Advance () {
-			if (hasNextItem) {
+			if (Game.Controller.NextAgendaItem ()) {
 				AllGotoView ("agenda_item");
 			} else {
-				AllGotoView (Game.Rounds.NextRound ()
-					? "scoreboard"
-					: "final_scoreboard"
-				);
+				if (Game.Controller.NextRound ()) {
+					AllGotoView ("scoreboard");
+				} else {
+					AllGotoView ("final_scoreboard");
+				}
 			}
 		}
 	}

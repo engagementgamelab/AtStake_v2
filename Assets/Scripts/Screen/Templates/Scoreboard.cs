@@ -8,15 +8,16 @@ namespace Templates {
 
 	public class Scoreboard : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("next_button") {
+				TopBarColor = Palette.Orange,
+				TopBarHeight = TemplateSettings.ShortBar,
+				BottomBarHeight = TemplateSettings.MediumBar,
+				BackgroundColor = Palette.White,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "score_list", TextStyle.Paragraph }
+				}
+			};
 		}
 		
 		ListElementUI<TextElementUI, TextElement> scores;
@@ -28,9 +29,19 @@ namespace Templates {
 			}
 		}
 
+		protected virtual ScreenElementUI ContinueButton {
+			get { return Elements["next"]; }
+		}
+
 		protected override void OnLoadView () {
-			Elements["next"].Visible = false;
-			Elements["decider_instructions"].Visible = false;
+
+			ContinueButton.Visible = false;
+
+			TextElementUI instructions;
+			if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+				instructions.Visible = false;
+			}
+
 			foreach (TextElementUI t in Scores.ChildElements)
 				t.Visible = false;
 		}
@@ -49,8 +60,11 @@ namespace Templates {
 				childElements[counter].Visible = true;
 				counter --;
 			}, () => {
-				Elements["next"].Visible = true;
-				Elements["decider_instructions"].Visible = true;
+				ContinueButton.Visible = true;
+				TextElementUI instructions;
+				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
+					instructions.Visible = true;
+				}
 			});
 		}
 

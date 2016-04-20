@@ -1,27 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using InventorySystem;
 using Models;
 
 //// <summary>
-/// Handles scoring for all players
+/// Interfaces with GameController to handle scoring for all players
 /// This includes players' individual scores and the pot
 /// </summary>
-public class ScoreManager : GameInstanceBehaviour, IInventoryHolder {
+public class ScoreManager : GameInstanceBehaviour {
 
 	public delegate void OnUpdateScore (int score);
-
-	Inventory inventory;
-	public Inventory Inventory {
-		get {
-			if (inventory == null) {
-				inventory = new Inventory (this);
-				inventory.Add (new PotGroup (Settings.PotCoinCount));
-			}
-			return inventory;
-		}
-	}
+	public delegate void OnUpdatePot (int pot);
 
 	Settings settings;
 	Settings Settings {
@@ -34,27 +23,26 @@ public class ScoreManager : GameInstanceBehaviour, IInventoryHolder {
 	}
 
 	public int PlayerScore {
-		get { return Game.Manager.Player.CoinCount; }
-		private set { 
-			Game.Manager.Player.CoinCount = value; 
+		get { return Game.Controller.CoinCount; }
+		set { 
+			Game.Controller.CoinCount = value; 
 			SendUpdateMessage ();
 		}
 	}
-
-	int DeciderScore {
-		get { return Game.Manager.DeciderPlayer.CoinCount; }
-		set { Game.Manager.DeciderPlayer.CoinCount = value; }
-	}
-
+	
 	public int Pot {
-		get { return Inventory["pot"].Count; }
+		get { return Game.Controller.Pot; }
+		set { 
+			Game.Controller.Pot = value; 
+			SendUpdatePotMessage ();
+		}
 	}
 
 	public Dictionary<string, int> PlayerScores {
-		get { 
+		get {
 			Dictionary<string, int> playerScores = new Dictionary<string, int> ();
-			foreach (var player in Game.Manager.Players)
-				playerScores.Add (player.Key, player.Value.CoinCount);
+			foreach (Player player in Game.Controller.Players) 
+				playerScores.Add (player.Name, player.CoinCount);
 			return playerScores;
 		}
 	}
@@ -64,46 +52,49 @@ public class ScoreManager : GameInstanceBehaviour, IInventoryHolder {
 	}
 
 	public OnUpdateScore onUpdateScore;
+	public OnUpdatePot onUpdatePot;
 
 	public void Init () {
-		PlayerScore = 0;
 		Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
 	}
 
-	public void FillPot () { 
-		Inventory["pot"].Set (Settings.PotCoinCount);
-	}
-
-	public void EmptyPot () { Inventory["pot"].Clear (); }
+	public void FillPot () { Pot = Settings.PotCoinCount; }
+	public void EmptyPot () { Pot = 0; }
 
 	public void AddRoundStartScores () {
-		foreach (var player in Game.Manager.Players) {
-			if (player.Key != Game.Manager.Decider)
-				player.Value.CoinCount += Settings.PlayerStartCoinCount;	
+		string deciderName = Game.Controller.DeciderName;
+		foreach (Player player in Game.Controller.Players) {
+			if (player.Name != deciderName)
+				player.CoinCount += Settings.PlayerStartCoinCount;
 		}
-		DeciderScore += Settings.DeciderStartCoinCount;
+		Game.Controller.Decider.CoinCount += Settings.DeciderStartCoinCount;
 		SendUpdateMessage ();
 	}
 
 	public void AddWinnings () {
-		Game.Manager.Players[Game.Manager.Winner].CoinCount += Inventory["pot"].Count;
+		Game.Controller.Winner.CoinCount += Pot;
 		EmptyPot ();
 		SendUpdateMessage ();
 	}
 
 	public void ApplyPlayerReward (PlayerAgendaItem item) {
-		Game.Manager.Players[item.Player].CoinCount += Settings.Rewards[item.Reward];
+		Game.Controller.FindPlayer (item.PlayerName).CoinCount += Settings.Rewards[item.Reward];
 		SendUpdateMessage ();
 	}
 
 	void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
-		Inventory["pot"].Add (Settings.ExtraTimeCost);
-		Game.Manager.Players[msg.str1].CoinCount -= Settings.ExtraTimeCost;
+		Pot += Settings.ExtraTimeCost;
+		Game.Controller.FindPlayer (msg.str1).CoinCount -= Settings.ExtraTimeCost;
 		SendUpdateMessage ();
 	}
 
 	void SendUpdateMessage () {
 		if (onUpdateScore != null)
 			onUpdateScore (PlayerScore);
+	}
+
+	void SendUpdatePotMessage () {
+		if (onUpdatePot != null)
+			onUpdatePot (Pot);
 	}
 }

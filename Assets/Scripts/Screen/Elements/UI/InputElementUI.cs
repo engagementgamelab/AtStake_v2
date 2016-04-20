@@ -3,14 +3,14 @@ using System.Collections;
 
 public class InputElementUI : ScreenElementUI<InputElement> {
 
-	bool focusedOnLoad = false;
+	public bool FocusedOnLoad { get; private set; }
 
 	public override void ApplyElement (InputElement e) {
 		Placeholder.text = e.Placeholder;
 		AddEndEditListener (e.OnEndEdit);
 		if (e.OnValueChanged != null)
 			AddValueChangedListener (e.OnValueChanged);
-		focusedOnLoad = e.FocusedOnLoad;
+		FocusedOnLoad = e.FocusedOnLoad;
 	}
 
 	public override void RemoveElement (InputElement e) {
@@ -18,7 +18,7 @@ public class InputElementUI : ScreenElementUI<InputElement> {
 	}
 
 	protected override void OnInputEnabled (InputElement e) {
-		if (focusedOnLoad)
+		if (FocusedOnLoad)
 			InputField.ActivateInputField ();
 	}
 }

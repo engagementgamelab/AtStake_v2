@@ -11,11 +11,14 @@ public class ViewManagerDebug : MonoBehaviour {
 	public Text inputText;
 
 	public void Init (ViewManager views) {
+		#if SHOW_DEBUG_INFO
 		this.views = views;
+		#endif
 	}
 
 	#if SHOW_DEBUG_INFO
 	void Update () {
+		if (views == null) return;
 		current.text = "Current view: " + views.CurrView;
 		previous.text = "Previous view: " + views.PrevView;
 	}

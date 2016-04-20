@@ -181,6 +181,17 @@ public static class ExtensionMethods {
 		return children;
 	}
 
+	public static List<T> GetAllChildren<T> (this Transform transform) where T : MonoBehaviour {
+		List<T> children = new List<T> ();
+		List<Transform> transforms = transform.GetAllChildren ();
+		foreach (Transform child in transforms) {
+			T t = child.GetComponent<T> ();
+			if (t != null)
+				children.Add (t);
+		}
+		return children;
+	}
+
 	public static Transform GetNthParent (this Transform transform, int n) {
 		Transform parent = transform.parent;
 		if (parent == null) {
@@ -237,6 +248,10 @@ public static class ExtensionMethods {
 		transform.position = position;
 	}
 	
+	public static void SetLocalPosition (this Transform transform) {
+		transform.localPosition = Vector3.zero;
+	}
+
 	public static void SetLocalPosition (this Transform transform, Vector3 position) {
 		transform.localPosition = position;
 	}
@@ -375,6 +390,12 @@ public static class ExtensionMethods {
 	    }  
 	}
 
+	public static List<T> ToShuffled<T> (this List<T> list) {
+		List<T> newList = new List<T> (list);
+		newList.Shuffle ();
+		return newList;
+	}
+
 	public static void Print (this IList list) {
 		foreach (var i in list) {
 			System.Type t = i.GetType ();
@@ -389,15 +410,12 @@ public static class ExtensionMethods {
 	}
 
 	public static void Print<T> (this List<T> list, Func<T, object> onPrint) where T : class {
-		foreach (T t in list) {
-			if (onPrint != null)
-				Debug.Log (onPrint (t));
-			else
-				Debug.Log (t);
-		}
+		foreach (T t in list)
+			Debug.Log (onPrint (t));
 	}
 
 	public static void Print (this IDictionary dict) {
+		Debug.Log (dict + ": " + dict.Count + " elements");
 		foreach (var d in dict) {
 			System.Type t = d.GetType ();
 			if (t == typeof (IList)) {

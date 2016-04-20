@@ -14,6 +14,6 @@ public class GameInstanceBehaviour : MB {
 	}
 
 	protected void Log (object msg) {
-		Debug.Log (Game.Manager.Player.Name + ": " + msg);
+		Debug.Log (Game.Name + ": " + msg);
 	}
 }

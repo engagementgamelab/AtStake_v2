@@ -6,14 +6,13 @@ namespace Views {
 	public class Winner : View {
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("next", new NextButtonElement ("agenda_item"));
-			Game.Decks.ShuffleAgendaItems (Game.Manager.Peers);
-			Game.Decks.NextAgendaItem ();
+			Elements.Add ("next", new NextButtonElement ("agenda_item_instructions"));
 		}
 
 		protected override void OnInitElements () {
 			Elements.Add ("winner", new TextElement (DataManager.GetTextFromScreen (Model, "winner")));
-			Elements.Add ("winner_name", new TextElement (Game.Manager.Winner + "!", TextStyle.Header));
+			Elements.Add ("winner_name", new TextElement (Game.Controller.WinnerName + "!"));
+			Elements.Add ("avatar", new ImageElement (AssetLoader.GetAvatarFilename (Game.Controller.GetAvatarForPlayer (Game.Controller.WinnerName))));
 		}
 
 		protected override void OnShow () {

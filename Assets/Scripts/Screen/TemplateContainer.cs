@@ -11,10 +11,12 @@ namespace Templates {
 		public Image backgroundColor;
 		public Image backgroundImage;
 		public Image topBar;
+		public Image bottomBar;
+		public ButtonElementUI nextButton;
 
-		public BackButtonElementUI backButton;
-		public PotElementUI pot;
-		public CoinsElementUI coins;
+		BackButtonElementUI backButton;
+		PotElementUI pot;
+		CoinsElementUI coins;
 
 		public Template[] templates;
 
@@ -27,6 +29,7 @@ namespace Templates {
 				if (overlayElements == null) {
 					overlayElements = new Dictionary<string, ScreenElementUI> ();
 					overlayElements.Add ("back", backButton);
+					overlayElements.Add ("next", nextButton);
 					overlayElements.Add ("pot", pot);
 					overlayElements.Add ("coins", coins);
 				}
@@ -46,17 +49,31 @@ namespace Templates {
 			set { topBar.color = value; }
 		}
 
+		Color BottomBarColor {
+			set { bottomBar.color = value; }
+		}
+
 		public static TemplateContainer Init (TemplatesContainer myContainer, int siblingIndex) {
+
 			TemplateContainer c = ObjectPool.Instantiate<TemplateContainer> ();
 			c.transform.SetParent (myContainer.transform);
 			c.transform.SetSiblingIndex (siblingIndex);
 			c.RectTransform.localScale = Vector3.one;
 			c.RectTransform.anchoredPosition = Vector2.zero;
 			c.RectTransform.sizeDelta = Vector2.zero;
-			c.backButton = myContainer.backButton;
-			c.pot = myContainer.pot;
-			c.coins = myContainer.coins;
+			c.InitOverlayElements (myContainer);
+
+			// All templates should be deactivated to start
+			foreach (Template template in c.templates)
+				template.gameObject.SetActive (false);
+
 			return c;
+		}
+
+		public void InitOverlayElements (TemplatesContainer myContainer) {
+			backButton = myContainer.backButton;
+			pot = myContainer.pot;
+			coins = myContainer.coins;
 		}
 
 		public void LoadView (string id, View view) {
@@ -68,7 +85,8 @@ namespace Templates {
 
 		public void UnloadView () {
 			content.UnloadView ();
-			content.gameObject.SetActive (false);
+			foreach (Template template in templates)
+				template.gameObject.SetActive (false);
 		}
 
 		public bool TemplateIsBefore (string template1, string template2) {
@@ -83,17 +101,35 @@ namespace Templates {
 
 		void ApplySettings (TemplateSettings settings) {
 			SetBackground (settings.BackgroundColor, settings.BackgroundImage);
-			SetTopBar (settings.TopBarEnabled, settings.TopBarColor);
+			SetTopBar (settings.TopBarHeight, settings.TopBarColor);
+			SetBottomBar (settings.BottomBarHeight, settings.BottomBarColor);
 		}
 
 		void SetBackground (Color bgColor, string bgImage) {
 			BackgroundColor = bgColor;
-			BackgroundImage = AssetLoader.LoadBackground (bgImage);
+			
+			bool hasBg = !string.IsNullOrEmpty (bgImage);
+			backgroundImage.gameObject.SetActive (hasBg);
+			if (hasBg)
+				BackgroundImage = AssetLoader.LoadBackground (bgImage);
 		}
 
-		void SetTopBar (bool enabled, Color topBarColor=new Color()) {
-			topBar.gameObject.SetActive (enabled);
-			TopBarColor = topBarColor;
+		void SetTopBar (float height, Color topBarColor=new Color()) {
+
+			bool active = height > 0;
+			topBar.gameObject.SetActive (active);
+
+			if (active) {
+				topBar.GetComponent<LayoutElement> ().preferredHeight = height;
+				TopBarColor = topBarColor;
+				topBar.transform.GetChild (0).gameObject.SetActive (height > TemplateSettings.ShortBar);
+			}
+		}
+
+		void SetBottomBar (float height, Color bottomBarColor=new Color()) {
+			bottomBar.gameObject.SetActive (height > 0);
+			bottomBar.GetComponent<LayoutElement> ().preferredHeight = height;
+			BottomBarColor = bottomBarColor;
 		}
 
 		Template GetTemplateById (string id) {

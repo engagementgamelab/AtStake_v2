@@ -16,12 +16,15 @@ namespace Templates {
 		public PotElementUI pot;
 		public CoinsElementUI coins;
 
+		public bool Animating {
+			get { return anim == null ? false : anim.Animating; }
+		}
+
 		TemplateContainer container1;
 		TemplateContainer container2;
 
 		float canvasWidth;
 		float slideTime = 0.33f;
-		bool animating = false;
 		string prevId;
 
 		TemplateContainer activeContainer;
@@ -35,6 +38,8 @@ namespace Templates {
 				return raycaster;
 			}
 		}
+
+		UIAnimator anim;
 
 		// Specify overrides for the default transition behaviour (slides in if the new template is listed after the previous one, out otherwise)
 		// true = SlideIn
@@ -54,6 +59,7 @@ namespace Templates {
 				// Initialize if this is the first time loading a view
 				activeContainer = container1;
 				activeContainer.LoadView (id, view);
+				activeContainer.SetInputEnabled ();
 				inactiveContainer = container2;
 				inactiveContainer.RectTransform.SetAnchoredPositionX (canvasWidth);
 			} else {
@@ -85,6 +91,7 @@ namespace Templates {
 			canvasWidth = canvas.GetComponent<RectTransform> ().sizeDelta.x;
 			container1 = TemplateContainer.Init (this, 0);
 			container2 = TemplateContainer.Init (this, 1);
+			anim = UIAnimator.AttachTo (gameObject);
 		}
 
 		void SlideIn () { Slide (-canvasWidth); }
@@ -92,17 +99,7 @@ namespace Templates {
 
 		void Slide (float to) {
 
-			if (animating) return;
-			animating = true;
-
-			// Disable the raycaster while animating so that the user can't "double press" buttons
-			Raycaster.enabled = false;
-
-			inactiveContainer.RectTransform.SetAnchoredPositionX (-to);
-
-			Co.StartCoroutine (slideTime, (float p) => {
-				RectTransform.SetAnchoredPositionX (Mathf.Lerp (0f, to, Mathf.SmoothStep (0f, 1f, p)));
-			}, () => {
+			if (anim.Animate (new UIAnimator.Slide (slideTime, to, () => {
 
 				// Normalize positions
 				inactiveContainer.RectTransform.SetAnchoredPositionX (0f);
@@ -115,13 +112,20 @@ namespace Templates {
 				// Swap the active and inactive containers
 				UpdateActiveContainer ();
 
-				// Enable the raycaster so that input is accepted again
-				Raycaster.enabled = true;
-				animating = false;
-
 				// Inform the newly active container that the animation has finished & input is being accepted
 				activeContainer.SetInputEnabled ();
-			});
+
+				// Enable the raycaster so that input is accepted again (small pause so that players don't accidently 'double press' buttons)
+				Co.WaitForSeconds (0.05f, () => {
+					Raycaster.enabled = true;
+				});
+
+			}))) {
+
+				// Disable the raycaster while animating so that the user can't "double press" buttons
+				Raycaster.enabled = false;
+				inactiveContainer.RectTransform.SetAnchoredPositionX (-to);
+			}
 		}
 
 		void UpdateActiveContainer () {

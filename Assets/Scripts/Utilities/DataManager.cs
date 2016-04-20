@@ -28,27 +28,18 @@ public class DataManager {
             return currentConfig.root;
         }
     }
-    
-    /// <summary>
-    /// Get the IP address of the server that handles multiplayer connections
-    /// </summary>
-    /*public static string MultiplayerServerIp {
-        get { return currentConfig.multiplayerServerIp == "unity" ? MasterServer.ipAddress : currentConfig.multiplayerServerIp; }
+
+    public static string MasterServerAddress {
+        get {
+            return currentConfig.master;
+        }
     }
 
-    /// <summary>
-    /// Get the port of the server that handles multiplayer connections
-    /// </summary>
-    public static int MultiplayerServerPort {
-        get { return currentConfig.multiplayerServerPort == -1 ? MasterServer.port : currentConfig.multiplayerServerPort; }
+    public static string SocketAddress {
+        get {
+            return currentConfig.socket;
+        }
     }
-
-    /// <summary>
-    /// Get the port of the facilitator port for nat punchthroughs 
-    /// </summary>
-    public static int FacilitatorPort {
-        get { return currentConfig.facilitatorPort == -1 ? Network.natFacilitatorPort : currentConfig.facilitatorPort; }
-    }*/
 
     /// <summary>
     /// Set to production mode.
@@ -86,7 +77,8 @@ public class DataManager {
         config = JsonReader.Deserialize<GameConfig>(data);
         
         // Set the current game config based on the environment
-        // #if UNITY_EDITOR
+        #if UNITY_EDITOR
+        
             currentConfig = config.local;
 
             // If override set, use that
@@ -100,13 +92,13 @@ public class DataManager {
             }
 
 
-        /*#elif DEVELOPMENT_BUILD
+        #elif DEVELOPMENT_BUILD
            currentConfig = config.development;
         #elif IS_PRODUCTION
            currentConfig = config.production;
         #else
            currentConfig = config.staging;
-        #endif*/
+        #endif
 
     }
 
@@ -128,8 +120,8 @@ public class DataManager {
         #if !UNITY_WEBPLAYER 
 
             SaveDataToJson("data", data
-                #if UNITY_IOS || UNITY_ANDROID
-                ,false
+                #if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
+                ,true
                 #endif
             );
 
@@ -184,14 +176,17 @@ public class DataManager {
             switch (key) {
                 case "Instructions": text = screen.Instructions; break;
                 case "DeciderInstructions": text = screen.DeciderInstructions; break;
+                case "DeciderInstructionsOutLoud": text = screen.DeciderInstructionsOutLoud; break;
                 case "PlayerInstructions": text = screen.PlayerInstructions; break;
                 case "HostInstructions": text = screen.HostInstructions; break;
                 case "ClientInstructions": text = screen.ClientInstructions; break;
                 default: text = screen.Text[key]; break;
             }
         } catch {
-            throw new System.Exception ("The model " + screen + " does not contain text with the key " + key);
+            throw new System.Exception ("The screen " + screen.Symbol + " does not contain text with the key '" + key + "'");
         }
+
+        // Match and replace keywords
         if (vars != null) {
             foreach (Match match in Regex.Matches (text, @"\{\{(.*?)\}\}")) {
                 string m = match.Value;

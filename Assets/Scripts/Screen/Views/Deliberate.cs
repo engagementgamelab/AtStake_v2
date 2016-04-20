@@ -25,8 +25,8 @@ namespace Views {
 		List<string> declinedPlayers = new List<string> ();
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
-				Game.Dispatcher.ScheduleMessage ("StartTimer");
+			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
+				Game.Dispatcher.ScheduleMessage ("StartTimer", state == State.Deliberate ? "deliberate" : "extra");
 			}, () => {
 				Game.Dispatcher.ScheduleMessage ("TimeExpired");
 			}));
@@ -36,7 +36,7 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			CreateRoleCard (true, true, true);
-			Elements.Add ("timer", new TimerElement (Duration));
+			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, TimerType.Deliberate));
 		}
 
 		protected override void OnShow () {
@@ -53,9 +53,15 @@ namespace Views {
 		}
 
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {
+			
 			if (HasElement ("timer")) {
+
+				float duration = msg.str1 == "deliberate"
+					? Duration
+					: ExtraTimeDuration;
+
 				TimerElement timer = GetScreenElement<TimerElement> ("timer");
-				timer.Reset (state == State.Deliberate ? Duration : ExtraTimeDuration);
+				timer.Reset (duration);
 				timer.StartTimer ();
 			}
 			state = State.Extra;
@@ -65,14 +71,14 @@ namespace Views {
 			AllGotoView ("deliberate");
 			declinedPlayers.Clear ();
 			TimerButtonElement timer = GetScreenElement<TimerButtonElement> ("timer_button");
-			timer.Reset (state == State.Deliberate ? Duration : ExtraTimeDuration);
+			timer.Reset (ExtraTimeDuration);
 			timer.StartTimer ();
 		}
 
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
 			if (!declinedPlayers.Contains (msg.str1)) {
 				declinedPlayers.Add (msg.str1);
-				if (declinedPlayers.Count == Game.Manager.Peers.Count) {
+				if (declinedPlayers.Count == Game.Controller.PeerCount) {
 					AllGotoView ("decide");
 				}
 			}

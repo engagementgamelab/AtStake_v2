@@ -5,15 +5,8 @@ namespace Templates {
 
 	public class _template : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings () {};
 		}
 	}
 }

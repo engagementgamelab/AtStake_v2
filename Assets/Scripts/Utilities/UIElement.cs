@@ -34,18 +34,18 @@ public class UIElement : MB {
 		set { Image.sprite = value; }
 	}
 
-	Button button = null;
-	public Button Button {
+	Button myButton = null;
+	public virtual Button Button {
 		get {
-			if (button == null) {
-				button = GetComponent<Button> ();
+			if (myButton == null) {
+				myButton = GetComponent<Button> ();
 			}
-			return button;
+			return myButton;
 		}
 	}
 
 	InputField inputField = null;
-	protected InputField InputField {
+	public InputField InputField {
 		get {
 			if (inputField == null) {
 				inputField = GetComponent<InputField> ();
@@ -55,7 +55,7 @@ public class UIElement : MB {
 	}
 
 	Text text = null;
-	public Text Text {
+	public virtual Text Text {
 		get {
 			if (text == null) {
 				if (Button != null) {
@@ -101,6 +101,18 @@ public class UIElement : MB {
 	public bool Interactable {
 		get { return Button.interactable; }
 		set { Button.interactable = value; }
+	}
+
+	Color color;
+	public virtual Color Color {
+		get { return color; }
+		set {
+			color = value;
+			if (Image != null)
+				Image.color = color;
+			if (Text != null)
+				Text.color = color;
+		}
 	}
 
 	LayoutElement layout = null;

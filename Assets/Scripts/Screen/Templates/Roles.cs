@@ -1,35 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
 	public class Roles : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg"
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("bottom_button|play") {
+				TopBarHeight = TemplateSettings.TallBar,
+				TopBarColor = Palette.Pink,
+				BackgroundColor = Palette.White,
+				TextStyles = new Dictionary<string, TextStyle> () {
+					{ "role_list", TextStyle.Paragraph }
+				}
+			};
 		}
 
 		int roleCounter = 0;
 
-		ListElementUI<TextElementUI, TextElement> roleList;
-		ListElementUI<TextElementUI, TextElement> RoleList {
+		ListElementUI<AvatarElementUI, AvatarElement> roleList;
+		ListElementUI<AvatarElementUI, AvatarElement> RoleList {
 			get {
 				if (roleList == null)
-					roleList = GetElement<ListElementUI<TextElementUI, TextElement>> ("role_list");
+					roleList = GetElement<ListElementUI<AvatarElementUI, AvatarElement>> ("role_list");
 				return roleList;
 			}
 		}
 
 		protected override void OnLoadView () {
 			RoleList.Visible = false;
-			Elements["next"].Visible = false;
+			Elements["play"].Visible = false;
 		}
 
 		protected override void OnUnloadView () {
@@ -37,6 +38,11 @@ namespace Templates {
 		}
 
 		protected override void OnInputEnabled () {
+
+			foreach (AvatarElementUI avatar in RoleList.ChildElements) {
+				avatar.playerName.gameObject.SetActive (false);
+				avatar.playerRole.gameObject.SetActive (false);
+			}
 
 			// Introduce roles over time, ending with the Decider
 			Co.InvokeWhileTrue (0.25f, 0.75f, () => { return Loaded && roleCounter < RoleList.ChildElements.Count * 2; }, () => {
@@ -47,24 +53,22 @@ namespace Templates {
 
 					int index = Mathf.FloorToInt ((float)i/2f);
 					int roleIndex = Mathf.FloorToInt ((float)roleCounter/2f);
-					TextElementUI t = RoleList.ChildElements[index];
+					AvatarElementUI t = RoleList.ChildElements[index];
 
 					bool active = index <= roleIndex;
 					t.gameObject.SetActive (active);
 					
 					if (index == roleIndex) {
-						string[] playerRole = t.id.Split ('|');
-						t.Text.text = playerRole[0];
+						t.playerName.gameObject.SetActive (true);
 						if (roleCounter % 2 != 0) {
-							t.Text.text += " the " + playerRole[1];
-							if (playerRole[1] == "Decider")
-								t.Style = FontStyle.Bold;
+							t.playerRole.gameObject.SetActive (true);
 						}
 					}
 				}
 				roleCounter ++;
 			}, () => {
-				Elements["next"].Visible = true;
+				Elements["play"].Visible = true;
+				Elements["play"].Animate (new UIAnimator.Expand (1f));
 			});
 		}
 	}

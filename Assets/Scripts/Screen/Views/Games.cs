@@ -9,46 +9,44 @@ namespace Views {
 	public class Games : View {
 
 		protected override void OnInitElements () {
-			// Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
-			Elements.Add ("game_list", new ListElement<ButtonElement> ());
-			Elements.Add ("searching", new TextElement ("Searching for games..."));
+			Elements.Add ("back", new BackButtonElement ("hostjoin", () => { Game.Multiplayer.Disconnect (); }));
+			Elements.Add ("searching", new TextElement (GetText ("searching")));
+			Elements.Add ("logo", new ImageElement ("logo"));
+			Elements.Add ("game_list", new RadioListElement (GetButton ("confirm"), (string selected) => {
+				JoinGame (selected);
+			}));
 		}
 
 		protected override void OnShow () {
 
-			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("game_list");
-
-			/*Game.Multiplayer.onRoomFull += OnRoomFull;
-			Game.Multiplayer.onNameTaken += OnNameTaken;
-			Game.Multiplayer.onConnect += OnConnect;
+			RadioListElement list = GetScreenElement<RadioListElement> ("game_list");
 
 			Game.Multiplayer.RequestHostList ((List<string> hosts) => {
-				Dictionary<string, ButtonElement> hostButtons = new Dictionary<string, ButtonElement> ();
-				for (int i = 0; i < hosts.Count; i ++) {
-					string hostId = hosts[i];
-					hostButtons.Add (hostId, new ButtonElement (hostId, () => {
-						Game.JoinGame (hostId);
-					}));
+
+				if (hosts.Contains ("__error")) {
+					GetScreenElement<TextElement> ("searching").Text = GetText ("error");
+				} else {
+					GetScreenElement<TextElement> ("searching").Text = GetText ("searching");
+					list.Set (hosts);
+					Elements["searching"].Active = hosts.Count == 0;
 				}
-				list.Set (hostButtons);
-				Elements["searching"].Active = list.Count == 0;
-			});*/
+			});
 		}
 
-		protected override void OnHide () {
-			/*Game.Multiplayer.onRoomFull = null;
-			Game.Multiplayer.onNameTaken = null;
-			Game.Multiplayer.onConnect = null;*/
-		}
-		
-		/*void OnRoomFull () {
-			Debug.Log ("ROOM FULL");
-		}
-
-		void OnNameTaken () {
-			Debug.Log ("NAME TAKEN");
+		void JoinGame (string hostId) {
+			Game.StartGame ();
+			Game.Multiplayer.JoinGame (hostId, (ResponseType res) => {
+				switch (res) {
+					case ResponseType.Success: GotoView ("lobby"); break;
+					case ResponseType.NameTaken:
+						Game.EndGame ();
+						break;
+				}
+			});
 		}
 
-		void OnConnect () { GotoView ("lobby"); }*/
+		public override void OnDisconnect () {
+			Debug.LogWarning ("Name taken!");
+		}
 	}
 }

@@ -23,9 +23,8 @@ namespace Models {
 
         public string root { get; set; }
         public string authKey { get; set; }
-        public string multiplayerServerIp { get; set; }
-        public int multiplayerServerPort { get; set; }
-        public int facilitatorPort { get; set; }
+        public string master { get; set; }
+        public string socket { get; set; }
 
     }
 
@@ -42,6 +41,8 @@ namespace Models {
 		public int PotCoinCount { get; set; }
 		public int PlayerStartCoinCount { get; set; }
 		public int DeciderStartCoinCount { get; set; }
+		public int PlayerRoundStartCoinCount { get; set; }
+		public int DeciderRoundStartCoinCount { get; set; }
 		public int[] Rewards { get; set; }
 		public int ExtraTimeCost { get; set; }
 		public float ThinkSeconds { get; set; }
@@ -54,7 +55,7 @@ namespace Models {
 		public string Name { get; set; }
 		public int CoinCount { get; set; }
 		public Role Role { get; set; }
-		public bool HasBeenDecider { get; set; }
+		public string Avatar { get; set; }
 	}
 
 	public class Deck {
@@ -89,7 +90,8 @@ namespace Models {
 		public string Instructions { get; set; }
 
 		// Instructions that only the Decider sees
-		public string DeciderInstructions { get; set; }
+		public string DeciderInstructionsOutLoud { get; set; }	// Instructions that the Decider reads to other players
+		public string DeciderInstructions { get; set; }			// Instructions that only the Decider sees
 
 		// Instructions that only the players see (not the Decider)
 		public string PlayerInstructions { get; set; }
@@ -99,5 +101,37 @@ namespace Models {
 
 		// Instructions that only clients see (not the host)
 		public string ClientInstructions { get; set; }
+	}
+
+	// -- The following models are populated during a game instance
+
+	public class InstanceData {
+		public string DeckName { get; set; }
+		public Player[] Players { get; set; }
+		public Round[] Rounds { get; set; }
+		public int Pot { get; set; }
+		public int RoundIndex { get; set; }
+	}
+
+	public class Round {
+		
+		public PlayerRole[] Roles { get; set; }
+		public string[] PitchOrder { get; set; }
+		public int[][] AgendaItemOrder { get; set; }
+		public int AgendaItemIndex { get; set; }
+		public int PitchIndex { get; set; }
+		public string Winner { get; set; }
+
+		public string Decider {
+			get { return System.Array.Find (Roles, x => x.Title == "Decider").PlayerName; }
+		}
+	}
+
+	public class PlayerRole : Role {
+		public string PlayerName { get; set; }
+	}
+
+	public class PlayerAgendaItem : AgendaItem {
+		public string PlayerName { get; set; }
 	}
 }

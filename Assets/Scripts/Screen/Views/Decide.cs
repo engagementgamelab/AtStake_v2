@@ -17,7 +17,7 @@ namespace Views {
 			}) { Interactable = false });
 
 			// A button list of players
-			Dictionary<string, ButtonElement> peers = Game.Manager.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
+			Dictionary<string, ButtonElement> peers = Game.Controller.PeerNames.ToDictionary (x => x, x => new ButtonElement (x, () => {
 				selectedPeer = x;
 				ButtonElement confirmButton = GetScreenElement<ButtonElement> ("confirm");
 				confirmButton.Text = "Confirm " + selectedPeer;
@@ -27,16 +27,11 @@ namespace Views {
 			Elements.Add ("peer_list", new ListElement<ButtonElement> (peers));
 		}
 
-		protected override void OnShow () {
-			Game.Dispatcher.AddListener ("ChooseWinner", ChooseWinner);
-		}
-
-		protected override void OnHide () {
-			Game.Dispatcher.RemoveListener (ChooseWinner);
-		}
+		protected override void OnShow () { Game.Dispatcher.AddListener ("ChooseWinner", ChooseWinner); }
+		protected override void OnHide () { Game.Dispatcher.RemoveListener (ChooseWinner); }
 
 		void ChooseWinner (MasterMsgTypes.GenericMessage msg) {
-			Game.Manager.Winner = msg.str1;
+			Game.Controller.SetWinner (msg.str1);
 			GotoView ("winner");
 		}
 	}

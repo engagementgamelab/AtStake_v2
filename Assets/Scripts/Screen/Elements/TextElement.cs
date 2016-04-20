@@ -7,15 +7,18 @@ public class TextElement : ScreenElement {
 	public string Text {
 		get { return text; }
 		set {
-			text = value;
-			SendUpdateMessage ();
+			if (text != value) {
+				text = value;
+				SendUpdateMessage ();
+			}
 		}
 	}
 
-	public readonly TextStyle Style;
+	// Color override ---- not needed?
+	public readonly string AvatarColor;
 
-	public TextElement (string text, TextStyle style=null) {
+	public TextElement (string text, string avatarColor="") {
 		this.text = text;
-		Style = (style == null) ? TextStyle.Paragraph : style;
+		AvatarColor = avatarColor;
 	}
 }

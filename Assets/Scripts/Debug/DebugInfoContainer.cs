@@ -10,6 +10,6 @@ public class DebugInfoContainer : MonoBehaviour {
 	public void Init (GameInstance game) {
 		dispatcherDebug.Init (game.Dispatcher);
 		viewDebug.Init (game.Views);
-		multiplayerDebug.Init (game.Multiplayer2);
+		multiplayerDebug.Init (game.Multiplayer);
 	}
 }

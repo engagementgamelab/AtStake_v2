@@ -8,3 +8,6 @@ Delays network messages by a random value (up to 1 second) to simulate poor conn
 
 Overlays debug information to help monitor gameplay
 -define:SHOW_DEBUG_INFO
+
+Speed up timers
+-define:FAST_TIME

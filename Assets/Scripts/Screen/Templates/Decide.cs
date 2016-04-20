@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Templates {
 
 	public class Decide : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg",
-					PotEnabled = true,
-					CoinsEnabled = true
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("orange_button|confirm", "blue_button|peer_list", "coins_and_pot") {
+				TopBarHeight = TemplateSettings.ShortBar,
+				TopBarColor = Palette.Pink,
+				BottomBarHeight = TemplateSettings.MediumBar,
+				BottomBarColor = Palette.LtTeal,
+				BackgroundColor = Palette.White,
+				PotEnabled = true,
+				CoinsEnabled = true
+			};
 		}
 	}
 }

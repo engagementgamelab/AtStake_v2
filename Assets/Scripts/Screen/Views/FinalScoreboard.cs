@@ -15,5 +15,7 @@ namespace Views {
 				GotoView ("start"); 
 			}));
 		}
+
+		public override void OnDisconnect () {}
 	}
 }

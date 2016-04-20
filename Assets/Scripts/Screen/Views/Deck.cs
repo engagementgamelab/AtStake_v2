@@ -9,23 +9,29 @@ namespace Views {
 	public class Deck : View {
 
 		protected override void OnInitHostElements () {
-			Elements.Add ("deck_list", new ListElement<ButtonElement> ());
+			Elements.Add ("deck_list", new RadioListElement (GetButton ("confirm"), (string selected) => {
+				Game.Dispatcher.ScheduleMessage ("SetDeck", selected);
+			}, Game.Decks.Names));
+			Game.Dispatcher.AddListener ("SetDeck", OnSetDeck);
 		}
 
-		protected override void OnShow () {
+		protected override void OnInitElements () {
+			Elements.Add ("logo", new ImageElement ("logo"));
+		}
+		
+		protected override void OnHide () {
+			Game.Dispatcher.RemoveListener (OnSetDeck);
+		}
 
-			if (!IsHost) return;
+		void OnSetDeck (MasterMsgTypes.GenericMessage msg) {
 
-			ListElement<ButtonElement> list = GetScreenElement<ListElement<ButtonElement>> ("deck_list");
-			List<string> names = Game.Decks.Names;
-
-			for (int i = 0; i < names.Count; i ++) {
-				string name = names[i];
-				list.Add (name, new ButtonElement (name, () => {
-					Game.Dispatcher.ScheduleMessage ("SetDeck", name);
+			// Wait a frame to ensure that DeckManager sets the deck before referencing it
+			Co.WaitForFixedUpdate (() => {
+				Game.Dispatcher.ScheduleMessage ("StartGame");
+				Co.YieldWhileTrue (() => { return !Game.Controller.DataLoaded; }, () => {
 					AllGotoView ("roles");
-				}));
-			}
+				});
+			});
 		}
 	}
 }

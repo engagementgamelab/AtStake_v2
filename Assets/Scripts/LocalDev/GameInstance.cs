@@ -7,30 +7,31 @@ using Templates;
 public class GameInstance : MonoBehaviour {
 
 	public PlayerManager Manager { get; private set; }
-	// public MultiplayerManager Multiplayer { get; private set; }
-	public MultiplayerManager2 Multiplayer2 { get; private set; }
+	public MultiplayerManager Multiplayer { get; private set; }
 	public MessageDispatcher Dispatcher { get; private set; }
 	public ViewManager Views { get; private set; }
 	public TemplateManager Templates { get; private set; }
 	public DeckManager Decks { get; private set; }
-	public RoundManager Rounds { get; private set; }
 	public ScoreManager Score { get; private set; }
+	public GameController Controller { get; private set; }
+	public GameTest Test { get; private set; }
 
+	// For convenience (the player's name gets referenced quite a bit)
 	public string Name {
-		get { return Manager.Player.Name; }
+		get { return Manager.Name; }
 	}
 
 	void OnEnable () {
 
 		Manager 	= GameInstanceBehaviour.Init<PlayerManager> (transform);
-		// Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
-		Multiplayer2 = GameInstanceBehaviour.Init<MultiplayerManager2> (transform);
+		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);
 		Dispatcher 	= GameInstanceBehaviour.Init<MessageDispatcher> (transform);
 		Views 		= GameInstanceBehaviour.Init<ViewManager> (transform);
-		Templates 	= GameInstanceBehaviour.Init<TemplateManager> (transform);
+		Templates 	= TemplateManager.Init (transform);
 		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
-		Rounds 		= GameInstanceBehaviour.Init<RoundManager> (transform);
 		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
+		Controller 	= GameInstanceBehaviour.Init<GameController> (transform);
+		Test 		= GameInstanceBehaviour.Init<GameTest> (transform);
 		
 		InitApp ();
 	}
@@ -42,48 +43,31 @@ public class GameInstance : MonoBehaviour {
 	
 	// Called when the app is started
 	void InitApp () {
-		Manager.Init ();
 		Views.Init ();
-		Decks.Init ();
+		Manager.Init ();
 	}
 
 	// Called when the game begins (considered to be when a player hosts or joins a game)
-	void StartGame () {
+	public void StartGame () {
+		Views.Init ();
 		Manager.Init ();
-		Rounds.Init ();
+		Decks.Init ();
 		Score.Init ();
+		Controller.Init ();
+		Test.Init ();
+		Multiplayer.onDisconnected += OnDisconnect;
 	}
 
 	public void EndGame () {
-		// Multiplayer.Disconnect ();
+		Multiplayer.Disconnect (); // Also triggers OnDisconnect
 	}
-
-	public void HostGame () {
-		/*StartGame ();
-		Multiplayer.HostGame ();
-		Multiplayer.onUpdateClients += OnUpdateClients;
-		Multiplayer.onDisconnect += OnDisconnect;*/
-	}
-
-	public void JoinGame (string hostId="") {
-		/*StartGame ();
-		Multiplayer.JoinGame (hostId == "" ? Multiplayer.Hosts[0] : hostId);
-		Multiplayer.onDisconnect += OnDisconnect;*/
-	}
-
-	// deprecate
-	/*void OnUpdateClients (List<string> clients) {
-		string players = "";
-		foreach (string player in clients) {
-			players += player + "|";
-		}
-		players += Manager.Player.Name;
-		Dispatcher.ScheduleMessage ("UpdatePlayers", players);
-	}*/
 
 	void OnDisconnect () {
-		/*Views.OnDisconnect ();
-		Multiplayer.onDisconnect -= OnDisconnect;
-		Dispatcher.RemoveAllListeners ();*/
+		Views.OnDisconnect ();
+		Multiplayer.onDisconnected -= OnDisconnect;
+		Dispatcher.Reset ();
+		Controller.Reset ();
+		Decks.Reset ();
+		Manager.Reset ();
 	}
 }

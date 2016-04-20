@@ -2,12 +2,39 @@
 using System.Collections;
 
 public abstract class ScreenElementUI : UIElement {
+
 	public string id;
+
+	TextStyle style = TextStyle.Paragraph;
+	public virtual TextStyle Style {
+		get { return style; }
+		set {
+			style = value;
+			if (Text != null)
+				Text.ApplyStyle (style);
+		}
+	}
+
+	UIAnimator anim;
+	protected UIAnimator Anim {
+		get {
+			if (anim == null)
+				anim = UIAnimator.AttachTo (gameObject); 
+			return anim;
+		}
+	}
+
 	public abstract bool Loaded { get; }
 	public abstract bool Visible { get; set; }
-	public abstract void Load (ScreenElement e);
+	protected abstract TemplateSettings Settings { get; }
+
+	public abstract void Load (ScreenElement e, TemplateSettings settings);
 	public abstract void Unload ();
 	public abstract void InputEnabled ();
+
+	public void Animate (UIAnimator.UIAnimation animation) {
+		Anim.Animate (animation);
+	}
 }
 
 public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenElement {
@@ -29,11 +56,18 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		}
 	}
 
-	public override void Load (ScreenElement element) {
+	TemplateSettings settings;
+	protected override TemplateSettings Settings {
+		get { return settings; }
+	}
+
+	public override void Load (ScreenElement element, TemplateSettings settings) {
+		this.settings = settings;
 		this.element = (T)element;
+		Transform.SetLocalScale (1f);
 		ApplyElement (this.element);
 		element.onUpdate += OnUpdate;
-		OnSetActive (element.Active);
+		SetActiveState (element.Active);
 	}
 
 	public override void Unload () {
@@ -52,17 +86,19 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	}
 
 	void OnUpdate (ScreenElement element) {
-		OnSetActive (element.Active);
+		SetActiveState (element.Active);
 		OnUpdate ((T)element);
 	}
 
-	protected virtual void OnSetActive (bool active) {
+	void SetActiveState (bool active) {
 		activeState = active;
 		gameObject.SetActive (visible && activeState);
+		OnSetActive (gameObject.activeSelf);
 	}
 
 	public abstract void ApplyElement (T element);
 	public virtual void RemoveElement (T element) {}
 	protected virtual void OnUpdate (T element) {}
 	protected virtual void OnInputEnabled (T element) {}
+	protected virtual void OnSetActive (bool active) {}
 }

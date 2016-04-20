@@ -21,42 +21,47 @@ namespace Views {
 		enum State { Pitch, Extra }
 		State state = State.Pitch;
 
-		List<string> peers;
-		int currentPeer;
-
-		Dictionary<string, string> CurrentPeerTextVariable {
-			get { return new Dictionary<string, string> () { { "current_peer", peers[currentPeer] } }; }
+		Dictionary<string, string> CurrentPitcherTextVariable {
+			get { return new Dictionary<string, string> () { { "current_peer", CurrentPitcher } }; }
 		}
+
+		string CurrentPitcher { get { return Game.Controller.CurrentPitcher; } }
+		bool IsCurrentPitcher { get { return CurrentPitcher == Name; } }
+		bool IsNextPitcher { get { return Game.Controller.NextPitcher == Name; }}
 
 		protected override void OnInitDeciderElements () {
 
 			Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
-			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
-			peers = ShuffledPeers ();
-			currentPeer = 0;
 			state = State.Pitch;
 
-			Elements.Add ("timer_button", new TimerButtonElement (Duration, () => {
+			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
-					peers[currentPeer], 
+					CurrentPitcher,
 					state == State.Pitch ? "pitch" : "extra"
 				);
 			}));
 		}
 
 		protected override void OnInitPlayerElements () {
+
 			CreateRoleCard (true, true, true);
-			Elements.Add ("timer", new TimerElement (Duration, () => {
-				GotoView ("extra_time");
-			}) { Active = false });
+
+			string timerText = GetButton (IsCurrentPitcher ? "pitching" : "listening"); 
+			TimerType type = IsCurrentPitcher ? TimerType.Pitch : TimerType.Listen;
+
+			Elements.Add ("timer", new TimerElement (timerText, Duration, type, () => {
+				if (IsCurrentPitcher)
+					GotoView ("extra_time");
+			}));
 		}
 
 		protected override void OnShow () {
+			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (HasElement ("decider_instructions")) {
 				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPeerTextVariable);
+					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPitcherTextVariable);
 			}
 		}
 
@@ -68,20 +73,16 @@ namespace Views {
 
 		void StartTimer (MasterMsgTypes.GenericMessage msg) {
 
-			// Check if it's this player's turn to pitch
-			if (msg.str1 == Name) {
+			if (IsDecider) return;
 
-				// Set the timer duration based on the pitch state
-				float duration = msg.str2 == "pitch"
-					? Duration
-					: ExtraTimeDuration;
+			float duration = msg.str2 == "pitch"
+				? Duration
+				: ExtraTimeDuration;
 
-				// Start the timer
-				TimerElement timer = GetScreenElement<TimerElement> ("timer");
-				timer.Active = true;
-				timer.Reset (duration);
-				timer.StartTimer ();
-			}
+			// Start the timer
+			TimerElement timer = GetScreenElement<TimerElement> ("timer");
+			timer.Reset (duration);
+			timer.StartTimer ();
 		}
 
 		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
@@ -93,40 +94,27 @@ namespace Views {
 		}
 
 		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
+
+			// Update player timers
+			if (!IsDecider) {
+				TimerElement timer = GetScreenElement<TimerElement> ("timer");
+				timer.Text = GetButton (IsNextPitcher ? "pitching" : "listening");
+				timer.Type = IsNextPitcher ? TimerType.Pitch : TimerType.Listen;
+				timer.Reset ();
+				return;
+			}
+
+			// Decider logic
 			state = State.Pitch;
-			currentPeer ++;
-			if (currentPeer < peers.Count) {
+			Game.Controller.NextPitch ();
+			if (CurrentPitcher != "") {
 				AllGotoView ("pitch");
 				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPeerTextVariable);
+					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);
 				GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
 			} else {
 				AllGotoView ("deliberate_instructions");
 			}
-		}
-
-		List<string> ShuffledPeers () {
-			List<string> peers = Game.Manager.PeerNames;
-
-			int[] randomIndices = new int[peers.Count];
-			List<int> peerIndices = new List<int> ();
-			
-			// Generate a list of numbers iterating by 1
-			for (int i = 0; i < peers.Count; i ++)
-				peerIndices.Add (i);
-			
-			// Randomly assign the numbers to an array
-			for (int i = 0; i < randomIndices.Length; i ++) {
-				int r = Random.Range (0, peerIndices.Count);
-				randomIndices[i] = peerIndices[r];
-				peerIndices.Remove (peerIndices[r]);
-			}
-
-			List<string> newPeers = new List<string> ();
-			for (int i = 0; i < randomIndices.Length; i ++) {
-				newPeers.Add (peers[randomIndices[i]]);
-			}
-			return newPeers;
 		}
 	}
 }

@@ -17,7 +17,6 @@ namespace Views {
 
 					views = new Dictionary<string, View> () {
 						{ "start", new Start () },
-						{ "name", new Name () },
 						{ "hostjoin", new HostJoin () },
 						{ "lobby", new Lobby () },
 						{ "games", new Games () },
@@ -37,11 +36,13 @@ namespace Views {
 						{ "extra_time_deliberate", new ExtraTimeDeliberate () },
 						{ "decide", new Decide () },
 						{ "winner", new Winner () },
+						{ "agenda_item_instructions", new AgendaItemInstructions () },
 						{ "agenda_item", new AgendaItem () },
 						{ "agenda_item_accept", new AgendaItemAccept () },
 						{ "agenda_item_reject", new AgendaItemReject () },
 						{ "scoreboard", new Scoreboard () },
-						{ "final_scoreboard", new FinalScoreboard () }
+						{ "final_scoreboard", new FinalScoreboard () },
+						{ "disconnected", new Disconnected () }
 					};
 				}
 
@@ -49,13 +50,17 @@ namespace Views {
 			}
 		}
 
+		bool Loaded { get { return views != null; } }
+
 		public string CurrView { get; private set; }
 		public string PrevView { get; private set; }
 
 		public void Init () {
-			foreach (var view in Views)
-				view.Value.Init (this, view.Key);
-			Goto ("start");
+			if (!Loaded) {
+				foreach (var view in Views)
+					view.Value.Init (this, view.Key);
+				Goto ("start");
+			}
 			Game.Dispatcher.AddListener ("GotoView", OnGotoView);
 		}
 
@@ -71,15 +76,25 @@ namespace Views {
 			CurrView = id;
 
 			// Render the new view
-			try {
+			if (Views.ContainsKey (CurrView)) {
 				Game.Templates.Load (CurrView, Views[CurrView]);
-			} catch (KeyNotFoundException e) {
-				throw new System.Exception ("No template with the id '" + id + "' exists.\n" + e);
+			} else {
+				throw new System.Exception ("No template with the id '" + id + "' exists.");
 			}
 		}
 
 		public void GotoPrevious () {
 			Goto (PrevView);
+		}
+
+		public T GetView<T> (string id="") where T : View {
+			if (id == "") id = CurrView;
+			return (T)Views[id];
+		}
+
+		public View GetView (string id="") {
+			if (id == "") id = CurrView;
+			return Views[id];
 		}
 
 		void OnGotoView (MasterMsgTypes.GenericMessage msg) {

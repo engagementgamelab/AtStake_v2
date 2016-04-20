@@ -22,6 +22,6 @@ public class GameInstanceComponent {
 	protected virtual void OnInit () {}
 
 	protected void Log (object msg) {
-		Debug.Log (Game.Manager.Player.Name + ": " + msg);
+		Debug.Log (Game.Name + ": " + msg);
 	}
 }

@@ -7,17 +7,16 @@ namespace Templates {
 
 	public class Pot : Template {
 
-		public override TemplateSettings Settings {
-			get {
-				return new TemplateSettings () {
-					TopBarEnabled = true,
-					TopBarColor = Palette.Orange,
-					BackgroundColor = Palette.White,
-					BackgroundImage = "applause-bg",
-					PotEnabled = true,
-					CoinsEnabled = true
-				};
-			}
+		protected override TemplateSettings LoadSettings () {
+			return new TemplateSettings ("next_button", "coins_and_pot") {
+				TopBarHeight = TemplateSettings.ShortBar,
+				TopBarColor = Palette.LtTeal,
+				BottomBarHeight = TemplateSettings.MediumBar,
+				BottomBarColor = Palette.LtTeal,
+				BackgroundColor = Palette.White,
+				PotEnabled = true,
+				CoinsEnabled = true
+			};
 		}
 
 		List<TextElementUI> instructions;
@@ -26,7 +25,8 @@ namespace Templates {
 				if (instructions == null) {
 					instructions = new List<TextElementUI> ();
 					instructions.Add ((TextElementUI)Elements["instruction1"]);
-					instructions.Add ((TextElementUI)Elements["instruction2"]);
+					if (LoadedElements.ContainsKey ("instruction2"))
+						instructions.Add ((TextElementUI)Elements["instruction2"]);
 					instructions.Add ((TextElementUI)Elements["instruction3"]);
 					instructions.Add ((TextElementUI)Elements["instruction4"]);
 					instructions.Add ((TextElementUI)Elements["instruction5"]);
@@ -46,21 +46,47 @@ namespace Templates {
 
 		protected override void OnInputEnabled () {
 			Co.RepeatAscending (0.5f, 3.5f, Instructions.Count, (int i) => {
-				if (!Loaded)
-					return;
-				if (i > 0)
-					Instructions[i-1].Visible = false;
-				Instructions[i].Visible = true;
-				if (i == 0 && Elements["next"].Loaded)
-					Elements["coins"].Visible = true;
-				else if (i == 1)
-					Elements["coins"].Visible = true;
-				else if (i == 3)
-					Elements["pot"].Visible = true;
+
+				// Wait until the view is loaded
+				if (!Loaded) return;
+
+				// Remove the previous instruction
+				if (i > 0) {
+					Instructions[i-1].Animate (new UIAnimator.FadeOut (0.2f, () => {
+						Instructions[i-1].Visible = false;
+						ShowInstruction (i);
+					}));
+				} else {
+					ShowInstruction (i);
+				}
+				
 			}, () => {
 				if (Loaded)
 					Elements["next"].Visible = true;
 			});
+		}
+
+		void ShowInstruction (int index) {
+
+			// Show the current instruction
+			Instructions[index].Visible = true;
+			Instructions[index].Animate (new UIAnimator.FadeIn (0.5f));
+
+			if (Elements["instruction1"].Visible && Elements["next"].Loaded)
+				FadeInElement ("coins");
+			if (Elements["instruction2"].Visible)
+				FadeInElement ("coins");
+			if (Elements["instruction4"].Visible) 
+				FadeInElement ("pot");
+		}
+
+		void FadeInElement (string id) {
+			Elements[id].Visible = true;
+			Elements[id].Animate (new UIAnimator.FadeIn (0.5f));
+		}
+
+		protected override void OnUnloadView () {
+			instructions = null;
 		}
 	}
 }

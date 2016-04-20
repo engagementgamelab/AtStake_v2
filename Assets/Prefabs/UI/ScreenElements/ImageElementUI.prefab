@@ -11,7 +11,7 @@ GameObject:
   - 222: {fileID: 22225838}
   - 114: {fileID: 11408218}
   - 114: {fileID: 11428628}
-  - 114: {fileID: 11489144}
+  - 114: {fileID: 11401978}
   m_Layer: 5
   m_Name: ImageElementUI
   m_TagString: Untagged
@@ -19,6 +19,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &11401978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4acda40875309435f82e14b5929a9000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
 --- !u!114 &11408218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,18 +76,6 @@ MonoBehaviour:
   m_PreferredHeight: 120
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
---- !u!114 &11489144
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0e58bfe27664574b8b93904a887764, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 
 --- !u!222 &22225838
 CanvasRenderer:
   m_ObjectHideFlags: 1

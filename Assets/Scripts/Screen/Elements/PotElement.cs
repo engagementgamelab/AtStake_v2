@@ -1,23 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PotElement : ScreenElement {
-
-	string text;
-	public string Text {
-		get { return text; }
-		set {
-			text = value;
-			SendUpdateMessage ();
-		}
-	}
+public class PotElement : ScoreElement {
 
 	protected override void OnInit () {
-		Game.Score.Inventory["pot"].onUpdate += SetText;
-		SetText ();
-	}
-
-	void SetText () {
-		Text = "Pot: " + Game.Score.Pot;
+		Game.Score.onUpdatePot += SetText;
+		SetText (Game.Score.Pot);
 	}
 }

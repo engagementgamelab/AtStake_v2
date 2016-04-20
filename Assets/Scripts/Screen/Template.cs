@@ -13,16 +13,26 @@ namespace Templates {
 	/// </summary>
 	public abstract class Template : MB {
 
-		public abstract TemplateSettings Settings { get; }
+		TemplateSettings settings = null;
+		public TemplateSettings Settings {
+			get {
+				if (settings == null)
+					settings = LoadSettings ();
+				return settings;
+			}
+		}
 
 		Dictionary<string, ScreenElementUI> elements;
 		protected Dictionary<string, ScreenElementUI> Elements {
 			get {
 				if (elements == null) {
 
-					List<ScreenElementUI> childElements = Transform.GetAllChildren ()
-						.FindAll (x => x.GetComponent<ScreenElementUI> () != null)
-						.ConvertAll (x => x.GetComponent<ScreenElementUI> ());
+					List<ScreenElementUI> childElements = new List<ScreenElementUI> ();
+					foreach (Transform child in Transform.GetAllChildren ()) {
+						ScreenElementUI s = child.GetComponent<ScreenElementUI> ();
+						if (s != null && s.id != "")
+							childElements.Add (s);
+					}
 
 					elements = new Dictionary<string, ScreenElementUI> ();
 					foreach (ScreenElementUI e in childElements)
@@ -35,14 +45,22 @@ namespace Templates {
 			}
 		}
 
-		Dictionary<string, ScreenElementUI> LoadedElements {
+		public List<string> ElementIds {
+			get { return new List<string> (Elements.Keys); }
+		}
+
+		protected Dictionary<string, ScreenElementUI> LoadedElements {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
 		protected bool Loaded { get; private set; }
-		Dictionary<string, ScreenElementUI> overlayElements;
+		protected UIAnimator anim;
+		Dictionary<string, ScreenElementUI> overlayElements = new Dictionary<string, ScreenElementUI> ();
 
-		void OnEnable () { Loaded = false; }
+		void OnEnable () { 
+			Loaded = false; 
+			anim = UIAnimator.AttachTo (gameObject);
+		}
 
 		public void LoadView (View view, Dictionary<string, ScreenElementUI> overlayElements) {
 			this.overlayElements = overlayElements;
@@ -64,9 +82,8 @@ namespace Templates {
 		}
 
 		public void InputEnabled () {
-			foreach (var element in LoadedElements) {
+			foreach (var element in LoadedElements)
 				element.Value.InputEnabled ();
-			}
 			OnInputEnabled ();
 		}
 		
@@ -90,10 +107,31 @@ namespace Templates {
 						v.Visible = Settings.PotEnabled;
 				}
 
+				// Apply content
 				if (data.TryGetValue (k, out elementData)) {
-					v.Load (elementData);
+					v.Load (elementData, Settings);
 				} else {
 					v.gameObject.SetActive (false); 
+				}
+			}
+
+			// Apply text styles
+			if (Settings.TextStyles != null) {
+				foreach (var style in Settings.TextStyles) {
+					ScreenElementUI se;
+					if (Elements.TryGetValue (style.Key, out se)) {
+						se.Style = style.Value;
+					}
+				}
+			}
+
+			// Apply colors
+			if (Settings.Colors != null) {
+				foreach (var color in Settings.Colors) {
+					ScreenElementUI se;
+					if (Elements.TryGetValue (color.Key, out se)) {
+						se.Color = color.Value;
+					}
 				}
 			}
 
@@ -101,7 +139,7 @@ namespace Templates {
 			#if UNITY_EDITOR
 			foreach (var element in data) {
 				string k = element.Key;
-				if (k == "back" || k == "pot" || k == "coins")
+				if (IsOverlayElement (k))
 					continue;
 				if (!Elements.ContainsKey (k)) {
 					Debug.LogWarning ("The template '" + this + "' does not contain a screen element with the id '" + k + "' so it will not be rendererd");
@@ -118,21 +156,23 @@ namespace Templates {
 			}
 		}
 
-		bool IsOverlayElement (string id) {
-			return id == "coins" || id == "pot" || id == "back";
+		protected bool TryGetElement<T> (string id, out T elem) where T : ScreenElementUI {
+			ScreenElementUI se;
+			if (LoadedElements.TryGetValue (id, out se)) {
+				elem = (T)se;
+				return true;
+			}
+			elem = null;
+			return false;
 		}
 
+		bool IsOverlayElement (string id) {
+			return id == "coins" || id == "pot" || id == "back" || id == "next";
+		}
+
+		protected abstract TemplateSettings LoadSettings ();
 		protected virtual void OnLoadView () {}
 		protected virtual void OnUnloadView () {}
 		protected virtual void OnInputEnabled () {}
-	}
-
-	public struct TemplateSettings {
-		public bool TopBarEnabled { get; set; }
-		public Color TopBarColor { get; set; }
-		public Color BackgroundColor { get; set; }
-		public string BackgroundImage { get; set; }
-		public bool PotEnabled { get; set; }
-		public bool CoinsEnabled { get; set; }
 	}
 }
