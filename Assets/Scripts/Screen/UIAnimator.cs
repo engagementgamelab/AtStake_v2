@@ -68,9 +68,9 @@ public class UIAnimator : UIElement {
 
 		Smooth curve = new Smooth ();
 
-		public Spin (float time) : base (time, (float p) => {
+		public Spin (float time, Action onEnd=null) : base (time, (float p) => {
 			Rect.SetLocalEulerAnglesZ (curve.Get (p) * 360f);
-		}) {}
+		}, onEnd) {}
 	}
 
 	public class Move : UIAnimation {

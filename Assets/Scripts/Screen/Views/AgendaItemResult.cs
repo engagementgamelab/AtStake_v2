@@ -30,6 +30,15 @@ namespace Views {
 				return v;
 			}
 		}
+		
+		public override ViewData Data {
+			get {
+				return new AgendaItemResultData () {
+					CoinCount = RewardValues[Item.Reward],
+					PlayerAvatarColor = Game.Controller.FindPlayer (Item.PlayerName).Avatar
+				};
+			}
+		}
 
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("next", new NextButtonElement ("", Advance));

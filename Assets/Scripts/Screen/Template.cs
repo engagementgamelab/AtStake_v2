@@ -53,11 +53,11 @@ namespace Templates {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
-		RectTransform animationContainer;
-		protected RectTransform AnimationContainer {
+		AnimationContainer animationContainer;
+		protected AnimationContainer AnimationContainer {
 			get {
 				if (animationContainer == null)
-					animationContainer = Transform.GetChild<AnimationContainer> ().GetComponent<RectTransform> ();
+					animationContainer = Transform.GetChild<AnimationContainer> ();//.GetComponent<RectTransform> ();
 				return animationContainer;
 			}
 		}
@@ -182,7 +182,7 @@ namespace Templates {
 		}
 
 		protected AnimElementUI CreateAnimation (Vector3 position=new Vector3()) {
-			return AnimElementUI.Create (AnimationContainer, position);
+			return AnimElementUI.Create (AnimationContainer.Transform, position);
 		}
 
 		bool IsOverlayElement (string id) {

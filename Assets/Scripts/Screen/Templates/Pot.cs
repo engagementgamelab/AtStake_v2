@@ -144,36 +144,7 @@ namespace Templates {
 		void RunCoinAnimation (string coinCount, string avatarColor) {
 
 			Co.WaitForSeconds (0.5f, () => {
-
-				// Introduce the coin
-				AnimElementUI coin = CreateAnimation ();
-				coin.SpriteName = "coin";
-				coin.Text = "+" + coinCount;
-				coin.Size = new Vector2 (50, 50);
-				coin.LocalPosition = new Vector3 (-50, 25, 0);
-				coin.Animate (new UIAnimator.Expand (0.5f));
-
-				Co.WaitForSeconds (1f, () => {
-
-					// Introduce the avatar
-					Vector3 deciderPosition = new Vector3 (50, 25f, 0);
-					AnimElementUI decider = CreateAnimation ();
-					decider.AvatarName = avatarColor;
-					decider.Size = new Vector2 (75, 75);
-					decider.LocalPosition = deciderPosition;
-					decider.Animate (new UIAnimator.Expand (0.5f));
-
-					Co.WaitForSeconds (1f, () => {
-
-						// Move the coin to the avatar and shrink out
-						coin.Animate (new UIAnimator.Move (1f, deciderPosition, () => {
-							coin.Destroy ();
-							decider.Animate (new UIAnimator.Shrink (0.5f, () => {
-								decider.Destroy ();
-							}));
-						}));
-					});
-				});
+				AnimationContainer.RunCoinToAvatarAnimation (coinCount, avatarColor);
 			});
 		}
 

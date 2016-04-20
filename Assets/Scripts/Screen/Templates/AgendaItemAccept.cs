@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Views;
 
 namespace Templates {
 
@@ -15,6 +16,20 @@ namespace Templates {
 				PotEnabled = true,
 				CoinsEnabled = true
 			};
+		}
+
+		AgendaItemResultData data;
+
+		protected override void OnLoadView () {
+			data = GetViewData<AgendaItemResultData> ();
+		}
+
+		protected override void OnInputEnabled () {
+			AnimationContainer.RunCoinToAvatarAnimation (data.CoinCount.ToString (), data.PlayerAvatarColor);
+		}
+
+		protected override void OnUnloadView () {
+			AnimationContainer.Reset ();
 		}
 	}
 }
