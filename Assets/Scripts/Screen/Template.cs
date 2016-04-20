@@ -53,8 +53,18 @@ namespace Templates {
 			get { return Elements.Where (x => x.Value.Loaded).ToDictionary (x => x.Key, x => x.Value); }
 		}
 
+		RectTransform animationContainer;
+		protected RectTransform AnimationContainer {
+			get {
+				if (animationContainer == null)
+					animationContainer = Transform.GetChild<AnimationContainer> ().GetComponent<RectTransform> ();
+				return animationContainer;
+			}
+		}
+
 		protected bool Loaded { get; private set; }
 		protected UIAnimator anim;
+		ViewData data;
 		Dictionary<string, ScreenElementUI> overlayElements = new Dictionary<string, ScreenElementUI> ();
 
 		void OnEnable () { 
@@ -64,6 +74,7 @@ namespace Templates {
 
 		public void LoadView (View view, Dictionary<string, ScreenElementUI> overlayElements) {
 			this.overlayElements = overlayElements;
+			data = view.Data;
 			LoadElements (view.Elements);
 			OnLoadView ();
 			Loaded = true;
@@ -164,6 +175,10 @@ namespace Templates {
 			}
 			elem = null;
 			return false;
+		}
+
+		protected T GetViewData<T> () where T : ViewData {
+			return (T)data;
 		}
 
 		bool IsOverlayElement (string id) {

@@ -62,6 +62,28 @@ namespace Views {
 		protected Models.Screen Model { get; private set; }
 
 		/// <summary>
+		/// Gets the amount of coins that the Decider starts with in this round
+		/// </summary>
+		protected int DeciderRoundStartCoinCount {
+			get {
+				return Game.Controller.RoundNumber == 0
+					? Settings.DeciderStartCoinCount
+					: Settings.DeciderRoundStartCoinCount;
+			}
+		}
+
+		/// <summary>
+		/// Gets the amount of coins that players start with in this round
+		/// </summary>
+		protected int PlayerRoundStartCoinCount {
+			get {
+				return Game.Controller.RoundNumber == 0
+					? Settings.PlayerStartCoinCount
+					: Settings.PlayerRoundStartCoinCount;
+			}
+		}
+
+		/// <summary>
 		/// The static elements that get rendered on the screen
 		/// These are initialized when they're first referenced
 		/// Generally you do not need to work directly with this dictionary
@@ -99,8 +121,8 @@ namespace Views {
 
 				Dictionary<string, string> textVars = new Dictionary<string, string> () {
 					{ "decider", Game.Controller.DeciderName },
-					{ "decider_start_coin_count", Settings.DeciderStartCoinCount.ToString () },
-					{ "player_start_coin_count", Settings.PlayerStartCoinCount.ToString () },
+					{ "decider_start_coin_count", DeciderRoundStartCoinCount.ToString () },
+					{ "player_start_coin_count", PlayerRoundStartCoinCount.ToString () },
 					{ "pot_coin_count", Settings.PotCoinCount.ToString () },
 					{ "extra_time_cost", Settings.ExtraTimeCost.ToString () },
 					{ "extra_seconds", Settings.ExtraSeconds.ToString () },
@@ -113,15 +135,13 @@ namespace Views {
 					{ "deliberate_seconds", Settings.DeliberateSeconds.ToString () }
 				};
 
-				if (Game.Controller.RoundNumber > 0) {
-					textVars["decider_start_coin_count"] = Settings.DeciderRoundStartCoinCount.ToString ();
-					textVars["player_start_coin_count"] = Settings.PlayerRoundStartCoinCount.ToString ();
-				}
-
 				return textVars;
 			}
 		}
 
+		/// <summary>
+		/// Settings, grabbed from DataManager
+		/// </summary>
 		Settings settings;
 		protected Settings Settings {
 			get {
@@ -129,6 +149,13 @@ namespace Views {
 					settings = DataManager.GetSettings ();
 				return settings;
 			}
+		}
+
+		/// <summary>
+		/// Optionally override this method to pass additional data to the template
+		/// </summary>
+		public virtual ViewData Data {
+			get { return new ViewData (); }
 		}
 
 		protected ViewManager views;

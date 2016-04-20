@@ -171,6 +171,14 @@ public static class ExtensionMethods {
 		return children;
 	}
 
+	public static T GetChild<T> (this Transform transform) where T : MonoBehaviour {
+		try {
+			return transform.GetAllChildren<T> ()[0];
+		} catch {
+			throw new System.Exception (transform + " does not have a child of type '" + typeof (T) + "'");
+		}
+	}
+
 	// TODO: rename to GetChildrenRecursively
 	public static List<Transform> GetAllChildren (this Transform transform) {
 		List<Transform> children = new List<Transform> ();

@@ -8,6 +8,16 @@ namespace Views {
 
 	public class Pot : View {
 
+		public override ViewData Data {
+			get {
+				return new PotData () {
+					DeciderCoinCount = DeciderRoundStartCoinCount,
+					PlayerCoinCount = PlayerRoundStartCoinCount,
+					DeciderAvatarColor = Game.Controller.Decider.Avatar
+				};
+			}
+		}
+
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("next", new NextButtonElement ("bio"));
 		}

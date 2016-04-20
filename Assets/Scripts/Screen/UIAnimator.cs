@@ -10,6 +10,12 @@ public class UIAnimator : UIElement {
 		get { return currentAnimation != null && currentAnimation.Animating; }
 	}
 
+	bool allowSimultaneous = false;
+	public bool AllowSimultaneous {
+		get { return allowSimultaneous; }
+		set { allowSimultaneous = value; }
+	}
+
 	public static UIAnimator AttachTo (GameObject obj) {
 		UIAnimator anim = obj.GetComponent<UIAnimator> ();
 		if (anim != null)
@@ -18,7 +24,7 @@ public class UIAnimator : UIElement {
 	}
 
 	public bool Animate (UIAnimation animation, RectTransform rect=null) {
-		if (Animating)
+		if (!AllowSimultaneous && Animating)
 			return false;
 		animation.Rect = rect == null ? gameObject.GetComponent<RectTransform> () : rect;
 		currentAnimation = animation;
@@ -67,6 +73,20 @@ public class UIAnimator : UIElement {
 		}) {}
 	}
 
+	public class Move : UIAnimation {
+
+		Smooth curve = new Smooth ();
+		Vector3 startPosition;
+
+		public Move (float time, Vector3 target, Action onEnd=null) : base (time, (float p) => {
+			Rect.SetLocalPosition (Vector3.Lerp (startPosition, target, curve.Get (p)));
+		}, onEnd) {}
+
+		protected override void OnLoad () {
+			startPosition = Rect.localPosition;
+		}
+	}
+
 	public class FadeOut : Fade {
 		public FadeOut (float time, Action onEnd=null) : base (time, 1f, 0f, onEnd) {}
 	}
@@ -95,9 +115,18 @@ public class UIAnimator : UIElement {
 
 		EaseOutBounce curve = new EaseOutBounce ();
 
-		public Expand (float time) : base (time, (float p) => {
+		public Expand (float time, Action onEnd=null) : base (time, (float p) => {
 			Rect.SetLocalScale (curve.Get (p));
-		}) {}
+		}, onEnd) {}
+	}
+
+	public class Shrink : UIAnimation {
+
+		EaseOutBounce curve = new EaseOutBounce ();
+
+		public Shrink (float time, Action onEnd=null) : base (time, (float p) => {
+			Rect.localScale = Vector3.Lerp (Vector3.one, Vector3.zero, curve.Get (p));
+		}, onEnd) {}
 	}
 
 	public class Peek : UIAnimation {

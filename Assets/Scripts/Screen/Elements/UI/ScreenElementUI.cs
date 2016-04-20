@@ -6,7 +6,7 @@ public abstract class ScreenElementUI : UIElement {
 	public string id;
 
 	TextStyle style = TextStyle.Paragraph;
-	public virtual TextStyle Style {
+	new public virtual TextStyle Style {
 		get { return style; }
 		set {
 			style = value;
