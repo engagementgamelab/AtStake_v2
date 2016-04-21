@@ -13,11 +13,7 @@ namespace Templates {
 		protected override TemplateSettings LoadSettings () {
 			return new TemplateSettings ("bottom_button|menu") {
 				TopBarColor = Palette.Orange,
-				TopBarHeight = TemplateSettings.ShortBar,
-				BackgroundColor = Palette.White,
-				TextStyles = new Dictionary<string, TextStyle> () {
-					{ "score_list", TextStyle.Paragraph }
-				}
+				TopBarHeight = TemplateSettings.ShortBar
 			};
 		}
 	}

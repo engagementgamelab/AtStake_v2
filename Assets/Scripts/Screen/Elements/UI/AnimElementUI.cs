@@ -47,7 +47,7 @@ public class AnimElementUI : MB {
 	}
 
 	RectTransform rectTransform = null;
-	RectTransform RectTransform {
+	public RectTransform RectTransform {
 		get {
 			if (rectTransform == null) {
 				rectTransform = GetComponent<RectTransform> ();

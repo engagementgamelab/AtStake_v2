@@ -20,20 +20,20 @@ public class AnimationContainer : MB {
 		Co.WaitForSeconds (1f, () => {
 
 			// Introduce the avatar
-			Vector3 deciderPosition = new Vector3 (50, 25f, 0);
-			AnimElementUI decider = CreateAnimation ();
-			decider.AvatarName = avatarColor;
-			decider.Size = new Vector2 (75, 75);
-			decider.LocalPosition = deciderPosition;
-			decider.Animate (new UIAnimator.Expand (0.5f));
+			Vector3 avatarPosition = new Vector3 (50, 25f, 0);
+			AnimElementUI avatar = CreateAnimation ();
+			avatar.AvatarName = avatarColor;
+			avatar.Size = new Vector2 (75, 75);
+			avatar.LocalPosition = avatarPosition;
+			avatar.Animate (new UIAnimator.Expand (0.5f));
 
 			Co.WaitForSeconds (1f, () => {
 
 				// Move the coin to the avatar and shrink out
-				coin.Animate (new UIAnimator.Move (1f, deciderPosition, () => {
+				coin.Animate (new UIAnimator.Move (1f, avatarPosition, () => {
 					coin.Destroy ();
-					decider.Animate (new UIAnimator.Shrink (0.5f, () => {
-						decider.Destroy ();
+					avatar.Animate (new UIAnimator.Shrink (0.5f, () => {
+						avatar.Destroy ();
 					}));
 				}));
 			});

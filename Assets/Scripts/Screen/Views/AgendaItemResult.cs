@@ -52,7 +52,7 @@ namespace Views {
 			if (Game.Controller.NextAgendaItem ()) {
 				AllGotoView ("agenda_item");
 			} else {
-				if (Game.Controller.NextRound ()) {
+				if (Game.Controller.HasNextRound) {
 					AllGotoView ("scoreboard");
 				} else {
 					AllGotoView ("final_scoreboard");

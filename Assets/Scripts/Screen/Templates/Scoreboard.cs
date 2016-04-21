@@ -9,28 +9,32 @@ namespace Templates {
 	public class Scoreboard : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button") {
+			return new TemplateSettings ("bottom_button|next_round") {
 				TopBarColor = Palette.Orange,
 				TopBarHeight = TemplateSettings.ShortBar,
-				BottomBarHeight = TemplateSettings.MediumBar,
-				BackgroundColor = Palette.White,
 				TextStyles = new Dictionary<string, TextStyle> () {
-					{ "score_list", TextStyle.Paragraph }
+					{ "round_end", new TextStyle ()
+						{
+							FontSize = 28,
+							FontStyle = FontStyle.Bold,
+							FontColor = Palette.Grey
+						}
+					}
 				}
 			};
 		}
 		
-		ListElementUI<TextElementUI, TextElement> scores;
-		ListElementUI<TextElementUI, TextElement> Scores {
+		ListElementUI<AvatarInlineElementUI, AvatarElement> scores;
+		ListElementUI<AvatarInlineElementUI, AvatarElement> Scores {
 			get {
 				if (scores == null)
-					scores = GetElement<ListElementUI<TextElementUI, TextElement>> ("score_list");
+					scores = GetElement<ListElementUI<AvatarInlineElementUI, AvatarElement>> ("score_list");
 				return scores;
 			}
 		}
 
 		protected virtual ScreenElementUI ContinueButton {
-			get { return Elements["next"]; }
+			get { return Elements["next_round"]; }
 		}
 
 		protected override void OnLoadView () {
@@ -38,18 +42,18 @@ namespace Templates {
 			ContinueButton.Visible = false;
 
 			TextElementUI instructions;
-			if (TryGetElement<TextElementUI> ("previous_decider_instructions", out instructions)) {
+			if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
 				instructions.Visible = false;
 			}
 
-			foreach (TextElementUI t in Scores.ChildElements)
+			foreach (AvatarInlineElementUI t in Scores.ChildElements)
 				t.Visible = false;
 		}
 
 		protected override void OnInputEnabled () {
 
-			List<TextElementUI> childElements = Scores.ChildElements;
-			childElements.Sort ((x, y) => ValueFromText (x.Text).CompareTo (ValueFromText (y.Text)));
+			List<AvatarInlineElementUI> childElements = Scores.ChildElements;
+			childElements.Sort ((x, y) => ValueFromText (x.coinCount).CompareTo (ValueFromText (y.coinCount)));
 			childElements.Reverse ();
 
 			for (int i = 0; i < childElements.Count; i ++)
@@ -60,10 +64,14 @@ namespace Templates {
 				childElements[counter].Visible = true;
 				counter --;
 			}, () => {
-				ContinueButton.Visible = true;
+				Co.WaitForSeconds (0.75f, () => {
+					ContinueButton.Visible = true;
+					ContinueButton.Animate (new UIAnimator.Expand (1f));
+				});
 				TextElementUI instructions;
-				if (TryGetElement<TextElementUI> ("previous_decider_instructions", out instructions)) {
+				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
 					instructions.Visible = true;
+					instructions.Animate (new UIAnimator.Expand (1f));
 				}
 			});
 		}

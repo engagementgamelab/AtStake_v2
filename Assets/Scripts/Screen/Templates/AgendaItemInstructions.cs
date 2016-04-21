@@ -11,7 +11,6 @@ namespace Templates {
 				TopBarHeight = TemplateSettings.ShortBar,
 				BackgroundColor = Palette.White,
 				BottomBarHeight = TemplateSettings.MediumBar,
-				PotEnabled = true,
 				CoinsEnabled = true
 			};
 		}

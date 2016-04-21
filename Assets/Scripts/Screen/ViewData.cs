@@ -11,6 +11,7 @@ namespace Views {
 		public int PlayerCoinCount { get; set; }
 		public string DeciderAvatarColor { get; set; }
 		public string PlayerAvatarColor { get; set; }
+		public bool IsDecider { get; set; }
 	}
 
 	public class AgendaItemResultData : ViewData {

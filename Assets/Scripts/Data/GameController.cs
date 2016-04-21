@@ -186,6 +186,13 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	/// <summary>
+	/// Returns true if there are more rounds to play (if false, the game is over)
+	/// </summary>
+	public bool HasNextRound {
+		get { return roundItr.Position < instance.Rounds.Length-1; }
+	}
+
+	/// <summary>
 	/// Gets the name of the player currently pitching
 	/// </summary>
 	public string CurrentPitcher {

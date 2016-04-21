@@ -248,7 +248,7 @@
     {
       "Symbol": "decide",
       "DeciderInstructions": "Time's up! I will now choose the best proposal.",
-      "PlayerInstructions": "The Decider is selecting the winner for the best proposal!"
+      "PlayerInstructions": "The Decider is selecting the winner with the best proposal!"
     },
     {
       "Symbol": "deck",
@@ -260,7 +260,7 @@
     },
     {
       "Symbol": "deliberate",
-      "DeciderInstructions": "Press 'deliberate' to start the next round. Be sure to ask probing questions about the proposal and encourage questions among players.",
+      "DeciderInstructions": "Press 'deliberate' to start the timer. Be sure to ask probing questions about the proposal and encourage questions among players.",
       "Buttons": {
         "timer_button": "Deliberate!"
       }
@@ -383,10 +383,10 @@
       "Instructions": "The character roles for this round are..."
     },
     {
+      "DeciderInstructions": "When everyone is ready, press 'next' to start the next round",
       "Symbol": "scoreboard",
       "Text": {
-        "round_end": "At the end of round {{round_number}} the scores are:",
-        "previous_decider_instructions": "When everyone is ready, press 'next' to start the next round"
+        "round_end": "At the end of round {{round_number}} the scores are:"
       }
     },
     {

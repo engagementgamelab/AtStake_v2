@@ -162,8 +162,8 @@ namespace Templates {
 		protected T GetElement<T> (string id) where T : ScreenElementUI {
 			try {
 				return (T)LoadedElements[id];
-			} catch {
-				throw new System.Exception ("The template '" + this + "' does not contain an element with the id '" + id + "'");
+			} catch (KeyNotFoundException e) {
+				throw new System.Exception ("The template '" + this + "' does not contain an element with the id '" + id + "'\n" + e);
 			}
 		}
 

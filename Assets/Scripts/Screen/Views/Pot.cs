@@ -15,7 +15,8 @@ namespace Views {
 					DeciderCoinCount = DeciderRoundStartCoinCount,
 					PlayerCoinCount = PlayerRoundStartCoinCount,
 					DeciderAvatarColor = Game.Controller.Decider.Avatar,
-					PlayerAvatarColor = Game.Controller.Player.Avatar
+					PlayerAvatarColor = Game.Controller.Player.Avatar,
+					IsDecider = IsDecider
 				};
 			}
 		}

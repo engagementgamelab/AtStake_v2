@@ -183,6 +183,10 @@ public class UIAnimator : UIElement {
 			}
 		}
 
+		bool ObjectActive {
+			get { return Rect.gameObject.activeSelf; }
+		}
+
 		public bool Animating { get; private set; }
 		protected float time;
 		Action<float> anim;
@@ -200,10 +204,15 @@ public class UIAnimator : UIElement {
 		public void Start () {
 			if (Animating) return;
 			Animating = true;
-			Co.StartCoroutine (time, anim, () => {
+			Co.StartCoroutine (time, (float p) => {
+				if (ObjectActive)
+					anim (p);
+			}, () => {
 				Animating = false;
-				if (onEnd != null)
-					onEnd();
+				if (ObjectActive) {
+					if (onEnd != null)
+						onEnd();
+				}
 			});
 		}
 	}

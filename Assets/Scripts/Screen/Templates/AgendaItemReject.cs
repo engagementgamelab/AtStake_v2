@@ -13,7 +13,6 @@ namespace Templates {
 				TopBarHeight = TemplateSettings.ShortBar,
 				BottomBarHeight = TemplateSettings.MediumBar,
 				BackgroundColor = Palette.White,
-				PotEnabled = true,
 				CoinsEnabled = true
 			};
 		}
@@ -37,19 +36,19 @@ namespace Templates {
 			Co.WaitForSeconds (1f, () => {
 
 				// Introduce the avatar
-				Vector3 deciderPosition = new Vector3 (50, 25f, 0);
-				AnimElementUI decider = CreateAnimation ();
-				decider.AvatarName = data.PlayerAvatarColor;
-				decider.Size = new Vector2 (75, 75);
-				decider.LocalPosition = deciderPosition;
-				decider.Animate (new UIAnimator.Expand (0.5f));
+				Vector3 avatarPosition = new Vector3 (50, 25f, 0);
+				AnimElementUI avatar = CreateAnimation ();
+				avatar.AvatarName = data.PlayerAvatarColor;
+				avatar.Size = new Vector2 (75, 75);
+				avatar.LocalPosition = avatarPosition;
+				avatar.Animate (new UIAnimator.Expand (0.5f));
 
 				Co.WaitForSeconds (0.5f, () => {
 					coin.Animate (new UIAnimator.Shrink (0.5f));
 
 					Co.WaitForSeconds (0.5f, () => {
-						decider.Animate (new UIAnimator.Spin (0.5f, () => {
-							decider.Animate (new UIAnimator.Shrink (0.5f));
+						avatar.Animate (new UIAnimator.Spin (0.5f, () => {
+							avatar.Animate (new UIAnimator.Shrink (0.5f));
 						}));
 					});
 				});

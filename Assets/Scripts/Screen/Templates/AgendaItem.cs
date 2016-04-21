@@ -11,7 +11,6 @@ namespace Templates {
 				TopBarColor = Palette.Orange,
 				TopBarHeight = TemplateSettings.ShortBar,
 				BackgroundColor = Palette.White,
-				PotEnabled = true,
 				CoinsEnabled = true,
 				TextStyles = new Dictionary<string, TextStyle> () {
 					{ "item", TextStyle.Header3 }

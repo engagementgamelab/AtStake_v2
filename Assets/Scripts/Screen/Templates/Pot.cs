@@ -37,15 +37,25 @@ namespace Templates {
 		}
 
 		PotData data;
+		Dictionary<string, bool> animationsRun = new Dictionary<string, bool> ();
 
 		protected override void OnLoadView () {
+
 			data = GetViewData<PotData> ();
-			Elements["pot"].Visible = false;
+
 			Elements["coins"].Visible = false;
 			Elements["next"].Visible = false;
+			if (data.IsDecider || data.PotCount > 0)
+				Elements["pot"].Visible = false;
+
 			foreach (TextElementUI t in Instructions) {
 				t.Visible = false;
 			}
+
+			animationsRun["decider"] = false;
+			animationsRun["player"] = false;
+			animationsRun["winner"] = false;
+			animationsRun["pot"] = false;
 		}
 
 		protected override void OnInputEnabled () {
@@ -97,18 +107,39 @@ namespace Templates {
 		}
 
 		void RunDeciderAnimation () {
-			if (Elements["instruction1"].Visible)
+			if (Elements["instruction1"].Visible && !animationsRun["decider"]) {
 				RunCoinAnimation (data.DeciderCoinCount.ToString (), data.DeciderAvatarColor);
+				animationsRun["decider"] = true;
+			}
 		}
 
 		void RunPlayerAnimation () {
-			if (Elements["instruction2"].Visible)
-				RunCoinAnimation (data.PlayerCoinCount.ToString (), data.PlayerAvatarColor);
+			if (Elements["instruction2"].Visible && !animationsRun["player"]) {
+				if (data.IsDecider) {
+					Co.WaitForSeconds (0.5f, () => {
+
+						AnimElementUI coin = CreateAnimation ();
+						coin.SpriteName = "coin";
+						coin.Text = data.PlayerCoinCount.ToString ();
+						coin.Size = new Vector2 (100, 100);
+						coin.Animate (new UIAnimator.Expand (1.5f, () => {
+							Co.WaitForSeconds (1f, () => {
+								coin.Animate (new UIAnimator.Shrink (1.5f, () => {
+									coin.Destroy ();
+								}));
+							});
+						}));
+					});
+				} else {
+					RunCoinAnimation (data.PlayerCoinCount.ToString (), data.PlayerAvatarColor);
+				}
+				animationsRun["player"] = true;
+			}
 		}
 
 		void RunWinnerAnimation () {
 
-			if (Elements["instruction3"].Visible) {
+			if (Elements["instruction3"].Visible && !animationsRun["winner"]) {
 
 				Co.WaitForSeconds (0.5f, () => {
 					AnimElementUI trophy = CreateAnimation ();
@@ -124,12 +155,14 @@ namespace Templates {
 						}));
 					});
 				});
+
+				animationsRun["winner"] = true;
 			}
 		}
 
 		void RunPotAnimation () {
 
-			if (Elements["instruction4"].Visible) {
+			if (Elements["instruction4"].Visible && !animationsRun["pot"]) {
 
 				Co.WaitForSeconds (0.5f, () => {
 					AnimElementUI pot = CreateAnimation ();
@@ -138,6 +171,8 @@ namespace Templates {
 					pot.Size = new Vector2 (100, 100);
 					pot.Animate (new UIAnimator.Expand (1.5f));
 				});
+
+				animationsRun["pot"] = true;
 			}
 		}
 
