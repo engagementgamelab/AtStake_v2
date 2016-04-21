@@ -47,7 +47,7 @@ namespace Templates {
 			}
 
 			foreach (AvatarInlineElementUI t in Scores.ChildElements)
-				t.Visible = false;
+				t.Alpha = 0f;
 		}
 
 		protected override void OnInputEnabled () {
@@ -60,18 +60,18 @@ namespace Templates {
 				childElements[i].Transform.SetSiblingIndex (i);
 
 			int counter = childElements.Count-1;
-			Co.InvokeWhileTrue (0.5f, 2.5f, () => { return counter >= 0; }, () => {
-				childElements[counter].Visible = true;
+			Co.InvokeWhileTrue (0.5f, 2f, () => { return counter >= 0; }, () => {
+				childElements[counter].Animate (new UIAnimator.FadeIn (0.75f));
 				counter --;
 			}, () => {
 				Co.WaitForSeconds (0.75f, () => {
 					ContinueButton.Visible = true;
-					ContinueButton.Animate (new UIAnimator.FadeIn (1f));
+					ContinueButton.Animate (new UIAnimator.FadeIn (0.5f));
 				});
 				TextElementUI instructions;
 				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
 					instructions.Visible = true;
-					instructions.Animate (new UIAnimator.Expand (1f));
+					instructions.Animate (new UIAnimator.FadeIn (1f));
 				}
 			});
 		}

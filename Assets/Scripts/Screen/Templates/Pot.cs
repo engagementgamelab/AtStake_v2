@@ -117,7 +117,7 @@ namespace Templates {
 
 		void RunPlayerAnimation () {
 			if (Elements["instruction2"].Visible && !animationsRun["player"]) {
-				if (data.IsDecider) {
+				if (data.IsDecider && data.PlayerCoinCount > 0) {
 					Co.WaitForSeconds (0.5f, () => {
 
 						AnimElementUI coin = CreateAnimation ();
