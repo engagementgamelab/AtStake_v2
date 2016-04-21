@@ -54,9 +54,21 @@ public class UIAnimator : UIElement {
 		}
 	}
 
+	public class EaseInBounce : Curve {
+		public override float Get (float x) {
+			return Mathf.Pow(x, 2) * (2 * x - 1);
+		}
+	}
+
 	public class Linear : Curve {
 		public override float Get (float x) {
 			return Mathf.Lerp (0f, 1f, x);
+		}
+	}
+
+	public class EaseOutCircular : Curve {
+		public override float Get (float x) {
+			return Mathf.Sqrt(-(x - 2) * x);
 		}
 	}
 
@@ -109,6 +121,15 @@ public class UIAnimator : UIElement {
 			if (cg == null)
 				cg = Rect.gameObject.AddComponent<CanvasGroup> ();
 		}
+	}
+
+	public class Bump : UIAnimation {
+
+		Smooth curve = new Smooth ();
+
+		public Bump (float time, float amount, Action onEnd=null) : base (time, (float p) => {
+			Rect.SetLocalScale (Mathf.Lerp (1f, amount, Mathf.Sin (Mathf.PI * curve.Get (p))));
+		}, onEnd) {}
 	}
 
 	public class Expand : UIAnimation {

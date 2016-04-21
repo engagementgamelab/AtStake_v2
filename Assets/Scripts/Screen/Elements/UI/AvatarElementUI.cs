@@ -47,7 +47,12 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		if (!spinning) {
 			spinning = true;
 			Co.WaitForSeconds (Random.Range (5, 8), () => {
-				Animate (new UIAnimator.Spin (1f), avatar.GetComponent<RectTransform> ());
+				RectTransform r = avatar.GetComponent<RectTransform> ();
+				if (Random.value > 0.5f) {
+					Animate (new UIAnimator.Spin (1f), r);
+				} else {
+					Animate (new UIAnimator.Bump (1f, 1.25f), r);
+				}
 				spinning = false;
 				Spin ();
 			});
