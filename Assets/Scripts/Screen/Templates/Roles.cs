@@ -30,7 +30,7 @@ namespace Templates {
 
 		protected override void OnLoadView () {
 			RoleList.Visible = false;
-			Elements["play"].Visible = false;
+			Elements["play"].Alpha = 0f;
 		}
 
 		protected override void OnUnloadView () {
@@ -67,8 +67,7 @@ namespace Templates {
 				}
 				roleCounter ++;
 			}, () => {
-				Elements["play"].Visible = true;
-				Elements["play"].Animate (new UIAnimator.Expand (1f));
+				Elements["play"].Animate (new UIAnimator.FadeIn (1f));
 			});
 		}
 	}

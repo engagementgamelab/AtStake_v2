@@ -103,6 +103,17 @@ public class UIElement : MB {
 		set { Button.interactable = value; }
 	}
 
+	float alpha;
+	public float Alpha {
+		get { return alpha; }
+		set {
+			if (canvasGroup == null && GetComponent<CanvasGroup> () == null)
+				canvasGroup = gameObject.AddComponent<CanvasGroup> ();
+			canvasGroup.alpha = value;
+			alpha = value;
+		}
+	}
+
 	Color color;
 	public virtual Color Color {
 		get { return color; }
@@ -122,6 +133,16 @@ public class UIElement : MB {
 				layout = GetComponent<LayoutElement> ();
 			}
 			return layout;
+		}
+	}
+
+	CanvasGroup canvasGroup = null;
+	CanvasGroup CanvasGroup {
+		get {
+			if (canvasGroup == null) {
+				canvasGroup = GetComponent<CanvasGroup> ();
+			}
+			return canvasGroup;
 		}
 	}
 

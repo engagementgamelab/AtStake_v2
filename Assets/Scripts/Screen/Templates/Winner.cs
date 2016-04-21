@@ -45,6 +45,7 @@ namespace Templates {
 						// Show winnings
 						Elements["coins_won"].Animate (new UIAnimator.Expand (1f, () => {
 							Elements["next"].Visible = true;
+							Elements["next"].Animate (new UIAnimator.FadeIn (0.5f));
 						}));
 					});
 				});

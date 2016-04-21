@@ -10,14 +10,17 @@ namespace Views {
 
 		ListElement<AvatarElement> peerList;
 
+		protected override void OnInitHostElements () {
+			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], 
+				() => { AllGotoView ("deck"); }) { Interactable = false });
+		}
+
 		protected override void OnInitElements () {
 
 			peerList = new ListElement<AvatarElement> ();
 			Elements.Add ("peer_list", peerList);
 
 			Elements.Add ("back", new BackButtonElement ("", () => { Game.Multiplayer.Disconnect (); }));
-			Elements.Add ("play", new ButtonElement (Model.Buttons["play"], 
-				() => { AllGotoView ("deck"); }) { Active = false });
 		}
 
 		protected override void OnShow () {
@@ -47,7 +50,7 @@ namespace Views {
 
 		void SetPlayButton () {
 			if (IsHost)
-				Elements["play"].Active = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
+				GetScreenElement<ButtonElement> ("play").Interactable = Game.Manager.Players.Count >= DataManager.GetSettings ().PlayerCountRange[0];
 		}
 
 		public override void OnDisconnect () {

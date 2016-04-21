@@ -66,7 +66,7 @@ namespace Templates {
 			}, () => {
 				Co.WaitForSeconds (0.75f, () => {
 					ContinueButton.Visible = true;
-					ContinueButton.Animate (new UIAnimator.Expand (1f));
+					ContinueButton.Animate (new UIAnimator.FadeIn (1f));
 				});
 				TextElementUI instructions;
 				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {

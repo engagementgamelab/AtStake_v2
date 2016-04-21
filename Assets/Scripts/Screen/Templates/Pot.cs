@@ -75,8 +75,10 @@ namespace Templates {
 				}
 				
 			}, () => {
-				if (Loaded)
+				if (Loaded) {
 					Elements["next"].Visible = true;
+					Elements["next"].Animate (new UIAnimator.FadeIn (1f));
+				}
 			});
 		}
 

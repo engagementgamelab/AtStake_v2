@@ -3,6 +3,9 @@ using System.Collections;
 
 public abstract class ScreenElementUI : UIElement {
 
+	public delegate void OnActiveStateUpdated (bool active);
+
+	public OnActiveStateUpdated onActiveStateUpdated;
 	public string id;
 
 	TextStyle style = TextStyle.Paragraph;
@@ -94,6 +97,8 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 		activeState = active;
 		gameObject.SetActive (visible && activeState);
 		OnSetActive (gameObject.activeSelf);
+		if (onActiveStateUpdated != null)
+			onActiveStateUpdated (active);
 	}
 
 	public abstract void ApplyElement (T element);

@@ -243,7 +243,7 @@
     {
       "Symbol": "bio",
       "DeciderInstructionsOutLoud": "Everyone, please introduce your character roles. You will be playing from this perspective this round.",
-      "DeciderInstructions": "Press done when everyone has introduced themselves"
+      "DeciderInstructions": "Press next when everyone has introduced themselves"
     },
     {
       "Symbol": "decide",

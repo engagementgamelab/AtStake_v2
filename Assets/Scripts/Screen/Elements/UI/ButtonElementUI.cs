@@ -35,4 +35,11 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 	public override void RemoveElement (ButtonElement e) {
 		RemoveButtonListeners ();
 	}
+
+	public void DelayedFadeIn (float delay=0.75f, float fadeTime=0.5f) {
+		Alpha = 0f;
+		Co.WaitForSeconds (delay, () => {
+			Animate (new UIAnimator.FadeIn (fadeTime));
+		});
+	}
 }
