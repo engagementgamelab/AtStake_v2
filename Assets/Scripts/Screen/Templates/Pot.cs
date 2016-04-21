@@ -77,7 +77,7 @@ namespace Templates {
 			}, () => {
 				if (Loaded) {
 					Elements["next"].Visible = true;
-					Elements["next"].Animate (new UIAnimator.FadeIn (1f));
+					Elements["next"].Animate (new UIAnimator.FadeIn (0.5f));
 				}
 			});
 		}
@@ -122,7 +122,7 @@ namespace Templates {
 
 						AnimElementUI coin = CreateAnimation ();
 						coin.SpriteName = "coin";
-						coin.Text = data.PlayerCoinCount.ToString ();
+						coin.Text = "+" + data.PlayerCoinCount.ToString ();
 						coin.Size = new Vector2 (100, 100);
 						coin.Animate (new UIAnimator.Expand (1.5f, () => {
 							Co.WaitForSeconds (1f, () => {
@@ -171,6 +171,7 @@ namespace Templates {
 					pot.SpriteName = "coin_stack";
 					pot.Text = data.PotCount.ToString ();
 					pot.Size = new Vector2 (100, 100);
+					pot.TextPadding = new Vector2 (-60, 0);
 					pot.Animate (new UIAnimator.Expand (1.5f));
 				});
 

@@ -21,6 +21,7 @@ namespace Templates {
 
 		protected override void OnLoadView () {
 			data = GetViewData<AgendaItemResultData> ();
+			AnimationContainer.Reset ();
 		}
 
 		protected override void OnInputEnabled () {

@@ -67,7 +67,7 @@ namespace Templates {
 				}
 				roleCounter ++;
 			}, () => {
-				Elements["play"].Animate (new UIAnimator.FadeIn (1f));
+				Elements["play"].Animate (new UIAnimator.FadeIn (0.5f));
 			});
 		}
 	}

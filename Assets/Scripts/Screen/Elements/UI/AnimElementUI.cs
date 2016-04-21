@@ -46,6 +46,11 @@ public class AnimElementUI : MB {
 		set { RectTransform.sizeDelta = value; }
 	}
 
+	public Vector2 TextPadding {
+		get { return text.GetComponent<RectTransform> ().sizeDelta; }
+		set { text.GetComponent<RectTransform> ().sizeDelta = value; }
+	}
+
 	RectTransform rectTransform = null;
 	public RectTransform RectTransform {
 		get {
@@ -75,5 +80,6 @@ public class AnimElementUI : MB {
 		image.sprite = null;
 		Text = "";
 		Size = new Vector2 (100, 100);
+		TextPadding = Vector2.zero;
 	}
 }

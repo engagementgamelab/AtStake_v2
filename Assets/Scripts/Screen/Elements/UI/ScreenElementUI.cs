@@ -21,8 +21,10 @@ public abstract class ScreenElementUI : UIElement {
 	UIAnimator anim;
 	protected UIAnimator Anim {
 		get {
-			if (anim == null)
+			if (anim == null) {
 				anim = UIAnimator.AttachTo (gameObject); 
+				anim.AllowSimultaneous = true;
+			}
 			return anim;
 		}
 	}

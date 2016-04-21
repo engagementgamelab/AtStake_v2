@@ -202,7 +202,8 @@ public class UIAnimator : UIElement {
 		protected virtual void OnLoad () {}
 
 		public void Start () {
-			if (Animating) return;
+			Co.StartCoroutine (CoAnimate);
+			/*if (Animating) return;
 			Animating = true;
 			Co.StartCoroutine (time, (float p) => {
 				if (ObjectActive)
@@ -213,7 +214,25 @@ public class UIAnimator : UIElement {
 					if (onEnd != null)
 						onEnd();
 				}
-			});
+			});*/
+		}
+
+		IEnumerator CoAnimate () {
+
+			if (Animating) yield break;
+			Animating = true;
+
+			float eTime = 0f;
+
+			while (eTime < time && ObjectActive) {
+				eTime += Time.deltaTime;
+				anim (eTime / time);
+				yield return null;
+			}
+
+			Animating = false;
+			if (ObjectActive && onEnd != null)
+				onEnd ();
 		}
 	}
 }
