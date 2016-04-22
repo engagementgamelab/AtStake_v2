@@ -43,10 +43,10 @@ namespace Templates {
 
 			data = GetViewData<PotData> ();
 
-			Elements["coins"].Visible = false;
+			Elements["pot"].Visible = false;
 			Elements["next"].Visible = false;
 			if (data.IsDecider || data.PotCount > 0)
-				Elements["pot"].Visible = false;
+				Elements["coins"].Visible = false;
 
 			foreach (TextElementUI t in Instructions) {
 				t.Visible = false;
@@ -124,6 +124,7 @@ namespace Templates {
 						coin.SpriteName = "coin";
 						coin.Text = "+" + data.PlayerCoinCount.ToString ();
 						coin.Size = new Vector2 (100, 100);
+						coin.TextPadding = new Vector2 (-10, 0);
 						coin.Animate (new UIAnimator.Expand (1.5f, () => {
 							Co.WaitForSeconds (1f, () => {
 								coin.Animate (new UIAnimator.Shrink (1.5f, () => {
@@ -167,12 +168,25 @@ namespace Templates {
 			if (Elements["instruction4"].Visible && !animationsRun["pot"]) {
 
 				Co.WaitForSeconds (0.5f, () => {
+
+					int potStartCount = data.PotCount;
+					int potEndCount = (int)(potStartCount * 1.5f);
+
 					AnimElementUI pot = CreateAnimation ();
 					pot.SpriteName = "coin_stack";
-					pot.Text = data.PotCount.ToString ();
+					pot.Text = potStartCount.ToString ();
 					pot.Size = new Vector2 (100, 100);
 					pot.TextPadding = new Vector2 (-60, 0);
 					pot.Animate (new UIAnimator.Expand (1.5f));
+
+					Co.WaitForSeconds (4f, () => {
+						Co.StartCoroutine (2.5f, (float p) => {
+							pot.Text = Mathf.Ceil (Mathf.Lerp (potStartCount, potEndCount, p)).ToString ();
+						});
+						Co.WaitForSeconds (0.5f, () => {
+							pot.Animate (new UIAnimator.FadeOut (2f));
+						});
+					});
 				});
 
 				animationsRun["pot"] = true;

@@ -17,20 +17,31 @@ namespace Templates {
 			};
 		}
 
+		AvatarElementUI avatar;
+		AvatarElementUI Avatar {
+			get {
+				if (avatar == null)
+					avatar = GetElement<AvatarElementUI> ("winning_player");
+				return avatar;
+			}
+		}
+
 		protected override void OnLoadView () {
 
-			AvatarElementUI avatar = GetElement<AvatarElementUI> ("winning_player");
-			avatar.playerName.ApplyStyle (new TextStyle () {
-				FontColor = Palette.Grey,
+			// AvatarElementUI avatar = GetElement<AvatarElementUI> ("winning_player");
+			Avatar.playerName.ApplyStyle (new TextStyle () {
+				FontColor = Palette.Black,
 				FontSize = 32,
 				TextAnchor = TextAnchor.MiddleRight
 			});
-			avatar.playerScore.ApplyStyle (new TextStyle () {
-				FontColor = Palette.Avatar.GetColor (avatar.Element.Color),
+			Avatar.playerScore.ApplyStyle (new TextStyle () {
+				FontColor = Palette.Avatar.GetColor (Avatar.Element.Color),
 				FontSize = 32,
 				TextAnchor = TextAnchor.MiddleLeft,
 				FontStyle = FontStyle.BoldAndItalic
 			});
+
+			Avatar.gameObject.SetActive (false);
 
 			base.OnLoadView ();
 		}
@@ -40,15 +51,22 @@ namespace Templates {
 			List<AvatarInlineElementUI> childElements = SortPlayers ();
 			int counter = 0;
 
-			Co.InvokeWhileTrue (2f, 0.25f, () => { return counter < childElements.Count; }, () => {
-				childElements[counter].Animate (new UIAnimator.FadeIn (0.75f));
-				counter ++;
-			}, () => {
-				Co.WaitForSeconds (0.75f, () => {
-					ContinueButton.Visible = true;
-					ContinueButton.Animate (new UIAnimator.FadeIn (0.5f));
+			Co.WaitForSeconds (1f, () => {
+
+				Avatar.gameObject.SetActive (true);
+				Avatar.RandomAnimations = false;
+
+				Co.InvokeWhileTrue (2.5f, 0.33f, () => { return counter < childElements.Count; }, () => {
+					childElements[counter].Animate (new UIAnimator.FadeIn (0.75f));
+					counter ++;
+				}, () => {
+					Co.WaitForSeconds (0.75f, () => {
+						ContinueButton.Visible = true;
+						ContinueButton.Animate (new UIAnimator.FadeIn (0.5f));
+					});
 				});
 			});
+
 		}
 	}
 }

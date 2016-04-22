@@ -10,6 +10,8 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 	public Text playerScore;
 	bool spinning = false;
 
+	public bool RandomAnimations { get; set; }
+
 	TextStyle nameStyle = new TextStyle () {
 		TextTransform = TextTransform.Lowercase,
 		FontColor = Palette.Grey,
@@ -22,7 +24,10 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		FontStyle = FontStyle.Bold
 	};
 
-	void OnEnable () { Animate (new UIAnimator.Expand (1.5f)); }
+	void OnEnable () { 
+		Animate (new UIAnimator.Expand (1.5f)); 
+		RandomAnimations = true;
+	}
 
 	public override void ApplyElement (AvatarElement e) {
 
@@ -52,13 +57,15 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		if (!spinning) {
 			spinning = true;
 			Co.WaitForSeconds (Random.Range (5, 8), () => {
-				RectTransform r = avatar.GetComponent<RectTransform> ();
-				if (Random.value > 0.5f) {
-					Animate (new UIAnimator.Spin (1f), r);
-				} else {
-					Animate (new UIAnimator.Bump (1f, 1.25f), r);
+				if (RandomAnimations) {
+					RectTransform r = avatar.GetComponent<RectTransform> ();
+					if (Random.value > 0.5f) {
+						Animate (new UIAnimator.Spin (1f), r);
+					} else {
+						Animate (new UIAnimator.Bump (1f, 1.25f), r);
+					}
+					spinning = false;
 				}
-				spinning = false;
 				Spin ();
 			});
 		}

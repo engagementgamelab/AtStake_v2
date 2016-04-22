@@ -15,6 +15,7 @@ public class AnimationContainer : MB {
 		coin.Text = "+" + coinCount;
 		coin.Size = new Vector2 (50, 50);
 		coin.LocalPosition = new Vector3 (-50, 25, 0);
+		coin.TextPadding = new Vector2 (-10, 0);
 		coin.Animate (new UIAnimator.Expand (0.5f));
 
 		Co.WaitForSeconds (1f, () => {
