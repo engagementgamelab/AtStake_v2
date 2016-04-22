@@ -22,7 +22,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public bool Hosting { get; private set; }
 
 	/// <summary>
-	/// Returns true if connected (always true if hosting)
+	/// Returns true if connected to a game (always true if hosting)
 	/// </summary>
 	public bool Connected {
 		get { return Hosting || connected; }
