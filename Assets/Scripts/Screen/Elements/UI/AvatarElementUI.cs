@@ -7,6 +7,7 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 	public Image avatar;
 	public Text playerName;
 	public Text playerRole;
+	public Text playerScore;
 	bool spinning = false;
 
 	TextStyle nameStyle = new TextStyle () {
@@ -35,10 +36,14 @@ public class AvatarElementUI : ScreenElementUI<AvatarElement> {
 		playerRole.gameObject.SetActive (e.Role != "");
 		playerRole.text = e.Role;
 
+		if (e.CoinCount != -1)
+			playerScore.text = e.CoinCount.ToString ();
+
 		// Style the text
 		roleStyle.FontColor = Palette.Avatar.GetColor (e.Color);
 		playerName.ApplyStyle (nameStyle);
 		playerRole.ApplyStyle (roleStyle);
+
 
 		Spin ();
 	}

@@ -303,7 +303,7 @@
     {
       "Symbol": "final_scoreboard",
       "Text": {
-        "scores": "And the final scores are:"
+        "winner": "And the winner is..."
       },
       "Buttons": {
         "menu": "Main menu"

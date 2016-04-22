@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Models;
@@ -45,6 +46,10 @@ public class ScoreManager : GameInstanceBehaviour {
 				playerScores.Add (player.Name, player.CoinCount);
 			return playerScores;
 		}
+	}
+
+	public KeyValuePair<string, int> TopScore {
+		get { return Game.Score.PlayerScores.Aggregate ((l, r) => l.Value > r.Value ? l : r); }
 	}
 
 	public bool CanAffordExtraTime {

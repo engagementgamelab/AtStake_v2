@@ -46,6 +46,8 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 	
 	T element;
 
+	public T Element { get { return element; } }
+
 	public override bool Loaded { get { return element != null; } }
 
 	// Set by the view (via the data in ScreenElement)

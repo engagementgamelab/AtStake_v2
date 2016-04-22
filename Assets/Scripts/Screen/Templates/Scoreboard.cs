@@ -52,14 +52,9 @@ namespace Templates {
 
 		protected override void OnInputEnabled () {
 
-			List<AvatarInlineElementUI> childElements = Scores.ChildElements;
-			childElements.Sort ((x, y) => ValueFromText (x.coinCount).CompareTo (ValueFromText (y.coinCount)));
-			childElements.Reverse ();
-
-			for (int i = 0; i < childElements.Count; i ++)
-				childElements[i].Transform.SetSiblingIndex (i);
-
+			List<AvatarInlineElementUI> childElements = SortPlayers ();
 			int counter = childElements.Count-1;
+
 			Co.InvokeWhileTrue (0.5f, 2f, () => { return counter >= 0; }, () => {
 				childElements[counter].Animate (new UIAnimator.FadeIn (0.75f));
 				counter --;
@@ -74,6 +69,18 @@ namespace Templates {
 					instructions.Animate (new UIAnimator.FadeIn (1f));
 				}
 			});
+		}
+
+		protected List<AvatarInlineElementUI> SortPlayers () {
+
+			List<AvatarInlineElementUI> childElements = Scores.ChildElements;
+			childElements.Sort ((x, y) => ValueFromText (x.coinCount).CompareTo (ValueFromText (y.coinCount)));
+			childElements.Reverse ();
+
+			for (int i = 0; i < childElements.Count; i ++)
+				childElements[i].Transform.SetSiblingIndex (i);
+
+			return childElements;
 		}
 
 		int ValueFromText (Text text) {

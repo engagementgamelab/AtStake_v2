@@ -23,9 +23,13 @@ namespace Views {
 			DisplayScores ();
 		}
 
-		protected void DisplayScores () {
-			Dictionary<string, AvatarElement> scores = Game.Score.PlayerScores
-				.ToDictionary (x => x.Key, x => new AvatarElement (x.Key, Game.Controller.GetAvatarForPlayer (x.Key), x.Value));
+		protected void DisplayScores (bool includeTopScore=true) {
+
+			Dictionary<string, int> playerScores = Game.Score.PlayerScores;
+			if (!includeTopScore)
+				playerScores.Remove (Game.Score.TopScore.Key);
+
+			Dictionary<string, AvatarElement> scores = playerScores.ToDictionary (x => x.Key, x => new AvatarElement (x.Key, Game.Controller.GetAvatarForPlayer (x.Key), x.Value));
 			Elements.Add ("score_list", new ListElement<AvatarElement> (scores));
 		}
 	}
