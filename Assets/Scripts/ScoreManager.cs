@@ -100,7 +100,7 @@ public class ScoreManager : GameInstanceBehaviour {
 		SendUpdateMessage ();
 	}
 
-	void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
+	void AcceptExtraTime (NetMessage msg) {
 		Pot += Settings.ExtraTimeCost;
 		Game.Controller.FindPlayer (msg.str1).CoinCount -= Settings.ExtraTimeCost;
 		SendUpdateMessage ();

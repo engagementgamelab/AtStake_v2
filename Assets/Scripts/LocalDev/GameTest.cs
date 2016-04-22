@@ -24,7 +24,7 @@ public class GameTest : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("RunTest", Run);
 	}
 
-	void Run (MasterMsgTypes.GenericMessage msg) {
+	void Run (NetMessage msg) {
 
 		Game.Dispatcher.AddListener ("GotoView", GotoView);
 
@@ -63,7 +63,7 @@ public class GameTest : GameInstanceBehaviour {
 		CurrentView.GetScreenElement<TimerButtonElement> ("timer_button").StartTimer ();
 	}
 
-	void GotoView (MasterMsgTypes.GenericMessage msg) {
+	void GotoView (NetMessage msg) {
 
 		Co.YieldWhileTrue (() => { return Animating; }, () => {
 			Co.WaitForSeconds (0.5f, () => {
@@ -98,7 +98,7 @@ public class GameTest : GameInstanceBehaviour {
 							PressTimerButton ();
 						} else {
 							Co.YieldWhileTrue (() => { return Game.Views.CurrView != "extra_time"; }, () => {
-								GotoView (MasterMsgTypes.GenericMessage.Create ("GotoView", "extra_time"));
+								GotoView (NetMessage.Create ("GotoView", "extra_time"));
 							});
 						}
 						break;
@@ -111,7 +111,7 @@ public class GameTest : GameInstanceBehaviour {
 							PressTimerButton ();
 						} else {
 							Co.YieldWhileTrue (() => { return Game.Views.CurrView != "extra_time_deliberate"; }, () => {
-								GotoView (MasterMsgTypes.GenericMessage.Create ("GotoView", "extra_time_deliberate"));
+								GotoView (NetMessage.Create ("GotoView", "extra_time_deliberate"));
 							});
 						}
 						break;

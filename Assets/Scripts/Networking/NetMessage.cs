@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// TODO: use this instead of MasterMsgTypes.GenericMessage
-
 public class NetMessage {
 
 	public string id;

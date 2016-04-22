@@ -23,7 +23,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (OnSetDeck);
 		}
 
-		void OnSetDeck (MasterMsgTypes.GenericMessage msg) {
+		void OnSetDeck (NetMessage msg) {
 
 			// Wait a frame to ensure that DeckManager sets the deck before referencing it
 			Co.WaitForFixedUpdate (() => {

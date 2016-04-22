@@ -44,7 +44,7 @@ public class PlayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	public void OnUpdatePlayers (MasterMsgTypes.GenericMessage msg) {
+	public void OnUpdatePlayers (NetMessage msg) {
 
 		Dictionary<string, string> playerColors = AvatarsManager.ToDict (msg.str1);
 

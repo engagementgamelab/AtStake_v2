@@ -180,11 +180,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	// -- Messaging
 
-	public void ReceiveMessageFromClient (MasterMsgTypes.GenericMessage msg) {
+	public void ReceiveMessageFromClient (NetMessage msg) {
 		Game.Dispatcher.ReceiveMessage (msg);
 	}
 
-	public void SendMessageToClients (MasterMsgTypes.GenericMessage msg) {
+	public void SendMessageToClients (NetMessage msg) {
 		net.SendMessage (msg);
 	}
 

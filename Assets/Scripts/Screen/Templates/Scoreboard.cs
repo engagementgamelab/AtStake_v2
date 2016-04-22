@@ -65,7 +65,7 @@ namespace Templates {
 				TextElementUI instructions;
 				if (TryGetElement<TextElementUI> ("decider_instructions", out instructions)) {
 					instructions.Visible = true;
-					instructions.Animate (new UIAnimator.FadeIn (1f));
+					instructions.Animate (new UIAnimator.FadeIn (0.5f));
 				}
 			});
 		}

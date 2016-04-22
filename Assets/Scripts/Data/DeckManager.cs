@@ -40,7 +40,7 @@ public class DeckManager : GameInstanceBehaviour {
 		Deck = null;
 	}
 
-	public void SetDeck (MasterMsgTypes.GenericMessage msg) {
+	public void SetDeck (NetMessage msg) {
 		Deck = Decks.Find (x => x.Name == msg.str1);
 	}
 }

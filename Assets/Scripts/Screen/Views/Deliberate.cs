@@ -52,7 +52,7 @@ namespace Views {
 			state = State.Deliberate;
 		}
 
-		void StartTimer (MasterMsgTypes.GenericMessage msg) {
+		void StartTimer (NetMessage msg) {
 			
 			if (HasElement ("timer")) {
 
@@ -67,7 +67,7 @@ namespace Views {
 			state = State.Extra;
 		}
 
-		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
+		void AcceptExtraTime (NetMessage msg) {
 			AllGotoView ("deliberate");
 			declinedPlayers.Clear ();
 			TimerButtonElement timer = GetScreenElement<TimerButtonElement> ("timer_button");
@@ -75,7 +75,7 @@ namespace Views {
 			timer.StartTimer ();
 		}
 
-		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
+		void DeclineExtraTime (NetMessage msg) {
 			if (!declinedPlayers.Contains (msg.str1)) {
 				declinedPlayers.Add (msg.str1);
 				if (declinedPlayers.Count == Game.Controller.PeerCount) {
@@ -84,7 +84,7 @@ namespace Views {
 			}
 		}
 
-		void TimeExpired (MasterMsgTypes.GenericMessage msg) {
+		void TimeExpired (NetMessage msg) {
 			if (!IsDecider) {
 				GotoView ("extra_time_deliberate");
 			}

@@ -36,7 +36,7 @@ public class NetManager {
 
 	public delegate void ClientsUpdated (string[] clients);
 	public delegate void OnDisconnected ();
-	public delegate void MessageReceived (MasterMsgTypes.GenericMessage msg);
+	public delegate void MessageReceived (NetMessage msg);
 	public delegate void OnUpdateConnection (bool connected);
 
 	public ClientsUpdated clientsUpdated;
@@ -121,7 +121,7 @@ public class NetManager {
 		socket.Emit ("closeRoom", connection.roomId);
 	}
 
-	public void SendMessage (MasterMsgTypes.GenericMessage msg) {
+	public void SendMessage (NetMessage msg) {
 
 		JSONObject obj;
 
@@ -171,7 +171,7 @@ public class NetManager {
 		}
 
 		if (messageReceived != null) {
-			messageReceived (MasterMsgTypes.GenericMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
+			messageReceived (NetMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
 		}
 
 		/*JSONObject obj = JSONObject.Create ();

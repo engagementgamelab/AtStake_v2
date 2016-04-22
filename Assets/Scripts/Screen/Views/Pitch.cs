@@ -71,7 +71,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (DeclineExtraTime);
 		}
 
-		void StartTimer (MasterMsgTypes.GenericMessage msg) {
+		void StartTimer (NetMessage msg) {
 
 			if (IsDecider) return;
 
@@ -85,7 +85,7 @@ namespace Views {
 			timer.StartTimer ();
 		}
 
-		void AcceptExtraTime (MasterMsgTypes.GenericMessage msg) {
+		void AcceptExtraTime (NetMessage msg) {
 			AllGotoView ("pitch");
 			state = State.Extra;
 			TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
@@ -93,7 +93,7 @@ namespace Views {
 			t.StartTimer ();
 		}
 
-		void DeclineExtraTime (MasterMsgTypes.GenericMessage msg) {
+		void DeclineExtraTime (NetMessage msg) {
 
 			// Update player timers
 			if (!IsDecider) {

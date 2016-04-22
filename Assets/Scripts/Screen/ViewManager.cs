@@ -98,7 +98,7 @@ namespace Views {
 			return Views[id];
 		}
 
-		void OnGotoView (MasterMsgTypes.GenericMessage msg) {
+		void OnGotoView (NetMessage msg) {
 			Goto (msg.str1);
 		}
 

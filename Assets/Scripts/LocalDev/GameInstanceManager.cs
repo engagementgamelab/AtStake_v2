@@ -122,7 +122,7 @@ public class GameInstanceManager : MonoBehaviour {
 				instances[0].Views.AllGoto ("deck");
 			} else if (!beforeDeck) {
 
-				instances[0].Dispatcher.AddListener ("SetDeck", (MasterMsgTypes.GenericMessage msg) => {
+				instances[0].Dispatcher.AddListener ("SetDeck", (NetMessage msg) => {
 					Co.WaitForFixedUpdate (() => {
 
 						// Once the deck has been set, start the game

@@ -30,7 +30,7 @@ namespace Views {
 		protected override void OnShow () { Game.Dispatcher.AddListener ("ChooseWinner", ChooseWinner); }
 		protected override void OnHide () { Game.Dispatcher.RemoveListener (ChooseWinner); }
 
-		void ChooseWinner (MasterMsgTypes.GenericMessage msg) {
+		void ChooseWinner (NetMessage msg) {
 			Game.Controller.SetWinner (msg.str1);
 			GotoView ("winner");
 		}

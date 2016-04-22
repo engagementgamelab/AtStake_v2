@@ -415,7 +415,7 @@ public class GameController : GameInstanceBehaviour {
 		// PrintData ();
 	}
 
-	void InitializeInstanceData (MasterMsgTypes.GenericMessage msg) {
+	void InitializeInstanceData (NetMessage msg) {
 		if (Hosting && instance == null) 
 			Setup ();
 	}
@@ -425,7 +425,7 @@ public class GameController : GameInstanceBehaviour {
 		Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", data);
 	}
 
-	void LoadInstanceData (MasterMsgTypes.GenericMessage msg) {
+	void LoadInstanceData (NetMessage msg) {
 		if (!Hosting)
 			instance = JsonReader.Deserialize<InstanceData> (msg.str1);
 	}
@@ -472,7 +472,7 @@ public class GameController : GameInstanceBehaviour {
 			game.Dispatcher.ScheduleMessage ("__next", id, position);
 		}
 
-		void OnNext (MasterMsgTypes.GenericMessage msg) {
+		void OnNext (NetMessage msg) {
 			if (msg.str1 == id) {
 				position = msg.val;
 				onNext (position);

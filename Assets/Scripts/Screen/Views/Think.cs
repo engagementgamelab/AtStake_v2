@@ -33,7 +33,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (StartTimer);
 		}
 
-		void StartTimer (MasterMsgTypes.GenericMessage msg) {
+		void StartTimer (NetMessage msg) {
 			if (HasElement ("timer")) {
 				GetScreenElement<TimerElement> ("timer").StartTimer ();
 			}

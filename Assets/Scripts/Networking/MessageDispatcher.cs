@@ -12,37 +12,37 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 */
 
 	public void ScheduleMessage (string id) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id));
+		ScheduleMessage (NetMessage.Create (id));
 	}
 
 	public void ScheduleMessage (string id, string str1) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1));
+		ScheduleMessage (NetMessage.Create (id, str1));
 	}
 
 	public void ScheduleMessage (string id, int val) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, "", "", val));
+		ScheduleMessage (NetMessage.Create (id, "", "", val));
 	}
 
 	public void ScheduleMessage (string id, string str1, string str2) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1, str2));
+		ScheduleMessage (NetMessage.Create (id, str1, str2));
 	}
 
 	public void ScheduleMessage (string id, string str1, int val) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, str1, "", val));
+		ScheduleMessage (NetMessage.Create (id, str1, "", val));
 	}
 
 	public void ScheduleMessage (string id, int val, byte[] bytes) {
-		ScheduleMessage (MasterMsgTypes.GenericMessage.Create (id, "", "", val, bytes));
+		ScheduleMessage (NetMessage.Create (id, "", "", val, bytes));
 	}
 
-	public void ScheduleMessage (MasterMsgTypes.GenericMessage msg) {
+	public void ScheduleMessage (NetMessage msg) {
 		Game.Multiplayer.SendMessageToClients (msg);
 		ReceiveMessageEvent (msg);
 	}
 
 	// Listeners
 
-	public delegate void OnReceiveMessage (MasterMsgTypes.GenericMessage msg);
+	public delegate void OnReceiveMessage (NetMessage msg);
 	Dictionary<OnReceiveMessage, string> listeners = new Dictionary<OnReceiveMessage, string> ();
 
 	#if SHOW_DEBUG_INFO
@@ -79,7 +79,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	 *	Private methods
 	 */
 
-	void ReceiveMessageEvent (MasterMsgTypes.GenericMessage msg) {
+	void ReceiveMessageEvent (NetMessage msg) {
 		Dictionary<OnReceiveMessage, string> tempListeners = new Dictionary<OnReceiveMessage, string> (listeners);
 		foreach (var listener in tempListeners) {
 			if (listener.Value == msg.id)
@@ -87,7 +87,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 		}
 	}
 
-	public void ReceiveMessage (MasterMsgTypes.GenericMessage msg) {
+	public void ReceiveMessage (NetMessage msg) {
 		#if SIMULATE_LATENCY
 			StartCoroutine (LatentSendConfirmation (msg));
 		#else
@@ -96,7 +96,7 @@ public class MessageDispatcher : GameInstanceBehaviour {
 	}
 
 	#if SIMULATE_LATENCY
-	IEnumerator LatentSendConfirmation (MasterMsgTypes.GenericMessage msg) {
+	IEnumerator LatentSendConfirmation (NetMessage msg) {
 		yield return new WaitForSeconds (Random.value);
 		ReceiveMessageEvent (msg);
 	}
