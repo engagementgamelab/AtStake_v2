@@ -34,7 +34,7 @@ namespace Views {
 
 			Elements.Add ("submit", submitButton);
 
-			Elements.Add ("input", new InputElement ("your name", (string name) => {
+			Elements.Add ("input", new InputElement (Name, "your name", (string name) => {
 				#if !SINGLE_SCREEN
 				submitButton.Interactable = name != "" && Connected;
 				#endif

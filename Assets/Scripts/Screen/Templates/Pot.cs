@@ -184,7 +184,7 @@ namespace Templates {
 							pot.Text = Mathf.Ceil (Mathf.Lerp (potStartCount, potEndCount, p)).ToString ();
 						});
 						Co.WaitForSeconds (0.5f, () => {
-							pot.Animate (new UIAnimator.FadeOut (2f));
+							pot.Animate (new UIAnimator.Shrink (2f));
 						});
 					});
 				});

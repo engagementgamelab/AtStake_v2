@@ -6,6 +6,7 @@ public class InputElementUI : ScreenElementUI<InputElement> {
 	public bool FocusedOnLoad { get; private set; }
 
 	public override void ApplyElement (InputElement e) {
+		Text.text = e.StartText;
 		Placeholder.text = e.Placeholder;
 		AddEndEditListener (e.OnEndEdit);
 		if (e.OnValueChanged != null)
