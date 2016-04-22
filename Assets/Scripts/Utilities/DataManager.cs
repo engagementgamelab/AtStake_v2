@@ -29,12 +29,6 @@ public class DataManager {
         }
     }
 
-    public static string MasterServerAddress {
-        get {
-            return currentConfig.master;
-        }
-    }
-
     public static string SocketAddress {
         get {
             return currentConfig.socket;
