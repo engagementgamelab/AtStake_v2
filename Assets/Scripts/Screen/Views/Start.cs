@@ -8,15 +8,15 @@ namespace Views {
 
 	public class Start : View {
 
-		ConnectionStatus Status {
+		protected ConnectionStatus Status {
 			get { return Game.Multiplayer.ConnectionStatus; }
 		}
 
-		bool Connected {
+		protected bool Connected {
 			get { return Status == ConnectionStatus.Success; }
 		}
 
-		ButtonElement submitButton;
+		protected ButtonElement submitButton;
 
 		protected override void OnInitElements () {
 			
@@ -34,7 +34,7 @@ namespace Views {
 
 			Elements.Add ("submit", submitButton);
 
-			Elements.Add ("input", new InputElement (Name, "your name", (string name) => {
+			Elements.Add ("input", new InputElement (Game.Manager.Name, "your name", (string name) => {
 				#if !SINGLE_SCREEN
 				submitButton.Interactable = name != "" && Connected;
 				#endif

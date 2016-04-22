@@ -27,7 +27,7 @@ PlayerSettings:
   m_Stereoscopic3D: 0
   iosShowActivityIndicatorOnLoading: 1
   androidShowActivityIndicatorOnLoading: -1
-  iosAppInBackgroundBehavior: 0
+  iosAppInBackgroundBehavior: -1
   displayResolutionDialog: 0
   iosAllowHTTPDownload: 1
   allowedAutorotateToPortrait: 1
@@ -116,41 +116,53 @@ PlayerSettings:
     serializedVersion: 2
     m_Bits: 238
   iPhoneSdkVersion: 988
-  iPhoneTargetOSVersion: 22
+  iPhoneTargetOSVersion: 26
   uIPrerenderedIcon: 0
-  uIRequiresPersistentWiFi: 0
+  uIRequiresPersistentWiFi: 1
   uIRequiresFullScreen: 1
   uIStatusBarHidden: 1
   uIExitOnSuspend: 0
   uIStatusBarStyle: 0
-  iPhoneSplashScreen: {fileID: 0}
-  iPhoneHighResSplashScreen: {fileID: 0}
-  iPhoneTallHighResSplashScreen: {fileID: 0}
-  iPhone47inSplashScreen: {fileID: 0}
-  iPhone55inPortraitSplashScreen: {fileID: 0}
-  iPhone55inLandscapeSplashScreen: {fileID: 0}
-  iPadPortraitSplashScreen: {fileID: 0}
-  iPadHighResPortraitSplashScreen: {fileID: 0}
-  iPadLandscapeSplashScreen: {fileID: 0}
-  iPadHighResLandscapeSplashScreen: {fileID: 0}
+  iPhoneSplashScreen: {fileID: 2800000, guid: a2690f10177364672933cacf04106052, type: 3}
+  iPhoneHighResSplashScreen: {fileID: 2800000, guid: a2690f10177364672933cacf04106052,
+    type: 3}
+  iPhoneTallHighResSplashScreen: {fileID: 2800000, guid: a2690f10177364672933cacf04106052,
+    type: 3}
+  iPhone47inSplashScreen: {fileID: 2800000, guid: a2690f10177364672933cacf04106052,
+    type: 3}
+  iPhone55inPortraitSplashScreen: {fileID: 2800000, guid: a5693436393d546ab97ebaf80020245e,
+    type: 3}
+  iPhone55inLandscapeSplashScreen: {fileID: 2800000, guid: a5693436393d546ab97ebaf80020245e,
+    type: 3}
+  iPadPortraitSplashScreen: {fileID: 2800000, guid: 598a001cf54794449935e2676c24fd56,
+    type: 3}
+  iPadHighResPortraitSplashScreen: {fileID: 2800000, guid: 4a4ff1d23b9ac4a9ba829f96d4c1f36c,
+    type: 3}
+  iPadLandscapeSplashScreen: {fileID: 2800000, guid: 598a001cf54794449935e2676c24fd56,
+    type: 3}
+  iPadHighResLandscapeSplashScreen: {fileID: 2800000, guid: 4a4ff1d23b9ac4a9ba829f96d4c1f36c,
+    type: 3}
   appleTVSplashScreen: {fileID: 0}
   tvOSSmallIconLayers: []
   tvOSLargeIconLayers: []
   tvOSTopShelfImageLayers: []
-  iOSLaunchScreenType: 0
-  iOSLaunchScreenPortrait: {fileID: 0}
-  iOSLaunchScreenLandscape: {fileID: 0}
+  iOSLaunchScreenType: 1
+  iOSLaunchScreenPortrait: {fileID: 2800000, guid: 4575f556460a743b481f6dbacc682d93,
+    type: 3}
+  iOSLaunchScreenLandscape: {fileID: 2800000, guid: 4575f556460a743b481f6dbacc682d93,
+    type: 3}
   iOSLaunchScreenBackgroundColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4293119781
   iOSLaunchScreenFillPct: 100
   iOSLaunchScreenSize: 100
   iOSLaunchScreenCustomXibPath: 
-  iOSLaunchScreeniPadType: 0
-  iOSLaunchScreeniPadImage: {fileID: 0}
+  iOSLaunchScreeniPadType: 1
+  iOSLaunchScreeniPadImage: {fileID: 2800000, guid: 4575f556460a743b481f6dbacc682d93,
+    type: 3}
   iOSLaunchScreeniPadBackgroundColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4293119781
   iOSLaunchScreeniPadFillPct: 100
   iOSLaunchScreeniPadSize: 100
   iOSLaunchScreeniPadCustomXibPath: 
@@ -176,40 +188,6 @@ PlayerSettings:
       m_Icon: {fileID: 2800000, guid: cb5ccf80fa9d644bb9d03b3b6a7223c2, type: 3}
       m_Width: 128
       m_Height: 128
-  - m_BuildTarget: iPhone
-    m_Icons:
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 9db6497111e0f49198d4d4d3edecd715, type: 3}
-      m_Width: 180
-      m_Height: 180
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: f84d62726106644a698b79fdac856631, type: 3}
-      m_Width: 152
-      m_Height: 152
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 648540f93ea4f4c1e8ccaa4c4d185887, type: 3}
-      m_Width: 144
-      m_Height: 144
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 882e8758385af4a97823c4768540e3b2, type: 3}
-      m_Width: 120
-      m_Height: 120
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 1d64f249f3b7f453888edb414eedfacf, type: 3}
-      m_Width: 114
-      m_Height: 114
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 7d5539ea8ac1449f1b1c216a8ea76f52, type: 3}
-      m_Width: 76
-      m_Height: 76
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: e0f9f6312ced445869330296f8dff179, type: 3}
-      m_Width: 72
-      m_Height: 72
-    - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 269a141f0016f454fb5636158852818c, type: 3}
-      m_Width: 57
-      m_Height: 57
   - m_BuildTarget: Android
     m_Icons:
     - serializedVersion: 2

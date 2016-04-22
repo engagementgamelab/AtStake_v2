@@ -26,7 +26,13 @@ public class StyleSnippets {
 	}
 
 	public StyleSnippet this[string id] {
-		get { return Snippets[id].Clone (); }
+		get { 
+			try {
+				return Snippets[id].Clone (); 
+			} catch (KeyNotFoundException e) {
+				throw new System.Exception ("No snippet with the id '" + id + "' could be found\n" + e);
+			}
+		}
 	}
 
 	public StyleSnippet Logo {
@@ -73,6 +79,9 @@ public class StyleSnippets {
 			TextStyle agendaItem = new TextStyle () {
 				FontSize = 16
 			};
+
+			TextStyle coin = TextStyle.Coin;
+			coin.FontSize = 16;
 			
 			return new StyleSnippet () {
 				Snippets = new List<StyleSnippet> () {
@@ -81,8 +90,8 @@ public class StyleSnippets {
 					new StyleSnippet ("rc_agenda_title", agendaTitle),
 					new StyleSnippet ("rc_item0", agendaItem),
 					new StyleSnippet ("rc_item1", agendaItem),
-					new StyleSnippet ("rc_reward0", TextStyle.Coin),
-					new StyleSnippet ("rc_reward1", TextStyle.Coin)
+					new StyleSnippet ("rc_reward0", coin),
+					new StyleSnippet ("rc_reward1", coin)
 				}
 			};
 		}

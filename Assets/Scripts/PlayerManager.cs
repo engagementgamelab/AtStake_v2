@@ -18,11 +18,14 @@ public class PlayerManager : GameInstanceBehaviour {
 	}
 
 	public string Name { get; set; }
+	public string TakenName { get; set; }
+	public string AttemptedHost { get; set; }
 
 	public OnAddPeer onAddPeer;
 	public OnRemovePeer onRemovePeer;
 
 	public void Init () {
+		TakenName = "";
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
 	}
 

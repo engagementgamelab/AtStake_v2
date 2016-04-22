@@ -17,5 +17,14 @@ namespace Templates {
 				CoinsEnabled = true
 			};
 		}
+
+		protected override void OnLoadView () {
+			TextElementUI r0;
+			TextElementUI r1;
+			if (TryGetElement<TextElementUI> ("rc_reward0", out r0))
+				r0.Text.fontSize = 20;
+			if (TryGetElement<TextElementUI> ("rc_reward1", out r1))
+				r1.Text.fontSize = 20;
+		}
 	}
 }

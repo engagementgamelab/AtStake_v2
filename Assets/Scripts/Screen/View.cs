@@ -295,6 +295,38 @@ namespace Views {
 			GotoView ("disconnected");
 		}
 
+		// -- Misc
+
+		protected void JoinGame (string hostId) {
+			Game.StartGame ();
+			Game.Multiplayer.JoinGame (hostId, (ResponseType res) => {
+				switch (res) {
+					case ResponseType.Success: GotoView ("lobby"); break;
+					case ResponseType.NameTaken:
+						Game.Manager.TakenName = Name;
+						Game.Manager.AttemptedHost = hostId;
+						Game.EndGame ();
+						break;
+				}
+			});
+		}
+
+		protected void HostGame () {
+			Game.StartGame ();
+			Game.Multiplayer.HostGame ((ResponseType res) => {
+				
+				if (res == ResponseType.Success) {
+					GotoView ("lobby");
+				} else if (res == ResponseType.NameTaken) {
+					Game.Manager.TakenName = Name;
+					Game.Manager.AttemptedHost = "";
+					Game.EndGame ();
+				}
+			});
+		}
+
+		// -- Virtual methods
+
 		protected virtual void OnInitElements () {}			// Static elements that all players see
 		protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
 		protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see

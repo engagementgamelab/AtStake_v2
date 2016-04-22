@@ -345,6 +345,16 @@
       }
     },
     {
+      "Symbol": "name_taken",
+      "Instructions": "Someone already has that name. Please enter a different one:",
+      "Text": {
+        "connection_failed": "Couldn't connect to the Internet. Is your WIFI on?"
+      },
+      "Buttons": {
+        "submit": "ok"
+      }
+    },
+    {
       "Symbol": "pitch",
       "DeciderInstructions": ".",
       "Text": {

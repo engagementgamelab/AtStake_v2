@@ -33,20 +33,9 @@ namespace Views {
 			});
 		}
 
-		void JoinGame (string hostId) {
-			Game.StartGame ();
-			Game.Multiplayer.JoinGame (hostId, (ResponseType res) => {
-				switch (res) {
-					case ResponseType.Success: GotoView ("lobby"); break;
-					case ResponseType.NameTaken:
-						Game.EndGame ();
-						break;
-				}
-			});
-		}
-
 		public override void OnDisconnect () {
-			Debug.LogWarning ("Name taken!");
+			if (!string.IsNullOrEmpty (Game.Manager.TakenName))
+				GotoView ("name_taken");
 		}
 	}
 }

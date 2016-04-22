@@ -16,7 +16,6 @@ namespace Templates {
 					{ "round_end", new TextStyle ()
 						{
 							FontSize = 28,
-							FontStyle = FontStyle.Bold,
 							FontColor = Palette.Grey
 						}
 					}
