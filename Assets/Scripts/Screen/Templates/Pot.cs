@@ -45,9 +45,8 @@ namespace Templates {
 
 			Elements["pot"].Visible = false;
 			Elements["next"].Visible = false;
-			if (data.IsDecider || data.PotCount > 0)
-				Elements["coins"].Visible = false;
-
+			Elements["coins"].Visible = (!data.IsDecider && data.PlayerCoinCount == 0);
+			
 			foreach (TextElementUI t in Instructions) {
 				t.Visible = false;
 			}

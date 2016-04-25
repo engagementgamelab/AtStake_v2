@@ -8,7 +8,7 @@ public class ScoreElementUI<T> : ScreenElementUI<T> where T : ScoreElement {
 	int score = -1;
 	int targetScore = -1;
 	float timer = 0f;
-	float rate = 0.005f;
+	float rate = 0.003f;
 
 	public override void ApplyElement (T e) {
 		if (score == -1)
