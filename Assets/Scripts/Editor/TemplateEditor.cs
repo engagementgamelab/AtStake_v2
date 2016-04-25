@@ -101,7 +101,7 @@ public class TemplateEditor : EditorWindow {
 			prevTemplateIdx = 0;
 		}
 
-		ActivateTemplate (Templates[currTemplateIdx]);
+		ActivateTemplate (Templates[currTemplateIdx], false);
 	}
 
 	void ApplyChanges () {
@@ -114,9 +114,12 @@ public class TemplateEditor : EditorWindow {
 		BeginEdit ();
 	}
 
-	void ActivateTemplate (Template template) {
+	void ActivateTemplate (Template template, bool selectObject=true) {
 		template.gameObject.SetActive (true);
-		Selection.activeGameObject = template.gameObject;
+		if (selectObject) {
+			Selection.activeGameObject = template.gameObject;
+			EditorGUIUtility.PingObject (template.gameObject);
+		}
 	}
 
 	void DeactivateTemplate () {
@@ -136,6 +139,7 @@ public class TemplateEditor : EditorWindow {
 	void DisconnectContainer () {
 		Container.Parent = null;
 		Selection.activeGameObject = Container.gameObject;
+		EditorGUIUtility.PingObject (Container.gameObject);
 	}
 
 	T GetObject<T> (string directory="UI") where T : MonoBehaviour {

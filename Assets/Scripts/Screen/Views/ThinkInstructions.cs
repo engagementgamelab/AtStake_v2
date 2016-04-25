@@ -10,5 +10,9 @@ namespace Views {
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("next", new NextButtonElement ("think"));
 		}
+
+		protected override void OnInitPlayerElements () {
+			Elements.Add ("listen", new ImageElement ("listen"));
+		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Views {
 				Elements.Add ("cost", new TextElement ("-" + DataManager.GetSettings().ExtraTimeCost));
 			} else {
 				Elements.Add ("instruction", new TextElement (
-					DataManager.GetTextFromScreen (Model, "can_afford", TextVariables)));
+					DataManager.GetTextFromScreen (Model, "cant_afford", TextVariables)));
 			}
 
 			Elements.Add ("decline", new ButtonElement (Model.Buttons["decline"], (ButtonElement b) => {

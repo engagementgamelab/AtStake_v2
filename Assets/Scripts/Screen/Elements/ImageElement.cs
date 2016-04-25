@@ -2,9 +2,9 @@
 
 public class ImageElement : ScreenElement {
 
-	public readonly Sprite Sprite;
+	public readonly string SpriteName;
 
 	public ImageElement (string spriteName) {
-		Sprite = spriteName == "" ? null : AssetLoader.LoadIcon (spriteName);
+		SpriteName = spriteName;
 	}
 }

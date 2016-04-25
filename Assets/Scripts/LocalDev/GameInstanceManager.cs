@@ -166,6 +166,37 @@ public class GameInstanceManager : MonoBehaviour {
 		return instances[0].Multiplayer.Clients.Count == 2;
 	}
 
+	bool ValidView (string view) {
+		return view == "start"
+			|| view == "name_taken"
+			|| view == "hostjoin"
+			|| view == "lobby"
+			|| view == "games"
+			|| view == "deck"
+			|| view == "roles"
+			|| view == "pot"
+			|| view == "bio"
+			|| view == "agenda"
+			|| view == "question"
+			|| view == "think_instructions"
+			|| view == "think"
+			|| view == "pitch_instructions"
+			|| view == "pitch"
+			|| view == "extra_time"
+			|| view == "deliberate_instructions"
+			|| view == "deliberate"
+			|| view == "extra_time_deliberate"
+			|| view == "decide"
+			|| view == "winner"
+			|| view == "agenda_item_instructions"
+			|| view == "agenda_item"
+			|| view == "agenda_item_accept"
+			|| view == "agenda_item_reject"
+			|| view == "scoreboard"
+			|| view == "final_scoreboard"
+			|| view == "disconnected";
+	}
+
 	string gotoView = "";
 
 	void OnGUI () {
@@ -184,7 +215,7 @@ public class GameInstanceManager : MonoBehaviour {
 		if (instances.Count == 0) {
 			GUILayout.Label (" OR: skip to view: ");
 			gotoView = GUILayout.TextField (gotoView, 25, GUILayout.Width (50));
-			if (gotoView != "") {
+			if (gotoView != "" && ValidView (gotoView)) {
 				if (GUILayout.Button ("Go")) {
 					GotoView (gotoView);
 				}

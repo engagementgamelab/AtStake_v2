@@ -7,7 +7,7 @@ namespace Templates {
 	public class Games : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("logo", "lt_paragraph|client_instructions", "orange_button|confirm") {
+			return new TemplateSettings ("logo", "lt_paragraph|client_instructions", "green_button|confirm") {
 				BackgroundColor = Palette.Teal,
 				TextStyles = new Dictionary<string, TextStyle> () {
 					{ "game_list", TextStyle.Button },
