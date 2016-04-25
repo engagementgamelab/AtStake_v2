@@ -26,9 +26,11 @@ namespace Views {
 
 		protected override void OnInitDeciderElements () {
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
+				Game.Audio.Play ("timer_start");
 				Game.Dispatcher.ScheduleMessage ("StartTimer", state == State.Deliberate ? "deliberate" : "extra");
 			}, () => {
 				Game.Dispatcher.ScheduleMessage ("TimeExpired");
+				Game.Audio.Play ("alarm");
 			}));
 			Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);

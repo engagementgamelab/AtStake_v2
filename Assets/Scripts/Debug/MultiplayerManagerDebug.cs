@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MultiplayerManagerDebug : MonoBehaviour {
 
 	public Button disconnectButton;
+	public Button dropButton;
 	public Text broadcasterStatus;
 	public Text listenerStatus;
 	public Text hostStatus;
@@ -20,11 +21,16 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		multiplayer.Disconnect ();
 	}
 
+	public void Drop () {
+		multiplayer.Drop ();
+	}
+
 	void Update () {
 
 		if (multiplayer == null) return;
 
 		disconnectButton.gameObject.SetActive (multiplayer.Connected);
+		dropButton.gameObject.SetActive (multiplayer.Connected);
 		
 		broadcasterStatus.text = (multiplayer.Hosting && multiplayer.ConnectionStatus == ConnectionStatus.Success) 
 			? "Broadcasting"

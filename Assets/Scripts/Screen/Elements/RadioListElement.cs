@@ -5,28 +5,43 @@ using System.Collections.Generic;
 public class RadioListElement : ListElement<ButtonElement> {
 
 	string selected = "";
+	ButtonElement confirm;
 
 	public RadioListElement (string confirmText, System.Action<string> onConfirm, List<string> buttonNames=null) : base (null) {
 
-		Elements.Add ("confirm", new ButtonElement (confirmText, () => {
+		confirm = new ButtonElement (confirmText, () => {
 			onConfirm (selected);
-		}) { Interactable = false });
+		}, "confirm") { 
+			Interactable = false 
+		};
+
+		Elements.Add ("confirm", confirm);
 
 		if (buttonNames != null)
 			Set (buttonNames);
 	}
 
+	protected override void OnInit () {
+		foreach (var b in Elements)
+			b.Value.Init (Behaviour);
+	}
+
 	public void Add (string name) {
-		Add (name, new ButtonElement (name, SelectButton));
+		ButtonElement b = new ButtonElement (name, SelectButton, "select");
+		b.Init (Behaviour);
+		Add (name, b);
 	}
 
 	public void Set (List<string> newNames) {
 
 		Dictionary<string, ButtonElement> newElements = new Dictionary<string, ButtonElement> ();
 
-		foreach (string name in newNames)
-			newElements.Add (name, new ButtonElement (name, SelectButton));
-		newElements.Add ("confirm", Elements["confirm"]);
+		foreach (string name in newNames) {
+			ButtonElement b = new ButtonElement (name, SelectButton, "select");
+			b.Init (Behaviour);
+			newElements.Add (name, b);
+		}
+		newElements.Add ("confirm", confirm);
 
 		Set (newElements);
 

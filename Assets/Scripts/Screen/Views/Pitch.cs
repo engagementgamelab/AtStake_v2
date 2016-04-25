@@ -35,6 +35,7 @@ namespace Views {
 			state = State.Pitch;
 
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
+				Game.Audio.Play ("timer_start");
 				Game.Dispatcher.ScheduleMessage (
 					"StartTimer", 
 					CurrentPitcher,
@@ -51,8 +52,10 @@ namespace Views {
 			TimerType type = IsCurrentPitcher ? TimerType.Pitch : TimerType.Listen;
 
 			Elements.Add ("timer", new TimerElement (timerText, Duration, type, () => {
-				if (IsCurrentPitcher)
+				if (IsCurrentPitcher) {
 					GotoView ("extra_time");
+					Game.Audio.Play ("alarm");
+				}
 			}));
 		}
 

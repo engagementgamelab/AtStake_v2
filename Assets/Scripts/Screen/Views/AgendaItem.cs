@@ -11,7 +11,7 @@ namespace Views {
 		}
 
 		protected override void OnInitDeciderElements () {
-			Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => { AllGotoView ("agenda_item_accept"); }));
+			Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => { AllGotoView ("agenda_item_accept"); }, "click2"));
 			Elements.Add ("reject", new ButtonElement (Model.Buttons["reject"], () => { AllGotoView ("agenda_item_reject"); }));
 		}
 

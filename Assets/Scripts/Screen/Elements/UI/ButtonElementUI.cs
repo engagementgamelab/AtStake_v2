@@ -24,6 +24,8 @@ public class ButtonElementUI : ScreenElementUI<ButtonElement> {
 			AddButtonListener (e.OnPress);
 		if (e.OnPressThis != null)
 			AddButtonListener (() => { e.OnPressThis (e); });
+		if (e.PlayClickSound != null)
+			AddButtonListener (e.PlayClickSound);
 	}
 
 	protected override void OnUpdate (ButtonElement e) {

@@ -14,7 +14,7 @@ namespace Views {
 				Elements.Add ("accept", new ButtonElement (Model.Buttons["accept"], () => {
 					GotoView ("pitch");
 					Game.Dispatcher.ScheduleMessage ("AcceptExtraTime", Name);
-				}));
+				}, "add_coin"));
 				Elements.Add ("cost", new TextElement ("-" + DataManager.GetSettings().ExtraTimeCost));
 			} else {
 				Elements.Add ("instruction", new TextElement (

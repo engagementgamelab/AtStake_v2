@@ -10,5 +10,6 @@ public class BackButtonElement : ButtonElement {
 				Game.Views.Goto (prevScreen);
 			if (onPress != null)
 				onPress ();
+			Game.Audio.Play ("back");
 		}) {}
 }

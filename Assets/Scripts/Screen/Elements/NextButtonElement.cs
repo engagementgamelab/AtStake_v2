@@ -9,5 +9,5 @@ public class NextButtonElement : ButtonElement {
 				Game.Views.AllGoto (nextScreen);
 			if (onPress != null)
 				onPress ();
-		}) {}
+		}, "next") {}
 }

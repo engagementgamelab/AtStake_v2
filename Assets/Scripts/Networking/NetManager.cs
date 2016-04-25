@@ -77,8 +77,7 @@ public class NetManager {
 		socket.Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
 			if (!res.nameTaken) {
 				socket.On("updateClients", OnUpdateClients);
-				connection.clientId = res.client._id;
-				connection.room = res.room;
+				Register (res.client._id, res.room);
 			}
 			response (res.nameTaken ? ResponseType.NameTaken : ResponseType.Success);
 		});
@@ -100,6 +99,7 @@ public class NetManager {
 
 	public void StartAsClient (string name, string roomId, Action<ResponseType> response) {
 
+		connection.name = name;
 		JSONObject obj = JSONObject.Create ();
 		obj.AddField ("name", name);
 		obj.AddField ("roomId", roomId);
@@ -108,8 +108,7 @@ public class NetManager {
 			if (!res.nameTaken) {
 				socket.Off ("roomListUpdated", OnUpdateRoomList);
 				socket.On ("kick", OnRoomClosed);
-				connection.clientId = res.client._id;
-				connection.room = res.room;
+				Register (res.client._id, res.room);
 			}
 			response (res.nameTaken ? ResponseType.NameTaken : ResponseType.Success);
 		});
@@ -153,6 +152,22 @@ public class NetManager {
 
 		socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
 			connection.Reset ();
+		});
+	}
+
+	// Simulate a dropped connection
+	public void Drop () {
+		socket.Close ();
+	}
+
+	void Register (string clientId, Response.Room room) {
+		connection.clientId = clientId;
+		connection.room = room;
+		Co.InvokeWhileTrue (2f, () => { return Application.isPlaying && connection.connected; }, () => {
+			socket.Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
+				if (res.dropped)
+					OnRoomClosed (null);
+			});
 		});
 	}
 
@@ -273,6 +288,10 @@ public class NetManager {
 			public string str1 { get; set; }
 			public string str2 { get; set; }
 			public int val { get; set; }
+		}
+
+		public class DroppedClients {
+			public bool dropped { get; set; }
 		}
 	}
 }

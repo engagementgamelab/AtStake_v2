@@ -14,6 +14,7 @@ public class GameInstance : MonoBehaviour {
 	public DeckManager Decks { get; private set; }
 	public ScoreManager Score { get; private set; }
 	public GameController Controller { get; private set; }
+	public AudioController Audio { get; private set; }
 	public GameTest Test { get; private set; }
 
 	// For convenience (the player's name gets referenced quite a bit)
@@ -31,6 +32,7 @@ public class GameInstance : MonoBehaviour {
 		Decks 		= GameInstanceBehaviour.Init<DeckManager> (transform);
 		Score 		= GameInstanceBehaviour.Init<ScoreManager> (transform);
 		Controller 	= GameInstanceBehaviour.Init<GameController> (transform);
+		Audio 		= GameInstanceBehaviour.Init<AudioController> (transform);
 		Test 		= GameInstanceBehaviour.Init<GameTest> (transform);
 		
 		InitApp ();
@@ -43,6 +45,7 @@ public class GameInstance : MonoBehaviour {
 	
 	// Called when the app is started
 	void InitApp () {
+		Audio.Init ();
 		Views.Init ();
 		Manager.Init ();
 	}

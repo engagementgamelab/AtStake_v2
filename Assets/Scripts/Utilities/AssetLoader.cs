@@ -16,6 +16,10 @@ public static class AssetLoader {
 		get { return "Fonts/"; }
 	}
 
+	static string AudioPath {
+		get { return "Audio/"; }
+	}
+
 	public static string GetAvatarFilename (string color) {
 		return "avatar_" + color;
 	}
@@ -30,6 +34,14 @@ public static class AssetLoader {
 
 	public static Sprite LoadAvatar (string color) {
 		return LoadIcon (GetAvatarFilename (color));
+	}
+
+	public static AudioClip LoadAudio (string name) {
+		try {
+			return (AudioClip)Resources.Load (AudioPath + name);
+		} catch {
+			throw new System.Exception ("Could not find an audio clip with the name '" + name + "'");
+		}
 	}
 
 	static Sprite LoadSprite (string path) {

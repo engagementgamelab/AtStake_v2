@@ -151,6 +151,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		OnDisconnect ();
 	}
 
+	public void Drop () {
+		net.Drop ();
+		OnDisconnect ();
+	}
+
 	public void OnApplicationQuit () {
 		Disconnect ();
 	}
