@@ -25,6 +25,9 @@ namespace Views {
 
 		protected override void OnShow () {
 
+			// Ugly, but necessary because GameController hasn't loaded the game data by this point (typically you'd be better off with Game.Controller.Avatar)
+			Game.Audio.Play (AssetLoader.GetPlayerAudioFilename (Game.Manager.Players[Name].Avatar));
+
 			foreach (var player in Game.Manager.Players)
 				OnAddPeer (player.Key, player.Value.Avatar);
 

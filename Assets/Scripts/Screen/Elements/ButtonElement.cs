@@ -44,9 +44,10 @@ public class ButtonElement : ScreenElement {
 	}
 
 	void SetClickSound (string clickSound) {
+		audioClip = clickSound;
 		if (clickSound == "")
 			PlayClickSound = null;
 		else
-			PlayClickSound += () => { Game.Audio.Play (clickSound); };
+			PlayClickSound += PlayAudio;
 	}
 }

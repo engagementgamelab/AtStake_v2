@@ -55,10 +55,14 @@ namespace Templates {
 					int roleIndex = Mathf.FloorToInt ((float)roleCounter/2f);
 					AvatarElementUI t = RoleList.ChildElements[index];
 
+					bool wasActive = t.playerName.gameObject.activeSelf;
 					bool active = index <= roleIndex;
 					t.gameObject.SetActive (active);
+
+					if (active && !wasActive) 
+						t.PlayAudio ();
 					
-					if (index == roleIndex) {
+					if (index == roleIndex ) {
 						t.playerName.gameObject.SetActive (true);
 						if (roleCounter % 2 != 0) {
 							t.playerRole.gameObject.SetActive (true);

@@ -27,8 +27,14 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 		this.elements = elements;
 	}
 
+	protected override void OnInit () {
+		foreach (var element in Elements)
+			element.Value.Init (Behaviour);
+	}
+
 	public virtual void Add (string id, T t) {
 		Elements.Add (id, t);
+		t.Init (Behaviour);
 		if (onAdd != null)
 			onAdd (id, t);
 		SendUpdateMessage ();
@@ -51,6 +57,7 @@ public class ListElement<T> : ScreenElement where T : ScreenElement {
 		foreach (var element in newElements) {
 			if (!elements.ContainsKey (element.Key)) {
 				Add (element.Key, element.Value);
+				element.Value.Init (Behaviour);
 			}
 		}
 	}

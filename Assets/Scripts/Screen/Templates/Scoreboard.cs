@@ -55,6 +55,7 @@ namespace Templates {
 			int counter = childElements.Count-1;
 
 			Co.InvokeWhileTrue (0.5f, 2f, () => { return counter >= 0; }, () => {
+				childElements[counter].PlayAudio ();
 				childElements[counter].Animate (new UIAnimator.FadeIn (0.75f));
 				counter --;
 			}, () => {

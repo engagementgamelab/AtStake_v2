@@ -11,3 +11,6 @@ Overlays debug information to help monitor gameplay
 
 Speed up timers
 -define:FAST_TIME
+
+Disable sound
+-define:MUTE_AUDIO

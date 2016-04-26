@@ -36,6 +36,7 @@ public abstract class ScreenElementUI : UIElement {
 	public abstract void Load (ScreenElement e, TemplateSettings settings);
 	public abstract void Unload ();
 	public abstract void InputEnabled ();
+	public abstract void PlayAudio ();
 
 	public void Animate (UIAnimator.UIAnimation animation, RectTransform rect=null) {
 		Anim.Animate (animation, rect);
@@ -90,6 +91,10 @@ public abstract class ScreenElementUI<T> : ScreenElementUI where T : ScreenEleme
 
 	public override void InputEnabled () {
 		OnInputEnabled (element);
+	}
+
+	public override void PlayAudio () {
+		Element.PlayAudio ();
 	}
 
 	void OnUpdate (ScreenElement element) {

@@ -15,6 +15,7 @@ public abstract class ScreenElement : GameInstanceComponent {
 		}
 	}
 
+	protected string audioClip;
 	public delegate void OnUpdate (ScreenElement e);
 
 	public OnUpdate onUpdate;
@@ -22,5 +23,10 @@ public abstract class ScreenElement : GameInstanceComponent {
 	protected void SendUpdateMessage () {
 		if (onUpdate != null)
 			onUpdate (this);
+	}
+
+	public virtual void PlayAudio () { 
+		if (!string.IsNullOrEmpty (audioClip))
+			Game.Audio.Play (audioClip); 
 	}
 }

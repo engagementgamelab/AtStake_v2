@@ -88,11 +88,11 @@ namespace Templates {
 			Instructions[index].Animate (new UIAnimator.FadeIn (0.5f));
 
 			if (Elements["instruction1"].Visible && Elements["next"].Loaded)
-				FadeInElement ("coins");
+				ExpandInElement ("coins");
 			if (Elements["instruction2"].Visible)
-				FadeInElement ("coins");
+				ExpandInElement ("coins");
 			if (Elements["instruction4"].Visible) 
-				FadeInElement ("pot");
+				ExpandInElement ("pot");
 
 			RunDeciderAnimation ();
 			RunPlayerAnimation ();
@@ -100,10 +100,11 @@ namespace Templates {
 			RunPotAnimation ();
 		}
 
-		void FadeInElement (string id) {
+		void ExpandInElement (string id) {
 			if (!Elements[id].Visible) {
 				Elements[id].Visible = true;
-				Elements[id].Animate (new UIAnimator.FadeIn (0.5f));
+				Elements[id].PlayAudio ();
+				Elements[id].Animate (new UIAnimator.Expand (0.5f));
 			}
 		}
 

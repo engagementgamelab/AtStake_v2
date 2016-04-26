@@ -11,9 +11,15 @@ public class AvatarElement : ScreenElement {
 		Name = name;
 		Color = color;
 		Role = role;
+		audioClip = AssetLoader.GetPlayerAudioFilename (color);
 	}
 
 	public AvatarElement (string name, string color, int coinCount) : this (name, color) {
 		CoinCount = coinCount;
+	}
+
+	public override void PlayAudio () {
+		if (Name == Game.Name) 
+			Game.Audio.Play (audioClip);
 	}
 }

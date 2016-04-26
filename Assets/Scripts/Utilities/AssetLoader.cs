@@ -24,6 +24,10 @@ public static class AssetLoader {
 		return "avatar_" + color;
 	}
 
+	public static string GetPlayerAudioFilename (string color) {
+		return "player_" + color;
+	}
+
 	public static Sprite LoadBackground (string name) {
 		return LoadSprite (BackgroundsPath + name);
 	}
@@ -34,6 +38,10 @@ public static class AssetLoader {
 
 	public static Sprite LoadAvatar (string color) {
 		return LoadIcon (GetAvatarFilename (color));
+	}
+
+	public static AudioClip LoadPlayerAudio (string color) {
+		return LoadAudio (GetPlayerAudioFilename (color));
 	}
 
 	public static AudioClip LoadAudio (string name) {
