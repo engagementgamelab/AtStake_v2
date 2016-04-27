@@ -67,6 +67,7 @@ namespace Views {
 
 		public void Goto (string id) {
 
+			Log	(id);
 			if (id == CurrView) return;
 
 			// Unload the current view and update the PrevView reference
@@ -75,6 +76,7 @@ namespace Views {
 				PrevView = CurrView;
 			}
 			CurrView = id;
+			Game.Controller.SetView (CurrView);
 
 			// Render the new view
 			if (Views.ContainsKey (CurrView)) {

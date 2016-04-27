@@ -283,14 +283,26 @@ public class GameController : GameInstanceBehaviour {
 			// Reset the pitch and agenda item iterators when a new round begins
 			pitchItr.Reset ();
 			agendaItemItr.Reset ();
+			SaveData ();
 		});
 
-		pitchItr = new ArrayIterator ("pitch", Game, (int position) => { CurrentRound.PitchIndex = position; });
-		agendaItemItr = new ArrayIterator ("agenda_item", Game, (int position) => { CurrentRound.AgendaItemIndex = position; });
+		pitchItr = new ArrayIterator ("pitch", Game, (int position) => { 
+			CurrentRound.PitchIndex = position; 
+			SaveData ();
+		});
+
+		agendaItemItr = new ArrayIterator ("agenda_item", Game, (int position) => { 
+			CurrentRound.AgendaItemIndex = position; 
+			SaveData ();
+		});
 	}
 
 	public void Reset () {
 		instance = null;
+	}
+
+	public void DeleteData () {
+		DataManager.DeleteData (GetFilename ());
 	}
 
 	public Player FindPlayer (string playerName) {
@@ -307,6 +319,14 @@ public class GameController : GameInstanceBehaviour {
 
 	public void SetWinner (string winnerName) {
 		WinnerName = winnerName;
+		SaveData ();
+	}
+
+	public void SetView (string view) {
+		if (instance != null) {
+			instance.View = view;
+			SaveData ();
+		}
 	}
 
 	public bool NextRound () {
@@ -338,6 +358,7 @@ public class GameController : GameInstanceBehaviour {
 		}
 		PopulateData ();
 		SendData ();
+		SaveData ();
 	}
 
 	void PopulateData () {
@@ -426,8 +447,30 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	void LoadInstanceData (NetMessage msg) {
-		if (!Hosting)
+		if (!Hosting) {
 			instance = JsonReader.Deserialize<InstanceData> (msg.str1);
+			SaveData ();
+		}
+	}
+
+	void SaveData () {
+
+		// Save the gameplay data. This is used to recover disconnected games.
+		string data = JsonWriter.Serialize (instance);
+		DataManager.SaveDataToJson (GetFilename (), data);
+	}
+
+	void LoadData () {
+		string data = DataManager.LoadJsonData (GetFilename ());
+		instance = JsonReader.Deserialize<InstanceData> (data);
+	}
+
+	string GetFilename () {
+		return "gameplay_data"
+		#if SINGLE_SCREEN
+		+ "_" + Game.Name
+		#endif
+		;
 	}
 
 	void PrintData () {

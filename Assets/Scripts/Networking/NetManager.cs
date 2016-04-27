@@ -1,4 +1,4 @@
-#undef RESET_ON_REGISTER
+#define RESET_ON_REGISTER
 using UnityEngine;
 using System;
 using System.Collections;
@@ -45,6 +45,7 @@ public class NetManager {
 	public OnUpdateConnection onUpdateConnection;
 
 	ConnectionInfo connection;
+	ConnectionInfo previousConnection;
 	SocketIOComponent socket;
 	Action<Dictionary<string, string>> roomListResult;
 
@@ -53,6 +54,8 @@ public class NetManager {
 		get { return connection.roomId; }
 	}
 	#endif
+
+	bool dropped = false;
 
 	public NetManager (SocketIOComponent socket) {
 		this.socket = socket;
@@ -157,6 +160,7 @@ public class NetManager {
 
 	// Simulate a dropped connection
 	public void Drop () {
+		dropped = true;
 		socket.Close ();
 	}
 
@@ -166,7 +170,7 @@ public class NetManager {
 		Co.InvokeWhileTrue (2f, () => { return Application.isPlaying && connection.connected; }, () => {
 			socket.Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
 				if (res.dropped)
-					OnRoomClosed (null);
+					OnRoomClosed ();
 			});
 		});
 	}
@@ -204,7 +208,8 @@ public class NetManager {
 		}
 	}
 
-	void OnRoomClosed (SocketIOEvent e) {
+	void OnRoomClosed (SocketIOEvent e=null) {
+		previousConnection = connection;
 		connection.Reset ();
 		if (onDisconnected != null)
 			onDisconnected ();
@@ -212,6 +217,18 @@ public class NetManager {
 
 	void OnOpen (SocketIOEvent e) {
 		SendUpdateConnectionMessage (true);
+		if (dropped) {
+
+			JSONObject obj = JSONObject.Create ();
+			obj.AddField ("clientId", connection.clientId);
+			obj.AddField ("roomId", connection.roomId);
+
+			socket.Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
+				Debug.Log ("RECONNECTED!!!");
+				});
+
+			dropped = false;
+		}
 	}
 
 	void OnError (SocketIOEvent e) {
@@ -225,6 +242,9 @@ public class NetManager {
 
 	void OnClose (SocketIOEvent e) {
 		SendUpdateConnectionMessage (false);
+		if (dropped) {
+			this.socket.Connect ();
+		}
 	}
 
 	void SendUpdateConnectionMessage (bool connected) {

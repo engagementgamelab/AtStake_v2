@@ -105,16 +105,7 @@ public class DataManager {
             throw new Exception("Unable to set game data: " + e.Message);
         }
 
-        // create/save to file in Assets/Resources/
-        #if !UNITY_WEBPLAYER 
-
-            SaveDataToJson("data", data
-                #if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
-                ,true
-                #endif
-            );
-
-        #endif
+        SaveDataToJson("data", data);
     }
 
     /// <summary>
@@ -123,20 +114,59 @@ public class DataManager {
     /// <param name="fileName">The file's name.</param>
     /// <param name="data">String to be used to save in JSON file.</param>
     /// <param name="persistentPath">Use the application persistent resource path?</param>
-    static void SaveDataToJson(string fileName, string data, bool persistentPath=false) {
-
-        string dataPath = (persistentPath ? Application.persistentDataPath : Application.dataPath) + "/Resources/";
-        DirectoryInfo dirData = new DirectoryInfo(dataPath);
-        dirData.Refresh();
+    public static void SaveDataToJson(string fileName, string data) {
         
+        DirectoryInfo dirData = GetInfoAtPath (fileName);
         if(!dirData.Exists)
             dirData.Create();
 
-        using (StreamWriter outfile = new StreamWriter(dataPath + fileName + ".json"))
+        using (StreamWriter outfile = new StreamWriter(dirData.ToString() + fileName + ".json"))
         {
             outfile.Write(data);
         }
 
+    }
+
+    public static DirectoryInfo GetInfoAtPath (string filename) {
+
+        bool persistentPath = 
+        #if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
+        true
+        #else
+        false
+        #endif
+        ;
+
+        string dataPath = (persistentPath ? Application.persistentDataPath : Application.dataPath) + "/Resources/";
+        DirectoryInfo dirData = new DirectoryInfo(dataPath);
+        dirData.Refresh();
+        return dirData;
+    }
+
+    public static bool FileExists (string filename) {
+        return File.Exists (GetInfoAtPath (filename) + filename + ".json");
+    }
+
+    public static string LoadJsonData (string filename) {
+
+        string localData;
+
+        TextAsset dataJson = (TextAsset)Resources.Load (filename, typeof(TextAsset));
+        StringReader strData = new StringReader (dataJson.text);
+        localData = strData.ReadToEnd();
+        strData.Close();
+
+        return localData;
+    }
+
+    public static void DeleteData (string filename) {
+        DirectoryInfo info = GetInfoAtPath (filename);
+        string path = info + filename + ".json";
+        if (File.Exists (path)) {
+            File.Delete (path);
+            File.Delete (path + ".meta");
+            info.Refresh ();
+        }
     }
 
     public static Settings GetSettings () {

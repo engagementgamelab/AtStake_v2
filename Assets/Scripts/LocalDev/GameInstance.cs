@@ -63,6 +63,7 @@ public class GameInstance : MonoBehaviour {
 
 	public void EndGame () {
 		Multiplayer.Disconnect (); // Also triggers OnDisconnect
+		Controller.DeleteData ();
 	}
 
 	void OnDisconnect () {

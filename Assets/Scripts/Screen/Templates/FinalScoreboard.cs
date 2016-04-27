@@ -28,7 +28,6 @@ namespace Templates {
 
 		protected override void OnLoadView () {
 
-			// AvatarElementUI avatar = GetElement<AvatarElementUI> ("winning_player");
 			Avatar.playerName.ApplyStyle (new TextStyle () {
 				FontColor = Palette.Black,
 				FontSize = 32,

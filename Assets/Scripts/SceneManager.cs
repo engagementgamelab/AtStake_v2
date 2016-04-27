@@ -101,7 +101,7 @@ public class SceneManager : MonoBehaviour {
 		string gameData;
 
 		if (fallback)
-			gameData = GameDataLoadFallback ();
+			gameData = DataManager.LoadJsonData ("data");
 
 		else
 		{
@@ -113,24 +113,12 @@ public class SceneManager : MonoBehaviour {
 
 			// Fallback: load game data from local config
 			catch {
-				gameData = GameDataLoadFallback ();
+				gameData = DataManager.LoadJsonData ("data");
 			}
 		}
 
 		GameDataResponse (gameData);
 
-	}
-
-	string GameDataLoadFallback () {
-
-		string localData;
-
-		TextAsset dataJson = (TextAsset)Resources.Load ("data", typeof(TextAsset));
-		StringReader strData = new StringReader (dataJson.text);
-		localData = strData.ReadToEnd();
-		strData.Close();
-
-		return localData;
 	}
 
 	void GameDataResponse(string data) {

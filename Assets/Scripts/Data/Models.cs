@@ -111,6 +111,7 @@ namespace Models {
 		public Round[] Rounds { get; set; }
 		public int Pot { get; set; }
 		public int RoundIndex { get; set; }
+		public string View { get; set; }
 	}
 
 	public class Round {

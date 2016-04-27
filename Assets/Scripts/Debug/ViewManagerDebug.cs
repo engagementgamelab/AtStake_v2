@@ -8,7 +8,6 @@ public class ViewManagerDebug : MonoBehaviour {
 	ViewManager views;
 	public Text current;
 	public Text previous;
-	public Text inputText;
 
 	public void Init (ViewManager views) {
 		#if SHOW_DEBUG_INFO
