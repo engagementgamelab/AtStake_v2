@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using SocketIO;
 using JsonFx.Json;
 
-public class NetManager {
+public class NetManager : SocketIOComponent {
 
 	struct ConnectionInfo {
 
@@ -60,13 +60,12 @@ public class NetManager {
 	bool dropped = false;
 	bool hasDroppedClients = false;
 
-	public NetManager (SocketIOComponent socket) {
-		this.socket = socket;
-		this.socket.On("open", OnOpen);
-		this.socket.On("error", OnError);
-		this.socket.On("close", OnClose);
-		this.socket.On("receiveMessage", OnMessage);
-		this.socket.Connect ();
+	public void Init () {
+		On("open", OnOpen);
+		On("error", OnError);
+		On("close", OnClose);
+		On("receiveMessage", OnMessage);
+		Connect ();
 	}
 
 	/**
@@ -76,7 +75,7 @@ public class NetManager {
 	public void StartAsHost (string name, Action<ResponseType> response) {
 
 		#if RESET_ON_REGISTER
-		socket.Emit ("socketReset", (SocketIOEvent e) => {
+		Emit ("socketReset", (SocketIOEvent e) => {
 		#endif
 			
 		// Register and create the room
@@ -85,13 +84,13 @@ public class NetManager {
 		obj.AddField ("name", name);
 		obj.AddField ("maxClientCount", 4);
 		
-		socket.Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
+		Emit<Response.CreateRoom> ("createRoom", obj, (Response.CreateRoom res) => {
 
 			// If someone else already has this name, don't continue
 			if (!res.nameTaken) {
 				
 				// Listen for clients joining the room
-				socket.On("updateClients", (SocketIOEvent ev) => {
+				On("updateClients", (SocketIOEvent ev) => {
 					if (clientsUpdated != null)
 						clientsUpdated (ev.Deserialize<Response.ClientList> ().ClientNames);
 				});
@@ -111,7 +110,7 @@ public class NetManager {
 	public void CloseRoom () {
 
 		// The room is closed when the game begins so that other players will not be able to join an in-progress game
-		socket.Emit ("closeRoom", connection.roomId);
+		Emit ("closeRoom", connection.roomId);
 	}
 
 	/**
@@ -120,10 +119,10 @@ public class NetManager {
 
 	public void RequestRoomList (Action<Dictionary<string, string>> response) {
 
-		socket.On("roomListUpdated", OnUpdateRoomList);
+		On("roomListUpdated", OnUpdateRoomList);
 		roomListResult = response;
 
-		socket.Emit<Response.RoomList> ("requestRoomList", (Response.RoomList res) => {
+		Emit<Response.RoomList> ("requestRoomList", (Response.RoomList res) => {
 			response(res.ToDictionary ());
 		});
 	}
@@ -137,14 +136,14 @@ public class NetManager {
 		obj.AddField ("roomId", roomId);
 
 		// Request to join the room
-		socket.Emit<Response.JoinRoom> ("joinRoom", obj, (Response.JoinRoom res) => {
+		Emit<Response.JoinRoom> ("joinRoom", obj, (Response.JoinRoom res) => {
 
 			// If someone else already has this name, don't continue
 			if (!res.nameTaken) {
 
 				// Stop searching for rooms to join and listen for if this room is shut down
-				socket.Off ("roomListUpdated", OnUpdateRoomList);
-				socket.On ("kick", OnRoomDestroyed);
+				Off ("roomListUpdated", OnUpdateRoomList);
+				On ("kick", OnRoomDestroyed);
 
 				// Update ConnectionInfo
 				Register (res.client._id, res.room);
@@ -175,7 +174,7 @@ public class NetManager {
 			obj.AddField ("val", msg.val);
 		}
 
-		socket.Emit ("sendMessage", obj);
+		Emit ("sendMessage", obj);
 	}
 
 	public void Stop () {
@@ -188,19 +187,33 @@ public class NetManager {
 		obj.AddField ("roomId", connection.connected ? connection.roomId : "");
 		obj.AddField ("clientId", connection.clientId);
 
-		socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
+		Emit ("leaveRoom", obj, (SocketIOEvent e) => {
 			OnRoomDestroyed ();
 		});
 	}
 
+	public void OnLoseFocus () {
+		dropped = true;
+	}
+
+	public void OnGainFocus () {
+		Reconnect ();
+	}
+
 	// Simulate a dropped connection
 	public void Drop () {
-		socket.Close ();
+		dropped = true;
+		Close ();
 	}
 
 	// Simulate reconnecting after a dropped connection
 	public void Reconnect () {
-		this.socket.Connect ();
+		Debug.Log ("RECONNECTING: " + dropped);
+		if (IsConnected) {
+			OnOpen ();
+		} else if (dropped) {
+			Connect ();
+		}
 	}
 
 	/**
@@ -216,7 +229,12 @@ public class NetManager {
 		// Listen for dropped clients
 		Co.InvokeWhileTrue (1f, () => { return Application.isPlaying && connection.connected; }, () => {
 
-			socket.Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
+			Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
+
+				// Debug.Log (res.dropped);
+				// Ignore if this client has been dropped
+				if (res.dropped)
+					return;
 
 				// Send a message if a client was dropped or if previously dropped clients have reconnected
 				if (res.dropped && !hasDroppedClients) {
@@ -275,17 +293,18 @@ public class NetManager {
 			onDisconnected ();
 	}
 
-	void OnOpen (SocketIOEvent e) {
+	void OnOpen (SocketIOEvent e=null) {
 		
 		SendUpdateConnectionMessage (true);
 
+		Debug.Log ("opened .. dropped? " + dropped);
 		if (dropped) {
 
 			JSONObject obj = JSONObject.Create ();
 			obj.AddField ("clientId", connection.clientId);
 			obj.AddField ("roomId", connection.roomId);
 
-			socket.Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
+			Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
 				Debug.Log ("RECONNECTED!!!");
 			});
 
@@ -304,11 +323,7 @@ public class NetManager {
 
 	// This event should only ever fire when the application is quit or when the device loses its connection (in which case it will attempt to reconnect)
 	void OnClose (SocketIOEvent e) {
-
 		SendUpdateConnectionMessage (false);
-
-		dropped = true;
-		// this.socket.Connect ();
 	}
 
 	/**
