@@ -295,6 +295,10 @@ namespace Views {
 			GotoView ("disconnected");
 		}
 
+		public virtual void OnClientDropped () {
+			GotoView ("dropped");
+		}
+
 		// -- Misc
 
 		protected void JoinGame (string hostId) {

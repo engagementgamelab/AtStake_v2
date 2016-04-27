@@ -1,4 +1,4 @@
-#define RESET_ON_REGISTER
+#define RESET_ON_REGISTER // when true, clears the server database every time a host registers (don't use for production)
 using UnityEngine;
 using System;
 using System.Collections;
@@ -38,11 +38,13 @@ public class NetManager {
 	public delegate void OnDisconnected ();
 	public delegate void MessageReceived (NetMessage msg);
 	public delegate void OnUpdateConnection (bool connected);
+	public delegate void ClientDropped ();
 
 	public ClientsUpdated clientsUpdated;
 	public OnDisconnected onDisconnected;
 	public MessageReceived messageReceived;
 	public OnUpdateConnection onUpdateConnection;
+	public ClientDropped onClientDropped;
 
 	ConnectionInfo connection;
 	ConnectionInfo previousConnection;
@@ -65,6 +67,10 @@ public class NetManager {
 		this.socket.On("receiveMessage", OnMessage);
 		this.socket.Connect ();
 	}
+
+	/**
+	 *	Host methods
+	 */
 
 	public void StartAsHost (string name, Action<ResponseType> response) {
 
@@ -89,6 +95,16 @@ public class NetManager {
 		});
 		#endif
 	}
+
+	public void CloseRoom () {
+
+		// The room is closed when the game begins so that other players will not be able to join an in-progress game
+		socket.Emit ("closeRoom", connection.roomId);
+	}
+
+	/**
+	 *	Client methods
+	 */
 
 	public void RequestRoomList (Action<Dictionary<string, string>> response) {
 
@@ -117,11 +133,9 @@ public class NetManager {
 		});
 	}
 
-	public void CloseRoom () {
-
-		// The room is closed when the game begins so that other players will not be able to join an in-progress game
-		socket.Emit ("closeRoom", connection.roomId);
-	}
+	/**
+	 *	Client & Host methods
+	 */
 
 	public void SendMessage (NetMessage msg) {
 
@@ -154,7 +168,7 @@ public class NetManager {
 		obj.AddField ("clientId", connection.clientId);
 
 		socket.Emit ("leaveRoom", obj, (SocketIOEvent e) => {
-			connection.Reset ();
+			OnRoomClosed ();
 		});
 	}
 
@@ -164,16 +178,29 @@ public class NetManager {
 		socket.Close ();
 	}
 
+	/**
+	 *	Private methods
+	 */
+
 	void Register (string clientId, Response.Room room) {
 		connection.clientId = clientId;
 		connection.room = room;
-		Co.InvokeWhileTrue (2f, () => { return Application.isPlaying && connection.connected; }, () => {
+		Co.InvokeWhileTrue (1f, () => { return Application.isPlaying && connection.connected; }, () => {
 			socket.Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
 				if (res.dropped)
-					OnRoomClosed ();
+					OnClientDropped ();
 			});
 		});
 	}
+
+	void SendUpdateConnectionMessage (bool connected) {
+		if (onUpdateConnection != null)
+			onUpdateConnection (connected);
+	}
+
+	/**
+	 *	Events
+	 */
 
 	void OnUpdateClients (SocketIOEvent e) {
 		if (clientsUpdated != null)
@@ -192,13 +219,6 @@ public class NetManager {
 		if (messageReceived != null) {
 			messageReceived (NetMessage.Create (msg.key, msg.str1, msg.str2, msg.val));
 		}
-
-		/*JSONObject obj = JSONObject.Create ();
-		obj.AddField ("clientId", connection.clientId);
-		obj.AddField ("roomId", connection.roomId);
-		obj.AddField ("key", msg.key);
-
-		socket.Emit ("confirmReceipt", obj);*/
 	}
 
 	void OnUpdateRoomList (SocketIOEvent e) {
@@ -213,6 +233,11 @@ public class NetManager {
 		connection.Reset ();
 		if (onDisconnected != null)
 			onDisconnected ();
+	}
+
+	void OnClientDropped () {
+		if (onClientDropped != null)
+			onClientDropped ();
 	}
 
 	void OnOpen (SocketIOEvent e) {
@@ -243,14 +268,13 @@ public class NetManager {
 	void OnClose (SocketIOEvent e) {
 		SendUpdateConnectionMessage (false);
 		if (dropped) {
-			this.socket.Connect ();
+			// this.socket.Connect ();
 		}
 	}
 
-	void SendUpdateConnectionMessage (bool connected) {
-		if (onUpdateConnection != null)
-			onUpdateConnection (connected);
-	}
+	/**
+	 *	Response models
+	 */
 
 	class Response {
 

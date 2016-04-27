@@ -15,6 +15,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public delegate void OnLogMessage (string msg);
 	public delegate void OnDisconnected ();
 	public delegate void OnUpdateConnectionStatus (ConnectionStatus status);
+	public delegate void OnClientDroppped ();
 
 	/// <summary>
 	/// Returns true if this is the game's host
@@ -63,6 +64,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public OnDisconnected onDisconnected;
 	public OnUpdateConnectionStatus onUpdateConnectionStatus;
+	public OnClientDroppped onClientDropped;
 
 	ConnectionStatus connectionStatus = ConnectionStatus.Searching;
 	Dictionary<string, string> hosts;
@@ -97,8 +99,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		net.StartAsHost (Game.Name, (ResponseType res) => {
 
-			if (res == ResponseType.Success)
+			if (res == ResponseType.Success) {
 				net.clientsUpdated = OnUpdateClients;
+				net.onDisconnected = OnDisconnect;
+				net.onClientDropped = OnClientDrop;
+			}
 
 			response (res);
 		});
@@ -132,6 +137,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			if (res == ResponseType.Success) {
 				Connected = true;
 				net.onDisconnected = OnDisconnect;
+				net.onClientDropped = OnClientDrop;
 			}
 
 			response(res);	
@@ -144,16 +150,13 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	// Intentional disconnect (player chose to terminate their connection)
-	// This will stop the discovery service
 	// The OnDisconnect event will also fire
 	public void Disconnect () {
 		net.Stop ();
-		OnDisconnect ();
 	}
 
 	public void Drop () {
 		net.Drop ();
-		OnDisconnect ();
 	}
 
 	public void OnApplicationQuit () {
@@ -228,5 +231,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			if (Array.FindIndex (regClients, (string c) => { return c.Equals (cl); }) == -1)
 				RemoveClient (cl);
 		}
+	}
+
+	void OnClientDrop () {
+		if (onClientDropped != null)
+			onClientDropped ();
 	}
 }

@@ -111,6 +111,7 @@ public class TemplateEditor : EditorWindow {
 		DeactivateTemplate ();
 		ApplyModifications<TemplateManager> ();
 		ApplyModifications<TemplateContainer> ();
+		templateNames = null;
 		BeginEdit ();
 	}
 

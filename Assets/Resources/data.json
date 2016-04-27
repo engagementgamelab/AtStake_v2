@@ -248,10 +248,7 @@
     {
       "Symbol": "decide",
       "DeciderInstructions": "Time's up! I will now choose the best proposal.",
-      "PlayerInstructions": "The Decider is selecting the winner with the best proposal!",
-      "Buttons": {
-        "confirm": "Confirm"
-      }
+      "PlayerInstructions": "The Decider is selecting the winner with the best proposal!"
     },
     {
       "Symbol": "deck",
@@ -277,6 +274,13 @@
     {
       "Symbol": "disconnected",
       "Instructions": "Your device has disconnected from the game. This might be because the host left the game or because your device is having trouble connecting to the WIFI.",
+      "Buttons": {
+        "menu": "Main menu"
+      }
+    },
+    {
+      "Symbol": "dropped",
+      "Instructions": "One of the devices has disconnected from the game. Please wait while the player reconnects. Otherwise, you can quit the game and return to the main menu.",
       "Buttons": {
         "menu": "Main menu"
       }

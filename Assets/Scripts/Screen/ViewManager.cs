@@ -43,7 +43,8 @@ namespace Views {
 						{ "agenda_item_reject", new AgendaItemReject () },
 						{ "scoreboard", new Scoreboard () },
 						{ "final_scoreboard", new FinalScoreboard () },
-						{ "disconnected", new Disconnected () }
+						{ "disconnected", new Disconnected () },
+						{ "dropped", new Dropped () }
 					};
 				}
 
@@ -67,7 +68,6 @@ namespace Views {
 
 		public void Goto (string id) {
 
-			Log	(id);
 			if (id == CurrView) return;
 
 			// Unload the current view and update the PrevView reference
@@ -110,6 +110,10 @@ namespace Views {
 
 		public void OnDisconnect () {
 			Views[CurrView].OnDisconnect ();
+		}
+
+		public void OnClientDropped () {
+			Views[CurrView].OnClientDropped ();
 		}
 	}
 }

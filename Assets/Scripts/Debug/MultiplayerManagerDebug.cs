@@ -25,6 +25,10 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 		multiplayer.Drop ();
 	}
 
+	public void Reconnect () {
+		
+	}
+
 	void Update () {
 
 		if (multiplayer == null) return;
