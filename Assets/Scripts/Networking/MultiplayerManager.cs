@@ -161,10 +161,6 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	}
 
 	void OnApplicationFocus (bool focused) {
-		/*Debug.Log ("FOCUSED: " + focused);
-		if (focused) {
-			Reconnect ();
-		}*/
 		if (focused)
 			net.OnGainFocus ();
 		else

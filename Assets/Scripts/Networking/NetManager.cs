@@ -13,7 +13,7 @@ public class NetManager : SocketIOComponent {
 		public string name;
 		public string clientId;
 		public Response.Room room;
-		public string roomId { get { return room._id; } }
+		public string roomId { get { return connected ? room._id : ""; } }
 		public bool connected { get { return room != null; } }
 
 		public void Reset () {
@@ -196,7 +196,11 @@ public class NetManager : SocketIOComponent {
 	}
 
 	public void OnGainFocus () {
-		Reconnect ();
+		if (dropped) {
+			Debug.Log ("CLOSING INTENTIONALY");
+			socket.Close ();
+		}
+		// Reconnect ();
 	}
 
 	// Simulate a dropped connection
@@ -207,11 +211,13 @@ public class NetManager : SocketIOComponent {
 
 	// Simulate reconnecting after a dropped connection
 	public void Reconnect () {
-		if (IsConnected) {
+		if (dropped)
+			Connect ();
+		/*if (IsConnected) {
 			OnOpen ();
 		} else if (dropped) {
 			Connect ();
-		}
+		}*/
 	}
 
 	/**
@@ -229,7 +235,6 @@ public class NetManager : SocketIOComponent {
 
 			Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
 
-				// Debug.Log (res.dropped);
 				// Ignore if this client has been dropped
 				if (dropped)
 					return;
@@ -295,16 +300,19 @@ public class NetManager : SocketIOComponent {
 		
 		SendUpdateConnectionMessage (true);
 
-		if (dropped) {
+		if (IsConnected && dropped) {
 
-			JSONObject obj = JSONObject.Create ();
-			obj.AddField ("clientId", connection.clientId);
-			obj.AddField ("roomId", connection.roomId);
+			Debug.Log ("OPEN");
+			if (connection.connected) {
+				JSONObject obj = JSONObject.Create ();
+				obj.AddField ("clientId", connection.clientId);
+				obj.AddField ("roomId", connection.roomId);
 
-			Debug.Log ("reconnecting...");
-			Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
-				Debug.Log ("RECONNECTED!!!");
-			});
+				Debug.Log ("reconnecting...");
+				Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
+					Debug.Log ("RECONNECTED!!!");
+				});
+			}
 
 			dropped = false;
 		}
@@ -322,6 +330,10 @@ public class NetManager : SocketIOComponent {
 	// This event should only ever fire when the application is quit or when the device loses its connection (in which case it will attempt to reconnect)
 	void OnClose (SocketIOEvent e) {
 		SendUpdateConnectionMessage (false);
+		if (dropped) {
+			Debug.Log ("TRYINA RECONNECT YA NOW BUB");
+			Reconnect ();
+		}
 	}
 
 	/**

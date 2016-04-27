@@ -22,7 +22,7 @@ public class GameInstance : MonoBehaviour {
 		get { return Manager.Name; }
 	}
 
-	void OnEnable () {
+	void Awake () {
 
 		Manager 	= GameInstanceBehaviour.Init<PlayerManager> (transform);
 		Multiplayer = GameInstanceBehaviour.Init<MultiplayerManager> (transform);

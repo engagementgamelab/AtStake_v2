@@ -68,10 +68,10 @@ namespace Templates {
 		Dictionary<string, ScreenElementUI> overlayElements = new Dictionary<string, ScreenElementUI> ();
 
 		void OnEnable () { 
-			Loaded = false; 
 			anim = UIAnimator.AttachTo (gameObject);
+			Loaded = false; 
 		}
-
+		
 		public void LoadView (View view, Dictionary<string, ScreenElementUI> overlayElements) {
 			this.overlayElements = overlayElements;
 			data = view.Data;
