@@ -7,6 +7,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 
 	public Button disconnectButton;
 	public Button dropButton;
+	public Button reconnectButton;
 	public Text broadcasterStatus;
 	public Text listenerStatus;
 	public Text hostStatus;

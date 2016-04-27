@@ -275,11 +275,6 @@ public class NetManager {
 			onDisconnected ();
 	}
 
-	/*void OnClientDropped () {
-		if (onClientDropped != null)
-			onClientDropped ();
-	}*/
-
 	void OnOpen (SocketIOEvent e) {
 		
 		SendUpdateConnectionMessage (true);

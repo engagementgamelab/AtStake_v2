@@ -248,7 +248,10 @@
     {
       "Symbol": "decide",
       "DeciderInstructions": "Time's up! I will now choose the best proposal.",
-      "PlayerInstructions": "The Decider is selecting the winner with the best proposal!"
+      "PlayerInstructions": "The Decider is selecting the winner with the best proposal!",
+      "Buttons": {
+        "confirm": "Confirm"
+      }
     },
     {
       "Symbol": "deck",
