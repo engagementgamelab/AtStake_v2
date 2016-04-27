@@ -59,7 +59,7 @@ public class GameInstance : MonoBehaviour {
 		Controller.Init ();
 		Test.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
-		Multiplayer.onClientDropped += OnClientDropped;
+		Multiplayer.onUpdateDroppedClients += OnUpdateDroppedClients;
 	}
 
 	public void EndGame () {
@@ -70,13 +70,14 @@ public class GameInstance : MonoBehaviour {
 	void OnDisconnect () {
 		Views.OnDisconnect ();
 		Multiplayer.onDisconnected -= OnDisconnect;
+		Multiplayer.onUpdateDroppedClients -= OnUpdateDroppedClients;
 		Dispatcher.Reset ();
 		Controller.Reset ();
 		Decks.Reset ();
 		Manager.Reset ();
 	}
 
-	void OnClientDropped () {
-		Views.OnClientDropped ();
+	void OnUpdateDroppedClients (bool hasDroppedClients) {
+		Views.OnUpdateDroppedClients (hasDroppedClients);
 	}
 }

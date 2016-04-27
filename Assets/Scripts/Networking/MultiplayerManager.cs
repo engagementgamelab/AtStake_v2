@@ -15,7 +15,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public delegate void OnLogMessage (string msg);
 	public delegate void OnDisconnected ();
 	public delegate void OnUpdateConnectionStatus (ConnectionStatus status);
-	public delegate void OnClientDroppped ();
+	public delegate void OnUpdateDroppedClients (bool hasDroppedClients);
 
 	/// <summary>
 	/// Returns true if this is the game's host
@@ -64,7 +64,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 	public OnDisconnected onDisconnected;
 	public OnUpdateConnectionStatus onUpdateConnectionStatus;
-	public OnClientDroppped onClientDropped;
+	public OnUpdateDroppedClients onUpdateDroppedClients;
 
 	ConnectionStatus connectionStatus = ConnectionStatus.Searching;
 	Dictionary<string, string> hosts;
@@ -102,7 +102,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			if (res == ResponseType.Success) {
 				net.clientsUpdated = OnUpdateClients;
 				net.onDisconnected = OnDisconnect;
-				net.onClientDropped = OnClientDrop;
+				net.onUpdateDroppedClients = OnUpdateDropped;
 			}
 
 			response (res);
@@ -137,7 +137,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			if (res == ResponseType.Success) {
 				Connected = true;
 				net.onDisconnected = OnDisconnect;
-				net.onClientDropped = OnClientDrop;
+				net.onUpdateDroppedClients = OnUpdateDropped;
 			}
 
 			response(res);	
@@ -155,12 +155,17 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		net.Stop ();
 	}
 
+	public void OnApplicationQuit () {
+		Disconnect ();
+	}
+
+	// For testing only - simulate dropped devices
 	public void Drop () {
 		net.Drop ();
 	}
 
-	public void OnApplicationQuit () {
-		Disconnect ();
+	public void Reconnect () {
+		net.Reconnect ();
 	}
 
 	// -- Client handling
@@ -233,8 +238,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		}
 	}
 
-	void OnClientDrop () {
-		if (onClientDropped != null)
-			onClientDropped ();
+	void OnUpdateDropped (bool hasDroppedClients) {
+		if (onUpdateDroppedClients != null)
+			onUpdateDroppedClients (hasDroppedClients);
 	}
 }

@@ -112,8 +112,11 @@ namespace Views {
 			Views[CurrView].OnDisconnect ();
 		}
 
-		public void OnClientDropped () {
-			Views[CurrView].OnClientDropped ();
+		public void OnUpdateDroppedClients (bool hasDroppedClients) {
+			if (hasDroppedClients)
+				Views[CurrView].OnClientDropped ();
+			else
+				Views[CurrView].OnClientsReconnected ();
 		}
 	}
 }

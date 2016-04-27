@@ -26,7 +26,7 @@ public class MultiplayerManagerDebug : MonoBehaviour {
 	}
 
 	public void Reconnect () {
-		
+		multiplayer.Reconnect ();
 	}
 
 	void Update () {
