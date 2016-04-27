@@ -29,27 +29,20 @@ public class DataManager {
         }
     }
 
+    /// <summary>
+    /// Get the socket address to send & receive messages from
+    /// </summary>
     public static string SocketAddress {
         get {
             return currentConfig.socket;
         }
     }
 
-    /// <summary>
-    /// Set to production mode.
-    /// </summary>
-    /*public static bool Production {
-        set {
-            isProduction = value;
-        }
-    }*/
-
     public static GameEnvironment currentConfig;
 
     static JsonReaderSettings _readerSettings = new JsonReaderSettings();
     static GameConfig config;
     static GameData gameData;
-    // static bool isProduction;
 
     /// <summary>
     /// Set global game config data, such as API endpoints, given a valid input string
@@ -127,6 +120,11 @@ public class DataManager {
 
     }
 
+    /// <summary>
+    /// Gets the DirectoryInfo for the file with the given filename. Checks the appropriate path based on the platform.
+    /// </summary>
+    /// <param name="filename">Name of file to get info on</param>
+    /// <returns>DirectoryInfo for the requested file</returns>
     public static DirectoryInfo GetInfoAtPath (string filename) {
 
         bool persistentPath = 
@@ -143,10 +141,20 @@ public class DataManager {
         return dirData;
     }
 
+    /// <summary>
+    /// Returns true if the file with the given file name exists
+    /// </summary>
+    /// <param name="filename">Name of the file to check</param>
+    /// <returns>True if the file exists, false otherwise</returns>
     public static bool FileExists (string filename) {
         return File.Exists (GetInfoAtPath (filename) + filename + ".json");
     }
 
+    /// <summary>
+    /// Loads the given file as a JSON file and returns the data as a string
+    /// </summary>
+    /// <param name="filename">Name of JSON file to open</param>
+    /// <returns>A string in JSON format</returns>
     public static string LoadJsonData (string filename) {
 
         string localData;
@@ -159,6 +167,10 @@ public class DataManager {
         return localData;
     }
 
+    /// <summary>
+    /// Deletes the file with the given name
+    /// </summary>
+    /// <param name="filename">Name of file to delete</param>
     public static void DeleteData (string filename) {
         DirectoryInfo info = GetInfoAtPath (filename);
         string path = info + filename + ".json";
@@ -169,18 +181,27 @@ public class DataManager {
         }
     }
 
+    /// <summary>
+    /// Gets the game settings
+    /// </summary>
+    /// <returns>Settings data model</returns>
     public static Settings GetSettings () {
         return gameData.Settings;
     }
 
+    /// <summary>
+    /// Gets the available decks that can be played
+    /// </summary>
+    /// <returns>An array of Deck data models</returns>
     public static Deck[] GetDecks () {
         return gameData.Decks;
     }
 
-    public static string[] GetQuestions (string deckKey) {
-        return System.Array.Find (GetDecks (), x => x.Name == deckKey).Questions;
-    }
-
+    /// <summary>
+    /// Finds the data model with the given symbol
+    /// </summary>
+    /// <param name="symbol">Symbol to search for</param>
+    /// <returns>A Screen data model</returns>
     public static Models.Screen GetScreen (string symbol) {
         try {
             return System.Array.Find (gameData.Screens, x => x.Symbol == symbol);
@@ -189,6 +210,13 @@ public class DataManager {
         }
     }
 
+    /// <summary>
+    /// Gets text from the screen model based on its key. Also optionally replaces {{keywords}}
+    /// </summary>
+    /// <param name="screen">The Screen model to get text from</param>
+    /// <param name="key">The text key to search for</param>
+    /// <param name="vars">(optional) Keyword replacements. This should be in the format [keyword, replacement]</param>
+    /// <returns>The requested text</returns>
     public static string GetTextFromScreen (Models.Screen screen, string key, Dictionary<string, string> vars=null) {
         string text;
         try {

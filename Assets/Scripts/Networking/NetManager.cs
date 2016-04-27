@@ -48,7 +48,6 @@ public class NetManager : SocketIOComponent {
 
 	ConnectionInfo connection;
 	ConnectionInfo previousConnection;
-	SocketIOComponent socket;
 	Action<Dictionary<string, string>> roomListResult;
 
 	#if UNITY_EDITOR && SINGLE_SCREEN
@@ -208,7 +207,6 @@ public class NetManager : SocketIOComponent {
 
 	// Simulate reconnecting after a dropped connection
 	public void Reconnect () {
-		Debug.Log ("RECONNECTING: " + dropped);
 		if (IsConnected) {
 			OnOpen ();
 		} else if (dropped) {
@@ -227,13 +225,13 @@ public class NetManager : SocketIOComponent {
 		connection.room = room;
 
 		// Listen for dropped clients
-		Co.InvokeWhileTrue (1f, () => { return Application.isPlaying && connection.connected; }, () => {
+		Co.InvokeWhileTrue (0.5f, () => { return Application.isPlaying && connection.connected; }, () => {
 
 			Emit<Response.DroppedClients> ("checkDropped", connection.roomId, (Response.DroppedClients res) => {
 
 				// Debug.Log (res.dropped);
 				// Ignore if this client has been dropped
-				if (res.dropped)
+				if (dropped)
 					return;
 
 				// Send a message if a client was dropped or if previously dropped clients have reconnected
@@ -297,13 +295,13 @@ public class NetManager : SocketIOComponent {
 		
 		SendUpdateConnectionMessage (true);
 
-		Debug.Log ("opened .. dropped? " + dropped);
 		if (dropped) {
 
 			JSONObject obj = JSONObject.Create ();
 			obj.AddField ("clientId", connection.clientId);
 			obj.AddField ("roomId", connection.roomId);
 
+			Debug.Log ("reconnecting...");
 			Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
 				Debug.Log ("RECONNECTED!!!");
 			});
