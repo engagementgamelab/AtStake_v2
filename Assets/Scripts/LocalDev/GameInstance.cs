@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Views;
 using Templates;
 
+/// <summary>
+/// Contains all the managers for an instance of the game. All managers have a reference to GameInstance, and in this way are able to communicate to other managers.
+/// </summary>
 public class GameInstance : MonoBehaviour {
 
 	public PlayerManager Manager { get; private set; }
@@ -17,7 +20,9 @@ public class GameInstance : MonoBehaviour {
 	public AudioController Audio { get; private set; }
 	public GameTest Test { get; private set; }
 
-	// For convenience (the player's name gets referenced quite a bit)
+	/// <summary>
+	/// Gets the player's name. This is for convenience, as the name is referenced quite a bit
+	/// </summary>
 	public string Name {
 		get { return Manager.Name; }
 	}
@@ -38,6 +43,10 @@ public class GameInstance : MonoBehaviour {
 		InitApp ();
 	}
 
+	/// <summary>
+	/// Sets the position of the template on the screen. In production, this is always [0, 0], but when the SINGLE_SCREEN flag is enabled it positions multiple game instances in a grid.
+	/// </summary>
+	/// <param name="pos">The position to move the template to</param>
 	public void SetTemplatePosition (Vector3 pos) {
 		Templates.transform.position = pos;
 		Templates.transform.SetParent (transform);
@@ -48,9 +57,12 @@ public class GameInstance : MonoBehaviour {
 		Audio.Init ();
 		Views.Init ();
 		Manager.Init ();
+		Multiplayer.Init ();
 	}
 
-	// Called when the game begins (considered to be when a player hosts or joins a game)
+	/// <summary>
+	/// Called when the game begins (considered to be when a player hosts or joins a game)
+	/// </summary>
 	public void StartGame () {
 		Views.Init ();
 		Manager.Init ();
@@ -58,15 +70,20 @@ public class GameInstance : MonoBehaviour {
 		Score.Init ();
 		Controller.Init ();
 		Test.Init ();
+		Multiplayer.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
 		Multiplayer.onUpdateDroppedClients += OnUpdateDroppedClients;
 	}
 
+	/// <summary>
+	/// Called when the game ends (considered to be after the FinalScoreboard screen)
+	/// </summary>
 	public void EndGame () {
 		Multiplayer.Disconnect (); // Also triggers OnDisconnect
 		Controller.DeleteData ();
 	}
 
+	// Handles intentional and unintentional disconnects from the server
 	void OnDisconnect () {
 		Views.OnDisconnect ();
 		Multiplayer.onDisconnected -= OnDisconnect;
@@ -77,6 +94,7 @@ public class GameInstance : MonoBehaviour {
 		Manager.Reset ();
 	}
 
+	// Handles dropped clients (other than this one)
 	void OnUpdateDroppedClients (bool hasDroppedClients) {
 		Views.OnUpdateDroppedClients (hasDroppedClients);
 	}

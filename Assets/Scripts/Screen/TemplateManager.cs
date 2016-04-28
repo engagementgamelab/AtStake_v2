@@ -6,11 +6,17 @@ using Views;
 
 namespace Templates {
 
+	/// <summary>
+	/// Holds the template containers and loads templates
+	/// </summary>
 	public class TemplateManager : GameInstanceBehaviour {
 
 		public TemplatesContainer templatesContainer;
 		public DebugInfoContainer debug;
 
+		/// <summary>
+		/// Create the TemplateManager and initialize it
+		/// </summary>
 		public static TemplateManager Init (Transform parent) {
 
 			// When using the Template Editor, a "loose" manager will be floating around the scene - this disables it
@@ -25,6 +31,9 @@ namespace Templates {
 			return manager;
 		}
 
+		/// <summary>
+		/// Load the template with the id and apply the view
+		/// </summary>
 		public void Load (string id, View view) {
 			templatesContainer.Load (id, view);
 		}

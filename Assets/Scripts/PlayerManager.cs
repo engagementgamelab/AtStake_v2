@@ -5,27 +5,36 @@ using System.Collections.Generic;
 using Models;
 
 //// <summary>
-/// Keeps track of all the players in the game
+/// Keeps track of all the players in the game.
 /// </summary>
 public class PlayerManager : GameInstanceBehaviour {
 
 	public delegate void OnAddPeer (string peer, string color);
 	public delegate void OnRemovePeer (string peer);
 
+	/// <summary>
+	/// Gets the models associated with each player in the game. The key is the player's name.
+	/// </summary>
+	public Dictionary<string, Player> Players { get { return players; } }
 	Dictionary<string, Player> players = new Dictionary<string, Player> ();
-	public Dictionary<string, Player> Players {
-		get { return players; }
-	}
 
+	/// <summary>
+	/// Gets/sets this player's name
+	/// </summary>
 	public string Name { get; set; }
-	public string TakenName { get; set; }
-	public string AttemptedHost { get; set; }
 
+	/// <summary>
+	/// Event that fires when a peer joins the game
+	/// </summary>
 	public OnAddPeer onAddPeer;
+
+	/// <summary>
+	/// Event that fires when a peer leaves the game
+	/// </summary>
 	public OnRemovePeer onRemovePeer;
 
 	public void Init () {
-		TakenName = "";
+		// TakenName = "";
 		Game.Dispatcher.AddListener ("UpdatePlayers", OnUpdatePlayers);
 	}
 
@@ -33,6 +42,9 @@ public class PlayerManager : GameInstanceBehaviour {
 		players.Clear ();
 	}
 
+	/// <summary>
+	/// Called when the player hosts a new game
+	/// </summary>
 	public void AddHost (string color) {
 		if (!players.ContainsKey (Name)) {
 			players.Add (Name, new Player {
@@ -44,6 +56,9 @@ public class PlayerManager : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Called when a player joins or leaves the room that this player is hosting
+	/// </summary>
 	public void OnUpdatePlayers (NetMessage msg) {
 
 		Dictionary<string, string> playerColors = AvatarsManager.ToDict (msg.str1);

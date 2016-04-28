@@ -14,7 +14,7 @@ namespace Views {
 			Elements.Add ("connection_failed", new TextElement (GetText ("connection_failed")) { Active = !Connected });
 
 			submitButton = new ButtonElement (GetButton ("submit"), () => { 
-				if (Game.Manager.Name != "" && Game.Manager.Name != Game.Manager.TakenName && Connected)
+				if (Game.Manager.Name != "" && Game.Manager.Name != Game.Multiplayer.TakenName && Connected)
 					SubmitName ();
 			}) {
 				#if !SINGLE_SCREEN
@@ -24,24 +24,24 @@ namespace Views {
 
 			Elements.Add ("submit", submitButton);
 
-			Elements.Add ("input", new InputElement (Game.Manager.TakenName, "your name", (string name) => {
+			Elements.Add ("input", new InputElement (Game.Multiplayer.TakenName, "your name", (string name) => {
 				#if !SINGLE_SCREEN
-				submitButton.Interactable = name != "" && name != Game.Manager.TakenName && Connected;
+				submitButton.Interactable = name != "" && name != Game.Multiplayer.TakenName && Connected;
 				#endif
 			}, (string name) => {
 				Game.Manager.Name = name;
 
 				// This allows the name to be submitted by pressing "done" on the ios/android keyboard
-				if (name != "" && name != Game.Manager.TakenName && Connected)
+				if (name != "" && name != Game.Multiplayer.TakenName && Connected)
 					SubmitName ();
 			}));
 		}
 
 		void SubmitName () {
-			if (string.IsNullOrEmpty (Game.Manager.AttemptedHost)) {
+			if (string.IsNullOrEmpty (Game.Multiplayer.AttemptedHost)) {
 				HostGame ();
 			} else {
-				JoinGame (Game.Manager.AttemptedHost);
+				JoinGame (Game.Multiplayer.AttemptedHost);
 			}
 		}
 	}

@@ -9,6 +9,120 @@ public class GameController : GameInstanceBehaviour {
 
 	// -- Public properties
 
+	#region Players data
+
+	/// <summary>
+	/// Gets the data models of the players
+	/// </summary>
+	public Player[] Players {
+		get { return instance.Players; }
+	}
+
+	/// <summary>
+	/// Gets the data model associated with this player
+	/// </summary>
+	public Player Player {
+		get { return System.Array.Find (Players, x => x.Name == Game.Name); }
+	}
+
+	/// <summary>
+	/// Gets the name of the avatar for this player
+	/// </summary>
+	public string Avatar {
+		get { return Player.Avatar; }
+	}
+
+	/// <summary>
+	/// Gets the data model associated with the current Decider
+	/// </summary>
+	public Player Decider {
+		get {
+			if (!DataLoaded)
+				return null;
+			string deciderName = System.Array.Find (Roles, x => x.Title == "Decider").PlayerName;
+			return FindPlayer (deciderName);
+		}
+	}
+
+	/// <summary>
+	/// Gets the name of the current Decider
+	/// </summary>
+	public string DeciderName {
+		get { return Decider == null ? "" : Decider.Name; }
+	}
+
+	/// <summary>
+	/// Gets the number of players, excluding this one
+	/// </summary>
+	public int PeerCount {
+		get { return PlayerCount-1; }
+	}
+
+	/// <summary>
+	/// Gets the names of all players, excluding this one
+	/// </summary>
+	public List<string> PeerNames {
+		get { return PlayerNames.FindAll (x => x != Game.Name); }
+	}
+
+	/// <summary>
+	/// Gets the data model of the winning player
+	/// </summary>
+	public Player Winner {
+		get {
+			if (string.IsNullOrEmpty (WinnerName))
+				return null;
+			return System.Array.Find (Players, x => x.Name == WinnerName);
+		}
+	}
+
+	/// <summary>
+	/// Gets/sets the name of the round's winner
+	/// </summary>
+	public string WinnerName {
+		get {
+			if (!DataLoaded)
+				return "";
+			return CurrentRound.Winner;
+		}
+		set { CurrentRound.Winner = value; }
+	}
+
+	#endregion
+
+	#region Scoring data
+
+	/// <summary>
+	/// Gets/sets the amount of coins in the pot
+	/// </summary>
+	public int Pot {
+		get { return DataLoaded ? instance.Pot : 0; }
+		set { instance.Pot = value; }
+	}	
+
+	/// <summary>
+	/// Gets/sets this player's coin count
+	/// </summary>
+	public int CoinCount {
+		get { return DataLoaded ? FindPlayer (Game.Name).CoinCount : 0; }
+		set { FindPlayer (Game.Name).CoinCount = value; }
+	}
+
+	#endregion
+
+	#region Deck data
+
+	/// <summary>
+	/// Gets the question for the current round
+	/// </summary>
+	public string Question {
+		get { 
+			if (!DataLoaded)
+				return "";
+			return Game.Decks.Deck.Questions[instance.RoundIndex]; 
+		}
+	}
+
 	/// <summary>
 	/// Gets the data models for this round's roles
 	/// </summary>
@@ -45,122 +159,6 @@ public class GameController : GameInstanceBehaviour {
 				throw new System.Exception ("Could not find a role for the player " + Game.Name);
 			}
 		}
-	}
-
-	/// <summary>
-	/// Gets the data model associated with the current Decider
-	/// </summary>
-	public Player Decider {
-		get {
-			if (!DataLoaded)
-				return null;
-			string deciderName = System.Array.Find (Roles, x => x.Title == "Decider").PlayerName;
-			return FindPlayer (deciderName);
-		}
-	}
-
-	//// <summary>
-	/// Gets the data model associated with the Decider from the previous round
-	/// </summary>
-	public Player PreviousDecider {
-		get {
-			if (!DataLoaded || instance.RoundIndex == 0)
-				return null;
-			string deciderName = System.Array.Find (instance.Rounds[roundItr.Position-1].Roles, x => x.Title == "Decider").PlayerName;
-			return FindPlayer (deciderName);
-		}
-	}
-
-	/// <summary>
-	/// Gets the name of the current Decider
-	/// </summary>
-	public string DeciderName {
-		get { return Decider == null ? "" : Decider.Name; }
-	}
-
-	/// <summary>
-	/// Gets the data model associated with this player
-	/// </summary>
-	public Player Player {
-		get { return System.Array.Find (Players, x => x.Name == Game.Name); }
-	}
-
-	/// <summary>
-	/// Gets the name of the avatar for this player
-	/// </summary>
-	public string Avatar {
-		get { return Player.Avatar; }
-	}
-
-	/// <summary>
-	/// Gets the question for the current round
-	/// </summary>
-	public string Question {
-		get { 
-			if (!DataLoaded)
-				return "";
-			return Game.Decks.Deck.Questions[instance.RoundIndex]; 
-		}
-	}
-
-	/// <summary>
-	/// Gets the data models of the players
-	/// </summary>
-	public Player[] Players {
-		get { return instance.Players; }
-	}
-
-	/// <summary>
-	/// Gets the data model of the winning player
-	/// </summary>
-	public Player Winner {
-		get {
-			if (string.IsNullOrEmpty (WinnerName))
-				return null;
-			return System.Array.Find (Players, x => x.Name == WinnerName);
-		}
-	}
-
-	/// <summary>
-	/// Gets/sets the name of the round's winner
-	/// </summary>
-	public string WinnerName {
-		get {
-			if (!DataLoaded)
-				return "";
-			return CurrentRound.Winner;
-		}
-		set { CurrentRound.Winner = value; }
-	}
-
-	/// <summary>
-	/// Gets the number of players, excluding this one
-	/// </summary>
-	public int PeerCount {
-		get { return PlayerCount-1; }
-	}
-
-	/// <summary>
-	/// Gets the names of all players, excluding this one
-	/// </summary>
-	public List<string> PeerNames {
-		get { return PlayerNames.FindAll (x => x != Game.Name); }
-	}
-
-	/// <summary>
-	/// Gets/sets the amount of coins in the pot
-	/// </summary>
-	public int Pot {
-		get { return DataLoaded ? instance.Pot : 0; }
-		set { instance.Pot = value; }
-	}	
-
-	/// <summary>
-	/// Gets/sets this player's coin count
-	/// </summary>
-	public int CoinCount {
-		get { return DataLoaded ? FindPlayer (Game.Name).CoinCount : 0; }
-		set { FindPlayer (Game.Name).CoinCount = value; }
 	}
 
 	/// <summary>
@@ -239,6 +237,8 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	#endregion
+
 	/// <summary>
 	/// Returns true if the instance data has been loaded
 	/// </summary>
@@ -301,10 +301,18 @@ public class GameController : GameInstanceBehaviour {
 		instance = null;
 	}
 
+	/// <summary>
+	/// Remove the game instance data from the previously played game
+	/// </summary>
 	public void DeleteData () {
 		DataManager.DeleteData (GetFilename ());
 	}
 
+	/// <summary>
+	/// Find a player by name
+	/// </summary>
+	/// <param name="playerName">The player name to search for</param>
+	/// <returns>The Player model associated with the given name</returns>
 	public Player FindPlayer (string playerName) {
 		try {
 			return System.Array.Find (Players, x => x.Name == playerName);
@@ -313,15 +321,28 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Find the avatar for the player with the name
+	/// </summary>
+	/// <param name="playerName">The player name to search for</param>
+	/// <returns>A string describing the avatar color</returns>
 	public string GetAvatarForPlayer (string playerName) {
 		return Game.Manager.Players[playerName].Avatar;
 	}
 
+	/// <summary>
+	/// Set the round winner. Updates the instance data.
+	/// </summary>
+	/// <param name="winnerName">Name of the winning player</param>
 	public void SetWinner (string winnerName) {
 		WinnerName = winnerName;
 		SaveData ();
 	}
 
+	/// <summary>
+	/// Updates the instance data with the current view
+	/// </summary>
+	/// <param name="view">id of the view</param>
 	public void SetView (string view) {
 		if (instance != null) {
 			instance.View = view;
@@ -329,33 +350,52 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Advance to the next round if one exists
+	/// </summary>
+	/// <returns>True if a next round exists, otherwise false</returns>
 	public bool NextRound () {
 		roundItr.Next (); 
 		return roundItr.Position <= instance.Rounds.Length-1;
 	}
 
+	/// <summary>
+	/// Advance to the next pitch if one exists
+	/// </summary>
+	/// <returns>True if a next pitcher exists, otherwise false</returns>
 	public bool NextPitch () { 
 		pitchItr.Next (); 
 		return pitchItr.Position <= CurrentRound.PitchOrder.Length-1;
 	}
 
+	/// <summary>
+	/// Advance to the next agenda item if one exists
+	/// </summary>
+	/// <returns>True if a next agenda item exists, otherwise false</returns>
 	public bool NextAgendaItem () {
 		agendaItemItr.Next ();
 		return agendaItemItr.Position <= CurrentRound.AgendaItemOrder.Length-1;
 	}
 
 	void Setup () {
+
+		// Create new instance data
 		instance = new InstanceData ();
+
 		try {
+			// Assign the deck
 			instance.DeckName = Game.Decks.Deck.Name;
 		} catch {
 			throw new System.Exception ("Failed to setup game controller because a deck has not been chosen.");
 		}
+
 		try {
+			// Assign the players
 			instance.Players = Game.Manager.Players.Values.ToArray ();
 		} catch {
 			throw new System.Exception ("Failed to setup game controller because the players have not been set.");
 		}
+
 		PopulateData ();
 		SendData ();
 		SaveData ();
@@ -433,20 +473,26 @@ public class GameController : GameInstanceBehaviour {
 
 		instance.Rounds = rounds;
 
-		// PrintData ();
+		// PrintData (); // uncomment to print the data constructed above
 	}
 
 	void InitializeInstanceData (NetMessage msg) {
-		if (Hosting && instance == null) 
+
+		// When a host starts a new game, they receive this message and initialize the game data
+		if (Hosting && instance == null)
 			Setup ();
 	}
 
 	void SendData () {
+
+		// Send the instance data to all connected peers
 		string data = JsonWriter.Serialize (instance);
 		Game.Dispatcher.ScheduleMessage ("InstanceDataLoaded", data);
 	}
 
 	void LoadInstanceData (NetMessage msg) {
+
+		// Peers receive the data from the host and deserialize it
 		if (!Hosting) {
 			instance = JsonReader.Deserialize<InstanceData> (msg.str1);
 			SaveData ();
@@ -461,6 +507,8 @@ public class GameController : GameInstanceBehaviour {
 	}
 
 	void LoadData () {
+
+		// Load locally saved gameplay data
 		string data = DataManager.LoadJsonData (GetFilename ());
 		instance = JsonReader.Deserialize<InstanceData> (data);
 	}
@@ -491,6 +539,9 @@ public class GameController : GameInstanceBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Some values (round, pitch, agenda item) count up from 0. This class iterates those values and communicates the update to connected peers.
+	/// </summary>
 	class ArrayIterator {
 
 		readonly string id;

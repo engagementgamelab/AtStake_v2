@@ -2,6 +2,9 @@
 using System.Collections;
 using Views;
 
+/// <summary>
+/// (In SINGLE_SCREEN mode) runs through the entire game
+/// </summary>
 public class GameTest : GameInstanceBehaviour {
 
 	bool Animating {
@@ -24,6 +27,50 @@ public class GameTest : GameInstanceBehaviour {
 		Game.Dispatcher.AddListener ("RunTest", Run);
 	}
 
+	/// <summary>
+	/// If this player is the Decider and a next button exists, presses the button
+	/// </summary>
+	public void PressNext () {
+		if (IsDecider) 
+			PressButton ("next");
+	}
+
+	/// <summary>
+	/// Presses the button with the given id
+	/// </summary>
+	/// <param name="id">id of the button to press</param>
+	public void PressButton (string id) {
+		CurrentView.GetScreenElement<ButtonElement> (id).TestPress ();
+	}
+
+	/// <summary>
+	/// Presses the button in the radio list with the given id
+	/// </summary>
+	/// <param name="radioId">id of the radio list that the button is in</param>
+	/// <param name="id">id of the button to press</param>
+	public void PressRadioButton (string radioId, string id) {
+		RadioListElement list = CurrentView.GetScreenElement<RadioListElement> (radioId);
+		list.Elements[id].TestPress ();
+		list.Elements["confirm"].TestPress ();
+	}
+
+	/// <summary>
+	/// Presses the button in the list with the given id
+	/// </summary>
+	/// <param name="listId">id of the list that the button is in</param>
+	/// <param name="id">id of the button to press</param>
+	public void PressListButton (string listId, string id) {
+		ListElement<ButtonElement> list = CurrentView.GetScreenElement<ListElement<ButtonElement>> (listId);
+		list.Elements[id].TestPress ();
+	}
+
+	/// <summary>
+	/// Starts the timer
+	/// </summary>
+	public void PressTimerButton () {
+		CurrentView.GetScreenElement<TimerButtonElement> ("timer_button").StartTimer ();
+	}
+
 	void Run (NetMessage msg) {
 
 		Game.Dispatcher.AddListener ("GotoView", GotoView);
@@ -38,31 +85,7 @@ public class GameTest : GameInstanceBehaviour {
 
 		PressButton ("play");
 	}
-
-	public void PressNext () {
-		if (IsDecider) 
-			PressButton ("next");
-	}
-
-	public void PressButton (string id) {
-		CurrentView.GetScreenElement<ButtonElement> (id).TestPress ();
-	}
-
-	public void PressRadioButton (string radioId, string id) {
-		RadioListElement list = CurrentView.GetScreenElement<RadioListElement> (radioId);
-		list.Elements[id].TestPress ();
-		list.Elements["confirm"].TestPress ();
-	}
-
-	public void PressListButton (string listId, string id) {
-		ListElement<ButtonElement> list = CurrentView.GetScreenElement<ListElement<ButtonElement>> (listId);
-		list.Elements[id].TestPress ();
-	}
-
-	public void PressTimerButton () {
-		CurrentView.GetScreenElement<TimerButtonElement> ("timer_button").StartTimer ();
-	}
-
+	
 	void GotoView (NetMessage msg) {
 
 		Co.YieldWhileTrue (() => { return Animating; }, () => {

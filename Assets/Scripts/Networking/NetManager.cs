@@ -1,4 +1,4 @@
-#define RESET_ON_REGISTER // when true, clears the server database every time a host registers (don't use for production)
+// #define RESET_ON_REGISTER // when true, clears the server database every time a host registers (don't use for production)
 using UnityEngine;
 using System;
 using System.Collections;

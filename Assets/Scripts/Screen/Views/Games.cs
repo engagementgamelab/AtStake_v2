@@ -33,9 +33,11 @@ namespace Views {
 			});
 		}
 
-		public override void OnDisconnect () {
-			if (!string.IsNullOrEmpty (Game.Manager.TakenName))
+		protected override void OnNameTaken () {
+			if (!string.IsNullOrEmpty (Game.Multiplayer.TakenName))
 				GotoView ("name_taken");
 		}
+
+		public override void OnDisconnect () {}
 	}
 }

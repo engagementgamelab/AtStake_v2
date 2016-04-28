@@ -177,6 +177,18 @@ namespace Views {
 			elements = null;
 		}
 
+		/// <summary>
+		/// Gets the screen element with the id as the type T
+		/// </summary>
+		/// <param name="id">The id of the screen element</param>
+		public T GetScreenElement<T> (string id) where T : ScreenElement {
+			try {
+				return Elements[id] as T;
+			} catch (KeyNotFoundException) {
+				throw new System.Exception ("No screen element with the id '" + id + "'");
+			}
+		}
+
 		void LoadModelElements () {
 
 			// Header/title
@@ -231,14 +243,6 @@ namespace Views {
 			}
 		}
 
-		public T GetScreenElement<T> (string id) where T : ScreenElement {
-			try {
-				return Elements[id] as T;
-			} catch (KeyNotFoundException) {
-				throw new System.Exception ("No screen element with the id '" + id + "'");
-			}
-		}
-
 		protected void CreateRoleCard (bool showTitle, bool showBio, bool showAgenda) {
 			if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
 			if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
@@ -277,48 +281,76 @@ namespace Views {
 
 		// -- Routing
 
+		/// <summary>
+		/// Moves the player to a new view
+		/// </summary>
+		/// <param name="id">The id of the view to move to</param>
 		public void GotoView (string id) {
 			views.Goto (id);
 		}
 
+		/// <summary>
+		/// Moves the player back to the previous view
+		/// </summary>
 		public void GoBack () {
 			views.GotoPrevious ();
 		}
 
+		/// <summary>
+		/// Sends all connected players to a new view
+		/// </summary>
+		/// <param name="id">The id of the view to move to</param>
 		public void AllGotoView (string id) {
 			views.AllGoto (id);
 		}
 
 		// -- Events
 
+		/// <summary>
+		/// Called when the player is disconnected. By default, the player is sent to the "disconnected" view, but views can override this and define custom behavior
+		/// </summary>
 		public virtual void OnDisconnect () {
 			GotoView ("disconnected");
 		}
 
+		/// <summary>
+		/// Called when a player (other than this one) is disconnected from the game. By default, the player is sent to the "dropped" view, but views can override this and define custom behavior
+		/// </summary>
 		public virtual void OnClientDropped () {
 			GotoView ("dropped");
 		}
 
+		/// <summary>
+		/// Called when a previously disconnected player rejoins the game. By default, the player is sent to the previously visited view, but views can override this and define custom behavior
+		/// </summary>
 		public virtual void OnClientsReconnected () {
 			GoBack ();
 		}
 
 		// -- Misc
 
+		/// <summary>
+		/// Request to join a game with the given host id and handle the response
+		/// </summary>
+		/// <param name="hostId">The host id of the game to join</param>
 		protected void JoinGame (string hostId) {
 			Game.StartGame ();
 			Game.Multiplayer.JoinGame (hostId, (ResponseType res) => {
 				switch (res) {
 					case ResponseType.Success: GotoView ("lobby"); break;
 					case ResponseType.NameTaken:
-						Game.Manager.TakenName = Name;
-						Game.Manager.AttemptedHost = hostId;
+						Game.Multiplayer.TakenName = Name;
+						Game.Multiplayer.AttemptedHost = hostId;
 						Game.EndGame ();
+						OnNameTaken ();
 						break;
 				}
 			});
 		}
 
+		/// <summary>
+		/// Request to host a new game and handle the response
+		/// </summary>
 		protected void HostGame () {
 			Game.StartGame ();
 			Game.Multiplayer.HostGame ((ResponseType res) => {
@@ -326,21 +358,54 @@ namespace Views {
 				if (res == ResponseType.Success) {
 					GotoView ("lobby");
 				} else if (res == ResponseType.NameTaken) {
-					Game.Manager.TakenName = Name;
-					Game.Manager.AttemptedHost = "";
+					Game.Multiplayer.TakenName = Name;
+					Game.Multiplayer.AttemptedHost = "";
 					Game.EndGame ();
+					OnNameTaken ();
 				}
 			});
 		}
 
 		// -- Virtual methods
 
-		protected virtual void OnInitElements () {}			// Static elements that all players see
-		protected virtual void OnInitDeciderElements () {}	// Static elements that only the Decider sees
-		protected virtual void OnInitPlayerElements () {}	// Static elements that all players except the Decider see
-		protected virtual void OnInitHostElements () {}		// Static elements that only the host sees
-		protected virtual void OnInitClientElements () {}	// Static elements that only clients seee
+		/// <summary>
+		/// Static elements that all players see
+		/// </summary>
+		protected virtual void OnInitElements () {}
+
+		/// <summary>
+		/// Static elements that only the Decider sees
+		/// </summary>
+		protected virtual void OnInitDeciderElements () {}
+		
+		/// <summary>
+		/// Static elements that all players except the Decider see
+		/// </summary>
+		protected virtual void OnInitPlayerElements () {}
+
+		/// <summary>
+		/// Static elements that only the host sees
+		/// </summary>
+		protected virtual void OnInitHostElements () {}
+
+		/// <summary>
+		/// Static elements that only clients seee
+		/// </summary>
+		protected virtual void OnInitClientElements () {}
+
+		/// <summary>
+		/// Called after all screen elements have been loaded
+		/// </summary>
 		protected virtual void OnShow () {}
+
+		/// <summary>
+		/// Called when the player leaves the view
+		/// </summary>
 		protected virtual void OnHide () {}
+
+		/// <summary>
+		/// Called when the player attempted to join or host a game but their name is unavailable
+		/// </summary>
+		protected virtual void OnNameTaken () {}
 	}
 }

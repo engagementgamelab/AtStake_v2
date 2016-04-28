@@ -6,9 +6,19 @@ namespace Views {
 
 	//// <summary>
 	/// Manages all the views in the game
-	/// Sets which view is currently active
+	/// Sets which view is currently active and moves between views.
 	/// </summary>
 	public class ViewManager : GameInstanceBehaviour {
+
+		/// <summary>
+		/// The id of the view the player is currently on
+		/// </summary>
+		public string CurrView { get; private set; }
+
+		/// <summary>
+		/// The id of the previously visited view
+		/// </summary>
+		public string PrevView { get; private set; }
 
 		Dictionary<string, View> views;
 		Dictionary<string, View> Views {
@@ -54,9 +64,6 @@ namespace Views {
 
 		bool Loaded { get { return views != null; } }
 
-		public string CurrView { get; private set; }
-		public string PrevView { get; private set; }
-
 		public void Init () {
 			if (!Loaded) {
 				foreach (var view in Views)
@@ -66,6 +73,10 @@ namespace Views {
 			Game.Dispatcher.AddListener ("GotoView", OnGotoView);
 		}
 
+		/// <summary>
+		/// Move to the view with the given id
+		/// </summary>
+		/// <param name="id">The id of the view to move to</param>
 		public void Goto (string id) {
 
 			if (id == CurrView) return;
@@ -86,37 +97,61 @@ namespace Views {
 			}
 		}
 
+		/// <summary>
+		/// Moves the player to the previously visited view
+		/// </summary>
 		public void GotoPrevious () {
 			Goto (PrevView);
 		}
 
+		/// <summary>
+		/// Gets the view with the given id as the type T
+		/// </summary>
+		/// <param name="id">id of the view to get (leave blank to get the current view)</param>
+		/// <returns>View as T</returns>
 		public T GetView<T> (string id="") where T : View {
 			if (id == "") id = CurrView;
 			return (T)Views[id];
 		}
 
+		/// <summary>
+		/// Gets the view with the given id
+		/// </summary>
+		/// <param name="id">id of the view to get (leave blank to get the current view)</param>
+		/// <returns>View</returns>
 		public View GetView (string id="") {
 			if (id == "") id = CurrView;
 			return Views[id];
 		}
 
-		void OnGotoView (NetMessage msg) {
-			Goto (msg.str1);
-		}
-
+		/// <summary>
+		/// Send all players to a new view
+		/// </summary>
+		/// <param name="id">id of the view to move to</param>
 		public void AllGoto (string id) {
 			Game.Dispatcher.ScheduleMessage ("GotoView", id);
 		}
 
+		/// <summary>
+		/// Called when the player is disconnected. Passes the message on to the current view.
+		/// </summary>
 		public void OnDisconnect () {
 			Views[CurrView].OnDisconnect ();
 		}
 
+		/// <summary>
+		/// Called when a client (other than this one) is dropped or rejoins the game. Passes the message on to the current view.
+		/// </summary>
+		/// <param name="hasDroppedClients">True if clients are missing from the game, otherwise false</param>
 		public void OnUpdateDroppedClients (bool hasDroppedClients) {
 			if (hasDroppedClients)
 				Views[CurrView].OnClientDropped ();
 			else
 				Views[CurrView].OnClientsReconnected ();
+		}
+
+		void OnGotoView (NetMessage msg) {
+			Goto (msg.str1);
 		}
 	}
 }

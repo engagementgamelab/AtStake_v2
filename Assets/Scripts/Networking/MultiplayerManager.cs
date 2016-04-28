@@ -62,6 +62,16 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		private set { connectionStatus = value; }
 	}
 
+	/// <summary>
+	/// Gets/sets whether this player attempted to host or join a game but was disconnected because another player had the same name.
+	/// </summary>
+	public string TakenName { get; set; }
+
+	/// <summary>
+	/// Gets/sets the name of the game that the player unsuccessfully tried to join. This reference is needed so that the game knows which game to rejoin if the player enters a new name.
+	/// </summary>
+	public string AttemptedHost { get; set; }
+
 	public OnDisconnected onDisconnected;
 	public OnUpdateConnectionStatus onUpdateConnectionStatus;
 	public OnUpdateDroppedClients onUpdateDroppedClients;
@@ -86,6 +96,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		net.onUpdateConnection += OnUpdateConnection;
 	}
 
+	public void Init () {
+		TakenName = "";
+	}
+
 	public void HostGame (Action<ResponseType> response) {
 
 		// Set this player as the host
@@ -104,6 +118,8 @@ public class MultiplayerManager : GameInstanceBehaviour {
 				net.clientsUpdated = OnUpdateClients;
 				net.onDisconnected = OnDisconnect;
 				net.onUpdateDroppedClients = OnUpdateDropped;
+			} else {
+				OnDisconnect ();
 			}
 
 			response (res);
@@ -160,12 +176,14 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Disconnect ();
 	}
 
+	#if !SINGLE_SCREEN
 	void OnApplicationFocus (bool focused) {
 		if (focused)
 			net.OnGainFocus ();
 		else
 			net.OnLoseFocus ();
 	}
+	#endif
 
 	// For testing only - simulate dropped devices
 	public void Drop () {
