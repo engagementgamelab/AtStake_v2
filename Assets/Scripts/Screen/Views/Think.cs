@@ -12,14 +12,22 @@ namespace Views {
 			get { return DataManager.GetSettings ().ThinkSeconds; }
 		}
 
+		bool droppedClient = false;
+
 		protected override void OnInitDeciderElements () {
+
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
 				Game.Dispatcher.ScheduleMessage ("StartTimer");
 				Game.Audio.Play ("timer_start");
 			}, () => {
-				AllGotoView ("pitch_instructions");	
+				Advance ();
 				Game.Audio.Play ("alarm");
 			}));
+
+			// The skip button is only shown if a client was dropped (so that players don't need to wait for the timer to run down again)
+			Elements.Add ("skip", new ButtonElement (GetButton ("skip"), () => {
+				Advance ();
+			}) { Active = droppedClient });
 		}
 
 		protected override void OnInitPlayerElements () {
@@ -39,6 +47,16 @@ namespace Views {
 			if (HasElement ("timer")) {
 				GetScreenElement<TimerElement> ("timer").StartTimer ();
 			}
+		}
+
+		void Advance () {
+			AllGotoView ("pitch_instructions");
+			droppedClient = false;
+		}
+
+		public override void OnClientDropped () {
+			base.OnClientDropped ();
+			droppedClient = true;
 		}
 	}
 }

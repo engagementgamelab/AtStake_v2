@@ -1,0 +1,178 @@
+\hypertarget{class_score_manager}{}\section{Score\+Manager Class Reference}
+\label{class_score_manager}\index{Score\+Manager@{Score\+Manager}}
+
+
+Interfaces with Game\+Controller to handle scoring for all players This includes players\textquotesingle{} individual scores and the pot  
+
+
+Inheritance diagram for Score\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_score_manager}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+delegate void {\bfseries On\+Update\+Score} (int score)\hypertarget{class_score_manager_a0d535c5b349c2b0986b13ffcefbbfcd4}{}\label{class_score_manager_a0d535c5b349c2b0986b13ffcefbbfcd4}
+
+\item 
+delegate void {\bfseries On\+Update\+Pot} (int pot)\hypertarget{class_score_manager_acf4a27a78b14dcc45d59fbad960335df}{}\label{class_score_manager_acf4a27a78b14dcc45d59fbad960335df}
+
+\item 
+void {\bfseries Init} ()\hypertarget{class_score_manager_a5a4a682601029dcffa1bc6a79c78931e}{}\label{class_score_manager_a5a4a682601029dcffa1bc6a79c78931e}
+
+\item 
+void \hyperlink{class_score_manager_a2df20bbab8cd763e80b3f6e023552c62}{Fill\+Pot} ()
+\begin{DoxyCompactList}\small\item\em Sets the pot to its starting value \end{DoxyCompactList}\item 
+void \hyperlink{class_score_manager_a8963c413e2eb854856f32419cb41424a}{Empty\+Pot} ()
+\begin{DoxyCompactList}\small\item\em Sets the pot value to 0 \end{DoxyCompactList}\item 
+void \hyperlink{class_score_manager_a11408d13d0abff357b56d99324c6037b}{Add\+Round\+Start\+Scores} ()
+\begin{DoxyCompactList}\small\item\em Adds coins to each player\textquotesingle{}s score based on what round number this is and whether or not the player is the Decider \end{DoxyCompactList}\item 
+void \hyperlink{class_score_manager_addad3c65a8df534fb8d897a9f2b2b3d8}{Add\+Winnings} ()
+\begin{DoxyCompactList}\small\item\em Adds coins to the winning player\textquotesingle{}s score \end{DoxyCompactList}\item 
+void \hyperlink{class_score_manager_a01d67da43955f99b3715971e5fadce01}{Apply\+Player\+Reward} (Player\+Agenda\+Item item)
+\begin{DoxyCompactList}\small\item\em Adds coins to the player\textquotesingle{}s score based on the value defined in the agenda item \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+On\+Update\+Score \hyperlink{class_score_manager_a54ededdc900a0c1982c25ab9ca984bed}{on\+Update\+Score}
+\begin{DoxyCompactList}\small\item\em Event that is called when the player\textquotesingle{}s score is updated. \end{DoxyCompactList}\item 
+On\+Update\+Pot \hyperlink{class_score_manager_a2df09d1f61b32b83a80c78d63f94689b}{on\+Update\+Pot}
+\begin{DoxyCompactList}\small\item\em Event that is called when the pot\textquotesingle{}s value is updated. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{class_score_manager_a1a7ae6889437a8e47fac4ca2036149b3}{Player\+Score}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets/sets this player\textquotesingle{}s score. Sends a notification that the score has been updated. \end{DoxyCompactList}\item 
+int \hyperlink{class_score_manager_a4e64c104c582dbe98703bfaa2a6bf196}{Pot}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets/sets the pot value. Sends a notification that the pot has been updated. \end{DoxyCompactList}\item 
+Dictionary$<$ string, int $>$ \hyperlink{class_score_manager_a160ee3a7dbcadcca8a0c623719394681}{Player\+Scores}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets the scores for each player. The key is the player\textquotesingle{}s name. \end{DoxyCompactList}\item 
+Key\+Value\+Pair$<$ string, int $>$ \hyperlink{class_score_manager_aea653edd704e7a996e77ac55f23a9782}{Top\+Score}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets the top score. The key is the player\textquotesingle{}s name. \end{DoxyCompactList}\item 
+bool \hyperlink{class_score_manager_a45b9f26bc13807ae1733feea8a5c7349}{Can\+Afford\+Extra\+Time}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns true if the player\textquotesingle{}s score is large enough to be able to afford extra time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interfaces with Game\+Controller to handle scoring for all players This includes players\textquotesingle{} individual scores and the pot 
+
+
+
+\subsection{Member Function Documentation}
+\index{Score\+Manager@{Score\+Manager}!Add\+Round\+Start\+Scores@{Add\+Round\+Start\+Scores}}
+\index{Add\+Round\+Start\+Scores@{Add\+Round\+Start\+Scores}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Add\+Round\+Start\+Scores()}{AddRoundStartScores()}}]{\setlength{\rightskip}{0pt plus 5cm}void Score\+Manager.\+Add\+Round\+Start\+Scores (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_score_manager_a11408d13d0abff357b56d99324c6037b}{}\label{class_score_manager_a11408d13d0abff357b56d99324c6037b}
+
+
+Adds coins to each player\textquotesingle{}s score based on what round number this is and whether or not the player is the Decider 
+
+\index{Score\+Manager@{Score\+Manager}!Add\+Winnings@{Add\+Winnings}}
+\index{Add\+Winnings@{Add\+Winnings}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Add\+Winnings()}{AddWinnings()}}]{\setlength{\rightskip}{0pt plus 5cm}void Score\+Manager.\+Add\+Winnings (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_score_manager_addad3c65a8df534fb8d897a9f2b2b3d8}{}\label{class_score_manager_addad3c65a8df534fb8d897a9f2b2b3d8}
+
+
+Adds coins to the winning player\textquotesingle{}s score 
+
+\index{Score\+Manager@{Score\+Manager}!Apply\+Player\+Reward@{Apply\+Player\+Reward}}
+\index{Apply\+Player\+Reward@{Apply\+Player\+Reward}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Apply\+Player\+Reward(\+Player\+Agenda\+Item item)}{ApplyPlayerReward(PlayerAgendaItem item)}}]{\setlength{\rightskip}{0pt plus 5cm}void Score\+Manager.\+Apply\+Player\+Reward (
+\begin{DoxyParamCaption}
+\item[{Player\+Agenda\+Item}]{item}
+\end{DoxyParamCaption}
+)}\hypertarget{class_score_manager_a01d67da43955f99b3715971e5fadce01}{}\label{class_score_manager_a01d67da43955f99b3715971e5fadce01}
+
+
+Adds coins to the player\textquotesingle{}s score based on the value defined in the agenda item 
+
+\index{Score\+Manager@{Score\+Manager}!Empty\+Pot@{Empty\+Pot}}
+\index{Empty\+Pot@{Empty\+Pot}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Empty\+Pot()}{EmptyPot()}}]{\setlength{\rightskip}{0pt plus 5cm}void Score\+Manager.\+Empty\+Pot (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_score_manager_a8963c413e2eb854856f32419cb41424a}{}\label{class_score_manager_a8963c413e2eb854856f32419cb41424a}
+
+
+Sets the pot value to 0 
+
+\index{Score\+Manager@{Score\+Manager}!Fill\+Pot@{Fill\+Pot}}
+\index{Fill\+Pot@{Fill\+Pot}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Fill\+Pot()}{FillPot()}}]{\setlength{\rightskip}{0pt plus 5cm}void Score\+Manager.\+Fill\+Pot (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_score_manager_a2df20bbab8cd763e80b3f6e023552c62}{}\label{class_score_manager_a2df20bbab8cd763e80b3f6e023552c62}
+
+
+Sets the pot to its starting value 
+
+
+
+\subsection{Member Data Documentation}
+\index{Score\+Manager@{Score\+Manager}!on\+Update\+Pot@{on\+Update\+Pot}}
+\index{on\+Update\+Pot@{on\+Update\+Pot}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{on\+Update\+Pot}{onUpdatePot}}]{\setlength{\rightskip}{0pt plus 5cm}On\+Update\+Pot Score\+Manager.\+on\+Update\+Pot}\hypertarget{class_score_manager_a2df09d1f61b32b83a80c78d63f94689b}{}\label{class_score_manager_a2df09d1f61b32b83a80c78d63f94689b}
+
+
+Event that is called when the pot\textquotesingle{}s value is updated. 
+
+\index{Score\+Manager@{Score\+Manager}!on\+Update\+Score@{on\+Update\+Score}}
+\index{on\+Update\+Score@{on\+Update\+Score}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{on\+Update\+Score}{onUpdateScore}}]{\setlength{\rightskip}{0pt plus 5cm}On\+Update\+Score Score\+Manager.\+on\+Update\+Score}\hypertarget{class_score_manager_a54ededdc900a0c1982c25ab9ca984bed}{}\label{class_score_manager_a54ededdc900a0c1982c25ab9ca984bed}
+
+
+Event that is called when the player\textquotesingle{}s score is updated. 
+
+
+
+\subsection{Property Documentation}
+\index{Score\+Manager@{Score\+Manager}!Can\+Afford\+Extra\+Time@{Can\+Afford\+Extra\+Time}}
+\index{Can\+Afford\+Extra\+Time@{Can\+Afford\+Extra\+Time}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Can\+Afford\+Extra\+Time}{CanAffordExtraTime}}]{\setlength{\rightskip}{0pt plus 5cm}bool Score\+Manager.\+Can\+Afford\+Extra\+Time\hspace{0.3cm}{\ttfamily [get]}}\hypertarget{class_score_manager_a45b9f26bc13807ae1733feea8a5c7349}{}\label{class_score_manager_a45b9f26bc13807ae1733feea8a5c7349}
+
+
+Returns true if the player\textquotesingle{}s score is large enough to be able to afford extra time. 
+
+\index{Score\+Manager@{Score\+Manager}!Player\+Score@{Player\+Score}}
+\index{Player\+Score@{Player\+Score}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Player\+Score}{PlayerScore}}]{\setlength{\rightskip}{0pt plus 5cm}int Score\+Manager.\+Player\+Score\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}\hypertarget{class_score_manager_a1a7ae6889437a8e47fac4ca2036149b3}{}\label{class_score_manager_a1a7ae6889437a8e47fac4ca2036149b3}
+
+
+Gets/sets this player\textquotesingle{}s score. Sends a notification that the score has been updated. 
+
+\index{Score\+Manager@{Score\+Manager}!Player\+Scores@{Player\+Scores}}
+\index{Player\+Scores@{Player\+Scores}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Player\+Scores}{PlayerScores}}]{\setlength{\rightskip}{0pt plus 5cm}Dictionary$<$string, int$>$ Score\+Manager.\+Player\+Scores\hspace{0.3cm}{\ttfamily [get]}}\hypertarget{class_score_manager_a160ee3a7dbcadcca8a0c623719394681}{}\label{class_score_manager_a160ee3a7dbcadcca8a0c623719394681}
+
+
+Gets the scores for each player. The key is the player\textquotesingle{}s name. 
+
+\index{Score\+Manager@{Score\+Manager}!Pot@{Pot}}
+\index{Pot@{Pot}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Pot}{Pot}}]{\setlength{\rightskip}{0pt plus 5cm}int Score\+Manager.\+Pot\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}\hypertarget{class_score_manager_a4e64c104c582dbe98703bfaa2a6bf196}{}\label{class_score_manager_a4e64c104c582dbe98703bfaa2a6bf196}
+
+
+Gets/sets the pot value. Sends a notification that the pot has been updated. 
+
+\index{Score\+Manager@{Score\+Manager}!Top\+Score@{Top\+Score}}
+\index{Top\+Score@{Top\+Score}!Score\+Manager@{Score\+Manager}}
+\subsubsection[{\texorpdfstring{Top\+Score}{TopScore}}]{\setlength{\rightskip}{0pt plus 5cm}Key\+Value\+Pair$<$string, int$>$ Score\+Manager.\+Top\+Score\hspace{0.3cm}{\ttfamily [get]}}\hypertarget{class_score_manager_aea653edd704e7a996e77ac55f23a9782}{}\label{class_score_manager_aea653edd704e7a996e77ac55f23a9782}
+
+
+Gets the top score. The key is the player\textquotesingle{}s name. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Assets/\+Scripts/Score\+Manager.\+cs\end{DoxyCompactItemize}

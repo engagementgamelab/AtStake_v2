@@ -19,19 +19,34 @@ namespace Views {
 			get { return DataManager.GetSettings ().ExtraSeconds; }
 		}
 
+		TimerButtonElement TimerButton {
+			get { return GetScreenElement<TimerButtonElement> ("timer_button"); }
+		}
+
 		enum State { Deliberate, Extra }
 		State state = State.Deliberate;
 
 		List<string> declinedPlayers = new List<string> ();
+		bool droppedClient = false;
 
 		protected override void OnInitDeciderElements () {
+
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
 				Game.Audio.Play ("timer_start");
 				Game.Dispatcher.ScheduleMessage ("StartTimer", state == State.Deliberate ? "deliberate" : "extra");
+				Elements["skip"].Active = false;
+				droppedClient = false;
 			}, () => {
 				Game.Dispatcher.ScheduleMessage ("TimeExpired");
 				Game.Audio.Play ("alarm");
 			}));
+
+			// The skip button is only shown if a client was dropped (so that players don't need to wait for the timer to run down again)
+			Elements.Add ("skip", new ButtonElement (GetButton ("skip"), () => {
+				TimerButton.Skip ();
+				droppedClient = false;
+			}) { Active = droppedClient });
+
 			Game.Dispatcher.AddListener ("AcceptExtraTime", AcceptExtraTime);
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 		}
@@ -72,9 +87,8 @@ namespace Views {
 		void AcceptExtraTime (NetMessage msg) {
 			AllGotoView ("deliberate");
 			declinedPlayers.Clear ();
-			TimerButtonElement timer = GetScreenElement<TimerButtonElement> ("timer_button");
-			timer.Reset (ExtraTimeDuration);
-			timer.StartTimer ();
+			TimerButton.Reset (ExtraTimeDuration);
+			TimerButton.StartTimer ();
 		}
 
 		void DeclineExtraTime (NetMessage msg) {
@@ -90,6 +104,11 @@ namespace Views {
 			if (!IsDecider) {
 				GotoView ("extra_time_deliberate");
 			}
+		}
+
+		public override void OnClientDropped () {
+			base.OnClientDropped ();
+			droppedClient = true;
 		}
 	}
 }

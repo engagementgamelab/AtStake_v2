@@ -1,0 +1,115 @@
+\hypertarget{class_player_manager}{}\section{Player\+Manager Class Reference}
+\label{class_player_manager}\index{Player\+Manager@{Player\+Manager}}
+
+
+Keeps track of all the players in the game.  
+
+
+Inheritance diagram for Player\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_player_manager}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+delegate void {\bfseries On\+Add\+Peer} (string peer, string color)\hypertarget{class_player_manager_a23f484564192af50056793a8beda18ed}{}\label{class_player_manager_a23f484564192af50056793a8beda18ed}
+
+\item 
+delegate void {\bfseries On\+Remove\+Peer} (string peer)\hypertarget{class_player_manager_a2ab8d887716b904d65d7d7edacfbdad1}{}\label{class_player_manager_a2ab8d887716b904d65d7d7edacfbdad1}
+
+\item 
+void {\bfseries Init} ()\hypertarget{class_player_manager_abd70cd2d0328b9af204cfc4a8a5f2e69}{}\label{class_player_manager_abd70cd2d0328b9af204cfc4a8a5f2e69}
+
+\item 
+void {\bfseries Reset} ()\hypertarget{class_player_manager_a413d8be1a89c2428099ea76b74adef08}{}\label{class_player_manager_a413d8be1a89c2428099ea76b74adef08}
+
+\item 
+void \hyperlink{class_player_manager_adb5ef6634b1a67bd3a19af09e5cab970}{Add\+Host} (string color)
+\begin{DoxyCompactList}\small\item\em Called when the player hosts a new game \end{DoxyCompactList}\item 
+void \hyperlink{class_player_manager_affc64e53b2c473f3fc0b4c63756af102}{On\+Update\+Players} (Net\+Message msg)
+\begin{DoxyCompactList}\small\item\em Called when a player joins or leaves the room that this player is hosting \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+On\+Add\+Peer \hyperlink{class_player_manager_a547dd0727a139061c67ffdadd6f8e99c}{on\+Add\+Peer}
+\begin{DoxyCompactList}\small\item\em Event that fires when a peer joins the game \end{DoxyCompactList}\item 
+On\+Remove\+Peer \hyperlink{class_player_manager_a88f01e2ed833375b7b95ae3d1272baf0}{on\+Remove\+Peer}
+\begin{DoxyCompactList}\small\item\em Event that fires when a peer leaves the game \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+Dictionary$<$ string, Player $>$ \hyperlink{class_player_manager_a6fcc25b412f01d734a22624aa2d3e016}{Players}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets the models associated with each player in the game. The key is the player\textquotesingle{}s name. \end{DoxyCompactList}\item 
+string \hyperlink{class_player_manager_acf881bd65193d0c3b7089f014ae22057}{Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets/sets this player\textquotesingle{}s name \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Keeps track of all the players in the game. 
+
+
+
+\subsection{Member Function Documentation}
+\index{Player\+Manager@{Player\+Manager}!Add\+Host@{Add\+Host}}
+\index{Add\+Host@{Add\+Host}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{Add\+Host(string color)}{AddHost(string color)}}]{\setlength{\rightskip}{0pt plus 5cm}void Player\+Manager.\+Add\+Host (
+\begin{DoxyParamCaption}
+\item[{string}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{class_player_manager_adb5ef6634b1a67bd3a19af09e5cab970}{}\label{class_player_manager_adb5ef6634b1a67bd3a19af09e5cab970}
+
+
+Called when the player hosts a new game 
+
+\index{Player\+Manager@{Player\+Manager}!On\+Update\+Players@{On\+Update\+Players}}
+\index{On\+Update\+Players@{On\+Update\+Players}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{On\+Update\+Players(\+Net\+Message msg)}{OnUpdatePlayers(NetMessage msg)}}]{\setlength{\rightskip}{0pt plus 5cm}void Player\+Manager.\+On\+Update\+Players (
+\begin{DoxyParamCaption}
+\item[{Net\+Message}]{msg}
+\end{DoxyParamCaption}
+)}\hypertarget{class_player_manager_affc64e53b2c473f3fc0b4c63756af102}{}\label{class_player_manager_affc64e53b2c473f3fc0b4c63756af102}
+
+
+Called when a player joins or leaves the room that this player is hosting 
+
+
+
+\subsection{Member Data Documentation}
+\index{Player\+Manager@{Player\+Manager}!on\+Add\+Peer@{on\+Add\+Peer}}
+\index{on\+Add\+Peer@{on\+Add\+Peer}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{on\+Add\+Peer}{onAddPeer}}]{\setlength{\rightskip}{0pt plus 5cm}On\+Add\+Peer Player\+Manager.\+on\+Add\+Peer}\hypertarget{class_player_manager_a547dd0727a139061c67ffdadd6f8e99c}{}\label{class_player_manager_a547dd0727a139061c67ffdadd6f8e99c}
+
+
+Event that fires when a peer joins the game 
+
+\index{Player\+Manager@{Player\+Manager}!on\+Remove\+Peer@{on\+Remove\+Peer}}
+\index{on\+Remove\+Peer@{on\+Remove\+Peer}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{on\+Remove\+Peer}{onRemovePeer}}]{\setlength{\rightskip}{0pt plus 5cm}On\+Remove\+Peer Player\+Manager.\+on\+Remove\+Peer}\hypertarget{class_player_manager_a88f01e2ed833375b7b95ae3d1272baf0}{}\label{class_player_manager_a88f01e2ed833375b7b95ae3d1272baf0}
+
+
+Event that fires when a peer leaves the game 
+
+
+
+\subsection{Property Documentation}
+\index{Player\+Manager@{Player\+Manager}!Name@{Name}}
+\index{Name@{Name}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{Name}{Name}}]{\setlength{\rightskip}{0pt plus 5cm}string Player\+Manager.\+Name\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}\hypertarget{class_player_manager_acf881bd65193d0c3b7089f014ae22057}{}\label{class_player_manager_acf881bd65193d0c3b7089f014ae22057}
+
+
+Gets/sets this player\textquotesingle{}s name 
+
+\index{Player\+Manager@{Player\+Manager}!Players@{Players}}
+\index{Players@{Players}!Player\+Manager@{Player\+Manager}}
+\subsubsection[{\texorpdfstring{Players}{Players}}]{\setlength{\rightskip}{0pt plus 5cm}Dictionary$<$string, Player$>$ Player\+Manager.\+Players\hspace{0.3cm}{\ttfamily [get]}}\hypertarget{class_player_manager_a6fcc25b412f01d734a22624aa2d3e016}{}\label{class_player_manager_a6fcc25b412f01d734a22624aa2d3e016}
+
+
+Gets the models associated with each player in the game. The key is the player\textquotesingle{}s name. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Assets/\+Scripts/Player\+Manager.\+cs\end{DoxyCompactItemize}

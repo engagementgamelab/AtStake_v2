@@ -25,9 +25,14 @@ namespace Views {
 			get { return new Dictionary<string, string> () { { "current_peer", CurrentPitcher } }; }
 		}
 
+		TimerButtonElement TimerButton {
+			get { return GetScreenElement<TimerButtonElement> ("timer_button"); }
+		}
+
 		string CurrentPitcher { get { return Game.Controller.CurrentPitcher; } }
 		bool IsCurrentPitcher { get { return CurrentPitcher == Name; } }
 		bool IsNextPitcher { get { return Game.Controller.NextPitcher == Name; }}
+		bool droppedClient = false;
 
 		protected override void OnInitDeciderElements () {
 
@@ -41,7 +46,17 @@ namespace Views {
 					CurrentPitcher,
 					state == State.Pitch ? "pitch" : "extra"
 				);
+				Elements["skip"].Active = false;
+				droppedClient = false;
 			}));
+
+			// The skip button is only shown if a client was dropped (so that players don't need to wait for the timer to run down again)
+			Elements.Add ("skip", new ButtonElement (GetButton ("skip"), () => {
+				TimerButton.Skip ();
+				droppedClient = false;
+				Game.Dispatcher.ScheduleMessage ("TimerSkip");
+				Elements["skip"].Active = false;
+			}) { Active = droppedClient });
 		}
 
 		protected override void OnInitPlayerElements () {
@@ -57,6 +72,8 @@ namespace Views {
 					Game.Audio.Play ("alarm");
 				}
 			}));
+
+			Game.Dispatcher.AddListener ("TimerSkip", TimerSkip);
 		}
 
 		protected override void OnShow () {
@@ -72,6 +89,7 @@ namespace Views {
 			Game.Dispatcher.RemoveListener (StartTimer);
 			Game.Dispatcher.RemoveListener (AcceptExtraTime);
 			Game.Dispatcher.RemoveListener (DeclineExtraTime);
+			Game.Dispatcher.RemoveListener (TimerSkip);
 		}
 
 		void StartTimer (NetMessage msg) {
@@ -91,9 +109,8 @@ namespace Views {
 		void AcceptExtraTime (NetMessage msg) {
 			AllGotoView ("pitch");
 			state = State.Extra;
-			TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
-			t.Reset (ExtraTimeDuration);
-			t.StartTimer ();
+			TimerButton.Reset (ExtraTimeDuration);
+			TimerButton.StartTimer ();
 		}
 
 		void DeclineExtraTime (NetMessage msg) {
@@ -114,10 +131,14 @@ namespace Views {
 				AllGotoView ("pitch");
 				GetScreenElement<TextElement> ("decider_instructions")
 					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);
-				GetScreenElement<TimerButtonElement> ("timer_button").Reset (Duration);
+				TimerButton.Reset (Duration);
 			} else {
 				AllGotoView ("deliberate_instructions");
 			}
+		}
+
+		void TimerSkip (NetMessage msg) {
+			GetScreenElement<TimerElement> ("timer").Skip ();
 		}
 	}
 }

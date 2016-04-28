@@ -58,6 +58,12 @@ public class TimerElement : ScreenElement {
 		OnUpdateTime (0);
 	}
 
+	public void Skip () {
+		OnUpdateTime (1f);
+		if (onEnd != null)
+			onEnd ();
+	}
+
 	void OnUpdateTime (float p) {
 		Progress = p;
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));

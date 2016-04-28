@@ -324,7 +324,7 @@ namespace Views {
 		/// Called when a previously disconnected player rejoins the game. By default, the player is sent to the previously visited view, but views can override this and define custom behavior
 		/// </summary>
 		public virtual void OnClientsReconnected () {
-			GoBack ();
+			views.GotoViewBeforeDrop ();
 		}
 
 		// -- Misc

@@ -9,6 +9,7 @@ namespace Views {
 			Elements.Add ("menu", new ButtonElement (Model.Buttons["menu"], () => { 
 				Game.EndGame ();
 			}));
+			Elements.Add ("timeout", new TextElement (GetText ("timeout")));
 		}
 
 		public override void OnDisconnect () {

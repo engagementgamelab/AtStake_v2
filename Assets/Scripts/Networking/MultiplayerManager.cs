@@ -176,7 +176,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		Disconnect ();
 	}
 
-	#if !SINGLE_SCREEN
+	#if !UNITY_EDITOR || !SINGLE_SCREEN
 	void OnApplicationFocus (bool focused) {
 		if (focused)
 			net.OnGainFocus ();

@@ -191,17 +191,9 @@ public class NetManager : SocketIOComponent {
 		});
 	}
 
-	public void OnLoseFocus () {
-		dropped = true;
-	}
-
-	public void OnGainFocus () {
-		if (dropped) {
-			Debug.Log ("CLOSING INTENTIONALY");
-			socket.Close ();
-		}
-		// Reconnect ();
-	}
+	public void OnLoseFocus () { dropped = true; }
+	// public void OnGainFocus () { if (dropped) socket.Close (); }
+	public void OnGainFocus () { Reconnect (); }
 
 	// Simulate a dropped connection
 	public void Drop () {
@@ -213,11 +205,6 @@ public class NetManager : SocketIOComponent {
 	public void Reconnect () {
 		if (dropped)
 			Connect ();
-		/*if (IsConnected) {
-			OnOpen ();
-		} else if (dropped) {
-			Connect ();
-		}*/
 	}
 
 	/**
@@ -302,13 +289,11 @@ public class NetManager : SocketIOComponent {
 
 		if (IsConnected && dropped) {
 
-			Debug.Log ("OPEN");
 			if (connection.connected) {
 				JSONObject obj = JSONObject.Create ();
 				obj.AddField ("clientId", connection.clientId);
 				obj.AddField ("roomId", connection.roomId);
 
-				Debug.Log ("reconnecting...");
 				Emit ("rejoinRoom", obj, (SocketIOEvent s) => {
 					Debug.Log ("RECONNECTED!!!");
 				});
@@ -329,11 +314,11 @@ public class NetManager : SocketIOComponent {
 
 	// This event should only ever fire when the application is quit or when the device loses its connection (in which case it will attempt to reconnect)
 	void OnClose (SocketIOEvent e) {
+		#if UNITY_EDITOR && SINGLE_SCREEN
+		return;
+		#endif
 		SendUpdateConnectionMessage (false);
-		if (dropped) {
-			Debug.Log ("TRYINA RECONNECT YA NOW BUB");
-			Reconnect ();
-		}
+		Reconnect ();
 	}
 
 	/**

@@ -64,6 +64,8 @@ namespace Views {
 
 		bool Loaded { get { return views != null; } }
 
+		string viewBeforeDrop = "";
+
 		public void Init () {
 			if (!Loaded) {
 				foreach (var view in Views)
@@ -102,6 +104,16 @@ namespace Views {
 		/// </summary>
 		public void GotoPrevious () {
 			Goto (PrevView);
+		}
+
+		/// <summary>
+		/// Return to the view the player was on before a client was dropped
+		/// </summary>
+		public void GotoViewBeforeDrop () {
+			if (viewBeforeDrop == "")
+				GotoPrevious ();
+			else
+				Goto (viewBeforeDrop);
 		}
 
 		/// <summary>
@@ -144,10 +156,13 @@ namespace Views {
 		/// </summary>
 		/// <param name="hasDroppedClients">True if clients are missing from the game, otherwise false</param>
 		public void OnUpdateDroppedClients (bool hasDroppedClients) {
-			if (hasDroppedClients)
+			if (hasDroppedClients) {
+				if (CurrView != "dropped")
+					viewBeforeDrop = CurrView;
 				Views[CurrView].OnClientDropped ();
-			else
+			} else {
 				Views[CurrView].OnClientsReconnected ();
+			}
 		}
 
 		void OnGotoView (NetMessage msg) {
