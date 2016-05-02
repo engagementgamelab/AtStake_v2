@@ -16,7 +16,7 @@ namespace Views {
 
 		protected override void OnInitDeciderElements () {
 
-			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button"), Duration, () => {
+			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button_decider"), Duration, () => {
 				Game.Dispatcher.ScheduleMessage ("StartTimer");
 				Game.Audio.Play ("timer_start");
 			}, () => {
