@@ -48,6 +48,7 @@ namespace Views {
 				);
 				Elements["skip"].Active = false;
 				droppedClient = false;
+				SetDeciderInstructionsText ("listen");
 			}));
 
 			// The skip button is only shown if a client was dropped (so that players don't need to wait for the timer to run down again)
@@ -84,8 +85,9 @@ namespace Views {
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (HasElement ("decider_instructions")) {
-				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPitcherTextVariable);
+				SetDeciderInstructionsText ("first_up");
+				/*GetScreenElement<TextElement> ("decider_instructions")
+					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPitcherTextVariable);*/
 			}
 		}
 
@@ -133,8 +135,9 @@ namespace Views {
 			Game.Controller.NextPitch ();
 			if (CurrentPitcher != "") {
 				AllGotoView ("pitch");
-				GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);
+				SetDeciderInstructionsText ("next_up");
+				/*GetScreenElement<TextElement> ("decider_instructions")
+					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);*/
 				TimerButton.Reset (Duration);
 			} else {
 				AllGotoView ("deliberate_instructions");
@@ -143,6 +146,11 @@ namespace Views {
 
 		void TimerSkip (NetMessage msg) {
 			GetScreenElement<TimerElement> ("timer").Skip ();
+		}
+
+		void SetDeciderInstructionsText (string id) {
+			GetScreenElement<TextElement> ("decider_instructions")
+				.Text = DataManager.GetTextFromScreen (Model, id, CurrentPitcherTextVariable);
 		}
 	}
 }
