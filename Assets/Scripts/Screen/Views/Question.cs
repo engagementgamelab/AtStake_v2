@@ -14,11 +14,11 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			Elements.Add ("trophy", new ImageElement ("trophy"));
+			Elements.Add ("separator", new ImageElement (""));
 		}
 
 		protected override void OnInitElements () {
 			Elements.Add ("question", new TextElement (Game.Controller.Question));
-			Elements.Add ("separator", new ImageElement (""));
 			Elements.Add ("round", new TextElement ("Round " + (Game.Controller.RoundNumber+1).ToString ()));
 		}
 	}
