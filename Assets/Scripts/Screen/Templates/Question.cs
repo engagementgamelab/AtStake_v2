@@ -7,7 +7,7 @@ namespace Templates {
 	public class Question : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("next_button", "decider_instructions", "coins_and_pot") {
+			return new TemplateSettings ("next_button", "decider_instructions", "coins_and_pot", "question") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.LtTeal,
 				BottomBarHeight = TemplateSettings.MediumBar,
@@ -24,8 +24,7 @@ namespace Templates {
 							FontSize = 24,
 							FontColor = Palette.Orange
 						}
-					},
-					{ "question", TextStyle.Header3 }
+					}
 				}
 			};
 		}

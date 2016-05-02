@@ -31,8 +31,12 @@ namespace Views {
 		}
 
 		protected override void OnInitPlayerElements () {
-			CreateRoleCard (true, true, true);
+			CreateRoleCard (true, true, true, false);
 			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, TimerType.Think));
+		}
+
+		protected override void OnInitElements () {
+			Elements.Add ("question", new TextElement (Game.Controller.Question));
 		}
 
 		protected override void OnShow () {

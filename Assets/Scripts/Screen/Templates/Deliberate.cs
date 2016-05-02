@@ -7,7 +7,7 @@ namespace Templates {
 	public class Deliberate : Template {
 
 		protected override TemplateSettings LoadSettings () {
-			return new TemplateSettings ("role_card", "coins_and_pot", "orange_button|skip") {
+			return new TemplateSettings ("role_card", "coins_and_pot", "orange_button|skip", "question") {
 				TopBarHeight = TemplateSettings.ShortBar,
 				TopBarColor = Palette.Pink,
 				BottomBarHeight = TemplateSettings.MediumBar,

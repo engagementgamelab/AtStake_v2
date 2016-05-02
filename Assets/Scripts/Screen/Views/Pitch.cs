@@ -61,7 +61,7 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 
-			CreateRoleCard (true, true, true);
+			CreateRoleCard (true, true, true, false);
 
 			string timerText = GetButton (IsCurrentPitcher ? "pitching" : "listening"); 
 			TimerType type = IsCurrentPitcher ? TimerType.Pitch : TimerType.Listen;
@@ -76,6 +76,10 @@ namespace Views {
 			Game.Dispatcher.AddListener ("TimerSkip", TimerSkip);
 		}
 
+		protected override void OnInitElements () {
+			Elements.Add ("question", new TextElement (Game.Controller.Question));
+		}
+		
 		protected override void OnShow () {
 			Game.Dispatcher.AddListener ("DeclineExtraTime", DeclineExtraTime);
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);

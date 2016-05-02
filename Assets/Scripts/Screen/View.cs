@@ -243,21 +243,35 @@ namespace Views {
 			}
 		}
 
-		protected void CreateRoleCard (bool showTitle, bool showBio, bool showAgenda) {
+		protected void CreateRoleCard (bool showTitle, bool showBio, bool showAgenda, bool showAgendaImages=true) {
+
+			// The title ("Bob the Builder")
 			if (showTitle) Elements.Add ("rc_title", new TextElement (Name + " the " + Title));
+
+			// The character description ("Construction worker who makes beautiful buildings")
 			if (showBio) Elements.Add ("rc_bio", new TextElement (Role.Bio));
+
 			if (showAgenda) {
 
 				int[] rewardValues = DataManager.GetSettings ().Rewards;
 
+				// The Agenda caption ("Agenda")
 				Elements.Add ("rc_agenda_title", new TextElement ("Agenda"));
+
 				for (int i = 0; i < Role.AgendaItems.Length; i ++) {
+
 					string idx = i.ToString ();
+
+					// Agenda item description ("Includes dump trucks")
 					Elements.Add ("rc_item" + idx, new TextElement (Role.AgendaItems[i].Description));
-					Elements.Add ("rc_reward_image" + idx, new ImageElement ("coin"));
-					Elements.Add ("rc_reward" + idx, new TextElement ("+" + rewardValues[Role.AgendaItems[i].Reward]));
-					if (i > 0) {
-						Elements.Add ("rc_reward_image" + idx + "b", new ImageElement ("coin"));
+
+					// Agenda item values (coin image with value)
+					if (showAgendaImages) {
+						Elements.Add ("rc_reward_image" + idx, new ImageElement ("coin"));
+						Elements.Add ("rc_reward" + idx, new TextElement ("+" + rewardValues[Role.AgendaItems[i].Reward]));
+						if (i > 0) {
+							Elements.Add ("rc_reward_image" + idx + "b", new ImageElement ("coin"));
+						}
 					}
 				}
 			}

@@ -20,6 +20,7 @@ public class StyleSnippets {
 				snippets.Add ("blue_button", BlueButton);
 				snippets.Add ("coins_and_pot", CoinsAndPot);
 				snippets.Add ("lt_coins_and_pot", LtCoinsAndPot);
+				snippets.Add ("question", Question);
 			}
 			return snippets;
 		}
@@ -147,6 +148,10 @@ public class StyleSnippets {
 				}
 			};
 		}
+	}
+
+	public StyleSnippet Question {
+		get { return new StyleSnippet ("question", TextStyle.Header3); }
 	}
 }
 
