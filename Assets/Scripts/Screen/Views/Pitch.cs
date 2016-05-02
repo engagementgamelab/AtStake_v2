@@ -86,8 +86,6 @@ namespace Views {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 			if (HasElement ("decider_instructions")) {
 				SetDeciderInstructionsText ("first_up");
-				/*GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "first_up", CurrentPitcherTextVariable);*/
 			}
 		}
 
@@ -136,8 +134,6 @@ namespace Views {
 			if (CurrentPitcher != "") {
 				AllGotoView ("pitch");
 				SetDeciderInstructionsText ("next_up");
-				/*GetScreenElement<TextElement> ("decider_instructions")
-					.Text = DataManager.GetTextFromScreen (Model, "next_up", CurrentPitcherTextVariable);*/
 				TimerButton.Reset (Duration);
 			} else {
 				AllGotoView ("deliberate_instructions");

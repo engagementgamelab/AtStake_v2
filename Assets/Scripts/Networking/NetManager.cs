@@ -47,7 +47,6 @@ public class NetManager : SocketIOComponent {
 	public OnUpdateDroppedClients onUpdateDroppedClients;
 
 	ConnectionInfo connection;
-	ConnectionInfo previousConnection;
 	Action<Dictionary<string, string>> roomListResult;
 
 	#if UNITY_EDITOR && SINGLE_SCREEN
@@ -277,7 +276,6 @@ public class NetManager : SocketIOComponent {
 	}
 
 	void OnRoomDestroyed (SocketIOEvent e=null) {
-		previousConnection = connection;
 		connection.Reset ();
 		if (onDisconnected != null)
 			onDisconnected ();
@@ -314,11 +312,10 @@ public class NetManager : SocketIOComponent {
 
 	// This event should only ever fire when the application is quit or when the device loses its connection (in which case it will attempt to reconnect)
 	void OnClose (SocketIOEvent e) {
-		#if UNITY_EDITOR && SINGLE_SCREEN
-		return;
-		#endif
+		#if !UNITY_EDITOR || !SINGLE_SCREEN
 		SendUpdateConnectionMessage (false);
 		Reconnect ();
+		#endif
 	}
 
 	/**
