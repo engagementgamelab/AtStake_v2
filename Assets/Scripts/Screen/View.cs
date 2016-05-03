@@ -380,6 +380,25 @@ namespace Views {
 			});
 		}
 
+		/// <summary>
+		/// On a screen with timers, checks how much time has elapsed
+		/// </summary>
+		/// <returns>The amount of time that has elapsed</returns>
+		protected int GetElapsedTime () {
+
+			float e;
+
+			if (IsDecider) {
+				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
+				e = t.Progress * t.Duration;
+			} else {
+				TimerElement t = GetScreenElement<TimerElement> ("timer");
+				e = t.Progress * t.Duration;
+			}
+
+			return (int)e;
+		}
+
 		// -- Virtual methods
 
 		/// <summary>

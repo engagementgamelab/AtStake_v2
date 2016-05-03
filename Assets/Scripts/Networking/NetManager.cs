@@ -191,8 +191,8 @@ public class NetManager : SocketIOComponent {
 	}
 
 	public void OnLoseFocus () { dropped = true; }
-	// public void OnGainFocus () { if (dropped) socket.Close (); }
-	public void OnGainFocus () { Reconnect (); }
+
+	public void OnGainFocus () { if (dropped) Close (); }
 
 	// Simulate a dropped connection
 	public void Drop () {
@@ -202,8 +202,10 @@ public class NetManager : SocketIOComponent {
 
 	// Simulate reconnecting after a dropped connection
 	public void Reconnect () {
-		if (dropped)
+		if (dropped) {
+			Debug.Log ("reconnecting...");
 			Connect ();
+		}
 	}
 
 	/**
@@ -313,6 +315,7 @@ public class NetManager : SocketIOComponent {
 	// This event should only ever fire when the application is quit or when the device loses its connection (in which case it will attempt to reconnect)
 	void OnClose (SocketIOEvent e) {
 		#if !UNITY_EDITOR || !SINGLE_SCREEN
+		Debug.Log ("got closed");
 		SendUpdateConnectionMessage (false);
 		Reconnect ();
 		#endif

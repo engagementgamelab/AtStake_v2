@@ -4,7 +4,7 @@ using System.Collections;
 namespace Views {
 
 	// Players silently brainstorm plans
-	// Decider just kinda waits, awkwardly
+	// Decider just kinda waits, awkwardly, and thinks about what they're doing with their life. The paradox of life is that it seems so short, and yet it's the longest thing you'll ever do. Is sitting and silently looking at a timer really the best use of time? Or, is silent reflection perhaps the BEST use of time? All of this really depends on your "goals" going into silent reflection (if there should even be any goals, for that matter). Does it even make sense to try to figure out "what to do with your life" or is that a false dilemma promoted by a culture that insists there must be meaning lurking behind everything? When you think about it it's actually a pretty selfish notion - "what to do with your life"/"why are you here" - if every decision you make is in service to answering these questions, you're neglecting everyone around you and validating the delusion that your own personal experience is The Most Important Thing. If you really want to find tangible meaning in life, I'd argue that the answer probably involves service to others and NOT prioritizing the search for "what makes you happy." Happiness behaves kinda like an eye floater anyways. But so once the time has elapsed, the view automatically advances and the Decider listens to everyone's pitches.
 
 	public class Think : View {
 

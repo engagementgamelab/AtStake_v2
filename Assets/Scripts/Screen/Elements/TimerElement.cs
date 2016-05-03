@@ -25,6 +25,10 @@ public class TimerElement : ScreenElement {
 	public float Progress { get; private set; }
 	public string TimeText { get; private set; }
 
+	public float Duration {
+		get { return duration; }
+	}
+
 	float duration;
 	System.Action onEnd;
 
@@ -40,8 +44,8 @@ public class TimerElement : ScreenElement {
 		Reset ();
 	}
 
-	public void StartTimer () {
-		Co.StartCoroutine (duration, OnUpdateTime, () => {
+	public void StartTimer (float startTime=0f) {
+		Co.StartCoroutine (startTime, duration, OnUpdateTime, () => {
 			if (onEnd != null)
 				onEnd ();
 		});

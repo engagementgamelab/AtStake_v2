@@ -265,6 +265,7 @@
       "Symbol": "deliberate",
       "DeciderInstructions": "Press 'deliberate' to start the timer. Be sure to ask probing questions about the proposal and encourage questions among players.",
       "Buttons": {
+        "timer_button_decider": "Start!",
         "timer_button": "Deliberate!",
         "skip": "Skip"
       }
@@ -373,9 +374,11 @@
       "DeciderInstructions": ".",
       "Text": {
         "first_up": "It's {{current_peer}}'s turn to pitch first",
+        "listen": "Listen to {{current_peer}}'s pitch",
         "next_up": "Next up is {{current_peer}}. Start the timer when they're ready!"
       },
       "Buttons": {
+        "timer_button_decider": "Start!",
         "timer_button": "Pitch!",
         "pitching": "Pitch!",
         "listening": "Listen!",
@@ -428,6 +431,7 @@
       "Symbol": "think",
       "DeciderInstructions": "Press 'Think' to start.",
       "Buttons": {
+        "timer_button_decider": "Start!",
         "timer_button": "Think!",
         "skip": "Skip"
       }
@@ -460,7 +464,7 @@
       20
     ],
     "ExtraTimeCost": 10,
-    "ThinkSeconds": 30,
+    "ThinkSeconds": 60,
     "PitchSeconds": 60,
     "ExtraSeconds": 30,
     "DeliberateSeconds": 60

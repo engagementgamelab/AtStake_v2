@@ -41,7 +41,18 @@ public static class Co {
 	/// <param name="action">The function to call every frame. Passes the % of time that has elapsed as a float</param>
 	/// <param name="onEnd">(option) A function to run after the time has elapsed</param>
 	public static void StartCoroutine (float duration, Action<float> action, Action onEnd=null) {
-		CoMb.Instance.StartCoroutine (CoCoroutine (duration, action, onEnd));
+		CoMb.Instance.StartCoroutine (CoCoroutine (0f, duration, action, onEnd));
+	}
+
+	/// <summary>
+	/// Runs a function every frame for an amount of time, beginning the timer at a set value
+	/// </summary>
+	/// <param name="startTime">The time value to start the timer at</param>
+	/// <param name="duration">The amount of time to run (in seconds)</param>
+	/// <param name="action">The function to call every frame. Passes the % of time that has elapsed as a float</param>
+	/// <param name="onEnd">(option) A function to run after the time has elapsed</param>
+	public static void StartCoroutine (float startTime, float duration, Action<float> action, Action onEnd=null) {
+		CoMb.Instance.StartCoroutine (CoCoroutine (startTime, duration, action, onEnd));
 	}
 
 	/// <summary>
@@ -179,8 +190,8 @@ public static class Co {
 		onEnd ();
 	}
 
-	static IEnumerator CoCoroutine (float duration, Action<float> action, Action onEnd) {
-		float e = 0f;
+	static IEnumerator CoCoroutine (float startTime, float duration, Action<float> action, Action onEnd) {
+		float e = startTime;
 		while (e < duration) {
 			e += Time.deltaTime;
 			action (e / duration);

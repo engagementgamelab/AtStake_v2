@@ -43,13 +43,13 @@ public class TimerButtonElement : ScreenElement {
 		Reset ();
 	}
 
-	public void StartTimer () {
+	public void StartTimer (float startTime=0f) {
 
 		if (onStart != null)
 			onStart ();
 
 		Interactable = false;
-		Co.StartCoroutine (duration, OnUpdateTime, () => {
+		Co.StartCoroutine (startTime, duration, OnUpdateTime, () => {
 			if (onEnd != null)
 				onEnd ();
 		});
