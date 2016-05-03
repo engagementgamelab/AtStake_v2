@@ -55,6 +55,8 @@ namespace Views {
 			Game.Multiplayer.onUpdateConnectionStatus -= OnUpdateConnectionStatus;
 		}
 
+		public override void OnDisconnect () {}
+
 		void OnUpdateConnectionStatus (ConnectionStatus status) {
 			bool failed = status == ConnectionStatus.Fail;
 			Elements["connection_failed"].Active = failed;

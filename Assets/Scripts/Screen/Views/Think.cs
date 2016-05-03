@@ -42,7 +42,7 @@ namespace Views {
 		protected override void OnShow () {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
 		}
-
+		
 		protected override void OnHide () {
 			Game.Dispatcher.RemoveListener (StartTimer);
 		}
