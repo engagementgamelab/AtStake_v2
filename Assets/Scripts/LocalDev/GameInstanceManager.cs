@@ -28,6 +28,9 @@ public class GameInstanceManager : MonoBehaviour {
 	void Awake () {
 		Application.targetFrameRate = 60;
 		Application.runInBackground = true;
+
+		// Disable screen dimming
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 	}
 
 	void AddPlayer () {
