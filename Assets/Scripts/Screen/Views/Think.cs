@@ -37,7 +37,6 @@ namespace Views {
 
 		protected override void OnInitElements () {
 			Elements.Add ("question", new TextElement (Game.Controller.Question));
-			Elements.Add ("reconnected", new TextElement (DataManager.GetTextFromScreen (Model, "client_reconnected")));
 		}
 
 		protected override void OnShow () {
@@ -60,6 +59,13 @@ namespace Views {
 		}
 
 		public override void OnClientDropped () {
+			base.OnClientDropped ();
+			droppedClient = false;
+			
+			Elements.Add ("reconnected", new TextElement (DataManager.GetTextFromScreen (Model, "client_reconnected")));
+		}
+
+		public override void OnClientsReconnected () {
 			base.OnClientDropped ();
 			droppedClient = true;
 		}

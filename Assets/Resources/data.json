@@ -431,7 +431,7 @@
       "Symbol": "think",
       "DeciderInstructions": "Press 'Think' to start.",
       "Text": {
-        "client_reconnected": "You've rejoined the game! Please wait for the decier's timer to advance."
+        "client_reconnected": "Everyone is reconnected! Please wait for the decider's timer to advance."
       },
       "Buttons": {
         "timer_button_decider": "Start!",
