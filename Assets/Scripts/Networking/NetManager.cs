@@ -39,12 +39,14 @@ public class NetManager : SocketIOComponent {
 	public delegate void MessageReceived (NetMessage msg);
 	public delegate void OnUpdateConnection (bool connected);
 	public delegate void OnUpdateDroppedClients (bool hasDroppedClients);
+	public delegate void OnSocketDisconnected ();
 
 	public ClientsUpdated clientsUpdated;
 	public OnDisconnected onDisconnected;
 	public MessageReceived messageReceived;
 	public OnUpdateConnection onUpdateConnection;
 	public OnUpdateDroppedClients onUpdateDroppedClients;
+	public OnSocketDisconnected onSocketDisconnected;
 
 	ConnectionInfo connection;
 	Action<Dictionary<string, string>> roomListResult;
@@ -304,11 +306,15 @@ public class NetManager : SocketIOComponent {
 	}
 
 	void OnError (SocketIOEvent e) {
-		/*#if UNITY_EDITOR
-		Debug.LogWarning("[SocketIO] Error received: " + e.name + ", " + e.data);
-		#endif*/
-		if (e.name == "An exception has occurred while connecting.") {
+		#if UNITY_EDITOR
+			Debug.LogWarning("[SocketIO] Error received: " + e.data);
+		#endif
+
+		if (e.data.ToString() == "An exception has occurred while connecting.") {
 			SendUpdateConnectionMessage (false);
+		}
+		else if (e.data.ToString() == "An exception has occurred while receiving a message.") {
+			onSocketDisconnected();
 		}
 	}
 

@@ -12,8 +12,6 @@ public class SceneManager : MonoBehaviour {
 
 	void Awake () { 
 
-		ApiManager.Instance.onServerDown += OnServerDown;
-
 		// We need our game config data before calling any remote endpoints
 		LoadGameConfig ();
 			

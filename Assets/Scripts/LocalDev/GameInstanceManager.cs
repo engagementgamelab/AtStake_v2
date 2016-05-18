@@ -197,7 +197,8 @@ public class GameInstanceManager : MonoBehaviour {
 			|| view == "agenda_item_reject"
 			|| view == "scoreboard"
 			|| view == "final_scoreboard"
-			|| view == "disconnected";
+			|| view == "disconnected"
+			|| view == "socket_disconnected";
 	}
 
 	string gotoView = "";

@@ -7,7 +7,8 @@ using SocketIO;
 public enum ConnectionStatus {
 	Searching,
 	Success,
-	Fail
+	Fail,
+	Unreachable
 }
 
 public class MultiplayerManager : GameInstanceBehaviour {
@@ -92,8 +93,10 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	void Awake () {
 		net = gameObject.AddComponent<NetManager> ();
 		net.Init ();
+
 		net.messageReceived += ReceiveMessageFromClient;
 		net.onUpdateConnection += OnUpdateConnection;
+		net.onSocketDisconnected += OnSocketDisconnected;
 	}
 
 	public void Init () {
@@ -234,6 +237,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		if (onUpdateConnectionStatus != null)
 			onUpdateConnectionStatus (ConnectionStatus);
 	}
+
+	void OnSocketDisconnected () {
+		Game.Views.Goto("socket_disconnected");
+	}
+
 
 	// Intentional & unintentional disconnect
 	void OnDisconnect () {

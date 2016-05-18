@@ -256,7 +256,7 @@ public class ApiManager : MonoBehaviour {
                 if(_wwwRequest == null)
                     yield return null;
 
-                // Debug.Log(_wwwRequest.text);
+                Debug.Log(_wwwRequest.text);
 
                 // Deserialize the response and handle it below
                 Dictionary<string, object> response = JsonReader.Deserialize<Dictionary<string, object>>(_wwwRequest.text);
@@ -344,6 +344,16 @@ public class ApiManager : MonoBehaviour {
     
     }
     #endif
+
+    bool RequestHasFailed(string errorMsg) {
+     
+        return 
+        errorMsg != null && errorMsg.Length > 0 && 
+        (
+            errorMsg.Contains("502 Bad Gateway")
+        );
+    
+    }
 
     void KillNetwork(bool noConnection) {
 

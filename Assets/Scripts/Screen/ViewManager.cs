@@ -54,7 +54,8 @@ namespace Views {
 						{ "scoreboard", new Scoreboard () },
 						{ "final_scoreboard", new FinalScoreboard () },
 						{ "disconnected", new Disconnected () },
-						{ "dropped", new Dropped () }
+						{ "dropped", new Dropped () },
+						{ "socket_disconnected", new SocketDisconnected () }
 					};
 				}
 
@@ -163,6 +164,13 @@ namespace Views {
 			} else {
 				Views[CurrView].OnClientsReconnected ();
 			}
+		}
+
+		/// <summary>
+		/// Called when socket server for all clients is unresponsive.
+		/// </summary>
+		public void OnSocketDisconnected () {
+			// TODO: AllGoto
 		}
 
 		void OnGotoView (NetMessage msg) {
