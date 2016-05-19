@@ -113,8 +113,11 @@ namespace Views {
 		public void GotoViewBeforeDrop () {
 			if (viewBeforeDrop == "")
 				GotoPrevious ();
-			else
+			else {
 				Goto (viewBeforeDrop);
+				
+				Views[CurrView].Refresh();
+			}
 		}
 
 		/// <summary>

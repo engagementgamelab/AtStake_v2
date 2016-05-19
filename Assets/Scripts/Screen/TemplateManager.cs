@@ -14,6 +14,8 @@ namespace Templates {
 		public TemplatesContainer templatesContainer;
 		public DebugInfoContainer debug;
 
+		public bool enableEditorDebugging;
+
 		/// <summary>
 		/// Create the TemplateManager and initialize it
 		/// </summary>
@@ -60,6 +62,11 @@ namespace Templates {
 			#endif
 
 			#if UNITY_EDITOR
+			debug.gameObject.SetActive (enableEditorDebugging);
+			Co.YieldWhileTrue (() => { return Parent == null; }, () => {
+				debug.Init (Game);
+			});
+
 			if (Parent == null)
 				gameObject.SetActive (false);
 			#endif

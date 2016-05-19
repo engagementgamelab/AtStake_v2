@@ -1492,6 +1492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   templatesContainer: {fileID: 11460674}
   debug: {fileID: 11421936}
+  enableEditorDebugging: 1
 --- !u!114 &11439096
 MonoBehaviour:
   m_ObjectHideFlags: 1

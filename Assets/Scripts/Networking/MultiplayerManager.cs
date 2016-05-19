@@ -199,6 +199,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 		net.Reconnect ();
 	}
 
+
+	public void SyncDuration (float duration) {
+		net.SyncDuration(duration);
+	}
+
 	// -- Client handling
 
 	// Only the host uses these methods

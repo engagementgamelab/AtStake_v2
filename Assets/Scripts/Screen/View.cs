@@ -321,6 +321,13 @@ namespace Views {
 		// -- Events
 
 		/// <summary>
+		/// experimental
+		/// </summary>
+		public virtual void Refresh () {
+			
+		}
+
+		/// <summary>
 		/// Called when the player is disconnected. By default, the player is sent to the "disconnected" view, but views can override this and define custom behavior
 		/// </summary>
 		public virtual void OnDisconnect () {
@@ -345,7 +352,6 @@ namespace Views {
 		/// Called when socket server is suddenly unreachable. By default, all players are sent to the "socket_disconnected" view, but views can override this and define custom behavior
 		/// </summary>
 		public virtual void OnSocketDisconnected () {
-			Debug.Log("OnSocketDisconnected");
 			GotoView ("socket_disconnected");
 		}
 
@@ -405,6 +411,21 @@ namespace Views {
 			}
 
 			return (int)e;
+		}
+
+		protected void SyncElapsedTime () {
+
+			float e;
+
+			if (IsDecider) {
+				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
+				e = t.Remaining;
+			} else {
+				TimerElement t = GetScreenElement<TimerElement> ("timer");
+				e = t.Remaining;
+			}
+
+			Game.Multiplayer.SyncDuration(e);
 		}
 
 		// -- Virtual methods

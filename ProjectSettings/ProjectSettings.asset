@@ -370,6 +370,7 @@ PlayerSettings:
   spritePackerPolicy: 
   scriptingDefineSymbols:
     1: 
+    2: 
     4: 
     7: 
   metroPackageName: AtStake

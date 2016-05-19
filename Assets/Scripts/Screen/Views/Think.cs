@@ -14,6 +14,8 @@ namespace Views {
 
 		bool droppedClient = false;
 
+		TimerElement timerElPlayer;
+
 		protected override void OnInitDeciderElements () {
 
 			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button_decider"), Duration, () => {
@@ -32,7 +34,9 @@ namespace Views {
 
 		protected override void OnInitPlayerElements () {
 			CreateRoleCard (true, true, true, false);
-			Elements.Add ("timer", new TimerElement (GetButton ("timer_button"), Duration, TimerType.Think));
+
+			timerElPlayer = new TimerElement (GetButton ("timer_button"), Duration, TimerType.Think);
+			Elements.Add ("timer", timerElPlayer);
 		}
 
 		protected override void OnInitElements () {
@@ -58,15 +62,29 @@ namespace Views {
 			droppedClient = false;
 		}
 
+		public override void Refresh () {
+			base.Refresh ();
+
+			if(timerElPlayer != null) {
+
+				Debug.Log("Progress: " + timerElPlayer.Progress);
+				timerElPlayer.StartTimer(timerElPlayer.Progress);
+			
+			}
+		}
+
 		public override void OnClientDropped () {
 			base.OnClientDropped ();
 			droppedClient = false;
+
+			SyncElapsedTime();
 			
 			Elements.Add ("reconnected", new TextElement (DataManager.GetTextFromScreen (Model, "client_reconnected")));
 		}
 
 		public override void OnClientsReconnected () {
-			base.OnClientDropped ();
+			Debug.Log ("RECONNECTED THINK!!!");
+			base.OnClientsReconnected ();
 			droppedClient = true;
 		}
 	}

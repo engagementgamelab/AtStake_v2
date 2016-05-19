@@ -29,6 +29,10 @@ public class TimerElement : ScreenElement {
 		get { return duration; }
 	}
 
+	public float Remaining {
+		get { return Mathf.Round (Mathf.Abs (Progress * Duration - Duration)); }
+	}
+
 	float duration;
 	System.Action onEnd;
 

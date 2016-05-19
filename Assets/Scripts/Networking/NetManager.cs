@@ -113,6 +113,15 @@ public class NetManager : SocketIOComponent {
 		Emit ("closeRoom", connection.roomId);
 	}
 
+	public void SyncDuration (float duration) {
+
+		JSONObject obj = JSONObject.Create ();
+		obj.AddField ("roomId", connection.roomId);
+		obj.AddField ("duration", duration);
+		
+		Emit ("syncDuration", obj);
+	}
+
 	/**
 	 *	Client methods
 	 */
