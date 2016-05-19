@@ -341,6 +341,14 @@ namespace Views {
 			views.GotoViewBeforeDrop ();
 		}
 
+		/// <summary>
+		/// Called when socket server is suddenly unreachable. By default, all players are sent to the "socket_disconnected" view, but views can override this and define custom behavior
+		/// </summary>
+		public virtual void OnSocketDisconnected () {
+			Debug.Log("OnSocketDisconnected");
+			GotoView ("socket_disconnected");
+		}
+
 		// -- Misc
 
 		/// <summary>

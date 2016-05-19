@@ -20,6 +20,8 @@ public class GameInstance : MonoBehaviour {
 	public AudioController Audio { get; private set; }
 	public GameTest Test { get; private set; }
 
+	bool socketDisconnected = false;
+
 	/// <summary>
 	/// Gets the player's name. This is for convenience, as the name is referenced quite a bit
 	/// </summary>
@@ -73,6 +75,7 @@ public class GameInstance : MonoBehaviour {
 		Multiplayer.Init ();
 		Multiplayer.onDisconnected += OnDisconnect;
 		Multiplayer.onUpdateDroppedClients += OnUpdateDroppedClients;
+		Multiplayer.onSocketDisconnected += OnSocketDisconnected;
 	}
 
 	/// <summary>
@@ -86,8 +89,11 @@ public class GameInstance : MonoBehaviour {
 	// Handles intentional and unintentional disconnects from the server
 	void OnDisconnect () {
 		Views.OnDisconnect ();
+	
 		Multiplayer.onDisconnected -= OnDisconnect;
 		Multiplayer.onUpdateDroppedClients -= OnUpdateDroppedClients;
+		Multiplayer.onSocketDisconnected -= OnSocketDisconnected;
+
 		Dispatcher.Reset ();
 		Controller.Reset ();
 		Decks.Reset ();
@@ -97,5 +103,19 @@ public class GameInstance : MonoBehaviour {
 	// Handles dropped clients (other than this one)
 	void OnUpdateDroppedClients (bool hasDroppedClients) {
 		Views.OnUpdateDroppedClients (hasDroppedClients);
+	}
+
+	// Handles socket disconnection
+	void OnSocketDisconnected () {
+		// Views.OnSocketDisconnected ();
+		socketDisconnected = true;
+	}
+
+	void Update() {
+		if(socketDisconnected)
+		{
+			Views.OnSocketDisconnected ();
+			socketDisconnected = false; 
+		}
 	}
 }

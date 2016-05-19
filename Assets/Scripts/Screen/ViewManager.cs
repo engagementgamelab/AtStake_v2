@@ -170,7 +170,7 @@ namespace Views {
 		/// Called when socket server for all clients is unresponsive.
 		/// </summary>
 		public void OnSocketDisconnected () {
-			// TODO: AllGoto
+			Views[CurrView].OnSocketDisconnected();
 		}
 
 		void OnGotoView (NetMessage msg) {

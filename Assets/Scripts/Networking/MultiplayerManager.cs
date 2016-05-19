@@ -17,6 +17,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public delegate void OnDisconnected ();
 	public delegate void OnUpdateConnectionStatus (ConnectionStatus status);
 	public delegate void OnUpdateDroppedClients (bool hasDroppedClients);
+	public delegate void OnSocketDisconnected ();
 
 	/// <summary>
 	/// Returns true if this is the game's host
@@ -76,6 +77,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 	public OnDisconnected onDisconnected;
 	public OnUpdateConnectionStatus onUpdateConnectionStatus;
 	public OnUpdateDroppedClients onUpdateDroppedClients;
+	public OnSocketDisconnected onSocketDisconnected;
 
 	ConnectionStatus connectionStatus = ConnectionStatus.Searching;
 	Dictionary<string, string> hosts;
@@ -96,7 +98,7 @@ public class MultiplayerManager : GameInstanceBehaviour {
 
 		net.messageReceived += ReceiveMessageFromClient;
 		net.onUpdateConnection += OnUpdateConnection;
-		net.onSocketDisconnected += OnSocketDisconnected;
+		net.onSocketDisconnected += OnSocketDisconnect;
 	}
 
 	public void Init () {
@@ -238,8 +240,11 @@ public class MultiplayerManager : GameInstanceBehaviour {
 			onUpdateConnectionStatus (ConnectionStatus);
 	}
 
-	void OnSocketDisconnected () {
-		Game.Views.Goto("socket_disconnected");
+	void OnSocketDisconnect () {
+		// Game.Views.Goto("socket_disconnected");
+		if (onSocketDisconnected != null)
+			onSocketDisconnected ();
+		Debug.Log("************ DISCONNECTED");
 	}
 
 

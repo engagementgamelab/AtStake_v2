@@ -36,7 +36,14 @@ namespace Templates {
 
 					elements = new Dictionary<string, ScreenElementUI> ();
 					foreach (ScreenElementUI e in childElements)
-						elements.Add (e.id, e);
+					{
+						try {
+							elements.Add (e.id, e);
+						}
+						catch(System.Exception ex) {
+							throw new System.Exception("'" + e.id + "' already in elements for this view!");
+						}
+					}
 
 					foreach (var e in overlayElements)
 						elements.Add (e.Key, e.Value);

@@ -6,10 +6,7 @@ namespace Views {
 	public class SocketDisconnected : View {
 
 		protected override void OnInitElements () {
-			Elements.Add ("menu", new ButtonElement (Model.Buttons["menu"], () => { 
-				Game.EndGame ();
-				GotoView ("start"); 
-			}));
+			Elements.Add ("close_app", new TextElement (Model.Text["close_app"]));
 		}
 
 		public override void OnDisconnect () {}

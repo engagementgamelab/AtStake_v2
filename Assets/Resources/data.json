@@ -418,6 +418,13 @@
       }
     },
     {
+      "Symbol": "socket_disconnected",
+      "Instructions": "Sorry, but there seems to be some trouble contacting the game server.",
+      "Text": {
+        "close_app": "Please close the app and try again later!"
+      }
+    },
+    {
       "Symbol": "start",
       "Instructions": "Welcome to\n@Stake: <i>a deliberation game!</i>\nYou will need 3-4 players.",
       "Text": {

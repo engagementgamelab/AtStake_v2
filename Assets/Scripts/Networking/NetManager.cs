@@ -254,6 +254,11 @@ public class NetManager : SocketIOComponent {
 			onUpdateConnection (connected);
 	}
 
+	void SendSocketDisconnectMessage () {
+		if (onSocketDisconnected != null)
+			onSocketDisconnected ();
+	}
+
 	/**
 	 *	Events
 	 */
@@ -307,14 +312,17 @@ public class NetManager : SocketIOComponent {
 
 	void OnError (SocketIOEvent e) {
 		#if UNITY_EDITOR
-			Debug.LogWarning("[SocketIO] Error received: " + e.data);
+			Debug.LogWarning("[SocketIO] Error received: " + e.data.str);
 		#endif
 
-		if (e.data.ToString() == "An exception has occurred while connecting.") {
-			SendUpdateConnectionMessage (false);
+		if (e.data.str.Equals("An exception has occurred while connecting.")) {
+			SendSocketDisconnectMessage();
+
+			// SendUpdateConnectionMessage (false);
 		}
-		else if (e.data.ToString() == "An exception has occurred while receiving a message.") {
-			onSocketDisconnected();
+		else if (e.data.str.Equals("An exception has occurred while receiving a message.")) {
+			SendSocketDisconnectMessage();
+
 		}
 	}
 
