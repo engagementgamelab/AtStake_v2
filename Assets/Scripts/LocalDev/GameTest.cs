@@ -50,8 +50,14 @@ public class GameTest : GameInstanceBehaviour {
 	/// <param name="id">id of the button to press</param>
 	public void PressRadioButton (string radioId, string id) {
 		RadioListElement list = CurrentView.GetScreenElement<RadioListElement> (radioId);
-		list.Elements[id].TestPress ();
-		list.Elements["confirm"].TestPress ();
+
+		try {
+			list.Elements[id].TestPress ();
+			list.Elements["confirm"].TestPress ();
+		}
+		catch(System.Exception ex) {
+			throw new System.Exception("No element found with id '" + id + "'.");
+		}
 	}
 
 	/// <summary>
@@ -93,7 +99,7 @@ public class GameTest : GameInstanceBehaviour {
 				switch (msg.str1) {
 					case "deck": 
 						if (Hosting)
-							PressRadioButton ("deck_list", "Default");
+							PressRadioButton ("deck_list", "Civic");
 						break;
 					case "pot":
 					case "bio":

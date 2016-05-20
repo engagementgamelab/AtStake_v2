@@ -11,7 +11,7 @@ public class TimerButtonElement : ScreenElement {
 		}
 	}
 
-	public float Progress { get; private set; }
+	public float Progress { get; set; }
 	public string TimeText { get; private set; }
 
 	bool interactable;
@@ -25,10 +25,11 @@ public class TimerButtonElement : ScreenElement {
 
 	public float Duration {
 		get { return duration; }
+		set { duration = value; }
 	}
 
 	public float Remaining {
-		get { return Mathf.Round (Mathf.Abs (Progress * Duration - Duration)); }
+		get { return Mathf.Abs (Progress * Duration - Duration); }
 	}
 
 	float duration;
@@ -80,6 +81,7 @@ public class TimerButtonElement : ScreenElement {
 
 	void OnUpdateTime (float p) {
 		Progress = p;
+
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
 		TimeText = time.ToString () + " seconds";
 		SendUpdateMessage ();

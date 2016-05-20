@@ -119,6 +119,7 @@ public class NetManager : SocketIOComponent {
 		obj.AddField ("roomId", connection.roomId);
 		obj.AddField ("duration", duration);
 		
+		On ("updateDuration", OnUpdateDuration);
 		Emit ("syncDuration", obj);
 	}
 
@@ -319,6 +320,16 @@ public class NetManager : SocketIOComponent {
 		}
 	}
 
+	void OnUpdateDuration (SocketIOEvent e) {
+
+			Response.Duration msg = e.Deserialize<Response.Duration> ();
+			Debug.Log("OnUpdateDuration:  " + msg.duration);
+
+			if(messageReceived != null)
+				messageReceived (NetMessage.Create ("UpdateDuration", msg.duration));
+		
+	}
+
 	void OnError (SocketIOEvent e) {
 		#if UNITY_EDITOR
 			Debug.LogWarning("[SocketIO] Error received: " + e.data.str);
@@ -408,6 +419,10 @@ public class NetManager : SocketIOComponent {
 
 		public class DroppedClients {
 			public bool dropped { get; set; }
+		}
+		
+		public class Duration {
+			public float duration { get; set; }
 		}
 	}
 }

@@ -156,7 +156,7 @@ public class GameInstanceManager : MonoBehaviour {
 				});
 
 				// Set the default deck
-				instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Default");
+				instances[0].Dispatcher.ScheduleMessage ("SetDeck", "Civic");
 			}
 		});
 	}

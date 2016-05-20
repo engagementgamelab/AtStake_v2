@@ -420,10 +420,14 @@ namespace Views {
 			if (IsDecider) {
 				TimerButtonElement t = GetScreenElement<TimerButtonElement> ("timer_button");
 				e = t.Remaining;
+				Debug.Log(t.Progress);
 			} else {
 				TimerElement t = GetScreenElement<TimerElement> ("timer");
 				e = t.Remaining;
+				Debug.Log(t.Progress);
 			}
+
+			Debug.Log("SyncElapsedTime: " + e);
 
 			Game.Multiplayer.SyncDuration(e);
 		}

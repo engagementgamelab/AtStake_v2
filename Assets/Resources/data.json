@@ -1,66 +1,290 @@
 {
   "Decks": [
     {
-      "Name": "Bananas",
-      "Description": "The test deck is best",
+      "Name": "Civic",
+      "Description": "This deck represents a wide range of diverse stakeholders in any given neighborhood.",
       "Questions": [
-        "How do we encourage local businesses in our community?",
-        "How do we improve graduation rates of high schoolers?",
-        "How do we create more positive community events?"
+        "How might we improve public safety for women and girls?",
+        "How might we make our public spaces and programming more accessible to senior citizens?",
+        "How might we better engage young people to contribute to the neighborhood?"
       ],
       "Roles": [
         {
-          "Title": "Contractor",
-          "Bio": "Employee at a large construction company",
+          "Title": "Elected Official",
+          "Bio": "Building a reputation after recent election to city-wide office",
           "AgendaItems": [
             {
-              "Description": "Involves new construction",
+              "Description": "A plan that is budget-conscious",
               "Reward": 0
             },
             {
-              "Description": "Project will take at least 2 years to complete",
+              "Description": "A prominent role for the elected official (you)",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Property Owner",
-          "Bio": "Owner of several large apartment buildings",
+          "Title": "Real Estate Developer",
+          "Bio": "Senior planner at commercial real estate development agency",
           "AgendaItems": [
             {
-              "Description": "Is paid for by private investors",
+              "Description": "A budget for city development",
               "Reward": 0
             },
             {
-              "Description": "Increases property values",
+              "Description": "An obvious path to profitability",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Community Activist",
-          "Bio": "Popular activist and community volunteer",
+          "Title": "Law Enforcement Officer",
+          "Bio": "Recent graduate of police academy",
           "AgendaItems": [
             {
-              "Description": "Benefits are local, with no profit for global corporations",
+              "Description": "Increasing public safety",
               "Reward": 0
             },
             {
-              "Description": "Government funded",
+              "Description": "Stronger connections between law enforcement and community",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Minister",
+          "Bio": "Trusted leader, deeply committed to social justice",
+          "AgendaItems": [
+            {
+              "Description": "Bringing together communities of different faiths",
+              "Reward": 0
+            },
+            {
+              "Description": "Connecting volunteers to local organizations",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Single Parent",
+          "Bio": "30-something with two young children",
+          "AgendaItems": [
+            {
+              "Description": "Accommodations for parents with children so they can attend public meetings",
+              "Reward": 0
+            },
+            {
+              "Description": "Free or low-cost after-school activities",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Coffee Shop Owner",
+          "Bio": "Committed to creating a welcoming, diverse community",
+          "AgendaItems": [
+            {
+              "Description": "Frequent neighborhood meetings",
+              "Reward": 0
+            },
+            {
+              "Description": "A focus on neighborhood economic development",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Recent Immigrant",
+          "Bio": "Highly educated, non-native English speaker",
+          "AgendaItems": [
+            {
+              "Description": "Providing multilingual support at public meetings",
+              "Reward": 0
+            },
+            {
+              "Description": "Engagement of people who work at night",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Young Professional",
+          "Bio": "Trusted leader, deeply committed to social justice",
+          "AgendaItems": [
+            {
+              "Description": "Bringing together communities of different faiths",
+              "Reward": 0
+            },
+            {
+              "Description": "Community engagement through social media",
               "Reward": 1
             }
           ]
         },
         {
           "Title": "Artist",
-          "Bio": "Creative thinker who expresses complex ideas through art",
+          "Bio": "Runs a community art studio with affordable classes",
           "AgendaItems": [
             {
-              "Description": "Innovative use of public space for community engagement",
+              "Description": "Fun and interactive community engagement",
               "Reward": 0
             },
             {
-              "Description": "Funding for public art",
+              "Description": "Opportunities for artists to display their work",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Biology Teacher",
+          "Bio": "Environmental advocate who uses tech-based learning",
+          "AgendaItems": [
+            {
+              "Description": "Service-learning opportunities for teens",
+              "Reward": 0
+            },
+            {
+              "Description": "Partnerships between NGOs and the school district",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Doctor",
+          "Bio": "OB/GYN specialist in a community health clinic",
+          "AgendaItems": [
+            {
+              "Description": "Promotion of healthy habits",
+              "Reward": 0
+            },
+            {
+              "Description": "Access to healthcare services",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Freelance Journalist",
+          "Bio": "Covers community news for various publications",
+          "AgendaItems": [
+            {
+              "Description": "Greater access to information",
+              "Reward": 0
+            },
+            {
+              "Description": "Opportunities for public comment",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Local Farmer",
+          "Bio": "Provides organic produce for farmer’s markets and restaurants",
+          "AgendaItems": [
+            {
+              "Description": "Increased access to healthy food",
+              "Reward": 0
+            },
+            {
+              "Description": "Promotion of environmental conservation",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "College Professor",
+          "Bio": "History professor at a state school, produces local history podcast",
+          "AgendaItems": [
+            {
+              "Description": "Resources for local libraries",
+              "Reward": 0
+            },
+            {
+              "Description": "Encouragement of college students to participate locally",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Tech Entrepreneur",
+          "Bio": "Programmer in a small start-up focused on online learning",
+          "AgendaItems": [
+            {
+              "Description": "Tech-based approaches",
+              "Reward": 0
+            },
+            {
+              "Description": "Specific appeals to young adults",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Unemployed Worker",
+          "Bio": "Skilled laborer with 20 years of experience in manufacturing",
+          "AgendaItems": [
+            {
+              "Description": "Ideas to boost employment locally",
+              "Reward": 0
+            },
+            {
+              "Description": "Opportunities for paid work for skilled laborers and artisans",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "High School Student",
+          "Bio": "Has lived in the city most of their life, plays in local band",
+          "AgendaItems": [
+            {
+              "Description": "New technology",
+              "Reward": 0
+            },
+            {
+              "Description": "The participation of teenagers in the design of the project",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Youth Program Manager",
+          "Bio": "Runs an after-school program for at-risk youth",
+          "AgendaItems": [
+            {
+              "Description": "Mentorship opportunities for youth",
+              "Reward": 0
+            },
+            {
+              "Description": "Jobs for teens",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Community Activist",
+          "Bio": "Advocate for racial equality and affordable housing for over 50 years",
+          "AgendaItems": [
+            {
+              "Description": "Engagement of minority populations",
+              "Reward": 0
+            },
+            {
+              "Description": "Public transportation improvements",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Immigrant Youth",
+          "Bio": "An undocumented youth who works multiple jobs",
+          "AgendaItems": [
+            {
+              "Description": "Multilingual approaches",
+              "Reward": 0
+            },
+            {
+              "Description": "Opportunities for informal employment",
               "Reward": 1
             }
           ]
@@ -68,133 +292,276 @@
       ]
     },
     {
-      "Name": "Default",
-      "Description": "The test deck is best",
+      "Name": "Education",
+      "Description": "The stakeholders in this deck care about issues of K-12 education.",
       "Questions": [
-        "How do we encourage local businesses in our community?",
-        "How do we improve graduation rates of high schoolers?",
-        "How do we create more positive community events?"
+        "How might we better accommodate different learning styles?",
+        "How might we engage more community members and stakeholders in improving education?",
+        "How might we adapt new technologies for education?"
       ],
       "Roles": [
         {
-          "Title": "Contractor",
-          "Bio": "Employee at a large construction company",
+          "Title": "Elected Official",
+          "Bio": "Building a reputation after recent election to city-wide office",
           "AgendaItems": [
             {
-              "Description": "Involves new construction",
+              "Description": "A plan that is budget-conscious",
               "Reward": 0
             },
             {
-              "Description": "Project will take at least 2 years to complete",
+              "Description": "A prominent role for the elected official (you)",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Property Owner",
-          "Bio": "Owner of several large apartment buildings",
+          "Title": "Policy Maker",
+          "Bio": "Long-term supporter of education reform",
           "AgendaItems": [
             {
-              "Description": "Is paid for by private investors",
+              "Description": "Evidence-based decision-making",
               "Reward": 0
             },
             {
-              "Description": "Increases property values",
+              "Description": "Public rallies",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Community Activist",
-          "Bio": "Popular activist and community volunteer",
+          "Title": "School Board Representative",
+          "Bio": "Former school teacher committed to equity",
           "AgendaItems": [
             {
-              "Description": "Benefits are local, with no profit for global corporations",
+              "Description": "Opportunities for public comment",
               "Reward": 0
             },
             {
-              "Description": "Government funded",
+              "Description": "Benefits for underserved populations",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Minister",
+          "Bio": "Trusted leader, deeply committed to social justice",
+          "AgendaItems": [
+            {
+              "Description": "Bringing together communities of different faiths",
+              "Reward": 0
+            },
+            {
+              "Description": "Connecting volunteers to local organizations",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Executive Director",
+          "Bio": "Local leader of college preparation and mentoring non-profit",
+          "AgendaItems": [
+            {
+              "Description": "Impact assessment and evaluation",
+              "Reward": 0
+            },
+            {
+              "Description": "Cross-sector collaboration",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Principal",
+          "Bio": "Long-term leader of public middle school",
+          "AgendaItems": [
+            {
+              "Description": "Public events at the middle school",
+              "Reward": 0
+            },
+            {
+              "Description": "Improving the reputation of the school",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Parks and Recreation Director",
+          "Bio": "Newly appointed leader committed to improving public spaces",
+          "AgendaItems": [
+            {
+              "Description": "Service learning opportunities for students",
+              "Reward": 0
+            },
+            {
+              "Description": "Programming in public parks",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Child Psychologist Specialist",
+          "Bio": "A health practitioner with expertise in youth mental health",
+          "AgendaItems": [
+            {
+              "Description": "Initiatives to support holistic approach to youth development & well-being",
+              "Reward": 0
+            },
+            {
+              "Description": "Stronger connections between education and mental health support",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Makerspace Director",
+          "Bio": "Runs a local makerspace with robust offerings and memberships",
+          "AgendaItems": [
+            {
+              "Description": "Stronger connections with curricula",
+              "Reward": 0
+            },
+            {
+              "Description": "Student opportunities for professional development",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Unemployed Parent",
+          "Bio": "Volunteers frequently for the PTA",
+          "AgendaItems": [
+            {
+              "Description": "Opportunities for growth in parent leadership",
+              "Reward": 0
+            },
+            {
+              "Description": "Free or low-cost after-school activities",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Immigrant Parent",
+          "Bio": "Highly educated, non-native English speaker",
+          "AgendaItems": [
+            {
+              "Description": "Providing multilingual support at public meetings",
+              "Reward": 0
+            },
+            {
+              "Description": "Engagement of people who work at night",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Homeschooling Parent",
+          "Bio": "Educates two elementary school children at home",
+          "AgendaItems": [
+            {
+              "Description": "Informal educational resource gatherings",
+              "Reward": 0
+            },
+            {
+              "Description": "Community engagement through social media",
               "Reward": 1
             }
           ]
         },
         {
           "Title": "Artist",
-          "Bio": "Creative thinker who expresses complex ideas through art",
+          "Bio": "Paints murals and teaches youth art programming",
           "AgendaItems": [
             {
-              "Description": "Innovative use of public space for community engagement",
+              "Description": "Fun and interactive community engagement",
               "Reward": 0
             },
             {
-              "Description": "Funding for public art",
-              "Reward": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Hello Yellow",
-      "Description": "The test deck is best",
-      "Questions": [
-        "How do we encourage local businesses in our community?",
-        "How do we improve graduation rates of high schoolers?",
-        "How do we create more positive community events?"
-      ],
-      "Roles": [
-        {
-          "Title": "Contractor",
-          "Bio": "Employee at a large construction company",
-          "AgendaItems": [
-            {
-              "Description": "Involves new construction",
-              "Reward": 0
-            },
-            {
-              "Description": "Project will take at least 2 years to complete",
+              "Description": "Incorporates artwork produced by youth",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Property Owner",
-          "Bio": "Owner of several large apartment buildings",
+          "Title": "Humanities Teacher",
+          "Bio": "Passionate about improving literacy rates",
           "AgendaItems": [
             {
-              "Description": "Is paid for by private investors",
+              "Description": "Provides greater access to books, digital tools and other resources for students",
               "Reward": 0
             },
             {
-              "Description": "Increases property values",
+              "Description": "An incorporation of different pedagogical philosophies",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Community Activist",
-          "Bio": "Popular activist and community volunteer",
+          "Title": "Middle School Student",
+          "Bio": "Boy scout who is also in the school jazz band",
           "AgendaItems": [
             {
-              "Description": "Benefits are local, with no profit for global corporations",
+              "Description": "Opportunities to provide feedback on education",
               "Reward": 0
             },
             {
-              "Description": "Government funded",
+              "Description": "Ample support for academic success",
               "Reward": 1
             }
           ]
         },
         {
-          "Title": "Artist",
-          "Bio": "Creative thinker who expresses complex ideas through art",
+          "Title": "Social Worker",
+          "Bio": "Has a big case load supporting foster children",
           "AgendaItems": [
             {
-              "Description": "Innovative use of public space for community engagement",
+              "Description": "Increased integration of youth support services",
               "Reward": 0
             },
             {
-              "Description": "Funding for public art",
+              "Description": "Improves communication between youth and caretakers",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Youth Program Manager",
+          "Bio": "Runs an after-school program for at-risk youth",
+          "AgendaItems": [
+            {
+              "Description": "Mentorship opportunities for youth",
+              "Reward": 0
+            },
+            {
+              "Description": "Stronger connections between local NGO’s and schools",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Education Researcher",
+          "Bio": "PhD student writing dissertation about education equity",
+          "AgendaItems": [
+            {
+              "Description": "Engagement of minority populations",
+              "Reward": 0
+            },
+            {
+              "Description": "Analyzing big data sets",
+              "Reward": 1
+            }
+          ]
+        },
+        {
+          "Title": "Technologist",
+          "Bio": "Young professional working at an ed tech startup",
+          "AgendaItems": [
+            {
+              "Description": "Creative use of media and technology",
+              "Reward": 0
+            },
+            {
+              "Description": "Digital opportunities for engagement",
               "Reward": 1
             }
           ]

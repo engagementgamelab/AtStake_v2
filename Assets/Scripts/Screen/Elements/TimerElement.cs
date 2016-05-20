@@ -22,7 +22,7 @@ public class TimerElement : ScreenElement {
 		}
 	}
 
-	public float Progress { get; private set; }
+	public float Progress { get; set; }
 	public string TimeText { get; private set; }
 
 	public float Duration {
@@ -30,7 +30,7 @@ public class TimerElement : ScreenElement {
 	}
 
 	public float Remaining {
-		get { return Mathf.Round (Mathf.Abs (Progress * Duration - Duration)); }
+		get { return Mathf.Abs (Progress * Duration - Duration); }
 	}
 
 	float duration;
@@ -75,6 +75,9 @@ public class TimerElement : ScreenElement {
 	void OnUpdateTime (float p) {
 		Progress = p;
 		float time = Mathf.Round (Mathf.Abs (p * duration - duration));
+		
+		Debug.Log("time: " + time);
+
 		TimeText = time.ToString () + " seconds";
 		SendUpdateMessage ();
 	}

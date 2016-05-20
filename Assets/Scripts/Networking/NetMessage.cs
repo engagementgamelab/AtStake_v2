@@ -7,6 +7,7 @@ public class NetMessage {
 	public string str1;
 	public string str2;
 	public int val;
+	public float flVal;
 	public byte[] bytes;
 	public JSONObject json;
 
@@ -14,6 +15,13 @@ public class NetMessage {
 		NetMessage msg = new NetMessage ();
 		msg.id = id;
 		msg.json = json;
+		return msg;
+	}
+
+	public static NetMessage Create (string id, float flVal) {
+		NetMessage msg = new NetMessage ();
+		msg.id = id;
+		msg.flVal = flVal;
 		return msg;
 	}
 

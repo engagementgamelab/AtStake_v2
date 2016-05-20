@@ -15,16 +15,18 @@ namespace Views {
 		bool droppedClient = false;
 
 		TimerElement timerElPlayer;
+		TimerButtonElement timerElDecider;
 
 		protected override void OnInitDeciderElements () {
 
-			Elements.Add ("timer_button", new TimerButtonElement (GetButton ("timer_button_decider"), Duration, () => {
-				Game.Dispatcher.ScheduleMessage ("StartTimer");
-				Game.Audio.Play ("timer_start");
-			}, () => {
-				Advance ();
-				Game.Audio.Play ("alarm");
-			}));
+			timerElDecider = new TimerButtonElement (GetButton ("timer_button_decider"), Duration, () => {
+													Game.Dispatcher.ScheduleMessage ("StartTimer");
+													Game.Audio.Play ("timer_start");
+												}, () => {
+													Advance ();
+													Game.Audio.Play ("alarm");
+												});
+			Elements.Add ("timer_button", timerElDecider);
 
 			// The skip button is only shown if a client was dropped (so that players don't need to wait for the timer to run down again)
 			Elements.Add ("skip", new ButtonElement (GetButton ("skip"), () => {
@@ -45,6 +47,7 @@ namespace Views {
 
 		protected override void OnShow () {
 			Game.Dispatcher.AddListener ("StartTimer", StartTimer);
+			Game.Dispatcher.AddListener ("UpdateDuration", RefreshTimer);
 		}
 		
 		protected override void OnHide () {
@@ -57,6 +60,26 @@ namespace Views {
 			}
 		}
 
+		void RefreshTimer (NetMessage msg) {
+			// Game.Controller.SetWinner (msg.str1);
+			// GotoView ("winner");
+			Debug.Log("RefreshTimer: " + msg.flVal);
+
+			if(timerElPlayer != null) {
+
+				timerElPlayer.Progress = msg.flVal;
+				timerElPlayer.Reset(msg.flVal);
+				timerElPlayer.StartTimer(msg.flVal);
+			
+			}
+			if(timerElDecider != null) {
+
+				timerElDecider.Progress = msg.flVal;
+				timerElDecider.Reset(msg.flVal);
+			
+			}
+		}
+
 		void Advance () {
 			AllGotoView ("pitch_instructions");
 			droppedClient = false;
@@ -64,20 +87,14 @@ namespace Views {
 
 		public override void Refresh () {
 			base.Refresh ();
-
-			if(timerElPlayer != null) {
-
-				Debug.Log("Progress: " + timerElPlayer.Progress);
-				timerElPlayer.StartTimer(timerElPlayer.Progress);
-			
-			}
 		}
 
 		public override void OnClientDropped () {
-			base.OnClientDropped ();
-			droppedClient = false;
 
 			SyncElapsedTime();
+
+			base.OnClientDropped ();
+			droppedClient = false;
 			
 			Elements.Add ("reconnected", new TextElement (DataManager.GetTextFromScreen (Model, "client_reconnected")));
 		}
