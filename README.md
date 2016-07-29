@@ -1,4 +1,4 @@
-# NOTE: this version of @Stake is now DEPRECATED.
+# NOTE: this version of @Stake is now DEPRECATED. v3, an HTML5 port, is now active [here](https://github.com/engagementgamelab/at-stake-v3).
 
 @Stake
 =======
