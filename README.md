@@ -1,3 +1,5 @@
+# NOTE: this version of @Stake is now DEPRECATED.
+
 @Stake
 =======
 
